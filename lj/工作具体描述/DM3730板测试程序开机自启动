@@ -1,0 +1,137 @@
+1、把root密码去掉：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	/etc/passwd文件root行密码字段填"0"而不是"x"，我们的板子原本就是这样。
+
+2、root账户开机自登陆：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	网络文章"http://blog.sina.com.cn/s/blog_596f35310100bf4g.html"介绍的方法是针对
+PC机的login命令，方法如下：
+
+	设置/etc/inittab文件，让root账户在tty1虚拟中断自登陆。具体来说就是把/etc/inittab
+行中第四个字段(要执行的命令)改成自动登陆即可，譬如：
+	1:2345:raspawn:/sbin/mingetty tty1
+->
+	1:2345:raspawn:/sbin/mingetty --autologin root tty1
+
+	我们的DM3730上使用的是tinylogin。tinylogin同busybox一样，用来替换通常PC版Linux的
+login,passwd,getty等命令。使用tinylogin的一个突出的优点就是可以节省存储空间。
+
+	/sbin/tinylogin没有提供-h或者--help选项查看帮助，中文资料也不多，经过搜寻发现了一篇
+TI论坛的帖子"http://e2e.ti.com/support/dsp/davinci_digital_media_processors/f/717/t/203730"
+按照TI雇员"Vladimir-XID"的方法尝试是可行的，具体如下：
+
+	创建/bin/autologin文件
+	/bin/autologin文件写入两行：
+#!/bin/sh
+exec /bin/login -f root
+
+	chmod 700 /bin/autologin
+	修改/etc/inittab文件中的两行
+S:2345:respawn:/sbin/getty 115200 ttyO2 -n -l /bin/autologin
+
+#1:2345:respawn:/sbin/getty 38400 root tty1
+	重启开发板，发现登陆正常。
+
+3、测试程序自启动：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过/etc/inittab文件可知，初始化后进入的是5runlevel，所以在/etc/rc5.d文件夹下新
+建一个软链接文件到/etc/init.d/audiogpp，命令如下：
+
+ln -s ../init.d/audiogpp S99audiogpp
+
+新建/etc/init.d/audiogpp
+chmod 700 /etc/init.d/audiogpp
+
+内容如下：
+ifconfig eth0 192.168.1.30 netmask 255.255.255.0
+
+if [ -f /home/root/audiogpp-run ]; then
+	nohup /home/root/audiogpp-run /home/root/loop.out 16384 0 0 > /home/root/audio_log 2>&1 &
+fi
+
+
+
+4、通过SSH协议登陆DM3730板
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过"netstat -ntpl"指令可以发现，测试板上已经有进程监听在22端口上了，但它不是ssh，
+而是dropbear。dropbear是一个轻量级的SSH软件。既然已经有了服务，那我们就可以直接通过远程
+终端登陆DM3730板了。
+
+
+5、烧写nand flash
+	参照创龙用户手册《3-2-Linux系统固化到FLASH方法》进行
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5.1、查看并保存nand flash分区情况：
+	通过SD卡启动系统，使用"cat /proc/mtd"命令查看nand flash分区情况，结果如下：
+
+dev:    size   erasesize  name
+mtd0: 00080000 00020000 "X-Loader-NAND"
+mtd1: 00140000 00020000 "U-Boot-NAND"
+mtd2: 000c0000 00020000 "Boot Env-NAND"
+mtd3: 00500000 00020000 "Kernel-NAND"
+mtd4: 1f880000 00020000 "File System - NAND"
+
+应把结果保留好，以备待用。
+
+5.2、进入uboot命令行，烧写nand flash
+	加电后等串口输出相应提示，如果是标准uboot，按任意键可中断启动过程，进入uboot命令行
+界面
+
+	进入uboot时，在命令行上敲“?” ，回车就会打印出在uboot里可用的命令。要看命令的解释
+和用法，譬如mmc命令的解释和用法，输入"mmc ?"即可查看
+
+	应注意：5.2.1-5.2.4是在uboot命令行下进行，5.2.5是在linux命令行下进行。
+
+5.2.1、擦除flash
+Target# nand erase
+
+5.2.2、烧写MLO到mtd0(起始地址0)
+Target# nandecc hw 2
+Target# mmc init
+Target# fatload mmc 1 0x81600000 MLO
+Target# nand write 0x81600000 0 20000
+
+	namdecc指令用于设置nand的校验方式。所以第一行的意思是"设置nandflash的ecc校验是硬
+件校验，具体为BCH8(4位校验码)"
+
+	mmc指令用于mmc子系统，有两个子命令，"mmc init"用于初始化mmc子系统，"mmc device"
+用于查看当前可用的mmc设备号。所以第二行的意思是"初始化SD卡"，执行后显示"mmc1 is available"
+
+	fatload指令用于从FAT文件系统设备中读取指定文件放入指定内存中。用法如下：
+usage: fatload <interface> <dev[:part]> <addr> <filename> [bytes]
+interface：我们这里就是mmc
+dev：就是mmc设备号，我使用"mmc device"获得是mmc1，所以这里应改为1
+addr：内存地址
+filename：要拷贝的文件名
+bytes：要拷贝的长度
+所以第三行的意思是"拷贝mmc1设备中名为MLO的文件到内存0x81600000处"。
+
+	name write指令用于把内存写入nand flash。所以第四行的意思是"把内存0x81600000的内容
+写入到nand起始地址为0、长度为0x20000的空间中去"。
+
+5.2.3、烧写u-boot.bin到mtd1(起始地址0x80000)
+Target# nandecc hw 2 
+Target# fatload mmc 1 0x81600000 u-boot.bin 
+Target# nand write 0x81600000 80000 80000
+
+5.2.4、烧写uImage到mtd3(起始地址0x80000 + 0x140000 + 0xc0000 = 0x280000)
+Target# nandecc hw 1
+Target# fatload mmc 1 0x81600000 uImage
+Target# nand write 0x81600000 280000 400000
+
+5.2.5、烧写文件系统到mtd4(起始地址0x80000 + 0x140000 + 0xc0000 + 0x500000 = 0x780000)
+正常启动板子，不要进入uboot命令行，而是进入linux环境：
+
+Target# flash_erase /dev/mtd4 0 0
+Target# ubiattach -p /dev/mtd4 -O 2048
+Target# ubimkvol /dev/ubi0 -N rootfs -s 450MiB
+Target# mkdir -p /mnt/ubifs
+Target# mount -t ubifs ubi0_0 /mnt/ubifs
+Target# cp -rf /media/mmcblk0p2/* /mnt/ubifs
+
+
+文件系统太大，拷贝不进去。
+
+
+
+

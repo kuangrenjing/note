@@ -1,0 +1,260 @@
+需要修改的文件：
+Machine驱动(.name = "soc-audio")：
+	../sound/soc/omap/omap3evm.c   platform device
+	../sound/soc/soc-core.c        platform driver
+
+platform驱动(.name = "omap-pcm-audio")：
+	sdk/arch/arm/mach-omap2/devices.c        platform device
+	../sound/soc/omap/omap-pcm.c             platform driver snd_soc_register_platform
+
+DAI驱动(.name = "omap-mcbsp-dai")：
+	sdk/arch/arm/plat-omap/include/plat/mcbsp.h   OMAP_MCBSP_PLATFORM_DEVICE
+	sdk/arch/arm/mach-omap2/devices.c             platform device
+	../sound/soc/omap/omap-mcbsp.c                platform driver snd_soc_register_dai
+
+nau8540 codec驱动：
+	sdk/arch/arm/mach-omap2/board-omap3evm.c  I2C设备
+	../sound/soc/codec/nau8540.c              I2C驱动加载codec驱动
+
+ak4430 codec驱动：
+	sdk/arch/arm/mach-omap2/board-omap3evm.c  platform device
+	../sound/soc/codec/ak4430.c               platform driver
+
+管脚复用(pin mux)的修改：
+	sdk/arch/arm/mach-omap2/board-omap3evm.c
+
+
+具体来看：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、../sound/soc/codec/Makefile的修改（两个codec的platform driver文件）：
+	我们在../sound/soc/codec/下添加了两个codec头文件和两个codec源文件，要让内核编译
+系统kbuild认识它们，要按照kbuild规则来修改必要的文件。
+
+	kbuild是linux编译系统的Makefile框架，涉及的内容很多，我这里暂时不做太多深入，够用
+就行。目标定义是kbuild的主要部分，也是核心部分，在我们这里就是要添加两个目标定义。
+
+	kbuild Makefile目标定义的方法就是在文件夹下的Makefile中使用obj-y、obj-n、obj-m变
+量来通知kbuild如何编译目标文件。
+
+	对我们的ak4430.c和nau8540.c应该在../sound/soc/codec/Makefile这样添加：
+obj-y += ak4430.o
+obj-y += nau8540.o
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、sdk/arch/arm/mach-omap2/board-omap3evm.c文件的修改：
+2.1、管脚复用
+	ak4430接在mcbsp5上：mcbsp5_dx输出、mcbsp5_clk输出、mcbsp5_fsx输出
+	nua8540接在mcbsp3上：mcbsp3_fs输出、mcbsp3_dr输入、mcbsp3_clkx输出
+
+	比较繁琐，按刘阳的来，节约时间
+
+	/*TOUCH_INT/GPIO_140*/
+	/*OMAP3_MUX(MCBSP3_DX, OMAP_MUX_MODE4 | OMAP_PIN_INPUT_PULLUP |
+				OMAP_PIN_OFF_INPUT_PULLUP | OMAP_PIN_OFF_OUTPUT_LOW |
+				OMAP_PIN_OFF_WAKEUPENABLE),*/
+	/*LCD_CAP_INT/GPIO_141*/
+	/*OMAP3_MUX(MCBSP3_DR, OMAP_MUX_MODE4 | OMAP_PIN_INPUT_PULLUP |
+				OMAP_PIN_OFF_INPUT_PULLUP | OMAP_PIN_OFF_OUTPUT_LOW |
+				OMAP_PIN_OFF_WAKEUPENABLE),*/
+	/* McBSP1 */
+	/* CLKX -> BCLK 
+		FSX  -> FSYNC
+		DX   -> DIN
+		DR  <- DOUT */
+
+	//OMAP3_MUX(MCBSP1_CLKR, 	OMAP_MUX_MODE0 | OMAP_PIN_INPUT ),
+	//OMAP3_MUX(MCBSP1_FSR, 	OMAP_MUX_MODE0 | OMAP_PIN_INPUT),
+	//OMAP3_MUX(MCBSP1_DX, 	OMAP_MUX_MODE0 | OMAP_PIN_OUTPUT | OMAP_PULL_ENA |OMAP_PULL_UP ),
+
+
+	OMAP3_MUX(MCBSP3_FSX, OMAP_MUX_MODE0 | OMAP_PIN_INPUT),
+	OMAP3_MUX(MCBSP3_CLKX, OMAP_MUX_MODE0 | OMAP_PIN_INPUT),
+	OMAP3_MUX(MCBSP3_DR, OMAP_MUX_MODE0 | OMAP_PIN_INPUT),
+	OMAP3_MUX(MCBSP3_DX, OMAP_MUX_MODE0 | OMAP_PIN_OUTPUT),
+	
+	OMAP3_MUX(ETK_D5, OMAP_MUX_MODE1 | OMAP_PIN_OUTPUT),   //LRCK 
+	OMAP3_MUX(ETK_CLK, OMAP_MUX_MODE1 | OMAP_PIN_OUTPUT), //CLK
+	OMAP3_MUX(ETK_D6, OMAP_MUX_MODE1 | OMAP_PIN_OUTPUT),   //DX
+
+2.2、三片nau8540作为I2C设备的定义
+
+static struct i2c_board_info __initdata omap3evm_i2c3_boardinfo[] = {
+	{
+		I2C_BOARD_INFO("edt-ft5x06", 0x38),
+		.flags = I2C_CLIENT_WAKE,
+		.irq   = OMAP_GPIO_IRQ(OMAP3_EVM_TS_GPIO_cap),
+		.platform_data =&ft5x06_pdata,
+	},
+	{
+		I2C_BOARD_INFO("24c04", 0x50), // A0=0, A1=0, A2=0
+		.platform_data = &board_eeprom,
+	},
+	{
+		I2C_BOARD_INFO("nau8540", 0x1c),
+	},
+	{
+		I2C_BOARD_INFO("nau8540", 0x1d),
+	},
+	{
+		I2C_BOARD_INFO("nau8540", 0x1f),
+	},
+};
+
+static int __init omap3_evm_i2c_init(void)
+{
+	/*
+	 * REVISIT: These entries can be set in omap3evm_twl_data
+	 * after a merge with MFD tree
+	 */
+	omap3evm_twldata.vmmc1 = &omap3evm_vmmc1;
+	omap3evm_twldata.vsim = &omap3evm_vsim;
+
+	omap_register_i2c_bus(1, 2600, omap3evm_i2c_boardinfo,
+			ARRAY_SIZE(omap3evm_i2c_boardinfo));
+	/* Bus 2 is used for Camera/Sensor interface */
+	omap_register_i2c_bus(2, 400, omap3evm_i2c2_boardinfo, ARRAY_SIZE(omap3evm_i2c2_boardinfo));
+
+	omap_register_i2c_bus(3, 100, omap3evm_i2c3_boardinfo, ARRAY_SIZE(omap3evm_i2c3_boardinfo));
+	return 0;
+}
+
+2.3、ak4430的platform device的定义
+
+static struct platform_device ak4430_codec = {
+	.name   = "ak4430-codec",
+	.id     = -1,
+};
+
+static struct platform_device *omap3_evm_devices[] __initdata = {
+	&omap3_evm_dss_device,
+	//&keys_gpio,//use module
+	&omap3evm_bl,
+	&ak4430_codec,
+};
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、../sound/soc/omap/omap3evm.c文件修改
+
+3.1、ak4430 machine级驱动
+static int omap3evm_ak4430_hw_params(struct snd_pcm_substream *substream,
+	struct snd_pcm_hw_params *params)
+{
+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
+//	struct snd_soc_dai *codec_dai = rtd->codec_dai;
+	struct snd_soc_dai *cpu_dai = rtd->cpu_dai; 
+
+	int fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
+		SND_SOC_DAIFMT_CBS_CFS;
+	int ret;
+
+
+	/* Set cpu DAI configuration */
+	ret = snd_soc_dai_set_fmt(cpu_dai, fmt);
+	if (ret < 0) {
+		pr_err(PREFIX "can't set cpu DAI configuration\n");
+		return ret;
+	}
+
+	/* Set McBSP clock to external */
+	ret = snd_soc_dai_set_sysclk(cpu_dai, OMAP_MCBSP_SYSCLK_CLKS_EXT,
+				//512 * params_rate(params),
+				24576000,
+				SND_SOC_CLOCK_IN);
+	if (ret < 0) {
+		pr_err(PREFIX "can't set cpu system clock\n");
+		return ret;
+	}
+
+	ret = snd_soc_dai_set_clkdiv(cpu_dai, OMAP_MCBSP_CLKGDV, 24);
+	if (ret < 0) {
+		pr_err(PREFIX "can't set SRG clock divider\n");
+		return ret;
+	}
+
+	return 0;
+}
+
+static struct snd_soc_ops omap3evm_ak4430_ops = {
+	.hw_params = omap3evm_ak4430_hw_params,
+};
+
+3.2、nau8540 machine级驱动
+
+/* nau8540 ops */
+static int omap3evm_nau8540_hw_params(struct snd_pcm_substream *substream,
+	struct snd_pcm_hw_params *params)
+{
+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
+	struct snd_soc_dai *codec_dai = rtd->codec_dai;
+	struct snd_soc_dai *cpu_dai = rtd->cpu_dai;
+	int ret;
+
+	/* Set cpu DAI configuration */
+	ret = snd_soc_dai_set_fmt(cpu_dai,
+				SND_SOC_DAIFMT_DSP_B |
+				SND_SOC_DAIFMT_NB_NF |
+				SND_SOC_DAIFMT_CBS_CFS);         //cpu as slave 
+
+	if (ret < 0) {
+		printk(KERN_ERR "Can't set cpu DAI configuration\n");
+		return ret;
+	}
+
+	/* Set McBSP clock to external */
+	ret = snd_soc_dai_set_sysclk(cpu_dai, OMAP_MCBSP_SYSCLK_CLKS_EXT,
+				// 512 * params_rate(params),
+				24576000,
+				SND_SOC_CLOCK_IN);
+	if (ret < 0) {
+		pr_err(PREFIX "can't set cpu system clock\n");
+		return ret;
+	}
+
+	ret = snd_soc_dai_set_clkdiv(cpu_dai, OMAP_MCBSP_CLKGDV, 3);
+	if (ret < 0) {
+		pr_err(PREFIX "can't set SRG clock divider\n");
+		return ret;
+	}
+
+	return 0;
+}
+
+static struct snd_soc_ops omap3evm_nau8540_ops = {
+	.hw_params = omap3evm_nau8540_hw_params,
+};
+
+3.3、
+
+static struct snd_soc_dai_link  omap3evm_dai[] = {
+	{
+		.name 		= "AK4430",
+		.stream_name 	= "AK4430",
+		.cpu_dai_name = "omap-mcbsp-dai.4",         //mcbsp5
+		.codec_dai_name = "ak4430-hifi",
+		.platform_name = "omap-pcm-audio",
+		.codec_name = "ak4430-codec",
+		.ops 		= &omap3evm_ak4430_ops,
+	},
+	{
+		.name 		= "NAU8540",
+		.stream_name 	= "NAU8540",
+		.cpu_dai_name = "omap-mcbsp-dai.2",         //mcbsp3
+		.codec_dai_name = "nau8540-hifi",
+		.platform_name = "omap-pcm-audio",
+		.codec_name = "nau8540-codec.3-001c",
+		.ops 		= &omap3evm_nau8540_ops,
+	}
+};
+
+
+
+
+
+1、linux内核配置系统：
+make menuconfig
+1、CPU信息：
+
+在Linux 中, 体系结构相关的代码都在arch 目录下。之前介绍的TI 处理器都属于ARM体系结构。在arch/ arm 目录下, 和TI 处理器相关的目录有mach - davinci、mach - omap1、mach - omap2、plat - omap。这些目录相关的说明
+
+
+static struct omap_board_mux omap36x_board_mux[] __initdata

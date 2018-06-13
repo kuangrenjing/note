@@ -1,0 +1,7 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ARM是通用处理器(GPP General-Purpose Processor)，DSP是专用处理器。ARM+DSP双核CPU
+的出现是嵌入式控制领域发展的一个重要里程碑，双核CPU存在的一个重要问题是如何进行双方之间
+的通信，TI公司给它的OMAP系列芯片提供了DSPLink方案。DSPLINK提供了一套通用的API，从应用
+层抽象出ARM与DSP的物理连接特性，从而降低了用户开发程序的复杂度。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

@@ -1,0 +1,14 @@
+stdafx.h：69
+#define LITE_VERSION//LITE版不计算NETD，不统计CMOS Hist，Temperature Hist，Temperature STD，不保存Response
+
+NetComm.h:15
+#ifndef LITE_VERSION
+#define	_CONTROLLER_//表明是PC控制端代码
+#endif
+
+
+#ifdef _CONTROLLER_
+	pComm->DecodeCmdA(addr.sin_addr.s_addr, pk, &charBuffer[4], ret-sizeof (UINT));//上位机解码
+#else
+	pComm->DecodeCmdB(addr.sin_addr.s_addr, pk, &charBuffer[4], ret-sizeof (UINT));//下位机解码
+#endif

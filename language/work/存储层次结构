@@ -1,0 +1,20 @@
+device memory hierarchy
+
+一般的智能设备，都会根据存储单元与CPU结合的紧密程度划分存储层次结构。
+
+P1988
+The device memory hierarchy includes four levels:
+• L1 is internal to the CPUs. It concerns data exchange with the internal Level1 cache memory
+subsystem, and it is the closest memory to the microprocessor unit (MPU) core and the IVA2.2 core.
+• L2 is included in the IVA2.2 subsystem and the MPU subsystem.
+• The chip-level interconnect consists of one L3 interconnect and four L4 interconnects. It enables
+communication among the modules and subsystems in the device.
+Figure 9-1 shows an overview of the L3 and L4 interconnect architecture.
+• L3 handles many types of data transfers, especially exchanges with system-on-chip/external
+memories. L3 transfers data with a maximum width of 64 bits from the initiator to the target. The L3
+interconnect is a little-endian platform
+• L4 is composed of the L4-Core, L4-Per, L4-Wakeup, and L4-Emu interconnects and handles data
+transfers to peripherals. It supports 32-bit data width transfer and is optimized to support the
+interconnection of many peripheral targets. These backplanes assume little-endian transactions for
+narrower targets (8-bit, 16-bit) when doing data packing and unpacking.
+1988

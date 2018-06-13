@@ -1,0 +1,18 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	TI DM3730在2010年底就推出来了，那时叫OMAP3730，硬件主频没那么高，从OMAP3530，
+OMAP3630（MOTO刀锋手机使用的芯片）升级过来。2011年TI整合OMAP3730到DAVINCI系列芯片组，
+就是现在的DM3730（1GHz COTEX-A8+ 800MHz 的C64+ 定点DSP）
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+DVSDK的目录层次：
+	一些很好的参考文章：
+		https://blog.csdn.net/gqb_driver/article/details/8917451
+
+	psp，类似于其它厂商的板级支持包(bsp)，TI公司叫做平台支持包。我们关心的声音驱动就在
+这个子目录中。psp/docs是psp的文档，userguide中有声音驱动的详细介绍。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+DVSDK中的声音部分：
+	DVSDK有"psp/linux-2.6.37-psp04.02.00.04.sdk/sound/"子目录。

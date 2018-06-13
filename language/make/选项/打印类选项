@@ -1,0 +1,34 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我们在进行大型项目编译的时候经常会看到make会输出"Entering /home/hp"、"Leaving 
+/home/hp"这样的输出，那这些输出是怎么来的？产生这样的输出就说明make的“打印目录”选项被
+打开了。
+
+If you use several levels of recursive make invocations, the ‘-w’ or ‘--print-directory’
+option can make the output a lot easier to understand by showing each directory as make
+starts processing it and as make finishes processing it. For example, if ‘make -w’ is run in
+the directory /u/gnu/make, make will print a line of the form:
+make: Entering directory ‘/u/gnu/make’.
+before doing anything else, and a line of the form:
+make: Leaving directory ‘/u/gnu/make’.
+when processing is completed.
+Normally, you do not need to specify this option because ‘make’ does it for you: ‘-w’
+is turned on automatically when you use the ‘-C’ option, and in sub-makes. make will
+not automatically turn on ‘-w’ if you also use ‘-s’, which says to be silent, or if you use
+‘--no-print-directory’ to explicitly disable it.
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+‘-p’
+‘--print-data-base’
+Print the data base (rules and variable values) that results from reading the
+makefiles; then execute as usual or as otherwise specified. This also prints the
+version information given by the ‘-v’ switch (see below). To print the data
+base without trying to remake any files, use ‘make -qp’. To print the data base
+of predefined rules and variables, use ‘make -p -f /dev/null’. The data base
+output contains file name and line number information for recipe and variable
+definitions, so it can be a useful debugging tool in complex environments.
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+打印各个变量
+https://www.cnblogs.com/AP0904225/p/5936465.html

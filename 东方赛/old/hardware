@@ -1,0 +1,54 @@
+void StopPreview(BOOL bDeviceDisconnected=FALSE);//停止图像传输
+BOOL StartPreview(void (* pCallBackImgProcess)(const USHORT *), BOOL bBinAndAcc=TRUE);//开始图像传输
+
+extern CHardware theCamera;
+
+BIN（binning mode）就是把相邻的像素合成一个像素，然后再输出。
+
+
+StartPreview函数
+	此函数是在CTIDoc类的数据处理入口StartProcess函数中调用的。
+	此函数主要启动相机图像流；把StartProcess给的回调函数指针放在m_pCallBackImgProcess中；启用ThreadOutputImg线程函数。
+
+
+	驱动取数据
+	DeviceIoControl(m_hCamera, IOCTL_CAM_START_STREAM, &obj, sizeof(CAPTURE_OBJECT), NULL, 0, &dwNret, NULL)
+	obj.bBinAndAcc是StartPreview的第二个参数，来源于CTIDoc::StartProcess函数的第一个参数，这个参数有默认值，为true，CMainFrame中ontimer函数中调用StartProcess函数就是用的默认值。所以驱动把数据bin以后传上来。美光的读出电路尺寸很大，巨哥的探测器尺寸其实只有60*80，最多120*160。
+
+
+UINT CHardware::ThreadOutputImg(LPVOID pParam)
+	这个线程函数从驱动中取得图像数据。取得的数据放在CHardware::m_pOutPutImgBuffer。
+
+	图像bin的
+	memcpy(pHardware->m_pOutPutImgBuffer, pFrameBuffer, FPAWIDTH*FPAHEIGHT*sizeof(USHORT));
+	图像不bin的(Mag10都是输出未bin的数据bt601 YCbYCr)
+	memcpy(pHardware->m_pOutPutImgBuffer, pFrameBuffer, CMOSWIDTH*CMOSHEIGHT);
+
+	对取得的数据进行处理：
+	pHardware->m_pCallBackImgProcess(pHardware->m_pOutPutImgBuffer);
+
+好了，又回到CTIDoc中去了，是为NewFrame函数
+
+
+
+
+
+其它函数：
+SetFFCState
+	设置与挡板相关的一个IO，用于指示？？？
+
+SetShutterState
+	控制挡板开关
+
+
+
+BOOL StartReceiveImg(ImgTypes ImgType, UINT intImgSize, char * pOutputBuffer, void (* pCallBackImgProcess)(void *));
+->m_pThreadImg = AfxBeginThread(ThreadReceiveImg, (void *)this);
+->m_pThreadImgOutput = AfxBeginThread(ThreadOutputImg, (void *)this);
+DeviceIoControl(pHardware->m_hCamera, IOCTL_CAM_GET_FRAME, &pFrameBuffer, sizeof(DWORD), NULL, 0, &dwNRet, NULL)
+
+
+
+
+
+

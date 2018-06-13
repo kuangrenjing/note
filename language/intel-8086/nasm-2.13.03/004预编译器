@@ -1,0 +1,66 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	NASM拥有一个强大的宏处理器，它支持条件汇编，多级文件包含，两种形式的宏(单行的与多
+行的)，还有为更强大的宏能力而设置的'context stack'机制。
+
+	预处理指令都是以一个'%'打头。
+
+	%define
+
+	%idefine
+
+	%xdefine
+
+	%ixdefine
+
+	预处理器把所有以反斜杠(\)结尾的连续行合并为一行，比如：
+%define THIS_VERY_LONG_MACRO_NAME_IS_DEFINED_TO \
+THIS_value
+会像是单独一行那样正常工作。
+
+4.1 单行的宏。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1.1 最常用的方式:'%define'
+	单行的宏是以预处理指令'%define'定义的。定义工作同C很相似，所以你可以这样做：
+%define ctrl 0x1F &
+%define param(a,b) ((a)+(a)*(b))
+mov byte [param(2,ebx)], ctrl 'D'
+会被扩展为：
+mov byte [(2)+(2)*(ebx)], 0x1F & 'D'
+
+	单行的宏在定义时如果使用了其它的宏展开会把嵌套的宏也展开
+
+
+	当单行的宏被扩展开后还含有其它的宏时，展开工作会在执行时进行，而不是
+定义时，如下面的代码：
+%define a(x) 1+b(x)
+%define b(x) 2*x
+mov ax,a(8)
+会如预期的那样被展开成'mov ax, 1+2*8'， 尽管宏'b'并不是在定义宏a
+的时候定义的。
+用'%define'定义的宏是大小写敏感的：在代码'%define foo bar'之后，只有
+'foo'会被扩展成'bar'：'Foo'或者'FOO'都不会。用'%idefine'来代替'%define'
+(i代表'insensitive')，你可以一次定义所有的大小写不同的宏。所以
+
+
+
+
+4.1 Single−Line Macros
+4.1.1 The Normal Way: %define
+Single−line macros are defined using the %define preprocessor directive. The definitions work in a
+similar way to C; so you can do things like
+%define ctrl 0x1F &
+%define param(a,b) ((a)+(a)*(b))
+mov byte [param(2,ebx)], ctrl ’D’
+which will expand to
+mov byte [(2)+(2)*(ebx)], 0x1F & ’D’
+When the expansion of a single−line macro contains tokens which invoke another macro, the
+expansion is performed at invocation time, not at definition time. Thus the code
+%define a(x) 1+b(x)
+%define b(x) 2*x
+mov ax,a(8)
+will evaluate in the expected way to mov ax,1+2*8, even though the macro b wasn’t defined at the
+time of definition of a.
+Macros defined with %define are case sensitive: after %define foo bar, only foo will expand to
+bar: Foo or FOO will not. By using %idefine instead of %define (the ‘i’ stands for ‘insensitive’) you
+can define all the case variants of a macro at once, so that %idefine foo bar would cause foo,
+Foo, FOO, fOO and so on all to expand to bar.

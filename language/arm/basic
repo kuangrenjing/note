@@ -1,0 +1,13 @@
+1、ARM有BOIS吗？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	arm跟intel x86系列芯片有很大的不同，x86是一颗单独的CPU，周边配置了很多其它的芯片
+来配合它工作，譬如BIOS、南桥、北桥等等控制芯片。但ARM就不同，厂商从ARM公司拿到授权，然后
+设计自己的外设共同组合一个SoC，也就是说一些周边控制的芯片，都被整合到SoC里面。也因为如此，
+每家厂商所提供的SoC都不相同。既然每家提供的SoC不一样，那么，也就没有标准的BIOS提供。但芯
+片厂商会提供BSP。
+
+2、什么是ARM的BSP
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	BSP提供的bootloader跟PC机的BIOS类似，BSP还包含和系统有关的基本驱动（串口，网口...
+),此外程序员还可以编程修改BSP，在BSP中任意添加一些和系统无关的驱动或程序，甚至可以把上
+层开发的统统放到BSP中。每次定制完BSP后都可以把它烧到FLASH中去。

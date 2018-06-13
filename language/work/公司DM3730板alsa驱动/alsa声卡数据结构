@@ -1,0 +1,71 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、声卡的构成
+	一个声卡可以有多个pcm逻辑设备(一般就是codec，即编解码器)，每个pcm设备可以有两个
+stream(playback stream和capture stream)，每个stream又可以有多个substream。
+
+	在我司项目中，使用了两个codec(对应到驱动中需要两个pcm逻辑设备)：AK4430、NAU85l40，
+AK4430有一个playback stream，NAU85l40有一个capture stream。这两个stream各有一个
+substream。
+
+	我们知道soc是对alsa再封装，我们来看看alsa和soc分别是怎么描述网卡、PCM、stream和
+substream的。
+
+	include/sound/core.h定义alsa的结构
+	include/sound/soc.h定义soc的结构
+
+	声卡：
+		alsa:include/sound/core.h:struct snd_card
+		soc:include/sound/soc.h:struct snd_soc_card
+
+	pcm
+		alsa:include/sound/pcm.h:struct snd_pcm
+		soc:include/sound/soc.h:struct snd_soc_pcm_runtime
+
+	stream
+		alsa:include/sound/pcm.h:struct snd_pcm_substream
+		soc:include/sound/soc.h:struct snd_soc_pcm_stream
+
+	substream
+		alsa:include/sound/pcm.h:struct snd_pcm_substream
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	soc框架中pcm设备的配置使用snd_soc_dai_link类型数组来组织，主要是各pcm设备对应的
+platform、codec_dai、codec、cpu_dai驱动的名字和一组pcm操作函数。而pcm设备在soc框架中
+使用snd_soc_pcm_runtime结构体描述，在alsa框架中使用snd_pcm描述。
+
+	platform、codec_dai、codec、cpu_dai是soc的概念，所以它们的驱动都是放在
+snd_soc_pcm_runtime结构中的。snd_soc_pcm_runtime有四个成员：
+	struct snd_soc_codec *codec;
+	struct snd_soc_platform *platform;
+	struct snd_soc_dai *codec_dai;
+	struct snd_soc_dai *cpu_dai;
+这四个成员有分别有：
+	struct snd_soc_codec_driver *driver;
+	struct snd_soc_platform_driver *driver;
+	struct snd_soc_dai_driver *driver;
+	struct snd_soc_dai_driver *driver;
+用于表示各驱动。
+
+这些驱动都是通过
+snd_soc_register_codec
+snd_soc_register_platform
+snd_soc_register_dai
+函数注册到soc-core.c文件定义的codec_list、platform_list、dai_list全局列表上。
+
+	platform、codec_dai、codec(包括machine)驱动都借助了linux的platform类型驱动模块。
+在linux platform驱动和设备匹配成功后，入口函数会调用register系列函数，这样驱动就到达了
+全局列表中。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+sound/soc/omap/omap-mcbsp.c定义了
+static struct snd_soc_dai_ops mcbsp_dai_ops = {
+	.startup	= omap_mcbsp_dai_startup,
+	.shutdown	= omap_mcbsp_dai_shutdown,
+	.trigger	= omap_mcbsp_dai_trigger,
+	.delay		= omap_mcbsp_dai_delay,
+	.hw_params	= omap_mcbsp_dai_hw_params,
+	.set_fmt	= omap_mcbsp_dai_set_dai_fmt,
+	.set_clkdiv	= omap_mcbsp_dai_set_clkdiv,
+	.set_sysclk	= omap_mcbsp_dai_set_dai_sysclk,
+};

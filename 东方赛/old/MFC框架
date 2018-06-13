@@ -1,0 +1,38 @@
+mfc框架提供五个类、一个全局变量和若干宏定义常量。
+
+五个类是：
+CAboutDlg   继承于CDialog  为用户提供程序相关的帮助信息
+CMainFrame  继承于CFrameWnd  主框架窗口
+CTIDoc      继承于CDocument  负责数据存储和加载
+CTIView     继承于CView      负责数据显示和修改
+CTIApp      继承于CWinApp    框架的全局变量的类型，标识应用程序本身。
+
+
+
+CMainFrame:
+	注意这两个全局变量：
+	extern CHardware theCamera;
+	extern CNetComm theComm;
+
+	Ontimer()函数：
+	定期检查网络连接状况，调用数据处理的入口函数pDoc->StartProcess()
+
+
+
+CTIDoc：
+	数据处理的入口函数：StartProcess()，缺省参数为“图像是bin的”，先设置好m_Func，如加载校准表、设置TCM、设置调色板，然后调用：
+	theCamera.StartPreview(NewFrame, bBinAndAcc)
+
+
+	NewFrame函数
+	设置给CHardware的回调函数，CHardware的ThreadOutputImg线程函数会调用它。
+	这个函数会根据上位机要求传的数据类型来处理数据，从驱动取出来的数据可能是ImgCMOS255或ImgCMOSDownsized(bin过)的，如果要求的是这两种格式，那就可以直接传了。
+	如果上位机要求的是其它类型，那就需要CFunction发挥作用了，调用pDoc->PushFrame(&ImgHeader, lpFrame)，CTIDoc::PushFrame又分别调用m_Func.PushBaselineGray(lpFrame)、m_Func.PushResponseGray(lpFrame)压入挡板灰度和景物灰度图。
+	下面我们就去CFunction类看看
+		ImgResponse,
+		ImgTemperature,
+		ImgInfrareadOrigin,
+		ImgInfrareadRGB565
+	数据都是怎么生成的。
+
+

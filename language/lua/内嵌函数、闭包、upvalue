@@ -1,0 +1,20 @@
+
+1、类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	类型，定义了一个取值的集合，以及可作用的操作的集合。如C语言的int类型有一个上下界，
+可进行加减乘除等操作。变量可能有 int，float，string。。等类型，函数、对象等也有类型。进一步，
+我们把类型分为三类：
+	First Class。该类型的值可以作为函数的参数和返回值，也可以赋给变量。
+	Second Class。该类型的值可以作为函数的参数，但不能从函数返回，也不能赋给变量。
+	Third Class。该类型的值作为函数参数也不行
+
+
+2、lua函数是first class value：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Lua中的函数是一阶类型值(first-class value)，定义函数就象创建普通类型值一样(只不
+过函数类型值的数据主要是一条条指令而已)，所以在函数体中仍然可以定义函数，可以把函数作为
+返回值返回。假设函数f2定义在函数f1中，那么就称f2为f1的内嵌(inner)函数，f1为f2的外包(
+enclosing)函数，外包和内嵌都具有传递性，即f2的内嵌必然是f1的内嵌，而f1的外包也一定是f2
+的外包。内嵌函数可以访问外包函数已经创建的所有局部变量，这种特性便是所谓的词法定界
+(lexical scoping)，而这些局部变量则称为该内嵌函数的外部局部变量(external local variable)
+或者upvalue(这个词多少会让人产生误解，因为upvalue实际指的是变量而不是值)。试看如下代码：

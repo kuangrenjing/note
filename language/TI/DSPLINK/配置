@@ -1,0 +1,15 @@
+编译DSPLink源码和测试代码之前，先要设置环境变量，TI已经为我们准备了一个脚本，我们只要修改它就可以了。
+
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/etc/host/scripts/Linux
+
+这个脚本只为dsplinkcfg.pl脚本提供环境变量，所以其生存期不需要太长。
+
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/config/bin/dsplinkcfg.pl运行后会在
+
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/config/BUILD下生成若干文件
+
+CFG_ARM.c
+CFG_Linux.c
+CFG_OMAP3530_SHMEM.c
+CFG_system.c
+CURRENTCFG.MK

@@ -1,0 +1,6 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、指定makefile文件名
+	如果我们的makefile的名字不叫"GNUmakefile", "makefile"或"Makefile"，那我们就需要
+使用-f选项指定我们的文件，用法如下：
+
+	make -f mymakefile_name

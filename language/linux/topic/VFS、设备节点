@@ -1,0 +1,6 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Linux文件系统与设备驱动
+	应用程序和VFS之间的接口是系统调用。而VFS与文件系统以及设备之间的接口是file_operation
+结构体成员函数，这个结构体对文件进行打开，关闭，读写，控制的一系列成员函数。
+	字符设备的上层没有类似于磁盘的ext2文件系统，所以字符设备的file_oeration成员函数就
+直接由设备驱动提供了。file_operation正是字符设备驱动的核心。

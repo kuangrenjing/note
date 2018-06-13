@@ -1,0 +1,8 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我们在Makefile中接触到的第一个指令可能就是include了。include指令告诉make暂停当前
+makefile的读取转而读取其它makefiles文件，相当于把其它makefiles文件的内容替换到include
+指令位置。
+
+The include directive tells make to suspend reading the current makefile and read one or
+more other makefiles before continuing. The directive is a line in the makefile that looks
+like this:

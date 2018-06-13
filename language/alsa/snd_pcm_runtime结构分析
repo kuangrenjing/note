@@ -1,0 +1,117 @@
+struct snd_pcm_runtime {
+	/* -- Status -- */
+	struct snd_pcm_substream *trigger_master;
+	struct timespec trigger_tstamp;	/* trigger timestamp */
+	int overrange;
+	snd_pcm_uframes_t avail_max;
+	snd_pcm_uframes_t hw_ptr_base;	/* Position at buffer restart */
+	snd_pcm_uframes_t hw_ptr_interrupt; /* Position at interrupt time */
+	unsigned long hw_ptr_jiffies;	/* Time when hw_ptr is updated */
+	unsigned long hw_ptr_buffer_jiffies; /* buffer time in jiffies */
+	snd_pcm_sframes_t delay;	/* extra delay; typically FIFO size */
+
+	/* -- HW params -- */
+	snd_pcm_access_t access;	/* access mode */
+	snd_pcm_format_t format;	/* SNDRV_PCM_FORMAT_* */
+	snd_pcm_subformat_t subformat;	/* subformat */
+	unsigned int rate;		/* rate in Hz */
+	unsigned int channels;		/* channels */
+	snd_pcm_uframes_t period_size;	/* period size */
+	unsigned int periods;		/* periods */
+	snd_pcm_uframes_t buffer_size;	/* buffer size */
+	snd_pcm_uframes_t min_align;	/* Min alignment for the format */
+	size_t byte_align;
+	unsigned int frame_bits;
+	unsigned int sample_bits;
+	unsigned int info;
+	unsigned int rate_num;
+	unsigned int rate_den;
+
+	/* -- SW params -- */
+	int tstamp_mode;		/* mmap timestamp is updated */
+  	unsigned int period_step;
+	snd_pcm_uframes_t start_threshold;
+	snd_pcm_uframes_t stop_threshold;
+	snd_pcm_uframes_t silence_threshold; /* Silence filling happens when
+						noise is nearest than this */
+	snd_pcm_uframes_t silence_size;	/* Silence filling size */
+	snd_pcm_uframes_t boundary;	/* pointers wrap point */
+
+	snd_pcm_uframes_t silence_start; /* starting pointer to silence area */
+	snd_pcm_uframes_t silence_filled; /* size filled with silence */
+
+	union snd_pcm_sync_id sync;	/* hardware synchronization ID */
+
+	/* -- mmap -- */
+	struct snd_pcm_mmap_status *status;
+	struct snd_pcm_mmap_control *control;
+
+	/* -- locking / scheduling -- */
+	snd_pcm_uframes_t twake; 	/* do transfer (!poll) wakeup if non-zero */
+	wait_queue_head_t sleep;	/* poll sleep */
+	wait_queue_head_t tsleep;	/* transfer sleep */
+	struct fasync_struct *fasync;
+
+	/* -- private section -- */
+	void *private_data;
+	void (*private_free)(struct snd_pcm_runtime *runtime);
+
+	/* -- hardware description -- */
+	struct snd_pcm_hardware hw;
+	struct snd_pcm_hw_constraints hw_constraints;
+
+	/* -- interrupt callbacks -- */
+	void (*transfer_ack_begin)(struct snd_pcm_substream *substream);
+	void (*transfer_ack_end)(struct snd_pcm_substream *substream);
+
+	/* -- timer -- */
+	unsigned int timer_resolution;	/* timer resolution */
+	int tstamp_type;		/* timestamp type */
+
+	/* -- DMA -- */           
+	unsigned char *dma_area;	/* DMA area */
+	dma_addr_t dma_addr;		/* physical bus address (not accessible from main CPU) */
+	size_t dma_bytes;		/* size of DMA area */
+
+	struct snd_dma_buffer *dma_buffer_p;	/* allocated buffer */
+
+#if defined(CONFIG_SND_PCM_OSS) || defined(CONFIG_SND_PCM_OSS_MODULE)
+	/* -- OSS things -- */
+	struct snd_pcm_oss_runtime oss;
+#endif
+
+#ifdef CONFIG_SND_PCM_XRUN_DEBUG
+	struct snd_pcm_hwptr_log *hwptr_log;
+#endif
+};
+
+1、DMA设置
+
+sound/core/pcm_memory.c负责为pcm substream的DMA申请内存
+
+snd_pcm_lib_preallocate_pages
+
+sound/soc/omap/omap-pcm.c
+
+/* this may get called several times by oss emulation */
+static int omap_pcm_hw_params(struct snd_pcm_substream *substream,
+			      struct snd_pcm_hw_params *params)
+
+->sdk/include/sound/pcm.h
+
+static inline void snd_pcm_set_runtime_buffer(struct snd_pcm_substream *substream,
+					      struct snd_dma_buffer *bufp)
+{
+	struct snd_pcm_runtime *runtime = substream->runtime;
+	if (bufp) {
+		runtime->dma_buffer_p = bufp;
+		runtime->dma_area = bufp->area;
+		runtime->dma_addr = bufp->addr;
+		runtime->dma_bytes = bufp->bytes;
+	} else {
+		runtime->dma_buffer_p = NULL;
+		runtime->dma_area = NULL;
+		runtime->dma_addr = 0;
+		runtime->dma_bytes = 0;
+	}
+}

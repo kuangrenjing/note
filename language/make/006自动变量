@@ -1,0 +1,33 @@
+1、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CK1： make.pdf(GNU make Version 4.2)
+
+GNU定义了一些它特有的变量[CK1-p185]：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+$@ The file name of the target.
+$% The target member name, when the target is an archive member.
+$< The name of the first prerequisite.
+$? The names of all the prerequisites that are newer than the target, with spaces
+between them. For prerequisites which are archive members, only the named
+member is used (see Chapter 11 [Archives], page 129).
+$^
+$+ The names of all the prerequisites, with spaces between them. For prerequisites
+which are archive members, only the named member is used (see Chapter 11
+[Archives], page 129). The value of $^ omits duplicate prerequisites, while $+
+retains them and preserves their order.
+$* The stem with which an implicit rule matches (see Section 10.5.4 [How Patterns
+Match], page 122).
+$(@D)
+$(@F) The directory part and the file-within-directory part of $@.
+$(*D)
+$(*F) The directory part and the file-within-directory part of $*.
+$(%D)
+$(%F) The directory part and the file-within-directory part of $%.
+$(<D)
+$(<F) The directory part and the file-within-directory part of $<.
+$(^D)
+$(^F) The directory part and the file-within-directory part of $^.
+$(+D)
+$(+F) The directory part and the file-within-directory part of $+.
+$(?D)
+$(?F) The directory part and the file-within-directory part of $?.

@@ -1,0 +1,5 @@
+dsplink的《UserGuide》文档第16章是关于LOOP程序说明的：
+	演示dsplink的基本数据流概念。GPP端和DSP端的两个task互相交换数据，演示了DSP/BIOS的SIO-TSK、GIO-SWI的用法。
+
+
+dsplink的《ProgrammersGuide》文档第3.5章节介绍了DSPLink多种DSP启动方式。

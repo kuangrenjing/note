@@ -1,0 +1,64 @@
+1、数据是否已经准备好，可以向画布绘画
+BOOL IsOutputDataReady() const{return m_bOutputDataReady;};
+
+给CFunction传入数据并处理数据，因为涉及到多帧平滑，最后一帧后才开始处理
+	BOOL PushTemperature(const USHORT * lpFrame){ return PushFrame(lpFrame, SrcTemperature); };//累加器满返回TRUE
+	BOOL PushResponse(const short * lpFrame){ return PushFrame((const USHORT *)lpFrame, SrcResponse); };//累加器满返回TRUE
+	BOOL PushResponseGray(const USHORT * lpFrame){ return PushFrame(lpFrame, SrcResponseGray); };//累加器满返回TRUE
+
+
+处理后的数据：
+	const short * GetResponsePointer() const{return m_shortResponse;};
+	const USHORT * GetTemperturePointer() const{return m_shortTemperature;};
+	const BYTE * GetOriginalBMPDataPointer() const{return m_byteTemperature;};
+	const USHORT * GetRGB565DataPointer(BOOL bColorBar=FALSE, int xOffset=0, int yOffset=0);
+	分别对应上位机要求下位机上传的
+		ImgResponse,
+		ImgTemperature,
+		ImgInfrareadOrigin,
+		ImgInfrareadRGB565
+	数据类型。
+
+	对应的CFunction的数据是：
+		m_shortResponse
+		m_shortTemperature
+		m_byteTemperature
+		暂未知
+
+PushResponseGray：
+	此函数在CTIDoc::PushFrame中被调用，它直接调用了CFunction::PushFrame
+
+PushFrame:
+	通过此函数把CMOS输出的原始灰度数据传入进来，然后计算响应，校准，得到温度数据(内部)。
+
+
+https://blog.csdn.net/yapingmcu/article/details/37817727
+https://wenku.baidu.com/view/35f5436302d276a201292ead.html
+
+像素计算netd
+http://bbs.gkong.com/archive.aspx?id=438737
+https://wenku.baidu.com/view/75cfc02fc281e53a5802ffd4.html
+
+
+
+
+
+
+
+	CAccumulator m_AccBaseline;//Baseline累加器，必备
+	CAccumulator m_AccResponse;//响应累加器，m_ParaInt.AccResponse>1时启用
+	CSmoother m_SmthResponse;//温度平滑器，m_ParaInt.SmoothResponse>1时启用
+	CSmoother m_SmthSTD;//计算netd平滑器，LITE版未启用
+
+
+ACC是Accumulator累加器的缩写
+
+
+enum SrcDataType
+{
+	SrcResponseGray=0,
+	SrcResponse=1,
+	SrcTemperature=2,
+};
+
+

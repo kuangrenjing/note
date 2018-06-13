@@ -1,0 +1,38 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+0、先要知道：
+	默认时，在shell中执行一条命令是在当前shell中进行的，如果是变量创建指令，创建的是局
+部变量。
+
+	默认时，在shell里执行一个脚本是创建了一个子shell(子进程)并在其中执行脚本中的命令的。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、环境变量
+	宽泛地说，环境变量对我们的进程而言就是一些全局变量
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、fork与父子shell
+	一个进程，包括代码、数据和分配给进程的资源。fork()函数通过系统调用创建一个与原来进程
+几乎完全相同的进程，也就是两个进程可以做完全相同的事，但如果初始参数或者传入的变量不同，
+两个进程也可以做不同的事。
+
+	一个进程调用fork（）函数后，系统先给新的进程分配资源，例如存储数据和代码的空间。然后
+把原来的进程的所有值都复制到新的新进程中，只有少数值与原来的进程的值不同。相当于克隆了一个
+自己。
+
+	从上面的两段话分析、结合实验，我们可以知道执行函数中的局部变量是可以被子进程继承的，但
+shell子进程在fork之后应该立即递归调用了执行函数(纯属猜测)，这样子shell又可以继续创建子shell，
+这样一直递归下去。这样父shell的局部变量在子shell中就不可见了。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、在父shell中创建子shell可以继承的变量
+	前面已经说到：父shell中的局部变量在子shell中是不可见的。那就是说我们需要在父shell
+中创建全局变量，这样子shell中才能取得此变量在父shell中的值。在shell中创建全局变量是通过
+"export"指令进行的。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4、在当前shell中执行脚本
+	我们在使用shell的过程中可以发现：控制台是一个生命期很长的shell，基本上可以认为跟机
+器运行时间相同，而它的子shell在执行完脚本以后就退出了。所以，如果我们有一个任务要在控制台
+中分好几个脚本完成，那些要定义全局变量供后面脚本使用的脚本需在控制台中执行而不是创建子shell
+执行。要达到这个目的，就要使用linux中的source命令或者点命令"."
+

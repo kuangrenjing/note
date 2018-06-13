@@ -1,0 +1,10 @@
+.POSIX:echo23
+
+mqs=tianya ruo                \
+	\
+			biling
+
+echo23:
+	@echo $(mqs)
+
+

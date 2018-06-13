@@ -1,0 +1,93 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	尽管NASM极力避免MASN和TASM中的那些庸肿复杂的东西，但还是不得不支持少量的指令，这些
+指令在本章进行描述。
+
+	NASM的指令有两种类型：用户级指令和原始指令。一般地，每一条指令都有一个用户级形式和原
+始形式。在大多数情况下，我们推荐用户使用有户级指令，它们以宏的形式运行，并去调用原始形式
+的指令。
+
+	原始指令被包含在一个方括号中；用户级指令没有括号。
+
+	除了本章所描述的这些通用的指令，每一种目标文件格式为了控制文件格式的一些特性，可以
+使用一些另外的指令。这些格式相关的指令在第7章中跟相关的文件格式一起进行介绍。
+
+6.1 `BITS': 指定目标的处理器模式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	'BITS'指令指定NASM产生的代码是被设计运行在处理器的16位模式、32位模式还是64位模式下
+的。语法是'BITS xx'，xx是16、32或64。
+
+	大多数情况下，你不需要显式地指定'BITS'。'aout','coff','elf','macho','win32'和
+'win64'目标文件格式都是被设计用在32位或64位操作系统上的，它们会让NASM缺省选择32位或64
+位模式。而'obj'目标文件格式允许你为每一个段指定'USE16'或'USE32'，然后NASM就会按你的指
+定设定操作模式，所以多次使用'BITS'是没有必要的。
+
+【注】：nasm是怎么决定使用32位模式还是64位模式的呢？
+
+	最有可能使用'BITS'的场合是在一个纯二进制文件中使用32位或64位代码；这是因为'bin'输
+出格式主要用于写DOS的'.COM'程序，DOS的'.SYS'设备驱动程序，这两种格式都是16位的，所以
+NASM编译'bin'格式时默认设置为16位。
+
+	如果你仅仅是为了在16位的DOS程序中使用32位指令，你不必指定'BITS 32'，如果你这样做了，
+汇编器反而会产生错误的代码，因为这样它会产生运行在16位模式下，却以32位平台为目标的代码。
+
+	当NASM在'BITS 16'状态下时，使用32位数据的指令可以加一个字节的前缀0x66，要使用32位
+的地址，可以加上0x67前缀。在'BITS 32'状态下，相反的情况成立，32位指令不需要前缀，而使用
+16位数据的指令需要0x66前缀，使用16位地址的指令需要0x67前缀。
+
+【注】16位模式下，指令码0x40对应的指令是inc ax；指令码0x66 40对应的指令是inc eax。
+【注】address-size override prefix 0x67一般应该没什么用，数据宽带才是关键。
+
+	当NASM在'BITS 64'状态下时，大部分指令跟'BITS-32'状态下行为相同。但是，'BITS 64'下
+多了8个通用和SSE寄存器可用，而且不再支持16位地址。默认地址长度是64位的，加0x67前缀地址
+长度就是32位的。默认的操作数长度还是32位的，加0x66前缀时使用16位操作数。PEX前缀用于使用
+64位操作数和存取新寄存器。NASM在需要时自动加入REX前缀。
+
+	当使用REX前缀时，处理器不能访问AH,BH,CH或者DH寄存器，但是可以存取SP,BP,SI和DI的低
+八位，分别表示为：SPL,BPL,SIL和DIL(只有使用PEX前缀时，才能这样访问)。
+
+【注】：这句话是不是可以获知这样的信息：数据宽带只是对取地址的内容时而言的，而不是对寄存器
+而言的。
+【注】：http://blog.csdn.net/longintchar/article/details/50602851 是网上做的PUSH语句
+的测试。
+
+	'BITS'指令拥有一个等效的原始形式：[BITS 16],[BITS 32]和[BITS 64]。而用户级的形式
+只是一个仅仅调用原始形式的宏。
+
+	一定要注意BITS语法要求BITS与数字之间需要有空格。
+
+6.1.1 'USE16' & 'USE32': BITS的别名。
+
+	'USE16'和'USE32'指令可以用来取代'BITS 16'和'BITS 32',这是为了和其他汇编器保持兼
+容性。
+
+6.2 DEFAULT:更改汇编器的默认设置
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	DEFAULT指令用于更改汇编器默认值。通常，它默认为一个模式在
+
+预计程序员将显式地直接指定大多数特性。然而，这是偶然的。
+
+令人讨厌的，因为明确的形式几乎是唯一一个希望使用的形式。
+
+目前，默认可以设置关系与ABS和BND和nobnd。
+
+
+
+6.2 DEFAULT: Change the assembler defaults
+The DEFAULT directive changes the assembler defaults. Normally, NASM defaults to a mode where the
+programmer is expected to explicitly specify most features directly. However, this is occasionally
+obnoxious, as the explicit form is pretty much the only one one wishes to use.
+Currently, DEFAULT can set REL & ABS and BND & NOBND.
+6.2.1 REL & ABS: RIP−relative addressing
+This sets whether registerless instructions in 64−bit mode are RIP–relative or not. By default, they are
+absolute unless overridden with the REL specifier (see section 3.3). However, if DEFAULT REL is
+specified, REL is default, unless overridden with the ABS specifier, except when used with an FS or GS
+segment override.
+The special handling of FS and GS overrides are due to the fact that these registers are generally used
+as thread pointers or other special functions in 64−bit mode, and generating RIP–relative addresses
+would be extremely confusing.
+DEFAULT REL is disabled with DEFAULT ABS.
+
+
+
+
+

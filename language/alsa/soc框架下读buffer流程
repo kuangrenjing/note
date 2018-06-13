@@ -1,0 +1,234 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、alsa-lib读buffer
+snd_pcm_sframes_t snd_pcm_readi(snd_pcm_t *pcm, void* buffer, snd_pcm_uframes_t size)
+参数：
+	pcm:      PCM handle
+	buffer:   frames containing buffer
+	size:     frames to be read 
+
+snd_pcm_readi函数没有调用linux文件系统的read api，而是调用了ioctl(fd, SNDRV_PCM_IOCTL_READI_FRAMES, &xferi)
+
+
+ioctl对应到内核里，就是pcm定义的struct file_operations snd_pcm_f_ops的unlocked_ioctl指针
+
+const struct file_operations snd_pcm_f_ops[2] = {
+	{
+		.owner =		THIS_MODULE,
+		.write =		snd_pcm_write,
+		.aio_write =		snd_pcm_aio_write,
+		.open =			snd_pcm_playback_open,
+		.release =		snd_pcm_release,
+		.llseek =		no_llseek,
+		.poll =			snd_pcm_playback_poll,
+		.unlocked_ioctl =	snd_pcm_playback_ioctl,
+		.compat_ioctl = 	snd_pcm_ioctl_compat,
+		.mmap =			snd_pcm_mmap,
+		.fasync =		snd_pcm_fasync,
+		.get_unmapped_area =	snd_pcm_get_unmapped_area,
+	},
+	{
+		.owner =		THIS_MODULE,
+		.read =			snd_pcm_read,
+		.aio_read =		snd_pcm_aio_read,
+		.open =			snd_pcm_capture_open,
+		.release =		snd_pcm_release,
+		.llseek =		no_llseek,
+		.poll =			snd_pcm_capture_poll,
+		.unlocked_ioctl =	snd_pcm_capture_ioctl,
+		.compat_ioctl = 	snd_pcm_ioctl_compat,
+		.mmap =			snd_pcm_mmap,
+		.fasync =		snd_pcm_fasync,
+		.get_unmapped_area =	snd_pcm_get_unmapped_area,
+	}
+};
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、snd_pcm_capture_ioctl SNDRV_PCM_IOCTL_READI_FRAMES
+
+static long snd_pcm_capture_ioctl(struct file *file, unsigned int cmd,
+				unsigned long arg)
+
+->
+...
+->
+
+static int snd_pcm_capture_ioctl1(struct file *file,
+				struct snd_pcm_substream *substream,
+				unsigned int cmd, void __user *arg)
+{
+...
+	case SNDRV_PCM_IOCTL_READI_FRAMES:
+	{
+		struct snd_xferi xferi;
+		struct snd_xferi __user *_xferi = arg;
+		struct snd_pcm_runtime *runtime = substream->runtime;
+		snd_pcm_sframes_t result;
+		if (runtime->status->state == SNDRV_PCM_STATE_OPEN)
+			return -EBADFD;
+		if (put_user(0, &_xferi->result))
+			return -EFAULT;
+		if (copy_from_user(&xferi, _xferi, sizeof(xferi)))
+			return -EFAULT;
+		result = snd_pcm_lib_read(substream, xferi.buf, xferi.frames);
+		__put_user(result, &_xferi->result);
+		return result < 0 ? result : 0;
+	}
+...
+}
+
+->sound/core/pcm_lib.c
+
+snd_pcm_sframes_t snd_pcm_lib_read(struct snd_pcm_substream *substream, void __user *buf, snd_pcm_uframes_t size)
+{
+	struct snd_pcm_runtime *runtime;
+	int nonblock;
+	int err;
+	
+	err = pcm_sanity_check(substream);
+	if (err < 0)
+		return err;
+	runtime = substream->runtime;
+	nonblock = !!(substream->f_flags & O_NONBLOCK);
+	if (runtime->access != SNDRV_PCM_ACCESS_RW_INTERLEAVED)
+		return -EINVAL;
+	return snd_pcm_lib_read1(substream, (unsigned long)buf, size, nonblock, snd_pcm_lib_read_transfer);
+}
+
+EXPORT_SYMBOL(snd_pcm_lib_read);
+
+
+->sound/core/pcm_lib.c
+
+
+static snd_pcm_sframes_t snd_pcm_lib_read1(struct snd_pcm_substream *substream,
+					   unsigned long data,
+					   snd_pcm_uframes_t size,
+					   int nonblock,
+					   transfer_f transfer)
+{
+	struct snd_pcm_runtime *runtime = substream->runtime;
+	snd_pcm_uframes_t xfer = 0;
+	snd_pcm_uframes_t offset = 0;
+	int err = 0;
+
+	if (size == 0)
+		return 0;
+
+	snd_pcm_stream_lock_irq(substream);
+	switch (runtime->status->state) {
+	case SNDRV_PCM_STATE_PREPARED:
+		if (size >= runtime->start_threshold) {
+			err = snd_pcm_start(substream);
+			if (err < 0)
+				goto _end_unlock;
+		}
+		break;
+	case SNDRV_PCM_STATE_DRAINING:
+	case SNDRV_PCM_STATE_RUNNING:
+	case SNDRV_PCM_STATE_PAUSED:
+		break;
+	case SNDRV_PCM_STATE_XRUN:
+		err = -EPIPE;
+		goto _end_unlock;
+	case SNDRV_PCM_STATE_SUSPENDED:
+		err = -ESTRPIPE;
+		goto _end_unlock;
+	default:
+		err = -EBADFD;
+		goto _end_unlock;
+	}
+
+	runtime->twake = runtime->control->avail_min ? : 1;
+	while (size > 0) {
+		snd_pcm_uframes_t frames, appl_ptr, appl_ofs;
+		snd_pcm_uframes_t avail;
+		snd_pcm_uframes_t cont;
+		if (runtime->status->state == SNDRV_PCM_STATE_RUNNING)
+			snd_pcm_update_hw_ptr(substream);
+		avail = snd_pcm_capture_avail(runtime);
+		if (!avail) {
+			if (runtime->status->state ==
+			    SNDRV_PCM_STATE_DRAINING) {
+				snd_pcm_stop(substream, SNDRV_PCM_STATE_SETUP);
+				goto _end_unlock;
+			}
+			if (nonblock) {
+				err = -EAGAIN;
+				goto _end_unlock;
+			}
+			runtime->twake = min_t(snd_pcm_uframes_t, size,
+					runtime->control->avail_min ? : 1);
+			err = wait_for_avail(substream, &avail);
+			if (err < 0)
+				goto _end_unlock;
+			if (!avail)
+				continue; /* draining */
+		}
+		frames = size > avail ? avail : size;
+		cont = runtime->buffer_size - runtime->control->appl_ptr % runtime->buffer_size;
+		if (frames > cont)
+			frames = cont;
+		if (snd_BUG_ON(!frames)) {
+			runtime->twake = 0;
+			snd_pcm_stream_unlock_irq(substream);
+			return -EINVAL;
+		}
+		appl_ptr = runtime->control->appl_ptr;
+		appl_ofs = appl_ptr % runtime->buffer_size;
+		snd_pcm_stream_unlock_irq(substream);
+		err = transfer(substream, appl_ofs, data, offset, frames);
+		snd_pcm_stream_lock_irq(substream);
+		if (err < 0)
+			goto _end_unlock;
+		switch (runtime->status->state) {
+		case SNDRV_PCM_STATE_XRUN:
+			err = -EPIPE;
+			goto _end_unlock;
+		case SNDRV_PCM_STATE_SUSPENDED:
+			err = -ESTRPIPE;
+			goto _end_unlock;
+		default:
+			break;
+		}
+		appl_ptr += frames;
+		if (appl_ptr >= runtime->boundary)
+			appl_ptr -= runtime->boundary;
+		runtime->control->appl_ptr = appl_ptr;
+		if (substream->ops->ack)
+			substream->ops->ack(substream);
+
+		offset += frames;
+		size -= frames;
+		xfer += frames;
+	}
+ _end_unlock:
+	runtime->twake = 0;
+	if (xfer > 0 && err >= 0)
+		snd_pcm_update_state(substream, runtime);
+	snd_pcm_stream_unlock_irq(substream);
+	return xfer > 0 ? (snd_pcm_sframes_t)xfer : err;
+}
+
+
+->sound/core/pcm_lib.c
+
+
+static int snd_pcm_lib_read_transfer(struct snd_pcm_substream *substream, 
+				     unsigned int hwoff,
+				     unsigned long data, unsigned int off,
+				     snd_pcm_uframes_t frames)
+{
+	struct snd_pcm_runtime *runtime = substream->runtime;
+	int err;
+	char __user *buf = (char __user *) data + frames_to_bytes(runtime, off);
+	if (substream->ops->copy) {
+		if ((err = substream->ops->copy(substream, -1, hwoff, buf, frames)) < 0)
+			return err;
+	} else {
+		char *hwbuf = runtime->dma_area + frames_to_bytes(runtime, hwoff);
+		if (copy_to_user(buf, hwbuf, frames_to_bytes(runtime, frames)))
+			return -EFAULT;
+	}
+	return 0;
+}

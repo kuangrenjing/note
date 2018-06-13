@@ -1,0 +1,6 @@
+1、设计流程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+先画原理图，生成原理图文件，譬如X3-01A.SCH
+执行电气规则检查(ERC)，根据错误修改原理图
+生成网络表，譬如譬如X3-01A.NET文件
+

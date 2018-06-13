@@ -1,0 +1,44 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+sdk/arch/arm/plat-omap/dma.c
+	这是arm的dma的驱动，实现为linux platform driver。在struct platform_driver结构的
+probe函数指针成员实例omap_system_dma_probe函数中调用request_irq来注册DMA中断处理函数。
+
+sdk/arch/arm/match-omap2/dma.c是相应的platform device。
+
+setup_irq注册struct irqaction
+
+request_irq会自己组装一个struct irqaction变量然后调用setup_irq
+
+static struct irqaction omap24xx_dma_irq = {
+	.name = "DMA",
+	.handler = omap2_dma_irq_handler,
+	.flags = IRQF_DISABLED
+};
+
+sdk\arch\arm\plat-omap\dma.c提供omap_request_dma函数用于注册DMA
+
+sdk\arch\arm\plat-omap\mcbsp.c会调用omap_request_dma函数
+sdk\sound\soc\omap\omap-pcm.c也会调用
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	sdk/arch/arm/plat-omap/include/plat/dma.h包含了DMA通道号的定义，于我们项目相关
+的有：
+
+#define OMAP24XX_DMA_MCBSP3_TX		17	/* S_DMA_16 */
+#define OMAP24XX_DMA_MCBSP3_RX		18	/* S_DMA_17 */
+#define OMAP24XX_DMA_MCBSP4_TX		19	/* S_DMA_18 */
+#define OMAP24XX_DMA_MCBSP4_RX		20	/* S_DMA_19 */
+#define OMAP24XX_DMA_MCBSP5_TX		21	/* S_DMA_20 */
+#define OMAP24XX_DMA_MCBSP5_RX		22	/* S_DMA_21 */
+
+
+sdk\sound\soc\omap\omap-pcm.c把DMA与alsa联系起来。
+调用的是omap_request_dma函数
+
+在 sdk\arch\arm\plat-omap\dma.c omap2_dma_handle_ch函数中做打印测试：
+
+omap2_dma_handle_ch
+
+sdk/sound/soc/omap/omap-mcbsp.c omap_pcm_dma_irq函数中做打印测试：
+
+omap24xx_dma_reqs

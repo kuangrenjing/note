@@ -1,0 +1,14 @@
+http://www.jb51.net/LINUXjishu/406899.html
+
+Linux发行版的内核只带了相对较小的“内置模块（built-in modules）”，其余的特定硬件驱动或者自定义功能作为“可加载模块”来让你有选择地加载或卸载。
+
+内置模块被静态地编译进了内核。不像可加载内核模块可以动态地使用modprobe、insmod、rmmod、modinfo或者lsmod等命令地加载、卸载、查询模块，内置的模块总是在启动时就加载进了内核，不会被这些命令管理。
+
+找出内置模块列表
+
+要得到内置模块列表，运行下面的命令。
+
+
+
+
+cat /lib/modules/$(uname -r)/modules.builtin

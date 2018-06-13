@@ -1,0 +1,4 @@
+http://www.cnblogs.com/vanishfan/p/6856411.html
+注册表的描述，借用PIL中的一段话：
+
+registry 一直位于一个由 LUA_REGISTRYINDEX 定义的值所对应的假索引(pseudo-index)的位置。一个假索引除了他对应的值不在栈中之外，其他都类似于栈中的索引。Lua API 中大部分接受索引作为参数的函数，也都可以接受假索引作为参数—除了那些操作栈本身的函数，比如 lua_remove，lua_insert。例如，为了获取以键值 "Key" 保存在 registry 中的值，使用下面的代码

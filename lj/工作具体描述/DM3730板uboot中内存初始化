@@ -1,0 +1,24 @@
+术语：
+	SDRC： SDRAM controller
+	SMS: SDRAM main address space
+
+
+《DM37x Multimedia Device Techinical Reference Manual》第2章“memory mapping”SDRAM区独占第3 quarter，又分为两个子区，起始地址分别是：0x80000000，0xA0000000。
+
+u-boot/arch/arm/include/asm/arch-omap3/cpu.h中定义了：
+#define OMAP34XX_SDRC_CS0	0x80000000
+#define OMAP34XX_SDRC_CS1	0xA0000000
+
+u-boot/include/configs/omap3_evm.h
+/* memtest works on */
+#define CONFIG_SYS_MEMTEST_START	(OMAP34XX_SDRC_CS0)
+#define CONFIG_SYS_MEMTEST_END		(OMAP34XX_SDRC_CS0 + \
+					0x01F00000) /* 31MB */
+
+#define CONFIG_SYS_LOAD_ADDR		(OMAP34XX_SDRC_CS0) /* default load */
+								/* address */
+
+
+#define PHYS_SDRAM_1		OMAP34XX_SDRC_CS0
+#define PHYS_SDRAM_1_SIZE	(32 << 20)	/* at least 32 MiB */
+#define PHYS_SDRAM_2		OMAP34XX_SDRC_CS1

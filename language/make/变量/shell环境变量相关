@@ -1,0 +1,16 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+6.10
+	make开始执行时，它所在shell的环境变量都会转化为make的同名变量，值也相同。
+
+变量优先级：
+	make可以继承shell的环境变量，make命令行也可以指定变量值，makefile中也可以指定变量值
+那这三者的优先级是怎样的呢。
+
+	命令行指定的变量值优先级最高，makefile中指定的变量值优先级次之，shell环境变量值最低。
+但是，make指定了"-e"选项时，优先级顺序变为：命令行指定的变量值优先级最高，shell环境变量值
+次之，makefile中指定的变量值优先级最低。
+
+	我们知道规则中的recipe中每条command执行时都是在make的shell中再创建一个子shell执行的。
+make的变量都会转化为这个子shell的环境变量。但是如果这个command是sub-make指令时，情况比较特
+殊，此时只转化父shell的环境变量（值还是按照前面的优先级确定）和命令行指定的变量。想要父make
+自定义变量传递到sub-make中，需使用"export"指令。

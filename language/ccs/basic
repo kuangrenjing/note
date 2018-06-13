@@ -1,0 +1,8 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、CCS(Code Composer Studio)代码集成套件是什么？
+	TI官方是这么说的：Code Composer Studio 是一种集成开发环境 (IDE)，支持 TI 的微控
+制器和嵌入式处理器产品系列。Code Composer Studio 包含一整套用于开发和调试嵌入式应用的
+工具。它包含了用于优化的 C/C++ 编译器、源码编辑器、项目构建环境、调试器、描述器以及多种其
+他功能。直观的 IDE 提供了单个用户界面，可帮助您完成应用开发流程的每个步骤。熟悉的工具和界
+面使用户能够比以前更快地入手。Code Composer Studio 将 Eclipse 软件框架的优点和 TI 先
+进的嵌入式调试功能相结合，为嵌入式开发人员提供了一个引人注目、功能丰富的开发环境。

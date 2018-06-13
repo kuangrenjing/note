@@ -1,0 +1,65 @@
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、安装vmware
+	秉承一贯使用免费软件而不破解的风格，我选择"VMware-player-14.1.0"版本，VMware-player
+在非商业行为下可免费使用。详细安装过程这里不再介绍。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、安装ubuntu 10.04LTS
+	dvsdk明确表示它只支持这个版本的开发主机，我们只有顺从它了。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、DVSDK安装
+	先查看《ubuntu使用》一篇
+
+	其实只需要安装dvsdk_dm3730-evm_04_03_00_06_setuplinux，不需要运行setup.sh。
+setup.sh只是安装串口调试、NFS、tftp等等。这些我们都可以有选择性地手动安装其它替代程序。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4、替换PSP。
+	我们使用的创龙的核心板，所以使用创龙提供的“平台支撑包”。把psp目录下的东西都删除，然后
+创建三个新的子文件夹：linux-2.6.37-psp04.02.00.04.sdk、u-boot-2010.06-psp04.02.00.04.sdk、
+x-load-1.51-psp04.02.00.07.sdk。把创龙光盘内的linux-2.6.37-g0234689-v1.0.tar.gz、
+u-boot-gedcdd26-v1.0.tar.gz、x-load-gf10ff26-v1.0.tar.gz文件分别拷贝进来并解压。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5、修改Rule.make文件
+	Rule.make主要定义了一些源码位置和工具位置变量，譬如linux内核源码路径，u-boot源码
+路径，交叉编译器路径等等。
+
+	在我们编写测试程序时，要在Makefile中使用“include $(DVSDK)/Rule.make”包含进这个文
+件，主要就是要使用它的“交叉编译器路径变量”。
+
+	由于我们刚刚修改了psp，所以Rule.make相应的路径变量也要修改。修改LINUXKERNEL_INSTALL_DIR
+即可。另外两个只在编译它们自身时才需要知道源码位置，经过测试，编译时可以自动找到。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+6、编译xload、u-bbot、linux内核。
+	在DVSDK的顶层目录，我的是“/home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06”执行命令。
+安装位置是在我们安装DVSDK时选择的文件系统的位置。
+
+xload编译安装：
+	sudo make xload_clean
+	sudo make xload
+	sudo make xload_install
+
+uboot编译安装：
+	sudo make u-boot_clean
+	sudo make u-boot
+	sudo make u-boot_install
+
+linux内核编译安装：
+	sudo make linux_clean
+	sudo make linux
+	sudo make linux_install
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+7、定制linux内核
+	前面我们编译linux内核只是为了熟悉以下步骤。应用于我们自己的项目，我们得定制自己的
+linux内核，具体来说就是要修改alsa声卡驱动。
+
+	在修改声卡(其实是codec)驱动之前，我们得先了解下我们器件选型和连接。我们选用了两种编
+解码器:3片nau85l40用作AD，3片nau85l40的数据线都直接连接在mcbsp3接口上(菊花状、或辐射状)，
+mcbsp3工作方式选用TMD方式，同时配置总线还连接在I2C3接口上；一片ak4430用作DA，数据线连接
+在mcbsp5接口上，mcbsp5工作方式选用I2S方式。

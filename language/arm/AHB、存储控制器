@@ -1,0 +1,11 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、Principles of ARM Memory Maps White Paper
+	这是arm公司给出的存储映射的规则文档。但看了几家公司的实际arm芯片文档都没有完全遵循
+这个白皮书的存储空间的划分。
+
+	
+
+
+
+1、arm存储器类型：
+arm存储系统可能包含多种类型的存储器件，如Flash、ROM、SRAM、SDRAM等。不同类型的存储器件的速度和宽度等各不相同，使用不同的存储管理器。

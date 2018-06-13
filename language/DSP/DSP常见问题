@@ -1,0 +1,4 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、DSP上可以跑linux系统吗？
+	DSP上不适合跑Linux系统，因为DSP没有MMU(存储管理单元)系统。但DSP可以跑SYS/BIOS实时
+操作系统，在DSPLink里叫做DSP/BIOS系统。

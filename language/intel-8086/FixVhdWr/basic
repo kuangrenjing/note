@@ -1,0 +1,7 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	FixVhdWr是《x86汇编语言 从实模式到保护模式》一书作者李忠提供的一个读写微软VHD虚拟硬
+盘的小工具。
+
+	第一个界面选择虚拟硬盘
+	第二个界面选择二进制文件
+	第三个界面开始将指定的文件写入虚拟硬盘（使用的是默认写入方式，即LBA连续直写模式）

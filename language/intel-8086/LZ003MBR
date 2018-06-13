@@ -1,0 +1,8 @@
+1、主引导扇区MBR(main boot record)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一般情况下，MBR与分区表共享第一扇区。
+
+2、主引导扇区的加载
+	ROM-BOIS程序将它加载到逻辑地址0x0000:0x7c00处，也就是物理地址0x07c00处，然后判断
+它是否有效。一个有效的引导扇区，其最后两字节应当是0x55和0xAA，ROM-BIOS程序首先检测这两
+个标志，如果主引导扇区有效，则以一个段间转移指令jmp 0x0000:0x7c00跳到那里继续执行。

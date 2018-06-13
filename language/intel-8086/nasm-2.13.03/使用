@@ -1,0 +1,25 @@
+nasm    汇编
+ndisasm 反汇编
+
+0、nasm简介：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	NASM全称The Netwide Assembler，是一款基于80x86和x86-64平台的汇编语言编译程序，
+其设计初衷是为了实现编译器程序跨平台和模块化的特性。NASM支持大量的文件格式，包括Linux，
+*BSD，a.out，ELF，COFF，Mach−O，Microsoft 16−bit OBJ，Win32以及Win64，同时也支持简
+单的二进制文件生成。它的语法被设计的简单易懂，相较Intel的语法更为简单，支持目前已知的所
+有x86架构之上的扩展语法，同时也拥有对宏命令的良好支持。
+
+
+1、nasm切换目录
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	如果源码跟NASM安装位置不在一个分区，先要输入源码的分区，譬如"d:"，然后cd到源码目录：
+d:
+cd D:\"Program Files"\VMware\share\language\intel-8086\nasm-2.13.03\test
+
+2、nasm编译bin目标文件
+	nasm test1.asm
+会生成test1文件
+
+2、ndisam反汇编
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ndisam -b32 test1

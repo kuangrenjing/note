@@ -1,0 +1,10 @@
+food = fish
+cfq_favor = swim $(food)
+
+#include m_recipe_end
+
+clean:
+	@echo '$*=(*)'
+	@echo '	origin = (origin*)'
+	@echo '	value = $(value  $*)'
+	@echo '	flavor = (flavor*)'

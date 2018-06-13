@@ -1,0 +1,56 @@
+1、PCB
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	PCB(Printed Circuit Board)，中文名称为印制电路板，又称印刷线路板，是重要的电子部
+件，是电子元器件的支撑体，是电子元器件电气连接的载体。由于它是采用电子印刷术制作的，故被
+称为“印刷”电路板。
+
+2、信号完整性
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	信号完整性是指信号在传输路径上的质量，传输路径可以是普通的金属线，可以是光学器件，
+也可以是其他媒质。信号具有良好的信号完整性是指当在需要的时候，具有所必需达到的电压电平数
+值。差的信号完整性不是由某一单一因素导致的，而是系统设计中多种因素共同引起的。
+
+	信号完整性与工作频率密切相关。一般认为，当系统工作在50MHz时，就会产生信号完整性问题，
+而随着系统和器件频率的不断攀升，信号完整性的问题也就愈发突出。
+
+3、EDA
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+资料：
+	https://zhidao.baidu.com/question/25403940.html
+
+	EDA是电子设计自动化(Electronics Design Automation)的缩写，在20世纪60年代中期从
+计算机辅助设计(CAD)、计算机辅助制造(CAM)、计算机辅助测试(CAT)和计算机辅助工程(CAE)的概
+念发展而来的。
+
+	我们可以使用一般CAD软件画PCB，但一般CAD显然没有为PCB设计提供专业工具，工作效率低。
+
+	利用EDA工具，电子设计师可以从概念、算法、协议等开始设计电子系统，大量工作可以通过计
+算机完成，并可以将电子产品从电路设计、性能分析到设计出IC版图或PCB版图的整个过程的计算机
+上自动处理完成。
+
+	现在对EDA的概念或范畴用得很宽。包括在机械、电子、通信、航空航天、化工、矿产、生物、医学、
+军事等各个领域，都有EDA的应用。目前EDA技术已在各大公司、企事业单位和科研教学部门广泛使用。
+例如在飞机制造过程中，从设计、性能测试及特性分析直到飞行模拟，都可能涉及到EDA技术。本文所
+指的EDA技术，主要针对电子电路设计、PCB设计和IC设计。
+
+	EDA设计可分为系统级、电路级和物理实现级。
+
+	EDA软件功能包括：电路设计与仿真、PCB设计、IC设计、PLD设计，一般一个软件包括其中几种
+功能。
+
+
+4、PCB设计软件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+protel
+candence
+PADS
+
+5、网站
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	国内的PCB设计师人气最多的网站：  Eda365.com，
+	国外的PCB设计师：               Edaboard.com。
+
+其实你可以在MULTISIM 10里做原理图设计、仿真，然后将网络表导出到PROTEL进行PCB板设计。
+
+4、SI仿真
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

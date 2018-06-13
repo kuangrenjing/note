@@ -1,0 +1,38 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、makefile是什么？
+	make工具自动探查程序的哪些部分需要重新编译，进而发出重新编译这些部分的命令。
+
+
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、makefile的组成：
+	Makefiles可以包含五种重要类型的事物：显式规则(explicit rules)、隐式规则(implicit 
+rules)、变量定义(variable definitions)、指令(directives)和注释(comments)。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、make协议：
+	POSIX.2对make做出了规定，具体可见：IEEE Standard 1003.2-1992标准6.2节make - 
+Maintain, update and regenerate groups of programs。GNU make是最遵循这个标准的make。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、Makefile取名：
+	默认情况下，make在文件夹下寻找makefile将按如下文件名顺序进行：GNUmakefile, makefile
+和Makefile。推荐使用makefile和Makefile，GNUmakefile只有GNU make才认识。
+
+	如果make找不到这些名字的文件，但它在命令行中发现了用户指定的目标参数，它将尝试只使
+用它内部的built-in隐式规则来推算如何remake目标。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我们想给make指定一个非标准的makefile文件名，可以使用"-f name"或"--file=name"选项，
+这两个选项可以多次使用用来包含多个makefile，这多个makefile会按指定顺序被make读入。默认
+寻找时，找到makefile就不会再寻找Makefile。
+If make finds none of these names, it does not use any makefile. Then you must specify
+a goal with a command argument, and make will attempt to figure out how to remake it
+using only its built-in implicit rules. See Chapter 10 [Using Implicit Rules], page 111.
+If you want to use a nonstandard name for your makefile, you can specify the makefile
+name with the ‘-f’ or ‘--file’ option. The arguments ‘-f name’ or ‘--file=name’ tell
+make to read the file name as the makefile. If you use more than one ‘-f’ or ‘--file’
+option, you can specify several makefiles. All the makefiles are effectively concatenated in
+the order specified. The default makefile names GNUmakefile, makefile and Makefile are
+not checked automatically if you specify ‘-f’ or ‘--file’.

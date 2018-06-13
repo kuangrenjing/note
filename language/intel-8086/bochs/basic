@@ -1,0 +1,30 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	bochs跟virtualbox类似，也是一个虚拟机软件，但与其它虚拟机软件相比，它有两个显著特
+点：开源、可调试。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、下载地址：
+	http://sourceforge.net/projects/bochs/files/bochs/
+
+2018-03-12下载时最新版是2.6.9版本，下载Bochs-2.6.9.exe
+
+	安装以后，在安装目录会出现两个可执行文件，分别是：bochs.exe和bochsdbg.exe，
+bochs.exe是纯虚拟机，bochsdbg.exe是调试工具。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、配置bochs
+	在第一次使用Bochs时，一定要做一些设置工作。
+
+	Bochs提供的默认设置已基本够用，只需要修改一下默认配置中的"Disk & Boot"配置，该项
+目用于设置磁盘和计算机启动的参数。双击之后，将弹出另一个界面，该界面上有6个标签页，我们
+先配置ATA channel 0下的First HD/CD on channel 0。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一般来说，你会选择VirtualBox虚拟机来观察运行结果，调试程序时使用Bochs。因此，最好
+是它们共用同一个虚拟硬盘文件。所以：
+	勾选"Enable this device"
+	"Path or physical device name"选择Virtualbox使用的硬盘路径
+	"Type of disk image"选择vpc
+	"Cylinders"通过FixVhdWr.exe获取
+	"Heads"通过FixVhdWr.exe获取
+	"Sectors per track"通过FixVhdWr.exe获取
+

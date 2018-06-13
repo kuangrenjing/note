@@ -1,0 +1,163 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、简介
+	本文通过追踪alsa-soc框架下的硬件配置流程来窥探soc的组织结构和工作流程。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、工作中一个疑问引起：soc中cpu_dai(项目中是mcbsp)的frame同步信号的周期是怎么设置的
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、soc的组成：
+	soc驱动又由machine、platform、codec、cpu_dai、codec_dai，分成这么多部分肯定是为了
+可移植性的考虑。
+
+	网路上著名的8篇一个系列的“Linux ALSA声卡驱动之”认为machine驱动是机器相关的，不同型号
+的机器是不可复用的，这话不完全对。soc架构下的machine驱动实现上分成了两个模块，分别是linux
+platform device模块和linux platform driver模块：
+	../sound/soc/omap/omap3evm.c   machine's linux platform device
+	../sound/soc/soc-core.c        machine's linux platform driver
+
+	从文件路径和名字来看，machine's linux platform device是特定于TI的omap3evm开发板的，
+但machine's linux platform driver却是机器、平台无关的，也就是说三星的、intel等公司的cpu
+上alsa-soc驱动也都使用这个文件。
+
+	所以machine驱动应该这么表述：数据是机器相关的，行为是机器无关的，machine驱动的行为就像
+是一个管家，全局管控soc框架的各个部分，收集它们的信息并给alsa框架的pcm模块提供服务。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4、cpu_dai设置了frame同步信号的发生周期：
+
+sound\soc\omap\omap-mcbsp.c(平台相关的cpu_dai驱动)中
+omap_mcbsp_dai_hw_params(struct snd_pcm_substream *substream,
+				struct snd_pcm_hw_params *params,
+				struct snd_soc_dai *cpu_dai)
+函数会设置frame synchronization寄存器。当mcbsp做主的时候，采用数时钟的方法来设置帧周期
+算法是：
+	framesize = (mcbsp_data->in_freq / div) / params_rate(params);
+mcbsp_data->in_freq是输入时钟
+div是分频数
+params_rate(params)是采样频率
+
+	omap_mcbsp_dai_hw_params是cpu_dai的snd_soc_dai_ops的hw_params函数:
+static struct snd_soc_dai_ops mcbsp_dai_ops = {
+	.startup	= omap_mcbsp_dai_startup,
+	.shutdown	= omap_mcbsp_dai_shutdown,
+	.trigger	= omap_mcbsp_dai_trigger,
+	.delay		= omap_mcbsp_dai_delay,
+	.hw_params	= omap_mcbsp_dai_hw_params,
+	.set_fmt	= omap_mcbsp_dai_set_dai_fmt,
+	.set_clkdiv	= omap_mcbsp_dai_set_clkdiv,
+	.set_sysclk	= omap_mcbsp_dai_set_dai_sysclk,
+};
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5、machine驱动收集platform、codec、cpu_dai、codec_dai驱动，提供struct snd_pcm_ops变量
+供pcm模块调用，新建pcm设备。
+
+
+/* ASoC PCM operations */
+static struct snd_pcm_ops soc_pcm_ops = {
+	.open		= soc_pcm_open,
+	.close		= soc_codec_close,
+	.hw_params	= soc_pcm_hw_params,
+	.hw_free	= soc_pcm_hw_free,
+	.prepare	= soc_pcm_prepare,
+	.trigger	= soc_pcm_trigger,
+	.pointer	= soc_pcm_pointer,
+};
+
+
+给pcm设置ops：
+void snd_pcm_set_ops(struct snd_pcm *pcm, int direction, struct snd_pcm_ops *ops)
+{
+	struct snd_pcm_str *stream = &pcm->streams[direction];
+	struct snd_pcm_substream *substream;
+	
+	for (substream = stream->substream; substream != NULL; substream = substream->next)
+		substream->ops = ops;
+}
+	这个函数的意思就是：pcm的capture_stream和playback_stream可以设置不同的ops，但
+capture_stream或者playback_stream的所有substream的ops都是一样的，虽然soc中每个stream
+只有一个substream。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+6、pcm调用snd_pcm_ops
+	machine驱动中注册的pcm设备会一步步调用到machine驱动给它提供的snd_pcm_ops结构中的
+方法。
+
+sound/core/pcm_native.c
+
+static long snd_pcm_capture_ioctl(struct file *file, unsigned int cmd,
+				unsigned long arg)
+
+->
+
+static int snd_pcm_capture_ioctl1(struct file *file,
+				struct snd_pcm_substream *substream,
+				unsigned int cmd, void __user *arg)
+
+->
+
+static int snd_pcm_common_ioctl1(struct file *file,
+				struct snd_pcm_substream *substream,
+				unsigned int cmd, void __user *arg)
+
+->
+
+static int snd_pcm_hw_params_user(struct snd_pcm_substream *substream,
+				struct snd_pcm_hw_params __user * _params)
+用户空间的params要先做映射。
+
+->
+
+static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
+				struct snd_pcm_hw_params *params)
+
+->
+
+	if (substream->ops->hw_params != NULL) {
+		err = substream->ops->hw_params(substream, params);
+		if (err < 0)
+			goto _error;
+	}
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+6、pcm设备文件节点的file_operations。
+	pcm模块提供了file_operations结构变量供应用层打开pcm设备文件节点(pcm的stream)后与
+驱动交互。
+
+sound/core/pcm_native.c
+
+const struct file_operations snd_pcm_f_ops[2] = {
+	{
+		.owner =		THIS_MODULE,
+		.write =		snd_pcm_write,
+		.aio_write =		snd_pcm_aio_write,
+		.open =			snd_pcm_playback_open,
+		.release =		snd_pcm_release,
+		.llseek =		no_llseek,
+		.poll =			snd_pcm_playback_poll,
+		.unlocked_ioctl =	snd_pcm_playback_ioctl,
+		.compat_ioctl = 	snd_pcm_ioctl_compat,
+		.mmap =			snd_pcm_mmap,
+		.fasync =		snd_pcm_fasync,
+		.get_unmapped_area =	snd_pcm_get_unmapped_area,
+	},
+	{
+		.owner =		THIS_MODULE,
+		.read =			snd_pcm_read,
+		.aio_read =		snd_pcm_aio_read,
+		.open =			snd_pcm_capture_open,
+		.release =		snd_pcm_release,
+		.llseek =		no_llseek,
+		.poll =			snd_pcm_capture_poll,
+		.unlocked_ioctl =	snd_pcm_capture_ioctl,
+		.compat_ioctl = 	snd_pcm_ioctl_compat,
+		.mmap =			snd_pcm_mmap,
+		.fasync =		snd_pcm_fasync,
+		.get_unmapped_area =	snd_pcm_get_unmapped_area,
+	}
+};
+
+alsa-lib没有使用虚拟文件系统与pcm驱动交互，而是通过ioctl接口来进行的，所以，读写等操作最后都到达unlocked_ioctl指针，也就是snd_pcm_capture_ioctl或snd_pcm_playback_ioctl函数。
+

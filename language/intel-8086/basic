@@ -1,0 +1,41 @@
+1971年intel公司生产了世界上第一个处理器INTEL4004
+1978年intel公司推出了INTEL8086处理器，它是整个Intel 32位架构处理器(IA-32)的开山鼻祖。
+
+1、intel 8086构成
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	intel 8086分为两个部分：总线接口单元(BIU)、执行单元(EU)。
+
+	总线接口单元：总线控制单元、指令指针寄存器IP、段寄存器、地址加法器、指令队列缓存器
+
+	执行单元：算术逻辑单元(ALU)、EU控制电路、寄存器组
+
+	intel 8086提供了8个通用寄存器(AX,BX,CX,DX,SI,DI,BP,SP)、4个段寄存器(CS,DS,ES,
+SS)、1个指令指针寄存器(IP)。这些寄存器都是16位的，其中AX、BX、CX、DX通用寄存器还可以分别
+当成2个8位寄存器使用(AH,AL,BH,BL,CH,CL,DH,DL)。
+
+	intel 8086提供了20根地址总线，可以访问1MB内存，其中有16根复用为数据总线。
+
+	内存地址的生成：地址加法器做CS*16+IP运算
+
+2、intel 8086上电
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	8086有一个RESET引脚，当这个引脚的电平由低变高时，处理器就会执行一个硬件初始化，将
+内部所有寄存器的内容初始化到一个预置的状态：CS为0xFFFF，其它寄存器都是0x0000。
+
+	8086家电复位后指令物理地址指向0xFFFF0(CS:IP=0xFFFF:0X0000)位置，这个位置在ROM-BIOS
+空间内，也就是说把通过这个位置把控制权交给了ROM-BIOS。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ROM-BIOS运行到最后，会把硬盘主引导扇区的内容读到内存0x0000:0x7c00处，并用一条跳转
+指令"jmp 0x0000:0x7c00"跳转到那里执行，也就是把控制器让给引导程序。
+
+
+3、8086内存空间
+	0x00000-0x9ffff(640k)属于DRAM，由内存条提供，0xF0000-0xFFFFF(64k)由主板上的一个
+芯片提供，即ROM-BIOS，0xB8000-0xBFFFF(32k)是显卡内存（所有PC上使用的显卡，在加电自检
+之后都会把自己初始化到80*25的文本模式，可显示2000个字符）
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	8086加电复位后CS:IP=0XFFFF:0X0000，这个地址离1M地址空间的顶端只有16个字节，所以
+这里一般只放一条跳转指令。
+

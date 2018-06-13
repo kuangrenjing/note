@@ -1,0 +1,16 @@
+上位机向下位机索要图像：
+
+上位机向下位机发送“StartImgTransferPack”指令，指令内容为数据类型，可选的有以下几种：
+	ImgCMOS255,
+	ImgCMOSDownsized,
+	ImgResponse,
+	ImgTemperature,
+	ImgInfrareadOrigin,
+	ImgInfrareadRGB565
+
+然后调用StartSendImg(数据类型);
+
+StartSendImg函数做数据初始化然后启动ThreadSendImg线程进行数据上传
+
+
+AsyncSendImg设置图像数据

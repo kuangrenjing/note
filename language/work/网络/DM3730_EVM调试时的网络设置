@@ -1,0 +1,61 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+0、一些网络资料
+https://www.linuxidc.com/Linux/2016-09/135521.htm   vmware网络介绍
+https://jingyan.baidu.com/article/7f41ecec5d6014593d095ce0.html  ubuntu静态IP设置
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、vmware三个虚拟网络、两张虚拟网卡
+	vmware为我们提供了三种网络工作模式，它们分别是：Bridged(桥接模式)、NAT(网络地址转
+换模式)、Host-Only(仅主机模式)。在虚拟机网络设置里边，这三种网络模式分别命名为：VMnet0(
+桥接模式)、VMnet1(仅主机模式)、VMnet8(NAT模式)，这其实就是三个虚拟交换机。
+
+	在主机上有两块虚拟网卡"VMware Network Adapter VMnet1"和"VMware Network Adapter VMnet8"
+分别用于VMnet1虚拟交换机和VMnet8虚拟交换机。
+
+	那桥接模式下主机不需要提供虚拟设备与VMnet0虚拟交换机连接吗，其实也有，是一个虚拟网桥
+或者虚拟交换机，主机接在这个网桥的一个端口上，VMnet0虚拟交换机接在这个网桥的另一个端口上。
+由此，我们知道在桥接模式下，主机IP和所有虚拟机IP需在同一网段。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、windows网络设置：
+	目前面临的情况是：没有读卡器，程序不能通过TF拷贝；只有一个OTG口，程序也不能通过U盘
+拷贝；没有交换机，如果要网络连接，PC得和开发板直连。
+
+	所以，我们选择PC、host、target都设置成静态IP。PC机静态IP设置成192.168.1.10
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、host虚拟机静态IP设置
+
+建两个文件：
+	sudo touch /etc/network/interfaces_vmnet0
+	sudo touch /etc/network/interfaces_vmnet8
+
+vmware设置为桥接模式时:
+	sudo cp /etc/network/interfaces_vmnet0 /etc/network/interfaces
+
+内容:
+	auto lo
+	iface lo inet loopback
+
+	auto eth0
+	iface lo inet static
+	address 192.168.1.20
+	netmask 255.255.255.0
+	gateway 192.168.1.1
+	broadcast 192.168.1.255
+
+vmware设置为NAT模式时:
+	sudo cp /etc/network/interfaces_vmnet8 /etc/network/interfaces
+
+内容：
+	auto lo
+	iface lo inet loopback
+
+	auto eth0
+	iface eth0 inet dhcp
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4、测试板静态IP设置：
+	经测试，EVM设置/etc/network/interfaces无效。每次启动后通过"ifconfig eth0 
+192.168.1.30 netmask 255.255.255.0"可以设置成功，并能ping通PC和host。

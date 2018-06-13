@@ -1,0 +1,41 @@
+1、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CK1： nasmdoc.pdf(NASM – The Netwide Assembler  version 2.13.03)
+
+
+2、nasm预处理器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+种类：
+	宏： 单行宏、多行宏
+	条件编译： 根据宏定义有条件地编译某一代码段
+	预处理器循环：
+
+解释：
+	nasm的宏指令都以%开头
+
+
+3、宏定义-单行宏定义：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+指令：
+	%define       
+	%idefine
+	%xdefine
+	%ixdefine
+	%[...]         宏重定向(Macro Indirection)
+
+	%undef
+	%assign
+预处理过程中对字符串进行处理(String Manipulation in Macros)
+
+在宏中处理字符串有时候是非常有用的
+
+
+
+It’s often useful to be able to handle strings in macros. NASM supports a few simple string handling
+macro operators from which more complex operations can be constructed.
+All the string operators define or redefine a value (either a string or a numeric value) to a single−line
+macro. When producing a string value, it may change the style of quoting of the input string or strings,
+and possibly use \–escapes inside ‘–quoted strings.
+
+
+解释：

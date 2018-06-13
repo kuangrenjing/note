@@ -1,0 +1,36 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	dm3730的启动流程为RBL(片内ROM firmware) + X-loader(片内SRAM) + uboot(片外的
+DDR) + uImage(片外的DDR)。
+
+TI 文档的第26章节讲解了启动过程
+
+http://blog.csdn.net/zhazhiqiang/article/details/25835051
+
+之所以建立这样一个复杂的启动过程，我个人的理解是。片内ROM和SRAM空间有限，uboot的大小基本达到了200KB 左右，不能放在空间有限的SRAM中（因为SRAM的集成度不高，容量越大体积也越大）。于是肯定需要有前期的RAM来帮助完成加载。当然为何不让ROM直接来加载uboot的原因也是如此，因为uboot需要有ddr的环境，而这部分需要做的初始化ddr控制器自然会增加程序的代码量，从而在容量有限的rom区域也没有这个条件来一次就完成uboot的加载环境的创建和程序的加载。因此TI的RBL将简易的x-loader运行在SRAM（SRAM的初始化简单，属于片内可以直接访问，速度也快）中来完成uboot的加载。而uboot在内存中自然可以方便的加载uImage啦。对于Android系统会启动init进程，进而创建system server和Zygote进程，运行第一个系统进程。完成直到用户界面的启动。  ((init_fnc_t *)CFG_LOADADDR)();
+
+
+dm6446的启动是RBL +UBL+uboot+uImage：user boot loder
+
+am335x是RBL+(uboot/spl)+uImage:其中uboot/spl是在一个源码包下的
+
+dm6437的启动原理也较为类似，采用RBL+second_boot(SBL)+APP的流程。RBL自动回将外部存储的程序加载到片内的程序空间。一般采用从norflash加载程序启动。比起dm3730的启动过程来得较为复杂。
+
+6437之所以使用SBL的原因在于：
+The ROMed SPI boot-loader for the DM643x does not utilize the full SPI band-width, resulting in slow boots. To workaround this issue a two stage boot process is proposed. At the first stage, a secondary boot code will be loaded via the ROMed SPI boot-loader. This code will then execute and download application code from the SPI storage device.
+
+RBL没有充分利用SPI的带宽，可以为了统一固件基本都使用8bit，所以读取内容越大，累积的时间久越久，看上去启动会变慢。因此只做小部分的SBL读取。后续SBL进行32bit的读，速度快同时易于分析AIS数据信息。
+
+理论上RBL可以完成APP的加载和执行，但是启动会变的很慢，因为4个字节分开读，读完还要合成32位做分析，速度又变慢。
+
+故基于RBL+SBL+APP的启动流程！
+
+1、从此页面下载DVSDK
+http://www.ti.com.cn/tool/cn/linuxdvsdk-dm37x
+
+
+
+
+2、公司板子启动
+xshell新建串口会话： 协议选择serial，串口号从设备管理器“端口(com和LPT)” USB-SERIAL CH340获取，码率115200，一位停止位，8位数据位。
+
+dm37x-evm login： 用户名root 没有密码

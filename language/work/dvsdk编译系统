@@ -1,0 +1,62 @@
+http://blog.51cto.com/zjbintsystem/1399719    DAVINCI DM3730开发攻略——U-BOOT-2010.06的移植 
+
+
+
+
+
+psp\linux-driver-examples-psp04.02.00.07\audio\make.sh  有ShareF
+
+http://blog.51cto.com/zjbintsystem/1167159
+
+make.sh
+
+#!/bin/sh
+#TIP=10.129.56.195
+
+echo "--------makefile--------"
+#cd /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/
+#make psp_examples > /home/hp/psp_examples_conpiler.txt
+#make psp_examples_install
+#scp /home/hp/install/dm3730/usr/share/ti/linux-driver-examples/audio/minimal_playback root@$TIP:/home/root/playbacktest/
+
+
+cp -R /mnt/hgfs/ShareF/loop/* /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/dsp/src/samples/loop/
+
+cp -R /mnt/hgfs/ShareF/audio/* /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src/samples/audio/
+
+#cp minimal_playback.c -R /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/psp/linux-driver-examples-psp04.02.00.07/audio/
+
+
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src/samples/audio/makeall.sh
+
+
+
+
+
+
+
+
+
+
+
+
+makeall.sh
+
+#!/bin/sh
+TIP=192.168.1.126
+
+echo "--------makefile--------"
+cd /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/
+make dsplink_samples  >/home/hp/dspLoopcompiler.txt
+make dsplink_install  >/home/hp/dspLoopInstall.txt
+#scp /home/hp/install/dm3730/usr/share/ti/ti-dsplink-examples/audiogpp root@$TIP:/home/root/
+#scp /home/hp/install/dm3730/usr/share/ti/ti-dsplink-examples/loop.out root@$TIP:/home/root/
+cp  /home/hp/install/dm3730/usr/share/ti/ti-dsplink-examples/loop.out /mnt/hgfs/share/loop/
+
+
+#cp -R /mnt/hgfs/ShareF/audio/* /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/psp/linux-driver-examples-psp04.02.00.07/audio/
+
+#cp minimal_playback.c -R /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/psp/linux-driver-examples-psp04.02.00.07/audio/
+
+
+#/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/psp/linux-driver-examples-psp04.02.00.07/audio/makeall.sh

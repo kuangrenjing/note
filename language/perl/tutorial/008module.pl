@@ -1,0 +1,11 @@
+=pod
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、模块介绍：
+	模块的作用当然是代码复用，避免重复造车轮子。
+=cut
+
+
+=pod
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、如何查看本机已安装了哪些模块
+=cut

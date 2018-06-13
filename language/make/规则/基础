@@ -1,0 +1,55 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+规则显然是makefile中最重要的组件，它的作用用一句话概括就是：何时、怎样remake某些文件。
+
+格式是这样的：
+target ... : prerequisite ...
+	recipe
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+target:
+	一个target通常是由程序产生而来的文件名，譬如可执行文件或者对象文件。target也可以是要执行的某项操作的名字，譬如"clean"。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+prerequisite:
+	一个prerequisite总是一个文件名，这个文件用于产生目标。一个目标经常依赖多个文件。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+recipe:
+	recipe是make要执行的一项操作，它由一个或多个shell命令组成，就是这么神奇，Makefile
+中使用两种语法：make语法和shell语法(5.1)，recipe部分使用的就是shell语法(也有部分make
+语法，make会先对recipe进行预处理)，其它部分使用make语法。
+
+	recipe的多条shell命令可以放在同一行，也可以放在多行中。recipe行也可以紧跟在prerequisite
+列表后面(使用分号与prerequisite列表分隔(5.1))。但是要注意，除了紧跟在prerequisite列表
+后面的，其它recipe行都要以tab字符开头。
+
+	A blank line that begins with a tab is not blank: it’s an empty recipe (see Section 5.9
+[Empty Recipes], page 57).
+ A comment in a recipe is not a make comment; it will be passed to the shell as-is.
+Whether the shell treats it as a comment or not depends on your shell.
+ A variable definition in a “rule context” which is indented by a tab as the first character
+on the line, will be considered part of a recipe, not a make variable definition, and passed
+to the shell.
+ A conditional expression (ifdef, ifeq, etc. see Section 7.2 [Syntax of Conditionals],
+page 78) in a “rule context” which is indented by a tab as the first character on the
+line, will be considered part of a recipe and be passed to the shell.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

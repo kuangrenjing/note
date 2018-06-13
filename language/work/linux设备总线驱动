@@ -1,0 +1,46 @@
+https://blog.csdn.net/lizuobin2/article/details/51570196
+https://blog.csdn.net/lizuobin2/article/details/51607813
+
+在内核里，有各种各样的总线，如 usb_bus_type、spi_bus_type、pci_bus_type、platform_bus_type、i2c_bus_type 等，内核通过总线将设备与驱动分离。
+
+设备是未知的，但系统上有哪些总线系统是预先知道的，所以这些总线的驱动和加载一般不需要我们自己定制。加载成功后的总线驱动出现在/sys/bus下面，每个总线目录下又有设备和驱动两个文件夹。当向总线驱动注册设备驱动时，会调用一些函数来寻找与正在注册的驱动匹配的设备，如果找到的设备还没有加入其它驱动列表中，就把它加入到这个驱动的设备列表中（先到先得？对不支持热加载的设备是这样，热加载的设备应该不是这样吧）。
+
+我们在/sys/bus下面看到了各种熟悉的总线名称，cpu，spi，i2c等等，但奇怪的是还有一个platform目录，这是一个什么总线类型呢。
+
+
+文档上说platform设备“通常是作为系统中的自治实体出现的设备”。Platform设备包括：基于端口的设备（已不推荐使用，保留下来只为兼容旧设备，legacy）；连接物理总线的桥设备；集成在SOC平台上面的控制器；连接在其它bus上的设备（很少见）。等等。
+
+这些设备有一个基本的特征：可以通过CPU bus直接寻址（例如在嵌入式系统常见的“寄存器”）。因此，由于这个共性，内核在设备模型的基础上（device和device_driver），对这些设备进行了更进一步的封装，抽象出paltform bus、platform device和platform driver，以便驱动开发人员可以方便的开发这类设备的驱动。
+
+可以说，paltform设备对Linux驱动工程师是非常重要的，因为我们编写的大多数设备驱动，都是为了驱动plaftom设备。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在linux驱动模型中，一般总线设备使用“struct device”描述，相应的驱动使用
+“struct device_driver”描述。而platform设备及驱动是对前者的再封装，使用“struct platform_device”
+和“struct platform_device_driver”描述。
+
+	platform_device_add函数会构造“struct platform_device”的“struct device”类型成员
+并调用device_add函数将其加入系统中去。
+
+我们的mcbsp接口总线就是platform设备
+
+
+
+以下说法有问题
+platform_driver_register()与platform_device_register()  
+
+设备与驱动的两种绑定方式：在设备注册时进行绑定及在驱动注册时进行绑定。 以一个USB设备为例，有两种情形：
+(1)先插上USB设备并挂到总线中，然后在安装USB驱动程序过程中从总线上遍历各个设备，看驱动程序是否与其相匹配，如果匹配就将两者邦定。这就是platform_driver_register()
+(2)先安装USB驱动程序，然后当有USB设备插入时，那么就遍历总线上的各个驱动，看两者是否匹配，如果匹配就将其绑定。这就是platform_device_register()函数
+
+
+驱动是有层次的，直接接在总线的设备的设备驱动是最底层的驱动。
+
+
+在linux系统中,/dev目录用来保存设备文件的.每个文件指向一个系统设备.用户的程序可以通过使用这些设备文件,对真实的硬件的设备进行操作.如: hda是第1个IDE硬盘,sda是第1个SCSI硬盘.
+
+在2.4内核时代,在/dev下保存了所有kernel可以支持的硬件设备的设备文件,将近有1万个.而这些设备中,大多数是没有连接的设备.这样就大大的浪费了系统资源,而且/dev目录也显得非常混乱.
+
+udev就是用了解决这些问题的.在2.6内核中,采用udev方式来管理/dev目录.它可以动态的建立/删除设备文件(设备连接到系统时,它会自动建立相应的设备文件,设备断开连接后,它会自动删除相应的设备文件).这样使/dev目录简化了许多.而且,udev还可以允许用户编写命名规则,为不同设备指定设备文件名.这样,对设备的管理也方便了许多.
+
+例如:你有2个U盘,1个容量是1G的,1个容量是2G的.一般情况下,你先接上的U盘会是sdb,后接上的U盘会是sdc.这样对使用很不方便.每次U盘的设备名可能不一样.但通过udev命名规则,你可以自己指定的设备命名,可以将1G的U盘命名为1g,将2G的U盘命名为2g.设备名不会再变化.使用和管理都会很方便.

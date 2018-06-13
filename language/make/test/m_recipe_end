@@ -1,0 +1,10 @@
+this_rule:
+	echo "line 1"
+
+	#line 3
+	echo "line 4"
+#line 5
+	echo "line 6"
+	a=6
+	echo "line 8"
+b=7

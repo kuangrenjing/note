@@ -1,0 +1,51 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	内核启动过程中需要完成各个部分的初始化，比如中断、页面管理、slab分配器、任务调度器、
+网络、PCI设备等等的初始化，这些初始化大概可以分为两种：
+
+	一种是关键的，必须完成的而且必须以特定的顺序来完成的初始化，这部分的代码往往是直接编
+入内核的而且是直接调用的。
+
+	另一种是非关键的的子系统（或者说模块、功能）的初始化，这部分根据配置可以不加载，可以以
+built-in的方式编到内核的可执行文件中，也可以以模块的方式加载。但是对于这一类来说，它们也需
+要内核的关键子系统的支持，甚至在它们之间也存在某种依赖或者说顺序关系，因此它们的初始化需要
+以另一种方式来实现。
+
+	对于第二类的子系统，内核在do_initcalls完成它们的初始化，在这之前内核会完成第一类子系
+统的初始化。do_initcalls的调用时机为start_kernel->rest_init->kernel_init->do_basic_setup->do_initcalls
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+do_initcalls函数
+	do_initcalls函数调用内核镜像中的.initcall.init节，.initcall.init节又分为7个子节，
+每个子节由一系列函数地址组成。do_initcalls函数分别调用各子节的函数指针完成相应模块的初始
+化。7个子节执行是有顺序的，所以放在前面子节的函数会被执行到，这是一个很有用的特性。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+.initcall.init节的生成
+	__define_initcall宏会指示连接器把函数指针放到.initcall.init节中去。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+__define_initcall系列宏
+	我们一般不直接使用__define_initcall宏，而是使用它的7个命名宏：
+
+	#define pure_initcall(fn) __define_initcall("0",fn,1)
+	#define core_initcall(fn) __define_initcall("1",fn,1)
+	#define core_initcall_sync(fn) __define_initcall("1s",fn,1s)
+	#define postcore_initcall(fn) __define_initcall("2",fn,2)
+	#define postcore_initcall_sync(fn) __define_initcall("2s",fn,2s)
+	#define arch_initcall(fn) __define_initcall("3",fn,3)
+	#define arch_initcall_sync(fn) __define_initcall("3s",fn,3s)
+	#define subsys_initcall(fn) __define_initcall("4",fn,4)
+	#define subsys_initcall_sync(fn) __define_initcall("4s",fn,4s)
+	#define fs_initcall(fn) __define_initcall("5",fn,5)
+	#define fs_initcall_sync(fn) __define_initcall("5s",fn,5s)
+	#define rootfs_initcall(fn) __define_initcall("rootfs",fn,rootfs)
+	#define device_initcall(fn) __define_initcall("6",fn,6)
+	#define device_initcall_sync(fn) __define_initcall("6s",fn,6s)
+	#define late_initcall(fn) __define_initcall("7",fn,7)
+	#define late_initcall_sync(fn) __define_initcall("7s",fn,7s)
+	#define __initcall(fn) device_initcall(fn)
+
+	我们常用的module_init(x)其实也是device_initcall(fn)，它的fn会被放入6子节，晚于subsys_initcall(fn)
+
+
+

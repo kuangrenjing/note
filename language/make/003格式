@@ -1,0 +1,17 @@
+1、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CK1： make.pdf(GNU make Version 4.2)
+
+
+2、切割长行(Splitting Long Lines)[CK1-p24]：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	makefile的文法是基于行的，对行的长度没有限制，以机器内存为限。为了方便阅读，长行可
+以使用反斜杠"\"切割放在多行上，也就是把换行符转义了"\NEWLINE", make会把它们解析成一行。
+
+	一般情况下："\NEWLINE"前的空白字符、"\NEWLINE"、"\NEWLINE"下一行的前导空白字符会被
+一起替换成一个空白字符。
+
+"\NEWLINE"有两种特殊情况：
+	1、recipe中的"\NEWLINE"
+	2、(CK1-p24)makefile中定义了".POSIX"目标，那对"\NEWLINE"的处理会遵循POSIX.2标准，
+不会把空白符压缩。(验证实验未通过)

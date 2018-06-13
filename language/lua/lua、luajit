@@ -1,0 +1,3 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一般脚本语言运行时先经过编译器编译成字节码，再通过解释器一条字节码指令一条字节码指
+令地解释运行。jit(just in time)机制会把字节码程序一次转化为机器码程序，比解释器省时。

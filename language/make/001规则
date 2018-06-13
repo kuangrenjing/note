@@ -1,0 +1,71 @@
+1、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CK1： make.pdf(GNU make Version 4.2)
+
+2、规则
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+规则显然是makefile中最重要的组件，它的作用用一句话概括就是：何时、怎样remake某些文件。
+
+2.1、规则的格式[CK1-p33]
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+targets : prerequisites
+	recipe
+	...
+
+或者像这样：
+targets : prerequisites ; recipe
+	recipe
+	...
+
+从中可以看出，规则由三部分组成，目标(target)、依赖(prerequisites)、shell命令(recipe)
+组成，下面我们分别来看。
+
+3、目标
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、目标的形式：
+规则中可以有一个或多个目标，目标之间用空格分隔。[CK1-p33]
+目标一般是文件名，也可以是
+
+
+
+4、依赖
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、依赖的形式：
+一个prerequisite总是一个文件名，这个文件用于产生目标。一个目标经常依赖多个文件。
+
+4.2、依赖的类型：
+基本上，依赖(Prerequisites)有两种类型：普通类型和"order-only"类型。
+
+普通类型有两方面的意思：1、依赖的规则要先于目标的规则先执行，2、当依赖比目标要新时，更新
+目标。
+
+"order-only":有时候，我们只想规定有些规则需要先于我们的目标执行，但不想它的执行结果影
+响目标更新，这时候就需要使用"order-only"依赖，它只保留普通类型的第一层语义。
+
+我们使用管道符号"|"来区分普通类型和"order-only"类型的依赖，格式如下：
+targets : normal-prerequisites | order-only-prerequisites
+管道符号前面的是普通类型依赖，管道后面是"order-only"类型依赖。
+
+4.3、依赖的搜索路径：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+对于大型系统而言，人们习惯于把源代码和二进制编译文件放在不同目录。make的路径搜索功能可
+以帮助我们在若干路径下自动寻找依赖。当我们改变了文件存储路径时，不需要修改每一个规则而只
+需修改搜索路径即可。[CK1-p37]
+
+
+
+5、recipe
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+recipe:
+	recipe是make要执行的一项操作，它由一个或多个shell命令组成，就是这么神奇，Makefile
+中使用两种语法：make语法和shell语法(5.1)，recipe部分使用的就是shell语法(也有部分make
+语法，make会先对recipe进行预处理)，其它部分使用make语法。
+
+	recipe的多条shell命令可以放在同一行，也可以放在多行中。recipe行也可以紧跟在prerequisite
+列表后面(使用分号与prerequisite列表分隔(5.1))。但是要注意，除了紧跟在prerequisite列表
+后面的，其它recipe行都要以tab字符开头。
+
+
+
+
+

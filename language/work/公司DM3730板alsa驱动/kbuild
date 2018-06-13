@@ -1,0 +1,107 @@
+https://linuxstory.org/kbuild-compile-linux-1/
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+linux内核编译时收集配置的方法：
+make config
+make menuconfig
+make xconfig
+make gconfig
+
+	"make config"：基于命令行的，文本式的，交互式的，对话式的，配置。不太方便使用。
+	"make menuconfig"：基于菜单式的，属于带图形界面的，或者叫辅助图形界面，基于ncurses
+库。目前使用最广泛的命令
+	"make xconfig"：真正的，图形界面的配置，用到的是QT的库。但界面效果不是很好。加上由
+于用到额外的图形库，所以用起来也不是那么的广泛。
+	"make gconfig"：也是图形界面。用到的是GTK的库。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Linux内核在2.6版本以后将配置文件由原来的config.in改为Kconfig。当执行make menuconfig
+时会出现内核的配置界面，所有配置工具都是通过读取arch/$(ARCH)Kconfig文件来生成配置界面，
+这个文件就是所有配置的总入口，它会包含其他目录的Kconfig。
+
+	Kconfig的作用是用来配置内核，它就是各种配置界面的源文件，内核的配置工具读取各个
+Kconfig文件，生成配置界面供开发人员配置内核，最后生成配置文件.config。
+
+	Kconfig的语法可以参考Documentation/kbuild/kconfig-language.txt。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+kconfig条目：
+	kconfig条目，直观地理解就是make menuconfig显示出来的树状结构中的一行。make menuconfig
+显示界面上有这样一些符号：
+	最后带有"--->"符号的行表示这个条目下有子条目，相当于文件夹（menu/endmenu、menuconfig if/endif
+choice/endchoice）；
+	前面带有"[] () <>"表示这个条目是一个可配置项，在此条目高亮显示时可通过空格键进行配置；
+
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+kconfig语法：
+	kconfig就像是一个树状结构的配置选项数据库，最终的配置结果放在一个平坦文件.config中。
+kconfig由菜单条目(menu entries)组成。
+
+菜单条目(menu entries)关键词：
+	config
+	menuconfig if/endif
+	choice/endchoice
+	comment
+	menu/endmenu
+	if/endif
+	source
+
+选项关键词：
+type definition: "bool"/"tristate"/"string"/"hex"/"int"
+  Every config option must have a type. There are only two basic types:
+  tristate and string; the other types are based on these two. The type
+  definition optionally accepts an input prompt, so these two examples
+  are equivalent:
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+源文件中使用kconfig
+
+https://www.linuxidc.com/Linux/2016-12/137841.htm
+
+
+
+
+
+我们知道：所谓代码移植性好不过是在不同的环境下使用不同的代码，而这通常是通过宏定义来完成的。linux要
+
+
+config后面不跟条目名，这这个配置不会出现在配置界面中
+
+
+
+
+关于kBuild
+
+kBuild是一个makefile框架，用于使编写简单的makefiles文件来完成复杂的任务
+
+当前kBuild设计
+
+kBuild框架的目标
+
+1.在所有支持的平台具有相似的行为
+
+2.灵活，不会产生不需要的阻止特别方案的约束
+
+3.Makefile能够很容易地编写和维护
+
+在当前kBuild观念中有4个概念：
+
+1.一个配置文件能够自动包含子目录树
+
+2.有目标配置文件模板作为makefile简化的主要机制
+
+3.有工具和SDKs(Software Development Kit )来使模板具有灵活性
+
+4.通过使用子makefiles来实现非递归makefile方法
+
+kBuild 不能做什么？
+
+kBuild不提供任何措施来检查编译器/库/头文件的配置，因为这不属于kBuild的范围。如果这个对你的工程很重要，请检查GNU build system的自动配置工具(autoconf tool)。如果你喜欢，你可以一起使用kBuild和autoconf，不过你最好使用完整的GNU包
+
+
+
+目标定义：

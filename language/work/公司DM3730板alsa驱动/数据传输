@@ -1,0 +1,24 @@
+https://blog.csdn.net/azloong/article/details/9910361
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、设置codec主从：
+	把codec设置为clock和frm从的意思就是codec芯片的clock、frm引脚从外部(我们的项目中就
+是mcbsp接口)接受信号。
+
+	这项工作是struct snd_soc_dai_ops结构的set_fmt函数指针完成的。在我们的项目中mcbsp3、
+mcbsp5都作为主，ak4430、nau8540都作为从来使用的。
+
+
+
+
+When the application tries to write samples into the buffer, an if the buffer is already full, the process goes to sleep. It gets woken up by the hardware through an interrupt; this interrupt is raised at the end of each period.
+
+There should be at least two periods per buffer; otherwise, the buffer is already empty when a wakeup happens, which result in an underrun.
+
+Increasing the number of periods (i.e., reducing the period size) increases the safety margin against underruns caused by scheduling or processing delays.
+
+The latency is just proportional to the buffer size: when you completely fill the buffer, the last sample written is played by the hardware only after all the other samples have been played.
+
+
+
+

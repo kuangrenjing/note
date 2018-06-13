@@ -1,0 +1,104 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Linux的内核模块机制允许开发者动态的向内核添加功能，我们常见的文件系统、驱动程序等都可以
+通过模块的方式添加到内核而无需对内核重新编译，这在很大程度上减少了操作的复杂度。模块机制
+使内核预编译时不必包含很多无关功能，把内核做到最精简，后期可以根据需要进行添加。而针对驱
+动程序，因为涉及到具体的硬件，很难使通用的，且其中可能包含了各个厂商的私密接口，厂商几乎
+不会允许开发者把源代码公开，这就和linux的许可相悖，模块机制很好的解决了这个冲突，允许驱
+动程序后期进行添加而不合并到内核。
+
+1、模块的加载
+
+实例(main.c)：
+#include<linux/module.h>
+#include<linux/init.h>
+
+static int __init init(void)
+{
+	printk("Hi module!\n");
+	return 0;
+}
+
+static void __exit exit(void)
+{
+	printk("Bye module!\n");
+}
+
+module_init(init);
+module_exit(exit);
+
+Makefile这么写：
+
+obj-m += main.o
+#generate the path
+CURRENT_PATH:=$(shell pwd)
+#the current kernel version number
+LINUX_KERNEL:=$(shell uname -r)
+#the absolute path
+LINUX_KERNEL_PATH:=/usr/src/linux-headers-$(LINUX_KERNEL)
+
+
+#complie object
+all:
+	make -C (LINUXKERNELPATH)M=(CURRENT_PATH) modules
+
+#clean
+clean:
+	make -C (LINUXKERNELPATH)M=(CURRENT_PATH) clean
+
+执行的make语句类似于：
+make -C /usr/src/linux-headers-2.6.35-22-generic M=/home/florian/module modules
+
+这样就把main.c文件编译成了main.ko文件
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+用readelf工具可以发现main.ko就是一个可重定位目标文件，这和一般的目标文件格式没有任何区
+别。我们知道，目标文件是不能直接执行的，它需要经过链接器的地址空间分配、符号解析和重定位
+的过程，转化为可执行文件才能执行。
+
+
+那么，内核将main.ko加载后，是否对其进行了链接呢？
+
+使用insmod和rmmod命令对模块进行加载和卸载操作，并使用dmesg打印内核日志。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+模块加载实际是由内核的系统调用init_module完成。系统调用init_module由SYSCALL_DEFINE3
+(init_module...)实现，其中有两个关键的函数调用。load_module用于模块加载，
+do_one_initcall用于回调模块的init函数。
+
+
+函数load_module调用copy_and_check(拷贝到内核)、layout_and_allocate(地址空间分配)、
+simplify_symbols(符号解析)、apply_relocations(重定位)来完成链接的任务。
+
+模块卸载由内核的系统调用delete_module完成。
+
+
+2、其它自写函数的内核识别：
+http://blog.csdn.net/mmpire/article/details/294889
+https://www.cnblogs.com/xiaojiang1025/p/6142548.html
+
+
+2、内核中的数据结构
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+每一个内核模块在内核中都对应一个数据结构module,所有的模块通过一个链表维护。所以有些恶意
+模块企图通过从链表摘除结构来达到隐藏模块的目的。部分成员列举如下：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+hardware123

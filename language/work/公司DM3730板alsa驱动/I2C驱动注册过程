@@ -1,0 +1,55 @@
+struct i2c_driver利用probe方法会自动生成i2c_client.会自动调用i2c_driver的.probe
+
+
+在Linux内核源代码中的drivers目录下的i2c_dev.c文件，实现了I2C适配器设备文件的功能，应用程序通过“i2c-%d”文件名并使用文件操作接口open()、write()、read()、ioctl()和close()等来访问这个设备。应用层可以借用这些接口访问挂接在适配器上的I2C设备的存储空间或寄存器并控制I2C设备的工作方式。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"https://wenku.baidu.com/view/96e35bcc0508763231121253.html"作者分享：
+1、设备和驱动的关联 
+	大家知道，对于一个驱动程序有两个元素不可或缺，即设备和驱动，一般驱动都是通过设备名
+和驱动名的匹配建立关系的，最开始我从代码中只能发现驱动的注册，却不见设备注册的踪影，令人
+疑惑，跟踪发现，在i2c adapter注册时会遍历i2c_board_info这样一个结构，而这个结构在29以
+前或更早的内核里是不存在的，它会完成驱动与设备的匹配问题，  
+
+2、名字匹配 
+	一个i2c驱动是可以有多个名字的，即一个驱动程序可以支持多个设备，该机制是通过 struct 
+i2c_device_id实现的，驱动中建立这么一个结构体数组，i2c架构层便会扫描该数组，与设备名去
+匹配，匹配成功的都会进入相应probe函数。 
+
+3、进入probe 
+	该过程困惑了我一段时间，其实要进入自己驱动的probe首先需要进入总线的probe，而进入总线
+probe的前提是与总线的match成功。 
+
+
+
+sdk\arch\arm\mach-omap2\board-omap3evm.c有
+static struct i2c_board_info __initdata omap3evm_i2c3_boardinfo[] = {
+	{
+		I2C_BOARD_INFO("edt-ft5x06", 0x38),
+		.flags = I2C_CLIENT_WAKE,
+		.irq   = OMAP_GPIO_IRQ(OMAP3_EVM_TS_GPIO_cap),
+		.platform_data =&ft5x06_pdata,
+	},
+	{
+		I2C_BOARD_INFO("24c04", 0x50), // A0=0, A1=0, A2=0
+		.platform_data = &board_eeprom,
+	},
+	{
+		I2C_BOARD_INFO("nau8540", 0x1c),
+	}, 
+	{
+		I2C_BOARD_INFO("nau8540", 0x1d),
+	},
+	{
+		I2C_BOARD_INFO("nau8540", 0x1f),
+	},
+};
+
+sdk/arch/arm/plat-omap/i2c.c
+omap_register_i2c_bus
+->
+	i2c_register_board_info
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在这个结构里我们能够发现"总线编号"(只是变量名)、"设备名字"(譬如"nau8540")、"设备地
+址"(譬如"0x1c")

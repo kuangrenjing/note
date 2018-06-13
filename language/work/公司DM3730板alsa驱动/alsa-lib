@@ -1,0 +1,1 @@
+alsa-lib操作的是pcm stream，事实上我们经常只给stream创建设备文件节点，而没有给snd_card创建设备文件节点。

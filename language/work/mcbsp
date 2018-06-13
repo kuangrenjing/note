@@ -1,0 +1,104 @@
+https://wenku.baidu.com/view/7be5427b6c175f0e7cd137d6.html
+https://www.cnblogs.com/elaron/archive/2011/07/25/2116258.html
+
+Multichannel Buffered Serial Port(P3061)
+mcbsp三种功能：
+	1、控制、数据功能，即通用串口功能
+	2、音频数据功能，可以直接对接对方的I2S接口
+	3、语音数据功能，对接PCM口，频率模式可选8k，16k
+
+字/频道(Words or Channels)21.2.4.1.1：
+	mcbsp的words和channels是同一个概念。
+	通过设置字长可以是8、12、16、20、24或者32bits长度
+
+	具体设置见21.2.4.1.1
+
+帧(frames)21.2.4.1.2：
+	一个或多个(最多128)字组成一个帧。
+	帧内的数据传输是连续不间断的，帧与帧之间可以有暂停
+	由于传输时字长、帧长都已设置好，且连续，所以帧同步只需起始信号即可。
+
+相位(phases)21.2.4.1.3：
+	一个帧可以包含一个或两个相位，双相位主要是为了兼容I2S接口。
+
+
+
+主从模式设置：
+	譬如发送主模式接受从模式
+
+
+dm3730内的mcbsp的接收方：
+MPU/IVA2.2 subsystem or to the sDMA controller
+
+21.2.1 McBSP Functions
+The device provides five instances of the McBSP module, called McBSP1, McBSP2, McBSP3, McBSP4,
+and McBSP5.
+List of recommended usage (non exhaustive) per McBSP modules in the device:
+• McBSP1: Digital baseband (DBB) data
+• McBSP2: Audio data with audio buffer and SIDETONE feature
+• McBSP3: Bluetooth® voice data with SIDETONE feature
+• McBSP4: DBB voice data
+• McBSP5: Midi data
+
+mcbsp2-5有4个引脚，mcbsp1有6个引脚，还有一个引脚是这5个接口共用的。
+	mcbsp_clks  输入       所有mcbsp共用的外部时钟接口
+
+	mcbspi_dr   输入       Receive serial data
+	mcbspi_dx   输入/输出  Transmit serial data
+	mcbspi_clkx 输入/输出  Transmit clock
+	mcbspi_fsx  输入/输出  Transmit frame synchronization
+
+	mcbsp1_clkr 输入/输出  Receive clock CLKR
+	mcbsp1_fsr  输入/输出  Receive frame synchronization
+
+mcbsp还有一些内部引脚，用于与DM3730其它模块的连接：
+连接PRCM的两个引脚
+	mcbspi_iclk
+	mcbspi_swakeup
+mcbsp的工作使用除了可以由外部引脚mcbsp_clks输入，也可以由DM3730内部模块PRCM通过DM3730内部引脚mcbspi_iclk输入
+
+
+
+
+
+
+
+
+
+
+	soc_pcm_hw_params函数会调用machine、codec_dai、cpu_dai、platform的
+hw_params函数，codec的hw_params有没有，在哪里调用呢。
+
+	soc_pcm_hw_params又是struct snd_pcm_ops的hw_params指针。
+
+	也就是machine驱动组装了一个struct snd_pcm_ops变量，然后用这个变量新建了PCM设备(一个
+snd_soc_dai_link新建一个，我们的项目是两个snd_soc_dai_link)。soc-coce.c新建pcm使用的是
+
+/* SoC platform interface */
+struct snd_soc_platform_driver {
+
+	int (*probe)(struct snd_soc_platform *);
+	int (*remove)(struct snd_soc_platform *);
+	int (*suspend)(struct snd_soc_dai *dai);
+	int (*resume)(struct snd_soc_dai *dai);
+
+	/* pcm creation and destruction */
+	int (*pcm_new)(struct snd_card *, struct snd_soc_dai *,
+		struct snd_pcm *);
+	void (*pcm_free)(struct snd_pcm *);
+
+	/*
+	 * For platform caused delay reporting.
+	 * Optional.
+	 */
+	snd_pcm_sframes_t (*delay)(struct snd_pcm_substream *,
+		struct snd_soc_dai *);
+
+	/* platform stream ops */
+	struct snd_pcm_ops *ops;
+};
+中的pcm_new函数。
+
+	显然的，platform驱动是跟硬件平台密切相关的，omap系列芯片的platform driver的路径在
+../sound/soc/omap/omap-pcm.c。在这个文件中pcm_new指针是omap_pcm_new。
+

@@ -1,0 +1,81 @@
+0、问题
+失败了，没搞起来，只能在dvsdk安装目录下通过make dsplink安装
+
+
+dvsdk提供的dsplink相关的软件包：
+（1）dspbios_5_41_03_17       //DSP/BIOS源码 
+（2）dsplink_1_65_01_05       //dsplink源码 
+（3）cgt6x_6_1_14             //dsp编译工具链 
+（4）xdctools_3_16_03_36      //实时调试工具
+
+（1）bios_5_41_10_36 
+（2）dsplink_linux_1_65_00_03 
+（3）ti_cgt_c6000_7.3.0 
+（4）xdctools_3_22_01_21
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、设置环境变量“DSPLINK”
+
+	编译DSPLink源码和示例代码之前，先要设置环境变量，TI已经为我们准备了一个脚本，我们
+只要修改它就可以了。
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/etc/host/scripts/Linux/dsplinkenv.bash
+这个脚本中用export指令导出了DSPLINK路径环境变量，修改成如下内容：
+export DSPLINK=$HOME/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink
+在每次编译dsplink之前，都需要运行：
+source /home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/etc/host/scripts/Linux/dsplinkenv.bash
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、运行dsplinkcfg.pl
+
+运行如下命令（适用于DM3730）：
+perl /home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/config/bin/dsplinkcfg.pl --platform=OMAP3530 --nodsp=1 --dspcfg_0=omap3530SHMEM --dspos_0=DSPBIOS5XX --gppos=OMAPLSP --comps=ponslrmc --DspTskMode=1
+
+会在/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/config/BUILD下生成若干文件：
+CFG_ARM.c
+CFG_Linux.c
+CFG_OMAP3530_SHMEM.c
+CFG_system.c
+CURRENTCFG.MK
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、修改编译时GPPOS的路径和编译器路径
+
+文件位置：
+/home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src/Rules.mk
+
+内核源码位置：
+KERNEL_DIR    := ${HOME}/ti-dvsdk_dm3730-evm_04_03_00_06/psp/linux-2.6.37-psp04.02.00.04.sdk/
+
+交叉编译工具链位置：
+TOOL_PATH     := ${HOME}/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit/arm-arago-linux-gnueabi/bin
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4、修改gpp端配置文件
+
+文件位置：
+/home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/make/Linux/omap3530_2.6.mk
+
+内核源码位置：
+BASE_BUILDOS    := ${HOME}/ti-dvsdk_dm3730-evm_04_03_00_06/psp/linux-2.6.37-psp04.02.00.04.sdk
+
+交叉编译工具链位置：
+BASE_TOOLCHAIN  := ${HOME}/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5、修改DSP端配置文件
+
+
+6、GPP端DSPLINK源码编译：
+cd /home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src
+make
+
+编译结果在：
+/home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/export/BIN/Linux/OMAP3530/RELEASE/
+
+7、GPP端DSPLINK示例代码编译：
+cd /home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src/samples
+make
+
+
+

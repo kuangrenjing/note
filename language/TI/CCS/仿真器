@@ -1,0 +1,11 @@
+CCS支持五种JTAG仿真器：
+	Blackhawk Emulators
+	Spectrum Digital Emulators
+	TI Emulators
+	XDS100 Class Emulator
+	TI XDS560 PCI Emulator
+
+VS调试Wince一般不使用JTAG，而是使用微软的USB AnctiveSync程序。
+
+
+https://wenku.baidu.com/view/485be6c5f7ec4afe05a1df2c.html

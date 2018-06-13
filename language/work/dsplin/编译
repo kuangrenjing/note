@@ -1,0 +1,40 @@
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src/samples/audio/make.sh的内容：
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src/samples/audio/makeall.sh
+
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src/samples/audio/makeall.sh的内容：
+cd /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/
+make dsplink_samples  >/home/hp/dspLoopcompiler.txt
+make dsplink_install  >/home/hp/dspLoopInstall.txt
+
+/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/Makefile的dsplink_samples段内容：
+dsplink_samples:
+        DSPLINK=$(LINK_INSTALL_DIR)/dsplink \
+        $(MAKE) -C $(LINK_INSTALL_DIR)/dsplink/gpp/src/samples \
+        BASE_TOOLCHAIN=$(CSTOOL_DIR) \
+        BASE_CGTOOLS=$(CSTOOL_DIR)/bin \
+        OSINC_PLATFORM=$(CSTOOL_PREFIX)/lib/gcc/arm-arago-linux-gnueabi/$($(CSTOOL_PREFIX) --dumversion)/include \
+        OSINC_TARGET=$(CSTOOL_DIR)/target/usr/include \
+        CROSS_COMPILE="$(CSTOOL_PREFIX)" \
+        CC=$(CSTOOL_PREFIX)gcc \
+        COMPILER=$(CSTOOL_PREFIX)gcc \
+        ARCHIVER=$(CSTOOL_PREFIX)ar \
+        AR=$(CSTOOL_PREFIX)ar \
+        LD=$(CSTOOL_PREFIX)ld \
+        KERNEL_DIR=$(LINUXKERNEL_INSTALL_DIR) \
+        all
+
+        DSPLINK=$(LINK_INSTALL_DIR)/dsplink \
+        $(MAKE) -C $(LINK_INSTALL_DIR)/dsplink/dsp/src/samples \
+        BASE_CGTOOLS=$(CODEGEN_INSTALL_DIR) \
+        BASE_SABIOS=$(BIOS_INSTALL_DIR) \
+        XDCTOOLS_DIR=$(XDC_INSTALL_DIR) \
+        all
+
+DSPLINK=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink make -C /home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/dsplink_1_65_01_05_eng/dsplink/gpp/src/samples BASE_TOOLCHAIN=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit/ BASE_CGTOOLS=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//bin OSINC_PLATFORM=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//bin/arm-arago-linux-gnueabi-/lib/gcc/arm-arago-linux-gnueabi//include OSINC_TARGET=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//target/usr/include CROSS_COMPILE="/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//bin/arm-arago-linux-gnueabi-" CC=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//bin/arm-arago-linux-gnueabi-gcc COMPILER=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//bin/arm-arago-linux-gnueabi-gcc ARCHIVER=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//bin/arm-arago-linux-gnueabi-ar AR=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//bin/arm-arago-linux-gnueabi-ar LD=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/linux-devkit//bin/arm-arago-linux-gnueabi-ld KERNEL_DIR=/home/hp/ti-dvsdk_dm3730-evm_04_03_00_06/psp/linux-2.6.37-psp04.02.00.04.sdk all
+
+
+使用了shell很不严谨的写法。
+
+
+
+./dsplink_1_65_01_05_eng/dsplink/make应该看一看

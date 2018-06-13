@@ -1,0 +1,39 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	主流的虚拟机软件包括VMWare、Virtual PC和VirtualBox，但只有甲骨文公司的VirtualBox
+是开源和免费的。
+
+2、安装
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	从https://www.virtualbox.org/下载最新版的Virtualbox，双击安装。
+
+3、创建一台虚拟PC
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	启动Virtualbox，从菜单栏“控制”->“新建”，这时会出现“欢迎使用新建虚拟电脑向导”。名
+称：“LEARN-ASM”，类型：“Other”，版本：“Other/Unknown”点击下一步。内存分配64M，点击下
+一步。创建虚拟硬盘，点击下一步。必须选择VHD格式，点击下一步。固定大小，点击下一步。选择1G，
+点击下一步。完成。
+
+4、为什么选择VHD硬盘
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	李忠之所以选择VHD硬盘，是因为其格式简单。固定尺寸的VHD虚拟硬盘是一个具有“.vhd”扩展
+名的文件，它仅包括两个部分，前面是数据区，用来模拟实际的硬盘空间，最后跟着一个512字节的
+结尾（2004年前的规范里只有511字节）。
+
+	文件尾信息是以一个字符串“conectix”开始的。这个标志用来告诉试图打开它的虚拟机，这的
+确是一个合法的VHD文件。该标志称为VHD创建者标识，就是说，该公司（conectix）创建了VHD文
+件格式的最初标准。从这个标志开始，后面的数据包含了诸如文件的创建日期、VHD的版本、创建该
+文件的应用程序名称和版本、创建该文件的应用程序所属的操作系统、该虚拟硬盘的参数（磁头数、
+每面磁道数、每磁道扇区数）、VHD类型（固定尺寸还是动态增长）、虚拟硬盘容量等。
+
+5、硬盘的访问：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	要访问硬盘，运行中的程序必须至少向硬盘控制器提供4个参数，分别是磁头号、磁道号、扇区
+号，以及访问意图（是读还是写）。
+
+	硬盘的读写是以扇区为最小单位的。所以，无论什么时候，要从硬盘读数据，或者向硬盘写数据，
+至少得是1个扇区。
+
+	你可能想，我只有2字节的数据，不足以填满一个扇区，怎么办呢？这是你自己的事。你可以用
+无意义的废数字来填充，凑够一个扇区的长度，然后写入。读取的时候也是这样，你需要自己跟踪和
+把握从扇区里读到的数据，哪些是你真正想要的。

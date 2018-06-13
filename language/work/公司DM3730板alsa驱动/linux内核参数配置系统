@@ -1,0 +1,3 @@
+kbuild是内核编译的makefile框架，涉及内容较多，我暂时不做深入了解，只做alsa驱动。
+
+kbuild系统由5部分组成：顶层Makefile、.config、arch/$(ARCH)/Makefile、scripts/Makefile.*、kbuild Makefiles。我们写驱动所涉及文件夹下的Makefile都是kbuild Makefile，

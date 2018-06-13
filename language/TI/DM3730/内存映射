@@ -1,0 +1,41 @@
+《DM37X Multimedia Device Technical Reference Manual》第二章"Memory Mapping"具体讲述了DM37X芯片的地址空间的划分
+
+
+这个空间里有一段地址空间是给DSP用的，但ARM也能访问，但两边的地址是不一样的，需要使用DSPLink函数POOL_translateAddr转换
+
+外设是统一编址，但DSP的片上内存是自己的编址，因为它是在DSP核上的，不是在SCR上的，外部模块看其地址是通过SCR过来的，所以加了地址偏移。
+
+
+free -m可以查看内存使用情况
+
+
+dsplink/config/BUILD/CFG_OMAP3530_SHMEM.C中对“DSPLINK MEMORY SECTION DIAGRAM”的描述
+数组LINKCFG_MemEntry LINKCFG_memTable_00定义了各种地址
+Global_ArmDspLinkConfigMemTableEntry
+
+
+http://processors.wiki.ti.com/index.php/OMAP3_DSP_MMU_Configuration
+mmu tlb
+
+https://blog.csdn.net/huangbin0709/article/details/52728313
+
+Z:\home\mqs\ti-dvsdk_dm3730-evm_04_03_00_06\psp\linux-2.6.37-psp04.02.00.04.sdk\arch\arm\plat-omap\include\plat\memory.h:
+   38   */
+   39  #if defined(CONFIG_ARCH_OMAP1)
+   40: #define PHYS_OFFSET		UL(0x10000000)
+   41  #else
+   42: #define PHYS_OFFSET		UL(0x80000000)
+   43  #endif
+   44  
+   ..
+   65  	({ dma_addr_t __dma = page_to_phys(page); \
+   66  	   if (is_lbus_device(dev)) \
+   67: 		__dma = __dma - PHYS_OFFSET + OMAP1510_LB_OFFSET; \
+   68  	   __dma; })
+   69  
+   ..
+   71  	({ dma_addr_t __dma = addr;				\
+   72  	   if (is_lbus_device(dev))				\
+   73: 		__dma += PHYS_OFFSET - OMAP1510_LB_OFFSET;	\
+   74  	   phys_to_page(__dma);					\
+   75  	})

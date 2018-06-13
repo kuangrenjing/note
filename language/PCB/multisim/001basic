@@ -1,0 +1,21 @@
+1、multsim简介：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Multisim是美国国家仪器（NI）有限公司推出的以Windows为基础的仿真工具，适用于板级的
+模拟/数字电路板的设计工作。它包含了电路原理图的图形输入、电路硬件描述语言输入方式，具有丰
+富的仿真分析能力。
+
+	工程师们可以使用Multisim交互式地搭建电路原理图，并对电路进行仿真。Multisim提炼了
+SPICE仿真的复杂内容，这样工程师无需懂得深入的SPICE技术就可以很快地进行捕获、仿真和分析
+新的设计，这也使其更适合电子学教育。通过Multisim和虚拟仪器技术，PCB设计工程师和电子学
+教育工作者可以完成从理论到原理图捕获与仿真再到原型设计和测试这样一个完整的综合设计流程。
+
+	9.0之前的版本是由加拿大EWB(Electrical Workbench)，从Multisim9.0开始是由NI发布
+的，从此Multisim可以与labview对接。理论教学――计算机仿真――实验环节
+
+
+2、应用场景：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	控制、能源、功率电子、机电一体化
+
+	http://www.ni.com/white-paper/10710/zhs/
+

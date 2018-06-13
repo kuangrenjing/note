@@ -1,0 +1,32 @@
+DMAI(Davinci Multimedia Application Interface)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	达芬奇多媒体接口。DMAI是操作系统(linux或者DSP/BIOS)、编解码器之上的应用接口，可以
+快速方便地编写达芬奇平台上的应用。
+
+PSP(platform support package)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	/home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/psp/linux-2.6.37-psp04.02.00.07.sdk/Documentation/sound/alsa
+放着PSP的alsa文档
+
+EVM(Evaluation Module)
+	硬件模拟板
+
+OMAP(Open Multimedia Application Platform)、DM
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	"开放式多媒体应用平台"(OMAP)是德州仪器为满足移动多媒体信息处理及无线通信应用开发出
+来的高性能、高集成度嵌入式处理器系列。
+
+	DM3730的DM是“digital media”的意思。
+
+DAI(Digital Audio Interface)音频设备的硬件接口
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	PCM接口
+	I2S接口
+		NAU85L40具有，但我们不用
+	AC97接口
+	TDM接口(mcbsp接口可直接对接)
+		NAU85L40具有，且是我们使用
+
+PCM、MP3
+	PCM是一种没有压缩的编码格式
+

@@ -1,0 +1,75 @@
+1、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CK1： make.pdf(GNU make Version 4.2)
+
+GNU定义了一些它特有的变量[CK1-p185]：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+MAKEFILES
+Makefiles to be read on every invocation of make.
+See Section 3.4 [The Variable MAKEFILES], page 14.
+
+VPATH
+Directory search path for files not found in the current directory.
+See Section 4.4.1 [VPATH Search Path for All Prerequisites], page 25.
+
+SHELL
+The name of the system default command interpreter, usually /bin/sh. You
+can set SHELL in the makefile to change the shell used to run recipes. See
+Section 5.3 [Recipe Execution], page 44. The SHELL variable is handled specially
+when importing from and exporting to the environment. See Section 5.3.2
+[Choosing the Shell], page 45.
+
+MAKESHELL
+On MS-DOS only, the name of the command interpreter that is to be used by
+make. This value takes precedence over the value of SHELL. See Section 5.3
+[MAKESHELL variable], page 44.
+
+MAKE
+The name with which make was invoked. Using this variable in recipes has
+special meaning. See Section 5.7.1 [How the MAKE Variable Works], page 51.
+
+MAKE_VERSION
+The built-in variable ‘MAKE_VERSION’ expands to the version number of the
+GNU make program.
+
+MAKE_HOST
+The built-in variable ‘MAKE_HOST’ expands to a string representing the host that
+GNU make was built to run on.
+
+MAKELEVEL
+The number of levels of recursion (sub-makes).
+See Section 5.7.2 [Variables/Recursion], page 52.
+
+MAKEFLAGS
+The flags given to make. You can set this in the environment or a makefile to
+set flags.
+See Section 5.7.3 [Communicating Options to a Sub-make], page 53.
+It is never appropriate to use MAKEFLAGS directly in a recipe line: its contents
+may not be quoted correctly for use in the shell. Always allow recursive make’s
+to obtain these values through the environment from its parent.
+
+GNUMAKEFLAGS
+Other flags parsed by make. You can set this in the environment or a makefile
+to set make command-line flags. GNU make never sets this variable itself. This
+variable is only needed if you’d like to set GNU make-specific flags in a POSIXcompliant
+makefile. This variable will be seen by GNU make and ignored by
+other make implementations. It’s not needed if you only use GNU make; just use
+MAKEFLAGS directly. See Section 5.7.3 [Communicating Options to a Sub-make],
+page 53.
+
+MAKECMDGOALS
+The targets given to make on the command line. Setting this variable has no
+effect on the operation of make.
+See Section 9.2 [Arguments to Specify the Goals], page 99.
+
+CURDIR
+Set to the absolute pathname of the current working directory (after all -C options
+are processed, if any). Setting this variable has no effect on the operation
+of make.
+See Section 5.7 [Recursive Use of make], page 50.
+
+SUFFIXES
+The default list of suffixes before make reads any makefiles.
+.LIBPATTERNS
+Defines the naming of the libraries make searches for, and their order.
+See Section 4.4.6 [Directory Search for Link Libraries], page 28.

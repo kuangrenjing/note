@@ -1,0 +1,217 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180510工作记录(周四)
+	今日工作总结：与朱卫、郭航骧一起测试了DM3730第二版的DMA算法的表现。与第一版类似，低频
+时表现良好，高频不正常。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180509工作记录(周三)
+	今日工作总结：编译刘阳的audio程序，调整传给DSP算法的麦克风数据顺序，使用18通道新上
+位软件采集数据，表现正常。最近测试比较多，实验室不空，这一版的测试要延迟到明天。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180508工作记录(周二)
+	今日工作总结：测试了与alsa线程去耦合的网络收发线程，发现连续发送数据还是会导致alsa
+发线程underrun且短时间内连续发生数次就无法恢复，下面可以尝试使用libevent来做网络收发工
+作。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180507工作记录(周一)
+	今日工作总结：解决了dsplink双buffer时数据错乱问题；解决了alsa函数snd_pcm_avail_update
+循环过程中sleep引入噪声问题；网络发送线程与alsa线程解耦合，不再会因网络抖动出现underrun。
+已请朱卫帮忙调整DMA程序的通道顺序，明天可再次进行DM3730板的第二版测试。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180504工作记录(周五)
+	今日工作总结：测试DM3730第二版DMA算法，由于第二版变成了16通道且通道排布有变化，上位
+机采集到的数据对不上，测试过程中才发现这个问题，正在解决中。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180503工作记录(周四)
+	今日工作总结：dsplink CHNL模块资料不详尽，经多次测试发现buffer地址在CHNL_reclaim
+函数调用后会发生改变，导致数据发生偏差。这个问题还没有彻底解决，播放过程中还会有杂音。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180502工作记录(周三)
+	今日工作总结：解决arm和dsp通信时arm发送和接受使用两个不同内存时杂音问题。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180428工作记录(周六)
+	今日工作总结：经过长时测试（12小时），DM3730第二版可以稳定运行。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180427工作记录(周五)
+	今日工作总结：arm和dsp通信时arm发送和接受使用两个不同内存，可以减少DSP等待时间。但
+经过测试会有杂声，这个问题还要测试
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180426工作记录(周四)
+	今日工作总结：按照《dsplink下数据时延和DSP资源利用率低的原因探讨及解决方案》的想法改写
+DM3730板的应用程序并在DM3730第二版本的板子进行测试，明天继续。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180425工作记录(周三)
+	今日工作总结：按照《dsplink下数据时延和DSP资源利用率低的原因探讨及解决方案》的想法改写
+DM3730板的应用程序。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180424工作记录(周二)
+	今日工作总结：经测试DMA算法在DM3730板上可以正常运行。写了一篇报告《dsplink下数据时
+延和DSP资源利用率低的原因探讨及解决方案》分析DM3730板应用程序还存在的一些问题。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180423工作记录(周一)
+	今日工作总结：测试DMA算法在DM3730板上的运行效果，明天继续测。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180420工作记录(周五)
+	今日工作总结：详细分析由dsplink例程loop改写而来的audio抓取、算法和播放程序，为DMA
+算法移植做准备。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180419工作记录(周四)
+	今日工作总结：解决DM3730板开机自启动的问题，写有《DM3730板测试程序开机自启动》报告。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180418工作记录(周三)
+	今日工作总结：熟悉下DSPLink dsp端的编程，调研开机自启动。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180417工作记录(周二)
+	今日工作总结：继续搞dsplink编译系统，但没有成功，在dvsdk目录下make dsplink是可以
+编译的，直接编译不能成功，由于时间紧张，这部分工作暂时放一放。
+
+	DM3730网速测试：DM3730测试板在使用过程中有同事反应网速比较满，只能达到1MBits/sec
+左右。经测试，网速基本正常，但ping延时较大，详见测试报告。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180417工作记录(周一)
+	今日工作总结：dsplink编译，按照创龙《OMAPL138的双核通信组件DSPLINK开发入门》配置DM3730
+的DSPLink的编译系统，主要是要理清DSP/BIOS编程的特点，自己编写一个DPS/BIOS时间API的历程获取
+DSP的主频。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180413工作记录(周五)
+	今日工作总结：王季壮已经基本解决了DM3730声卡时延问题，按照黄总监的安排，我下周开始
+做声音算法的移植工作，观察DM3730工作的实际工作。
+
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180412工作记录(周四)
+	今日工作总结：mcbsp接口的继续研究，尤其是驱动时钟，输出给从设备的时钟和帧同步信号的
+设置还有16信号是如何拼接的。分析驱动发现刘阳把mcbsp的工作时钟设为外部输入，但查看原理图
+此输入引脚创龙并没有在核心板上引出，后请教瞿林、刘阳后得知他们是内部时钟驱动失败后改用飞
+线接入的外部时钟，这个问题后面还是要尽量解决一下，不然就算改版了这根飞线也去不掉。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180411工作记录(周三)
+	今日工作总结：dsplink编程入门。王季壮alsa-lib应用程序的测试，经测试能够稳定工作一
+天一夜，时延37ms，初步解决了时延问题。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180410工作记录(周二)
+	今日工作总结：DMA中断时间的测量
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180409工作记录(周一)
+	今日工作总结：完成内核打造，主要是alsa驱动的流程整理。
+
+	明日工作安排：DMA中断间隔的测试
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180408工作记录(周日)
+	今日工作总结：计划花两天时间从头打造linux内核系统，主要想法是全面把握内核驱动开发的
+方方面面。今天主要工作是整理了kbuild makefile的架构和需要添加、修改的文件。
+
+	明日工作安排：完成内核打造
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180404工作记录(周三)
+	今日工作总结：分析刘阳写的nua8540和ak4430的codec驱动，主要是其加载过程和调用过程。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180403工作记录(周二)
+	今日工作总结：PC、开发host、target静态网络连通，host创建了ftp服务器，target通过ftpget、
+ftpput与host共享文件。
+	分析mcbsp dai的fifo、buffer、period设置细节。
+
+	明日工作安排：测试period的设置。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180402工作记录(周一)
+	今日工作总结：测试程序拷贝到开发板的过程中遇到了问题，通过挂载U盘、TF卡的方式都不可
+行，需要使用DVSDK的NFS功能。今天这项工作还没有完成，主要是主机与开发板的网络之间还没有
+设置通。
+
+	明日工作安排：解决开发板NFS挂载，测试程序开始测试。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180329工作记录(周五)
+	今日工作总结：对照datasheet熟悉了板子的构成，尤其是数据的物理通道，设计了一套测试
+时延的方案，待下周实施。
+
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180328工作记录(周四)
+	今日工作总结：熟悉设备通过open API到驱动的调用过程。测试代码编译通过，但钱骏不在，
+延迟到明天测试。
+
+	明日工作安排：找硬件工程师合作，测试代码关闭打印，测试代码不走DSP算法部分分别测试时延。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180327工作记录(周三)
+	今日工作总结：经过阅读nau85l40文档，我发现我对声卡和codec有些混淆，frame阈值是配
+置给mcbsp的（alsa驱动的machine部分）而不是nau85l40的（alsa驱动的codec部分），所以我
+又详细了解了alsa-lib下发的硬件配置信息是如何分配到各个驱动的，这一部分暂时还没有看完。
+
+	晚上我在思考另一个问题，nau85l40的采样率是16k，frame阈值从256降到8，相应时延从1062ms
+降到162ms，这跟16k的采样率不成比例，原因可能是多方面的，一个是其它地方还有时延，另一个我注
+意到测试代码没有关闭打印，按照我的经验，屏幕打印printf是一个非常耗时的操作。
+
+	明日工作安排：找硬件工程师合作，测试代码关闭打印，测试代码不走DSP算法部分分别测试时延。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180327工作记录(周二)
+	今日工作总结：熟悉alsa-lib相关术语、参数设置和API编程。
+	明日工作安排：测试代码通过alsa-lib读写nau85L40寄存器。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180326工作记录(周一)
+	今日工作总结：阅读sound/soc/omap/omap3evm.c、sound/soc/omap/omap-mcbsp.c、
+sound/soc/omap/omap-pcm.c中DAI驱动部分，分析音频数据的控制和流动情况。
+	明日工作安排：分析《DM3730系统时延测试报告》frame=8、256影响控制的具体是什么。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180324工作记录(周六)
+	结合《DM3730软件开发手册》、网络资料研读dvsdk alsa-soc结构和各模块的相互调用流程并做
+好笔记。alsa-soc machine驱动实现为linux的platform总线驱动并作为整个alsa的入口，
+soc-codec作为编解码器的控制模块、soc-platform作为编解码器的数据软通道哪个才是造成时延的
+元凶，还需要接下来继续研究。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180323工作记录(周五)
+	21号跟刘阳讨论下觉得“时延”问题可以在物理层再找找原因，所以今天整体了解下alsa驱动架
+构，这个过程还比较顺利。了解完之后根据《dm3730软件开发手册》在dvsdk中寻找alsa框架的各部件，
+在这个过程觉得dvsdk的开发手册很简单，不利于快速上手，下来得再找刘阳了解下。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180322工作记录(周四)
+	请假未记录
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+20180321工作记录(周三)
+	大概了解了dsplink的架构和特点。与刘阳交流了时延的问题，两人都认为与alsa驱动的buffer
+长度有关系。我认为可以结合硬件层驱动在这个方向上再试一试，还没有到要推倒重来的地步，晚上
+再找刘阳了解下网卡硬件层的接入情况。

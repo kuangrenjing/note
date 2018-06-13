@@ -1,0 +1,140 @@
+https://www.linuxidc.com/Linux/2016-12/138364.htm
+https://www.cnblogs.com/xiaojiang1025/p/6363626.html
+https://blog.csdn.net/zqixiao_09/article/details/50839042
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+0、引子-struct device与struct cdev
+	我们有这样的感官：好不容易捋完了linux的一个设备驱动，对struct device类型还模棱两
+可的时候，我们又看了应用层是怎么访问字符设备的，这时又看到了struct cdev类型，它也代表
+一个设备，这时我们就糊涂了，怎么一个同级别的设备要两种抽象呢。其实是它们面向的对象不一样，
+struct cdev是面向应用层的，而struct device是面向具体物理设备的。
+
+	驱动面向应用层时把设备分为字符设备、块设备、网络设备三种类型
+
+	驱动面向硬件层时把设备按所对接的总线类型分为usb、i2c、spi、网口、platform等总线设备
+
+Linux设备文件三大结构：inode,file,file_operations
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、驱动对上和对下两方面：
+	linux驱动程序就是向下控制硬件，向上提供接口，这里的向上提供的接口最终对应到应用层有
+三种方式：设备文件/dev，/proc，/sys，其中最常用的就是使用设备文件，而Linux设备中用的最
+多的就是字符设备，本文就以字符设备为例来分析创建并打开一个字符设备的文件内部机制。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、设备文件是怎么与设备和驱动联系起来的 - 设备号
+	linux的设备号共32位，分为两部分：高12位是主设备号-用以区分驱动；低20位是从设备号-
+用于区分驱动驱动的不同设备。
+
+	add_chrdev_region其实是把一个驱动对象和一个(一组)设备号联系到一起，add_chrdev把
+一个具有特定设备号的字符设备加入了系统。而创建设备文件，其实是把设备文件和设备号联系到一
+起。这样访问设备文件就能获取到设备号，然后就可以在系统内找到相应设备和驱动。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、inode结构
+	Linux中一切皆文件，当我们在Linux中创建一个文件时，就会在相应的文件系统创建一个inode
+与之对应，文件实体和文件的inode是一一对应的，创建好一个inode会存在存储器中，第一次open
+就会将inode在内存中有一个备份，同一个文件被多次打开并不会产生多个inode，当所有被打开的文
+件都被close之后，inode在内存中的实例才会被释放。既然如此，当我们使用mknod(或其他方法，譬
+如驱动中使用device_create_file)创建一个设备文件时，也会在文件系统中创建一个inode，这个
+inode和其他的inode一样，用来存储关于这个文件的静态信息(不变的信息)，包括这个设备文件对应
+的设备号，文件的路径以及对应的驱动对象等等。inode作为VFS四大对象之一，在驱动开发中很少需要
+自己进行填充，更多的是在open()方法中进行查看并根据需要填充我们的file结构。
+
+	对于不同的文件类型，inode被填充的成员内容也会有所不同，以创建字符设备为例，我们知道，
+add_chrdev_region其实是把一个驱动对象和一个(一组)设备号联系到一起。而创建设备文件，其实
+是把设备文件和设备号联系到一起。至此，这三者就被绑定在一起了。这样，内核就有能力创建一个
+struct inode实例了，下面是4.8.5内核中的inode。这个inode是VFS的inode，是最具体文件系统
+的inode的进一步封装，也是驱动开发中关心的inode，针对具体的文件系统，还有struct 
+ext2_inode_info等结构。
+
+struct inode {
+	umode_t                 i_mode;
+	kuid_t                  i_uid;
+	kgid_t                  i_gid;
+	unsigned int            i_flags;
+	union {
+		const unsigned int i_nlink;
+		unsigned int __i_nlink;
+	};
+	dev_t                   i_rdev;             //包含设备号
+	loff_t                  i_size;
+	struct timespec         i_atime;
+	struct timespec         i_mtime;
+	struct timespec         i_ctime;
+	union {
+		struct hlist_head       i_dentry;
+		struct rcu_head         i_rcu;
+	};
+	u64                     i_version;
+	atomic_t                i_count;
+	atomic_t                i_dio_count;
+	atomic_t                i_writecount;
+	const struct file_operations    *i_fop;    //创建设备文件的时候i_fops填充的是def_chr_fops,
+												blk_blk_fops,def_fifo_fops,bad_sock_fops之一
+	struct address_space    i_data;
+	struct list_head        i_devices;
+	union {                                   //创建设备文件的时候会把与之相关的设备号的驱动对象cdev拿来填充
+		struct pipe_inode_info  *i_pipe;
+		struct block_device     *i_bdev;
+		struct cdev             *i_cdev;
+		char                    *i_link;
+		unsigned                i_dir_seq;
+	};
+	void                    *i_private; /* fs or device private pointer */
+};
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4、file结构
+	我们都调用过文件I/O，只有在打开文件的时候才使用文件路径去寻找inode，读写文件的时候
+都是操作的文件描述符，这与file结构有关，我们来看：
+
+	Linux内核会为每一个进程维护一个文件描述符表，这个表其实就是struct file[]的索引。
+open()的过程其实就是根据传入的路径填充好一个file结构并将其赋值到数组中并返回其索引(文件
+描述符)。下面是file的主要内容：
+
+struct file {
+	union {
+		struct llist_node         fu_llist;
+		struct rcu_head           fu_rcuhead;
+	} f_u;
+	struct path                   f_path;       //open传入的路径，VFS就是根据这个路径逐层找到相应的inode
+	struct inode                  *f_inode;     //存储的是VFS找到的inode
+	const struct file_operations  *f_op;        //里存储的就是驱动提供的file_operations对象，这个对象应该
+												在第一次open()的时候被填充，具体地，应用层的open通过层层搜
+												索会调用inode.i_fops->open()，即chrdev_open()
+	spinlock_t                    f_lock;
+	atomic_long_t                 f_count;     //引用计数
+	unsigned int                  f_flags;
+	fmode_t                       f_mode;
+	struct mutex                  f_pos_lock;
+	loff_t                        f_pos;
+	struct fown_struct            f_owner;
+	const struct cred             *f_cred;
+	struct file_ra_state          f_ra;f
+	void                          *private_data; //私有数据
+	struct address_space          *f_mapping;
+} __attribute__((aligned(4)));  /* lest something weird decides that 2 is OK */
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+驱动层字符设备的注册(linux-2.6.37)：
+
+	register_chrdev向系统注册一个字符设备，其原型如下：
+register_chrdev(unsigned int major, const char *name, const struct file_operations *fops)
+参数只给出了设备的主设备号、设备名、和回调函数。
+
+	register_chrdev直接调用__register_chrdev函数来注册字符设备，其原型如下：
+int __register_chrdev(unsigned int major, unsigned int baseminor,
+unsigned int count, const char *name,
+const struct file_operations *fops)
+
+	未完
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+
+

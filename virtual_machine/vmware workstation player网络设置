@@ -1,0 +1,9 @@
+0、常见问题：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+0.1、vmware workstation 14 player 开启虚拟机时右下角显式：“设备vmnet0上的网桥没有运行”
+
+	正常情况下，在宿主windows主机里，控制面板->网络和Internet->网络和共享中心->更改适
+配器设置->选择要桥接的适配器，点击属性进去看，可以发现一个叫“VMware Bridge Protocol”的协议。
+
+	如果没有，我们应该属性页面上，点安装按钮->服务->选VMware, Inc->从磁盘安装->选vmware
+安装目录(下面有netbridge.inf文件)->安装。重启宿主机，一切OK。

@@ -1,0 +1,21 @@
+class CAccumulator  
+{
+public:
+	USHORT * GetAveFrame(){	return m_bIsReady ? m_lpAve : NULL; };
+	void Restart();
+	void CalInvertedAve();
+	UINT * GetInvertedAve() const {return m_bIsReady ? m_lpInvertedAve : NULL;};
+	BOOL PushFrame(const USHORT * lpFrame);
+	UINT * GetSumFrame() const {return m_bIsReady ? m_lpSumData : NULL;};
+	BOOL Reset(UINT intSize, UINT intTotalFrames, BOOL bNeedInvertedAve=FALSE, BOOL bNeedAve=FALSE);
+	CAccumulator();
+	virtual ~CAccumulator();
+private:
+	UINT * m_lpSumData;//sum
+	UINT * m_lpInvertedAve;//平均值的倒数, Q32
+	USHORT * m_lpAve;//平均值
+	UINT m_intFrameCounter;
+	UINT m_intFramePixel;
+	UINT m_intUpLimit;
+	BOOL m_bIsReady;
+};

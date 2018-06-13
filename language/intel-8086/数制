@@ -1,0 +1,28 @@
+https://baike.baidu.com/item/%E8%A1%A5%E7%A0%81/6854613?fr=aladdin
+http://blog.csdn.net/jn1158359135/article/details/7761011
+
+
+1、x86的sub、sbb指令：
+SUB是不计进位减法；SBB是计进位减法
+
+
+cmp指令：
+两个正数比较，使用SF标志位判断。
+　　　　SF=0，则AX≥BX，若ZF=1，则AX=BX
+　　　　SF=1，则AX<BX
+两个无符号数比较，使用CF标志位判断。
+　　　　CF=0，则AX≥BX，若ZF=1，则AX=BX
+　　　　CF=1，则AX<BX
+两个负数比较，使用SF标志位判断。
+　　　　SF=0，则AX≥BX，若ZF=1，则AX=BX
+　　　　SF=1，则AX<BX
+两个异符号数比较。
+　　　　如果OF=0，仍可用SF标志判断大小。
+　　　　如果OF=1，说明结果的符号位发生错误，所以
+　　　　　　　　　SF=0，则AX<BX
+　　　　　　　　　SF=1，则AX＞BX
+综上所述：两个异号数比较
+　　当OF=0，SF=0，则AX＞BX
+　　　　　　SF=1，则AX<BX
+　　当OF=1，SF=0，则AX<BX
+　　　　　　SF=1,则AX＞BX

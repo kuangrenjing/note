@@ -1,0 +1,5 @@
+HOME = /mqs
+export MONTH = may
+
+clean:
+	$(MAKE) -C sub_make_pass_variable

@@ -1,0 +1,221 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、ubuntu下的vi的使用
+
+	vi有三种模式：命令模式、底航模式、编辑模式。默认进入的是命令模式，在命令模式下可以进
+入底航模式或编辑模式，也可从后两者退回到命令模式。底航模式与编辑模式之间不能直接切换。
+
+	在编辑模式下可以像记事本一样输入文本
+
+	在命令模式下可以使用特定的命令进行操作不能随意输入，可以用命令进行模式转换
+
+	在底航模式下光标停在最底部，可以使用一些该模式下的命令
+
+三种模式的切换
+	命令模式      ： / ？                                        底航模式
+	底航模式       return                                        命令模式
+	命令模式       a(在光标前面插入) i(后插入) o(下一行插入)        编辑模式
+	编辑模式       escape                                        命令模式
+
+命令模式下常用命令及作用
+	1、x命令删除（一个）光标所在位置字符
+	2、dw连按删除光标所在位置的一个单词（3dw删除三个单词）
+	3、dd删除光标所在的行（5dd删除五行）
+	4、r替换光标所在字符（1个）
+	5、cw替换光标所在位置一个单词
+	6、cc替换贯标所在位置一行
+	7、C（大写）从光标所在位置替换到文件尾部
+	8、yw拷贝一个词
+	9、yy拷贝当前行
+
+底航模式下面常用的命令
+	1、：1,2co3拷贝第一第二行插入到第三行之后（下一行）
+	2、1,2m3移动第一行第二行到第三行之后（下一行）
+	3、：w保存，w filename保存成新文件
+	4、：wq保存并退出vi编辑器
+	5、：q!强行退出不保存
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、linux update与upgrade
+	linux的软件管理工具都需要update连接到源，并从源获取软件的列表后才能使用。所以update
+和upgrade的区别在于：update是下载源里面的metadata的，包括这个源有什么包，每个包什么版本
+之类的。upgrade是根据update命令下载的metadata决定要更新什么包(同时获取每个包的位置)。安
+装软件之前, 可以不upgrade, 但是要update，因为旧的信息指向了旧版本的包, 但是源的服务器
+更新了之后旧的包可能被新的替代了, 于是你会遇到404...
+
+	在ubuntu调用"sudo apt-get update"更新metadata之前，我们需要先手动设置源地址，配置
+文件是"/etc/apt/sources.list"。这里我们需要注意的是不同版本的ubuntu的源是不一样的，我们
+要找到自己使用的ubuntu版本的相应的源。
+
+	在寻找ubuntu版本相应源之前我们需要先了解下ubuntu版本的代号规则。ubuntu的每个版本的代
+号都是由两个单词组成，且这两个单词的首字母相同。10.04版本的版本代号是Lucid Lynx，所以我们
+如果寻找ubuntu 10.04的源，就要找URL中有Lucid Lynx源地址了。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ubuntu的版本更新淘汰是很快的，ubuntu LTS版支持5年，非LTS版支持18个月。之后不再支持
+在线安装软件和更新。还好，ubuntu把不支持的源都放在一个地方了：
+"http://old-releases.ubuntu.com/ubuntu/dists/"。
+
+	ubuntu 10.04是2010年发布的版本，所以此时(2018年)，我们应该这样设置
+"/etc/apt/sources.list"文件：
+
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid-security main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid-updates main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid-proposed main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid-backports main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid-security main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid-updates main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid-proposed main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid-backports main restricted universe multiverse
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3、ubuntu desktop版本安装OpenSSH-server
+	如果我们直接操作虚拟机往往不很方便，譬如窗口太小，shell输出不能复制，光标控制不方便。
+我们使用诸如xshell、secureCRT等远程终端连接虚拟机操作起来就方便多了。这些远程终端有多种
+通信协议可供选择，通过网络接口访问远程设备时一般选择ssh协议。
+
+	常见的ssh协议软件有SSH和OpenSSH，SSH收费，所以我们一般选择OpenSSH。
+
+	使用SSH协议通信，那远程终端譬如xshell就是ssh客户端，相应地ubuntu虚拟机上就要安装ssh
+服务端，也就是需要安装OpenSSH-server。
+
+	我们使用"sudo apt-get install openssh-server"命令安装，如果安装失败，那一般意味着我们
+需要更新下系统。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4、安装vmware tools
+	安装了vmware tools后，主机和客户机可以共享文件夹，这会给我们的工作带来极大的便利。
+点击vmware->安装vmware tools，客户机的虚拟光驱中就载入了linux.iso，这个文件就是我们要
+的vmware tools安装镜像，在ubuntu客户机中是/dev/cdrom。这个设备需要挂载后才能使用，我们
+用先建立挂载点"mkdir /mnt/cdrom"，然后执行"mount /dev/cdrom /mnt/cdrom"把虚拟光驱设备
+/dev/cdrom挂载到/mnt/cdrom文件夹。
+
+	挂载成功之后，执行"cp /mnt/cdrom/VMwareTools-10.2.0-7259539.tar.gz /home/mqs"。
+在我的文件夹下展开:"cd /home/mqs"，"tar -xzvf VMwareTools-10.2.0-7259539.tar.gz"。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5、安装rz、sz命令
+	sudo apt-get install lrzsz
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+6、安装fakeroot
+	dvsdk安装过程中会提示你安装fakeroot:"sudo apt-get install fakeroot"
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+7、安装、设置SAMBA
+先安装相应软件包：
+	#apt-get install samba
+	#apt-get install smbfs
+	#apt-get install samba-common-bin
+	#apt-get install system-config-samba
+
+设置samba用户密码
+	touch /etc/samba/smbpasswd
+	sudo smbpasswd -a mqs
+
+编辑/etc/samba/smb.conf文件，在最后加入：
+[mqs] #这里的用户要设置对，最好是创建root的权限，不然/home/mqs的权限要设置为777
+;comment = Shared Folder with username and password
+path = /home/mqs   #sudo chmod 777 /home/mqs
+public = yes
+writable = yes
+valid users = mqs
+create mask = 0777
+directory mask = 0777
+force user = nobody
+force group = nogroup
+available = yes
+browseable = yes
+
+sudo ufw disable
+
+sudo service smbd restart
+sudo service nmbd restart
+
+samba的日志在/var/log/samba下
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+7、安装"dvsdk_dm3730-evm_04_03_00_06_setuplinux"
+	创建"/home/mqs/dvsdk_dm3730-evm_04_03_00_06"，设备"dvsdk_dm3730-evm_04_03_00_06_setuplinux"
+执行权限，运行"dvsdk_dm3730-evm_04_03_00_06_setuplinux"并按照提示交互即可完成安装。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+8、设置dvsdk
+	TI提供了一个名叫setup.sh的脚本用于设置dvsdk，在运行它之前我们可以做一些简单的设置。
+在"/home/mqs/dvsdk_dm3730-evm_04_03_00_06/filesystem"下创建一个"dm3730rootfs"子目
+录，因为后面setup.sh会让你选择一个目录用于释放TI EVM的文件系统，但这个文件系统太大，我
+们还有一个可选方案：在setup.sh释放后手动使用"arago-base-tisdk-image-dm37x-evm.tar.gz"
+替换"dm3730rootfs"中的内容。
+
+	setup.sh又是由多个子脚本组成的。
+
+9
+
+This step will extract the target filesystem to /home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/filesystem/dm3730rootfs
+
+Note! This command requires you to have administrator priviliges (sudo access) 
+on your host.
+Press return to continue
+
+Successfully extracted dvsdk-dm37x-evm-rootfs.tar.gz to /home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/filesystem/dm3730rootfs
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+This step will update the EXEC_DIR variables in the Rules.make file
+This will facilitate the SDK to install (with make install) rebuilt binaries in
+    /home/mqs/ti-dvsdk_dm3730-evm_04_03_00_06/filesystem/dm3730rootfs
+
+The files will be available from / on the target.
+
+This setting can be changed later by editing Rules.make and changing the
+EXEC_DIR variable.
+
+9.2 NFS
+
+This step will export your target filesystem for NFS access.
+
+Note! This command requires you to have administrator priviliges (sudo access) 
+on your host.
+Press return to continue
+
+ * Stopping NFS kernel daemon                                                                                                                                       [ OK ] 
+ * Unexporting directories for NFS kernel daemon...                                                                                                                 [ OK ] 
+ * Exporting directories for NFS kernel daemon...                                                                                                                   [ OK ] 
+ * Starting NFS kernel daemon                                                                                                                                       [ OK ] 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Which directory do you want to be your tftp root directory?(if this directory does not exist it will be created for you)
+[ /tftpboot ] /tftpboot
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+This step will set up the tftp server in the /tftpboot directory.
+
+Note! This command requires you to have administrator priviliges (sudo access) 
+on your host.
+Press return to continue
+
+Successfully copied uImage-dm37x-evm.bin to tftp root directory /tftpboot
+
+
+/etc/xinetd.d/tftp successfully created
+
+Restarting tftp server
+ * Stopping internet superserver xinetd                                                                                                                             [ OK ] 
+ * Starting internet superserver xinetd                                                                                                                             [ OK ] 
+--------------------------------------------------------------------------------
+
+TISDK setup completed!
+Please continue reading the Software Developer's Guide for more information on
+how to develop software on the EVM
+
+
+
+
+
+
+10、设置静态IP
+/etc/network/interfaces
+
+http://www.360doc.com/content/10/0720/17/2036337_40349464.shtml

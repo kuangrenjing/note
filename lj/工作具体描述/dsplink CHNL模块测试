@@ -1,0 +1,168 @@
+1、分两片内存，好像实际用了4片内存
+STATIC Char8 *LOOP_Buffers[2] = {NULL};
+STATIC ChannelIOInfo LOOP_OutIOReq;
+STATIC ChannelIOInfo LOOP_InIOReq;
+STATIC Uint32 LOOP_BufferSize = 0x4000;
+
+status = CHNL_allocateBuffer(processorId,
+								CHNL_ID_OUTPUT,
+								(Char8**)LOOP_Buffers,
+								LOOP_BufferSize,
+								2);
+
+LOOP_OutIOReq.buffer = (Char8*)LOOP_Buffers[0];
+LOOP_OutIOReq.size   = LOOP_BufferSize;
+
+LOOP_InIOReq.buffer = (Char8*)LOOP_Buffers[1];
+LOOP_InIOReq.size   = LOOP_BufferSize;
+
+LOOP_Buffers[0]: 0x403b1000
+LOOP_Buffers[1]: 0x403b5000
+
+
+LOOP_OutIOReq.buffer: 0x403b1000
+LOOP_InIOReq.buffer:  0x403b5000
+
+CHNL_issue(processorId, CHNL_ID_OUTPUT, &LOOP_OutIOReq);
+CHNL_reclaim(processorId,
+						CHNL_ID_OUTPUT,
+						WAIT_FOREVER,
+						&LOOP_OutIOReq);
+
+LOOP_OutIOReq.buffer: 0x403b9000
+LOOP_InIOReq.buffer:  0x403b5000
+
+CHNL_issue(processorId, CHNL_ID_INPUT, &LOOP_InIOReq);
+CHNL_reclaim(processorId,
+						CHNL_ID_INPUT,
+						WAIT_FOREVER,
+						&LOOP_InIOReq);
+
+LOOP_OutIOReq.buffer: 0x403b9000
+LOOP_InIOReq.buffer:  0x403bd000
+
+
+CHNL_issue(processorId, CHNL_ID_OUTPUT, &LOOP_OutIOReq);
+CHNL_reclaim(processorId,
+						CHNL_ID_OUTPUT,
+						WAIT_FOREVER,
+						&LOOP_OutIOReq);
+
+LOOP_OutIOReq.buffer: 0x403b1000
+LOOP_InIOReq.buffer:  0x403bd000
+
+CHNL_issue(processorId, CHNL_ID_INPUT, &LOOP_InIOReq);
+CHNL_reclaim(processorId,
+						CHNL_ID_INPUT,
+						WAIT_FOREVER,
+						&LOOP_InIOReq);
+
+LOOP_OutIOReq.buffer: 0x403b1000
+LOOP_InIOReq.buffer:  0x403b5000
+
+
+
+2、分一片内存
+STATIC Char8 *LOOP_Buffers[1] = {NULL};
+STATIC ChannelIOInfo LOOP_IOReq;
+STATIC Uint32 LOOP_BufferSize = 0x4000;
+
+status = CHNL_allocateBuffer(processorId,
+								CHNL_ID_OUTPUT,
+								(Char8**)LOOP_Buffers,
+								LOOP_BufferSize,
+								1);
+
+LOOP_IOReq.buffer = (Char8*)LOOP_Buffers[0];
+LOOP_IOReq.size   = LOOP_BufferSize;
+
+
+
+LOOP_Buffers[0]:   0x40c05000
+LOOP_IOReq.buffer: 0x40c05000
+
+
+CHNL_issue(processorId, CHNL_ID_OUTPUT, &LOOP_IOReq);
+CHNL_reclaim(processorId,
+						CHNL_ID_OUTPUT,
+						WAIT_FOREVER,
+						&LOOP_OutIOReq);
+
+LOOP_Buffers[0]:   0x40c05000
+LOOP_IOReq.buffer: 0x40c09000
+
+CHNL_issue(processorId, CHNL_ID_INPUT, &LOOP_IOReq);
+CHNL_reclaim(processorId,
+						CHNL_ID_INPUT,
+						WAIT_FOREVER,
+						&LOOP_IOReq);
+
+LOOP_Buffers[0]:   0x40c05000
+LOOP_IOReq.buffer: 0x40c05000
+
+
+
+CHNL_issue(processorId, CHNL_ID_OUTPUT, &LOOP_OutIOReq);
+CHNL_reclaim(processorId,
+						CHNL_ID_OUTPUT,
+						WAIT_FOREVER,
+						&LOOP_OutIOReq);
+
+LOOP_Buffers[0]:   0x40c05000
+LOOP_IOReq.buffer: 0x40c09000
+
+
+CHNL_issue(processorId, CHNL_ID_INPUT, &LOOP_InIOReq);
+CHNL_reclaim(processorId,
+						CHNL_ID_INPUT,
+						WAIT_FOREVER,
+						&LOOP_InIOReq);
+
+LOOP_Buffers[0]:   0x40c05000
+LOOP_IOReq.buffer: 0x40c05000
+
+
+3、分开分配两片内存
+
+STATIC Char8 *LOOP_OutBuffers[1] = {NULL};
+STATIC Char8 *LOOP_InBuffers[1] = {NULL};
+STATIC ChannelIOInfo LOOP_OutIOReq;
+STATIC ChannelIOInfo LOOP_InIOReq;
+STATIC Uint32 LOOP_BufferSize = 0x4000;
+
+status = CHNL_allocateBuffer(processorId,
+								CHNL_ID_OUTPUT,
+								(Char8**)LOOP_OutBuffers,
+								LOOP_BufferSize,
+								1);
+
+status = CHNL_allocateBuffer(processorId,
+								CHNL_ID_OUTPUT,
+								(Char8**)LOOP_InBuffers,
+								LOOP_BufferSize,
+								1);
+
+LOOP_OutIOReq.buffer = (Char8*)LOOP_OutBuffers[0];
+LOOP_OutIOReq.size   = LOOP_BufferSize;
+
+LOOP_InIOReq.buffer = (Char8*)LOOP_InBuffers[1];
+LOOP_InIOReq.size   = LOOP_BufferSize;
+
+11LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c6b000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c6f000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+
+22LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c6b000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c6f000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+come in pcmread_threadf
+33LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c73000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c6f000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+44LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c73000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c77000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+
+22LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c73000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c77000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+33LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c6b000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c77000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+44LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c6b000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c6f000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+
+22LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c6b000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c6f000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+33LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c73000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c6f000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+44LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c73000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c77000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+
+22LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c73000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c77000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+33LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c6b000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c77000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000
+44LOOP_OutBuffers[0] is 0x40c6b000, LOOP_OutIOReq.buffer is 0x40c6b000, LOOP_InBuffers[0] is 0x40c6f000, LOOP_InIOReq.buffer is 0x40c6f000, iDataLen is 4000, LOOP_OutIOReq.size is 4000, LOOP_InIOReq.size is 4000

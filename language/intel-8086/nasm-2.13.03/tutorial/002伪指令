@@ -1,0 +1,13 @@
+1、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CK1： nasmdoc.pdf(NASM – The Netwide Assembler  version 2.13.03)
+
+2、nasm伪指令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	伪指令不是真正的x86机器指令，
+
+Pseudo−instructions are things which, though not real x86 machine instructions, are used in the
+instruction field anyway because that’s the most convenient place to put them. The current
+pseudo−instructions are DB, DW, DD, DQ, DT, DO, DY and DZ; their uninitialized counterparts RESB,
+RESW, RESD, RESQ, REST, RESO, RESY and RESZ; the INCBIN command, the EQU command, and
+the TIMES prefix.

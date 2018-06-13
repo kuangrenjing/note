@@ -1,0 +1,38 @@
+文件拷贝到开发板有如下几种方式：
+	SD卡、U盘、SATA硬盘等存储介质拷贝方式；
+	NFS、TFTP、FTP等网络拷贝方式；
+	串口拷贝方式；
+
+	介质拷贝肯定比较繁琐，一天两边拔插U盘几十次，想想都要吐血。串口拷贝需要下载命令，不
+确定能否搞成功。创龙提供了FTP传输方式的完整支持，所以我们选择使用FTP传输方式。
+
+	关于网络的设置，自行查看《DM3730_EVM调试时的网络设置》篇。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、host上FTP服务设置
+
+安装vsftpd
+	sudo apt-get install vsftpd
+	此时系统将自动创建ftp用户和ftp组，并建立"/srv/ftp"文件夹作为ftp用户的home目录。（
+如果想把ftp的目录放在"/home/ftp"，可修改"/etc/passwd"文件中ftp用户的home目录位置。）
+
+配置/etc/vsftpd.conf文件:
+
+anonymous_enable=YES  #就修改这一条就行了，完全按照创龙提供的配置会导致vsftpd无法启动
+
+sudo service vsftpd restart
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、开发板通过ftpget、ftpput与host机通信
+
+	ftpget、ftpput放在创龙光盘的tools目录下面。把做好的启动SD卡接上读卡器插入windows 7
+系统PC(windows10系统不能识别)，此时，windows7识别的是SD卡的boot分区，把这两个文件拷贝
+到这个分区中去。
+
+	把SD卡从读卡器上拔下来，插入到开发板上，上电后，boot分区会自动挂载到/media/mmcblk0p1/
+目录，把两个文件从/media/mmcblk0p1/目录拷贝到/usr/bin目录，我们就可以使用了。
+
+使用示例：
+	ftpget -u mqs -p 111 192.168.1.20 file_name
+利用用户名为"mqs"密码为"111"的账户从192.168.1.20上下载file_name到当前目录。file_name在
+host机器的/home/mqs目录下。
