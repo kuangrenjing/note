@@ -1,0 +1,72 @@
+1、色温
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+色温是表示光线中包含颜色成分的一个计量单位。从理论上讲，色温是指绝对黑体从绝对零度(一273℃)
+开始加温后所呈现的颜色。黑体在受热后逐渐由黑变红，转黄，发白，最后发出蓝色光。当加热到一
+定的温度．黑体发出的光所含的光谱成分就称为这一温度下的色温，计量单位为“K”(开尔文)。
+如果某一光源发出的光，与某一温度下黑体发出的光所含的光谱成分相同，即称为某K色温。如100W
+灯泡发出光的颜色，与绝对黑体在2527℃时的颜色相同，那么这只灯泡发出的光的色温就是：
+2527 + 273=2800K
+
+IRCUT能感知色温？ 不能
+
+        所谓IR-CUT可以简单理解为CMOS的“眼镜”，它包括“镜片”与“眼镜摘除装置”，“镜片”即滤光片，“眼镜摘除装置”即IR-CUT机械结构件。 镜片有2片，一片用于白天滤除红外光，一片用于晚上全透光。2个镜片由IR-CUT马达进行控制，轮流上岗，白天用滤红外片，图像不偏色，晚上用全透片，提高感光度。滤光片在材质上面有玻璃与石英之分，产地有国产与进口之分，一般**的滤光片为了达到最好的效果，都是根据芯片的光谱图来定制滤光片的，滤光片的种种差异导致了比较大的价格差，好的滤光片在图像的清晰度，细腻程度上面均有明显的提升。
+
+2、色调
+
+3、色饱和度
+
+4、gamma曲线
+
+2、白平衡
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+白平衡，顾名思义，即白色的平衡，由于人眼的适应性，在不同色温下，都能准确判断出白色，但
+是相机就差远了，在不同色温的光源下，图像会出现偏色，与人眼看到的颜色不一致，因此需要进
+行白平衡处理。在数码相机中，往往有ISP，这里面会做AWB（自动白平衡）处理。 
+
+白平衡的算法很多，有灰度世界法，完美反射法、动态阈值法，这里先介绍一种比较简单的，灰度世
+界法：
+
+该方法以灰度世界假设为前提，认为对于一幅有大量色彩的场景，R、G、B分量的平均值趋于同一个灰
+度。算法大致可以分为以下三步：
+	计算三个通道的平均灰度
+	计算三个通道的增益系数
+	原始值乘上增益系数
+
+非常重要的白平衡参考文献：
+http://www.360doc.com/content/17/0116/22/30355213_622925247.shtml
+https://blog.csdn.net/zqj6893/article/details/50380092
+https://blog.csdn.net/qq_20848403/article/details/81198240    特别重要的白平衡算法介绍
+https://wenku.baidu.com/view/ae0a275126fff705cc170aad.html    特别好的CIE色度介绍
+
+http://bbs.ebaina.com/thread-12585-1-1.html
+
+https://jingyan.baidu.com/article/363872ec3c10396e4ba16ff6.html  摄像机设置
+
+3、ACM色卡标定
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+4、Planckian曲线
+
+http://bbs.ebaina.com/thread-8799-1-1.html
+我在用calibration tool做3516c参数校正时，得到的planckian曲线与官方曲线相差很多；请问，这正常吗？
+另外，我自己调校得到的ccm在低色温下的值也与海思原始数值相差较大，效果还不如海思原始的。
+
+1. 海思的ccm一样也是通过3个色温下曲线矫正的，而且他们的色温场景更真实；
+之前去过海思使用的场景，他们使用的是面光源，场景色温更加均匀；
+2. 如果你使用的色温箱是灯管，可能有所差异的，我也矫正过，还没有官方给出的ccm，静态白平衡r ，rg，gb，b和动态白平衡矫正参数准确；
+3. 最后我还是用了海思给出的ccm ；
+
+
+5、背光补偿、宽动态
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+背光补偿：以视场中间的物体曝光为依据曝光，周围
+
+
+
+爱色丽 Color Checker 标准版 24色色卡 国际专业单反摄影白平衡
+
+CCM(color correction matrix)
+
+
+https://blog.csdn.net/real_myth/article/details/51192553
+https://blog.csdn.net/real_myth/article/details/51192553

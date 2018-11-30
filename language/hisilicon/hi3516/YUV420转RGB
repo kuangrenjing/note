@@ -1,0 +1,13 @@
+https://blog.csdn.net/Luoxw_1214/article/details/79956222
+http://www.cnblogs.com/dwdxdy/p/3713990.html
+
+RGB取值范围均为0~255,Y=0~255,U=-122~+122,V=-157~+157
+
+
+R = CLAMP(y +           1.596*V)
+G = CLAMP(y - 0.383*U - 0.813*V)
+B = CLAMP(y + 1.976*U          )
+
+where y = 0               for       Y <=  16,
+      y = (  Y-16)*1.164, for  16 < Y <= 239,
+      y = (239-16)*1.164, for 239 < Y

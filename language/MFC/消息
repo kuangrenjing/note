@@ -1,0 +1,57 @@
+1、消息的定义：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef struct tagMSG
+{
+	HWND hwnd;
+	UINT message; // WM_xxx，例如WM_MOUSEMOVE，WM_SIZE...
+	WPARAM wParam;
+	LPARAM lParam;
+	DWORD time;
+	POINT pt;
+}MSG;
+
+WIN32中的消息是这样定义的，但我们常涉及到的只是WM_COMMAND消息的命令ID，即wParam字段的
+低位两字节。
+
+2、WM_COMMAND消息介绍：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+MSG消息中有两个参数：wparam、lparam，对WM_COMMAND而言含义如下：
+	wParam的高两个字节代表通知码
+	wParam的低两字节代表命令ID
+	lParam代表发送命令消息的子窗体句柄。
+
+详细解释：
+	菜单的通知码为0；加速键的通知码为1。
+	命令ID也就是资源脚本中定义的菜单项的命令ID或者加速键的命令ID，也可以是自己定义的ID，ON_COMMAND
+就是根据这个ID来分配调用函数的。
+	对于菜单和加速键来说，lParam为0，只有控件此项才非0。
+
+3、ON_MESSAGE，ON_COMMAND和ON_NOTIFY的区别
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在Windows3.1里，控件会将mouse, keybord等等的消息通知它的父窗口，使用的消息就只有
+WM_COMMAND，事件种类和控件ID被包含在wParam中，控件的句柄包含在lParam中。
+
+由于wParam和lParam已经满了，当控件要向父窗口发送其它特殊消息同时附带很多信息的时候就没有
+地方可以存放它们了。所以Windows3.1中定义了许多其它的消息种类，比如WM_VSCROLL, WM_CTLCOLOR
+等等，每种消息wParam,lParam中附带的信息是不同的。
+
+当到了Win32后，控件的种类越来越多，当然不可以为每一个控件都定义一套消息，这样也不利于系统
+的扩充。所以在Win32中定义了唯一一个强大的消息 WM_NOTIFY。当然WM_NOTIFY也遵守原来的消息规则，
+即只带参数wParam和lParam。唯一不同处在于，此时的lParam中传送的是一个NMHDR指针。不同的控件可
+以按照规则对NMHDR进行扩充，因此WM_NOTIFY消息传送的信息量可以相当的大，这个可以看看MSDN中的
+相关说明，TreeControl中就有很多这种消息。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ON_MESSAGE是处理所有的Windows的消息的，因为所有的消息都以相同的格式传送，也就是ID, 
+WPARAM, LPARAM。
+
+ON_COMMAND是专门处理WM_COMMAND消息的，这样我们就不用自己解开WM_COMMAND中wParam和
+lParam中传送的控件ID，事件种类…（所有的都在MFC内部解决了：），当然方便了。
+
+ON_NOTIFY更是不用说了，看看他的处理函数，是不是把NMHDR解出来了。
+
+这样一样就一目了然了，ON_COMMAND和ON_NOTIFY都可以用ON_MESSAGE来处理，只不过自己要多做
+很多事情。ON_COMMAND和ON_NOTIFY最好就不要互换了！
+
+
+2、postmessage发送的消息可以使用ON_COMMAND来捕获吗

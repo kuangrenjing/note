@@ -1,0 +1,73 @@
+1、如何开启ISP多帧合成宽动态模式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+宽动态又分为sensor支持的宽动态和海思ISP的多帧合成宽动态(一般是两帧)。设置ISP宽动态模式
+使用的是HI_MPI_ISP_SetWDRMode()函数。
+
+2、HI_MPI_ISP_SetWDRMode()函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+这个函数属于“系统控制”部分，用来设置宽动态模式。因为宽动态功能除了涉及宽动态模块，还影响
+其它模块，所以在“系统控制”部分设置。
+
+调用这个函数会促使ISP模块调用sensor的pfn_cmos_set_image_mode回调函数。
+
+2.1、WDR_MODE_E结构体
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef enum hiWDR_MODE_E
+{
+	WDR_MODE_NONE = 0,                    线性模式
+	WDR_MODE_BUILT_IN,                    Sensor合成WDR模式
+	WDR_MODE_2To1_LINE,                   2帧合成行WDR模式
+	WDR_MODE_2To1_FRAME,                  2帧合成帧WDR模式
+	WDR_MODE_2To1_FRAME_FULL_RATE,        2帧合成帧WDR全帧率模式
+	WDR_MODE_3To1_LINE,                   3帧合成行WDR模式
+	WDR_MODE_3To1_FRAME,                  3帧合成帧WDR模式
+	WDR_MODE_3To1_FRAME_FULL_RATE,        3帧合成帧WDR全帧率模式
+	WDR_MODE_4To1_LINE,                   4帧合成行WDR模式
+	WDR_MODE_4To1_FRAME,                  4帧合成帧WDR 模式
+	WDR_MODE_4To1_FRAME_FULL_RATE,        4帧合成帧WDR 全帧率模式
+	WDR_MODE_BUTT,
+} WDR_MODE_E;
+
+【注意】
+3帧、4帧的目前都不支持。
+Sensor合成WDR模式和2帧合成行WDR模式需要探测器支持。
+对IMX178我们能用的其实就是1、线性模式 2、2帧合成帧WDR模式 3、2帧合成帧WDR全帧率模式
+再现实一点我们只会选：WDR_MODE_NONE、WDR_MODE_2To1_FRAME这两个模式
+
+ipc_save_src程序是在SAMPLE_VENC_1080P_CLASSIC函数的“step 3”处决定使用WDR_MODE_NONE
+还是WDR_MODE_2To1_FRAME的。
+
+
+3、多帧合成宽动态涉及到的模块
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+a. Sensor输出的长曝光(或短曝光)图像数据先送到DDR缓存，在短曝光(或长曝光)数据准备好的
+	时候再从DDR读出送到Channel2；短曝光(或长曝光)图像数据直接送给Channel1；
+b. Channel Switch模块用于将两路图像数据互换，一般不需要配置；
+c. FS WDR模块接收长短曝光数据进行合成，得到16bit 的图像数据；
+d. GammaFE模块进行非线性映射得到12bit的图像数据。GammaFE模块必须使能且位置必须放在FS WDR
+	模块之后(结构体ISP_MODULE_CTRL_U成员bitGammaFePosition配置为1)；
+e. DRC模块用于提高图像的动态范围，必须使能；
+f. Gamma模块先将非线性的图像数据平方转换成线性，再进行线性模式的gamma曲线映射，因此WDR
+	模式的gamma曲线与线性模式不一样。WDR模式的gamma曲线可通过PQ Tools由线性模式的gamma
+	曲线生成。
+
+【总结】
+实现宽动态功能要做的工作：
+1、调用HI_MPI_ISP_SetWDRMode函数开启宽动态功能；
+2、调用HI_MPI_ISP_SetFSWDRAttr配置宽动态模块；
+3、调用HI_MPI_ISP_SetGammaFEAttr配置GammaFE模块；
+4、设置ISP_MODULE_CTRL_U使GammaFE模块位于WDR模块后面；
+5、调用HI_MPI_ISP_SetDRCAttr函数配置DRC模块；
+6、调用HI_MPI_ISP_SetGammaAttr函数设置宽动态相关的Gamma系数。
+
+HI_MPI_VI_SetWDRAttr是个什么鬼
+
+
+4、网路上宽动态的实验：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://blog.51cto.com/shugenyin/1878262
+
+
+
+
+

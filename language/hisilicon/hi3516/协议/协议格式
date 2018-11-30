@@ -1,0 +1,44 @@
+GET|POST /dfs_level_monitor/network HTTP/1.1
+accept: application/json; version=1.0
+Host: 10.7.36.222
+Content-Length: 1146
+Accept-Encoding: gzip, deflate
+Connection: Close
+
+{
+	"DEVICE":"eth0",
+	"HWADDR":"00:0c:29:90:89:d9",
+	"ONBOOT":"yes",
+	"BOOTPROTO":"none",
+	"IPADDR4":"10.0.0.100",
+	"NETMASK":"255.255.255.0",
+	"GATEWAY":"10.0.0.2",
+	"DNS":{
+		3.5.5.5,
+		223.6.6.6
+	}
+},
+...
+{
+	"DEVICE":"ethn",
+	"HWADDR":"00:0c:29:90:89:d0",
+	"ONBOOT":"yes",
+	"BOOTPROTO":"none",
+	"IPADDR4":"10.0.0.109",
+	"NETMASK":"255.255.255.0",
+	"GATEWAY":"10.0.0.2",
+	"DNS":{
+		3.5.5.5,
+		223.6.6.6
+	}
+}
+
+说明：
+	我们远景也只支持Ethernet类型，所以不提供TYPE配置项。
+	ONBOOT：在开机或重启网卡的时候是否启动网卡，配置为yes或者no。
+	BOOTPROTO：网卡是如何获取到ip地址 网卡获取ip地址的方式：
+		a. dhcp 自动获取ip地址
+		b. none 固定的ip地址
+		c. static 固定的ip地址
+	子网掩码 决定这个局域网中最多有多少台机器
+	网关 整个大楼的大门

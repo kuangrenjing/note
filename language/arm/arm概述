@@ -1,0 +1,43 @@
+1、ARM体系结构版本
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+arm支持32位RISC(精简指令集)和16位Thumb(拇指指令集)。
+
+随着体系结构的更新，指令集也在不停地增加，所以体系结构版本基本就等同于指令集版本。
+
+2、ARM处理器系列
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+3、ARM处理器的运行模式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+4、ARM处理器寄存器构成
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+arm处理器共有37个寄存器：
+	30个通用寄存器
+	6个状态寄存器
+	1个PC寄存器(其实也是一个通用寄存器，代号为R15，也写为PC)
+
+arm有7种不同的处理器模式，在每种处理器模式下可以使用15个通用寄存器(R0~R14)、一个PC寄存
+器、一个或者两个状态寄存器。
+
+30个通用寄存器又分为：
+	未备份寄存器： R0-R7共8个，在各处理器模式下都是使用的同一个寄存器
+                              +-----> R8-R12共五个，每个寄存器代号对应2个物理寄存器，所以其实是10个
+	备份寄存器：   R8-R15共7个 |
+                              +-----> R13-R14共两个，每个寄存器对应6个物理寄存器，所以其实是12个
+
+对R8-R12而言，快速中断模式下使用的寄存器与其它模式下不同，这样快速中断时使用这五个寄存
+器可以省略保存和恢复中断现场的指令。
+
+对R13-R14而言，除了用户模式和系统模式下使用的物理寄存器相同，其它模式下使用的物理寄存器
+都不相同，所以是6套12个物理寄存器。
+
+R13寄存器一般作为栈指针寄存器使用，当进入某异常模式时，把现场保存到此异常模式R13所指栈中
+等到异常处理完毕，再从那里恢复现场。
+
+R14寄存一般又称为连接寄存器(Link Register, LR)。1、当通过BL或BLX指令调用子程序时，R14被
+设置为该子程序的返回地址。在子程序中，当把R14的值复制到程序计数器PC中时，子程序即返回。2、
+当异常中断发生时，该异常模式下的R14寄存器被设置为该异常模式将要返回的地址。
+

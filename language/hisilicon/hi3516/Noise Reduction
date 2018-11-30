@@ -1,0 +1,20 @@
+0、实例
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://www.mamicode.com/info-detail-1693656.html
+
+
+
+1、NR(Noise Reduction 去噪)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+去噪算法在空域内进行运算，处理Raw 数据，在去噪的同时保存边缘和纹理
+
+2、2DNR、3DNR(2D/3D digital noise reduction 2维数字去噪、3维数字去噪)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2D降噪是ISP的内容，3D降噪是VPSS的功能？？？
+
+3、noise profile(噪声型式)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+这是通过cmos默认设置来定义的，是一个拟合数组。有两种方式：一种是ini文件方式，一种是
+cmos.c中直接定义变量方式，详见《HiISP开发参考》第八章。
+
+3、去噪与增益

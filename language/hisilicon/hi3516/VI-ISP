@@ -1,0 +1,11 @@
+VI与ISP的关系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+海思的文档并没有明确说明VI与ISP的关系，或者说解释的不是很明确。《HiISP开发参考》1.2功能描
+述图1-1指出sensor输出接入到ISP，经ISP处理后输出RGB数据到VI。
+
+《HiMPP IPC V2.0媒体处理软件开发参考》3 视频输入一章明确说明了，VI才是接受sensor输入的对
+象，而且VI支持很多种输入接口，有视频输入BT656、BT1200等格式，还有digital camera接口格
+式但是ISP支持不了这么多格式的输入，它一般需要raw rgb格式的输入，所以在VI_DEV_ATTR_S结
+构体的说明中提到，当输入不是raw rgb时，VI内部的ISP需要bypass。这里明确指出Hi3516a的ISP
+是VI内部的一个模块，但也只有这里提到过。VI_DEV_ATTR_S提到的AD输入指的应该是模拟视频转换
+输入，也就是BT656、BT1200等电视输入。

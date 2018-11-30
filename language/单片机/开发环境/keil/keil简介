@@ -1,0 +1,95 @@
+0、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+1、arm公司：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Acorn计算机公司是现在著名的ARM公司的前身。Acorn计算机公司(Acorn Computers)创立于
+1978年，公司位于英格兰的剑桥，它在80年代PC革命初期的贡献，相当于美国的“苹果公司”。1991
+年，Acorn计算机公司剥离了ARM部门，成立了ARM公司。
+
+2、keil公司：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Keil公司是一家业界领先的微控制器（MCU）软件开发工具的独立供应商。Keil公司由两家私人
+公司联合运营，分别是德国慕尼黑的Keil Elektronik GmbH和美国德克萨斯的Keil Software Inc。
+Keil公司制造和销售种类广泛的开发工具，包括ANSI C编译器、宏汇编程序、调试器、连接器、库管理
+器、固件和实时操作系统核心（real-time kernel）。有超过10万名微控制器开发人员在使用这种得
+到业界认可的解决方案。其Keil C51编译器自1988年引入市场以来成为事实上的行业标准，并支持超
+过500种8051变种。
+
+	Keil公司在2005年被ARM公司收购。
+
+3、uVision开发环境
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	keil的IDE(集成开发环境)叫做uVision，vision有“视窗”的意思。到目前为止，keil已经发
+布了多个uVision版本。
+
+Keil μVision2
+	KeilμVision2是美国Keil Software公司出品的51系列兼容单片机C语言软件开发系统，使用
+接近于传统C语言的语法来开发，与汇编相比，C语言易学易用,而且大大的提高了工作效率和项目开
+发周期,他还能嵌入汇编，您可以在关键的位置嵌入，使程序达到接近于汇编的工作效率。Keil C51
+标准C编译器为8051微控制器的软件开发提供了C语言环境,同时保留了汇编代码高效,快速的特点。
+C51编译器的功能不断增强，使你可以更加贴近CPU本身，及其它的衍生产品。C51已被完全集成到
+μVision2的集成开发环境中，这个集成开发环境包含：编译器，汇编器，实时操作系统，项目管理
+器，调试器。μVision2 IDE可为它们提供单一而灵活的开发环境。
+
+Keil μVision3
+	2006年1月30日ARM推出全新的针对各种嵌入式处理器的软件开发工具，集成Keil μVision3
+的RealView MDK开发环境。RealView MDK开发工具Keil μVision3源自Keil公司。RealView MDK
+集成了业内领先的技术，包括Keil μVision3集成开发环境与RealView编译器。支持ARM7、ARM9和
+最新的Cortex-M3核处理器，自动配置启动代码，集成Flash烧写模块，强大的Simulation设备模拟，
+性能分析等功能，与ARM之前的工具包ADS等相比，RealView编译器的最新版本可将性能改善超过20%。
+
+Keil μVision4
+	2009年2月发布Keil μVision4，Keil μVision4引入灵活的窗口管理系统，使开发人员能够
+使用多台监视器，并提供了视觉上的表面对窗口位置的完全控制的任何地方。新的用户界面可以更好
+地利用屏幕空间和更有效地组织多个窗口，提供一个整洁，高效的环境来开发应用程序。新版本支持
+更多最新的ARM芯片，还添加了一些其他新功能。
+
+	2011年3月ARM公司发布最新集成开发环境RealView MDK开发工具中集成了最新版本的Keil 
+μVision4，其编译器、调试工具实现与ARM器件的最完美匹配。
+
+Keil μVision5
+	2013年10月，Keil正式发布了Keil μVision5 IDE。
+
+keil现在针对C51 C166 C251 ARM开发了四套开发工具。uVision界面是一样的，只是Toolchain不同?
+
+
+4、MDK(Microcontroller Development Kit)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+https://www.keil.com/pack/doc/CMSIS/Core/html/startup_s_pg.html
+
+Reset_Handler
+
+5、keil选择编译器-armcc或者gcc
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在“Manage Project Items”->“Folders/Extensions”标签页中。
+
+
+rtthread-stm32.lnp中放着链接选项
+
+
+6、keil工程内各个后缀名文件的作用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1 test1 无后缀文件，这个是最终生成的文件，只要有这个文件KEIL就可以软件仿真，不能打开
+2 test1.hex 这个文件可以直接下载到单片机里，他就是从无后缀文件test1里提取的，去掉了调试信息，可以打开
+3 test1.DSN，这个是另外一个软件PROTUES软件的工程文件，里面是电路图，用来和KEIL联合仿真
+4 test1.LST 列表文件，这个文件是某个C文件编译后的文件，在你工程选项里，可以配置他是否显示头文件，显示符号表，显示程序汇编后的汇编代码等等，可以打开
+5 test1.OBJ 这个是编译器编译后的最终文件，用来给连接器连接和定位，连接器对OBJ连接后就变成了无后缀文件，然后提取变成HEX
+6 DBK PWI 是test1.DSN的附带文件，这就属于PROTUES软件了
+7 plg keil 的编译日志文件
+8 test1.M51文件，这个文件很重要，可以打开，出了大问题必须打开它，比如覆盖分析，混合编程时查看函数段名等，里面都是连接器的连接信息，例如你有哪些代码段、数据段，都是多大，被定位到单片机哪个地址里了，哪个函数调用了哪个函数，没有调用哪个函数，工程代码总大小，内存使用总大小等
+9 uvopt和uvproj都是keil工程文件，共同说明这你工程里有哪些文件，文件有没有被编译过，工程目录树是怎么组织的等等信息
+10 bak就是对工程文件的备份
+11 asm 就是汇编文件了
+12 lnp算是连接日志，告诉你连接器连接了哪些OBJ等，可以用文本编辑器打开
+
+
+7、下载STM32F103C8系列的固件库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	进入意法首页“https://www.st.com”，点“Product Catalog”->“Microcontrollers”，选“
+STM32 32-bit Arm Cortex MCUs”->“STM32 Mainstream MCUs”->“STM32F1 Series”->“STM32F103”
+点“STM32F103C8” 点“Tools&Software”，进入资源页面，搜索“peripheral”，20181129时搜到的是
+STSW-STM32054包，进去后版本是3.5.0。

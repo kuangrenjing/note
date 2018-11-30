@@ -1,0 +1,21 @@
+FPN(Fixed Pattern Noise 固定模型噪声)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Sensor 将光信号转换成电信号，再通过数百万个ADC 器件后输出图像。每个像素结构
+中的光电二极管的尺寸、掺杂浓度、生产过程中的沾污以及MOS 场效应管的参数的偏
+差等都会造成像素输出信号的变化，由于这些偏差造成的噪声对于给定的单个像素它
+是固定的，这种噪声就是固定模式噪声FPN（Fixed Pattern Noise）
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+《HiISP开发参考》在ISP_AE_RESULT_S结构体的解释中说到:"AE计算得出的总增益值，ISO表示系
+统增益，以常数100乘以倍数为单位,例如系统中sensor的增益为2倍，ISP的增益为1倍，那么整个
+系统的ISO值计算方式为：2*1*100=200，即系统ISO为200，本文档中涉及到的ISO 都是采用这种
+计算方法。此变量影响ISP的去噪，sharpen等自适应效果，必须配置。"
+
+注意增益与积分时间没有关系。
+
+FPN标定时需获取sensor的增益？通过哪个回调函数获取的这个增益呢。
+
+海思FPN标定时没有记录曝光时间，这很奇怪呢。
+
+http://forum.xitek.com/forum.php?mod=viewthread&tid=1646321&pid=70634282&ordertype=1&extra=page=1
+http://bbs.ebaina.com/forum.php?mod=viewthread&tid=12896&extra=&page=2

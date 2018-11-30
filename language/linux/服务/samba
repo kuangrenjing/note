@@ -1,0 +1,195 @@
+1、SAMBA史前
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在早期的网络世界中，文件数据在不同主机之间的传输大多是使用FTP这个好用的服务器软件进行的。
+不过，使用FTP传输文件不能直接修改服务器上面的文件数据。所以现在我们需要有这样一种服务，能
+够允许我们在客户端直接修改服务端的文件。在samba出现之前，已经有多种这样的服务：譬如
+Network File System（NFS）文件系统，可以在Unix Like机器间直接修改对方的文件内容；windows
+系统上提供了Common Internet File System（CIFS）（当时还不叫这个名字）文件系统在windows
+机器间实现类似的功能，CIFS最简单的用途就是目前常见的“网上邻居”。Windows系统的计算机可以通
+过桌面上的“网上邻居”来访问别人所提供的文件数据；甚至Unix Like机器与windows间也有类似的
+服务，那就是samba作者当时使用的DEC公司开发的PATHWORKS的软件。但是没有一个开源的、Unix Like
+系统通用的与windows主机实现文件通信(主要是直接修改功能)的软件，这就是samba出现的历史环境。
+
+
+2、利用数据包侦测逆向工程发展的SMB Server
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在1991年，一个名叫Andrew Tridgwell的大学生就有这样的困扰，他手上有三台机器，分别是运行
+DOS的个人计算机、DEC公司的Digital Unix系统以及Sun的Unix系统。在当时，DEC 公司开发出一套
+称为PATHWORKS的软件，这套软件可以用来分享DEC的Unix与个人计算机的DOS这两个操作系统的文件
+数据，可惜让Tridgwell觉得较困扰的是Sun的Unix无法通过这个软件来达到文件共享的目的。这个时
+候Tridgwell就想：“咦！既然这两台系统可以共享，没道理Sun就必须这么苦命吧？可不可以将这两
+个系统的工作原理找出来，然后让Sun机器也能够共享文件数据呢？”，为了解决这样的的问题，
+Tridgwell就自行编写了一个程序去检测当DOS与DEC的Unix系统在进行文件分享传输时所使用到的通
+信协议信息，然后获取这些重要的信息，并且基于上述所找到的通信协议而开发出Server Message Block（SMB）这个文件系统，而就是这套SMB软件就能够让Unix与DOS互相共享文件。
+
+
+3、取名为SAMBA的主因
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.5版本之前没使用什么合适的名字，1.5版本开始作者给它取名为"smbserver"，我但这个名字跟别
+名的软件名冲突了，所以改名为"samba"，因为这个单词包含了s、m、b这三个字母。
+
+4、安装SAMBA
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+先安装相应软件包：
+	#apt-get install samba
+	#apt-get install smbfs
+	#apt-get install samba-common-bin
+	#apt-get install system-config-samba
+
+5、samba配置文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+samba的默认配置文件是/etc/samba/smb.conf。smb.conf含有多个段，每个段由段名开始，直到
+下个段名。每个段名放在方括号中间。每段的参数的格式是：名称=值。配置文件中一行一个段名或参数，
+段名和参数名不分大小写。除了[global]段外，所有的段都可以看作是一个共享资源(通常就是一个
+文件夹)。段名是该共享资源的名字(取什么名字无关紧要，只要唯一就行)，段里的参数是该共享资源
+的属性(共享的是哪个文件夹，哪些用户可以访问这个文件夹等等)。
+
+Samba安装好后，使用testparm命令可以测试smb.conf配置是否正确。使用testparm –v命令可以
+详细的列出smb.conf支持的配置参数。
+
+testparm -v似乎不支持config file配置深入
+
+6、samba配置文件中的重要配置项
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+完整的配置项可参见这篇blog：
+https://www.linuxidc.com/Linux/2017-11/148354.htm
+
+
+7、smb.conf配置示例：
+[global]
+config file = /etc/samba/smb.conf.%u
+
+/etc/samba/smb.conf.root这样配置：
+[global]
+	security = user
+	passdb backend = smbpasswd
+	smb passwd file = /etc/samba/smbpasswd
+	encrypt passwords = yes #默认开启，没有也没关系
+	log file = /var/log/samba/log.root
+
+[root]
+	comment = 共享根目录
+	path = /
+	browseable = yes
+	writable = yes
+	available = yes
+	valid users = root
+
+【注】
+passdb backend设置为smbpasswd时，smbpasswd -a root才会在/etc/samba/smbpasswd(可能需要创建)
+中创建条目。
+
+win10可能需要手动开启smb1.0协议，说明samba太老旧了，需要更新了。
+
+配置文件内的一些用法说明
+%v 用samba的版本号代替
+
+https://websiteforstudents.com/samba-setup-on-ubuntu-16-04-17-10-18-04-with-windows-systems/
+
+
+8、网络上的一个step by step的配置教程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+8.1)、确认windows工作组：
+	为了找出windows机器属于哪个工作组，打开命令提示符CMD，键入以下命令：
+net config workstation
+工作站域(workstation domain)行正是我们PC的工作组名。
+
+8.2)、把ubuntu机器的IP加入到windows系统的hosts文件中：
+	点击开始菜单->windows附件->记事本，右键->以管理员身份运行，文件->打开->
+C:\Windows\System32\drivers\etc  键入以下行
+192.168.0.100    ubuntu1804.localhost    ubuntu1804
+
+8.3)、使能windows文件共享功能：
+	windows文件共享功能需要显式使能。以管理员身份运行CMD，并运行以下命令：
+netsh advfirewall firewall set rule group="File and Printer Sharing" new enable=Yes
+netsh advfirewall firewall set rule group="Network Discovery" new enable=Yes
+
+netsh firewall set service FileAndPrint
+
+
+8.5)、配置samba public共享
+	/etc/samba/smb.conf设置如下：
+#======================== Global definition =======================
+[global]
+	workgroup = WORKGROUP
+	server string = Samba Server %v
+	netbios name = ubuntu1604
+	security = user
+	map to guest = bad user
+	name resolve order = bcast host
+	dns proxy = no
+	bind interfaces only = yes
+
+#====================== Share Definitions ==========================
+[Public]
+	path = /samba/public
+	writable = yes
+	guest ok = yes
+	guest only = yes
+	read only = no
+	create mode = 0777
+	directory mode = 0777
+	force user = nobody
+
+8.6)、设置public文件夹用来共享
+	mkdir -p /samba/public
+
+	chown -R nobody:nogroup /samba/public
+	chmod -R 0775 /samba/public
+
+	service smbd restart
+
+8.7)、配置samba private共享
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	创建私有和保护共享，只有那些经核准(approved)组的成员才能使用密码存取secure 
+location。
+
+	首先创建一个samba组叫做"smbgroup"用于共享，ubuntu下创建一个组的命令如下：
+addgroup smbgroup
+
+	加入一个用户到组里边去：
+usermod -aG smbgroup mqs
+
+	所有那些需要存取samba共享的用户需要有一个password，把一个用户加入samba password
+数据库：
+	smbpasswd -a mqs
+用户会被提示键入和确认一个口令。这个口令就用于存取samba共享
+
+	创建一个保护共享文件夹：
+mkdir -p /samba/protected
+
+	给与/samba/protected文件夹root权限：
+chown -R root:smbgroup /samba/protected
+chmod -R 0770 /samba/protected
+
+	/etc/samba/smb.conf加入一段，完整配置如下
+#======================== Global definition =======================
+[global]
+	workgroup = WORKGROUP
+	server string = Samba Server %v
+	netbios name = ubuntu1604
+	security = user
+	map to guest = bad user
+	name resolve order = bcast host
+	dns proxy = no
+	bind interfaces only = yes
+#====================== Share Definitions ==========================
+[Public]
+	path = /samba/public
+	writable = yes
+	guest ok = yes
+	guest only = yes
+	read only = no
+	create mode = 0777
+	directory mode = 0777
+	force user = nobody
+[Protected]
+	path = /samba/protected
+	valid users = @smbgroup
+	guest ok = no
+	writable = yes
+	browsable = yes
+
+	service smbd restart
+
+【注】不要对/文件夹做改变权限的操作，不然可能造成无法启动的情况。

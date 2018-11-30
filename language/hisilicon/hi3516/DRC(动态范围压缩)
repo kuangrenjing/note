@@ -1,0 +1,6 @@
+1、Dynamic Range Compression
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ISP_AE_RESULT_S
+
+AE计算得出的总曝光量，等于曝光时间(曝光行为单位)*系统增益(倍数为单位)。此变量影响DRC效果，
+必须配置。

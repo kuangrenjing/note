@@ -1,0 +1,19 @@
+https://www.linuxidc.com/Linux/2016-09/135521.htm
+
+
+NAT模式对局域网的其他电脑是不可见的。
+
+
+1、仅主机模式使用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Host-Only模式其实就是NAT模式去除了虚拟NAT设备，然后使用VMware Network Adapter VMnet1
+虚拟网卡连接VMnet1虚拟交换机来与虚拟机通信的，Host-Only模式将虚拟机与外网隔开，使得虚拟
+机成为一个独立的系统，只与主机相互通讯。
+
+	VMware Network Adapter VMnet1设置成自动获取IP
+	虚拟机原来使用其它模式的话，先要重启虚拟机或虚拟机网络，这时ifconfig到的IP就可以直接
+连接了。
+
+https://www.lyblog.net/detail/385.html
+
+

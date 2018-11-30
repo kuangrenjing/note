@@ -1,0 +1,151 @@
+/3516Ako/hi3516a_jpege.ko
+/3516Ako/hi3516a_region.ko
+/3516Ako/hi3516a_venc.ko
+/3516Ako/hiuser.ko
+/3516Ako/hi3516a_ai.ko
+/3516Ako/hi3516a_ao.ko
+/3516Ako/hifb.ko
+/3516Ako/hi3516a_pm.ko
+/3516Ako/hi3516a_rc.ko
+/3516Ako/hi3516a_vpss.ko
+/3516Ako/hi_media.ko
+/3516Ako/acodec.ko
+/3516Ako/hi_mipi.ko
+/3516Ako/hi3516a_h264e.ko
+/3516Ako/hi3516a_h265e.ko
+/3516Ako/hi3516a_aio.ko
+/3516Ako/hi3516a_adec.ko
+/3516Ako/hi_rtc.ko
+/3516Ako/hi3516a_aenc.ko
+/3516Ako/extdrv/sensor_i2c.ko
+/3516Ako/extdrv/lightsensor_dev.ko
+/3516Ako/extdrv/sensor_spi.ko
+/3516Ako/extdrv/piris.ko
+/3516Ako/extdrv/gpiospi.ko
+/3516Ako/extdrv/htxkey.ko
+/3516Ako/extdrv/sample_ist.ko
+/3516Ako/extdrv/pwm.ko
+/3516Ako/extdrv/gpioi2c_16.ko
+/3516Ako/hi3516a_isp.ko
+/3516Ako/hi3516a_ive.ko
+/3516Ako/hi3516a_base.ko
+/3516Ako/mmz.ko
+/3516Ako/hi3516a_tde.ko
+/3516Ako/hi3516a_sys.ko
+/3516Ako/hi3516a_vda.ko
+/3516Ako/hi3516a_vgs.ko
+/3516Ako/hi3516a_viu.ko
+/3516Ako/hi3516a_vou.ko
+/3516Ako/hi3516a_chnl.ko
+
+
+/home/mqs/Hi3516A_SDK_V1.0.5.0/mpp/lib/lib_hiae.a
+/home/mqs/Hi3516A_SDK_V1.0.5.0/test/ipc_save_src/hi_sdk_50/lib/lib_hiae.a
+
+
+2、数据类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ALG_LIB_S：定义AE/AWB/AF 算法库结构体。
+
+s32Id 算法库实例的Id。
+acLibName 标识算法库名称的字符数组。
+
+库的名字acLibName，用以区分不同的算法库；库的s32Id，用以支持运行同一个算法库的多个实例。
+
+所以acLibName = hisi_ae_lib是个什么意思呢？？？
+
+
+
+
+SAMPLE_COMM_ISP_Init()
+	HI_MPI_AE_Register()
+
+
+
+
+1、ipc_save功能
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+视频录像保存
+
+2、入口
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ipc_save_src/src/main.cpp中的main函数是此程序的入口：
+
+int main(void)
+{
+	g711_init();
+	SAMPLE_VENC_1080P_CLASSIC();
+
+	while(1)
+	{
+		sleep(1);
+	}
+}
+
+
+
+step1:init sys variable
+要计算哪些系统变量呢
+
+	1.1、输入图像尺寸，输出图像尺寸（分模拟输出设备、数字输出设备）
+	SAMPLE_COMM_VI_GetSizeBySensor() 测试板返回PIC_HD720
+	SAMPLE_COMM_SYS_GetPicSize()     测试板返回1280*720
+	根据sensor的类型选择sensor的输出图像尺寸（测试板是SONY_IMX178_LVDS_1080P_30FPS）：
+
+	hi_comm_video.h定义了一个图片分辨率的枚举变量
+	typedef enum hiPIC_SIZE_E
+	{
+		PIC_QCIF = 0,
+		PIC_CIF,
+		PIC_2CIF,
+		PIC_HD1,
+		PIC_D1,
+		PIC_960H,
+
+		PIC_QVGA,    /* 320 * 240 */
+		PIC_VGA,     /* 640 * 480 */
+		PIC_XGA,     /* 1024 * 768 */
+		PIC_SXGA,    /* 1400 * 1050 */
+		PIC_UXGA,    /* 1600 * 1200 */
+		PIC_QXGA,    /* 2048 * 1536 */
+
+		PIC_WVGA,    /* 854 * 480 */
+		PIC_WSXGA,   /* 1680 * 1050 */
+		PIC_WUXGA,   /* 1920 * 1200 */
+		PIC_WQXGA,   /* 2560 * 1600 */
+
+		PIC_HD720,   /* 1280 * 720 */
+		PIC_HD1080,  /* 1920 * 1080 */
+		PIC_2304x1296, /* 3M:2304 * 1296 */
+		PIC_2592x1520, /* 4M:2592 * 1520 */
+		PIC_5M,        /* 2592 * 1944 */
+		PIC_UHD4K,     /* 3840 * 2160 */
+
+		PIC_BUTT
+	}PIC_SIZE_E;
+
+	1.2、从而算出VB_CONF_S
+
+
+
+
+step2:mpp system init
+	SAMPLE_COMM_SYS_Init
+
+
+
+
+step3: start vi dev & chn to capture
+	SAMPLE_COMM_VI_StartVi
+		    ->SAMPLE_COMM_VI_StartIspAndVi
+		或者->SAMPLE_COMM_VI_StartBT656
+
+
+
+
+
+
+
+
+
+

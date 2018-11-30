@@ -1,0 +1,13 @@
+ubuntu安装"VMware Tools"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+我使用的是“VMware Workstation 14 player” 所以点击player(p)下拉菜单->管理->重新安装
+WMware Tools(T)...
+
+提示在客户机中装载虚拟CD驱动器，启动终端，使用tar解压缩安装程序，然后执行vmware-install.pl
+安装VMware Tools
+
+mount /dev/cdrom /mnt/cdrom
+
+安装成功后有这样一个进程：/usr/sbin/vmtoolsd
+
+vmware_tools不是包管理工具安装的，所以不能通过包管理工具查看。

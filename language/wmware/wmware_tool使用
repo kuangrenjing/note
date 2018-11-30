@@ -1,0 +1,55 @@
+1、vmware设置了文件夹，但虚拟机上无法访问
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/xiaopang1122/article/details/72640448
+执行df /mnt/hgfs查看，正常情况下应该是这样的：
+.host:/ 357703676 191295936 166407740 54% /mnt/hgfs
+
+
+2、wmware的共享文件夹是在哪里被挂载上去的：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+unbuntu 10.04：
+/etc/init.d/vmware-tools:      vmware_exec_selinux "mount -t vmhgfs .host:/ $vmhgfs_mnt"
+/etc/rc0.d/K20vmware-tools:      vmware_exec_selinux "mount -t vmhgfs .host:/ $vmhgfs_mnt"
+/etc/rc1.d/K20vmware-tools:      vmware_exec_selinux "mount -t vmhgfs .host:/ $vmhgfs_mnt"
+/etc/rc2.d/S20vmware-tools:      vmware_exec_selinux "mount -t vmhgfs .host:/ $vmhgfs_mnt"
+/etc/rc3.d/S20vmware-tools:      vmware_exec_selinux "mount -t vmhgfs .host:/ $vmhgfs_mnt"
+/etc/rc4.d/S20vmware-tools:      vmware_exec_selinux "mount -t vmhgfs .host:/ $vmhgfs_mnt"
+/etc/rc5.d/S20vmware-tools:      vmware_exec_selinux "mount -t vmhgfs .host:/ $vmhgfs_mnt"
+/etc/rc6.d/K20vmware-tools:      vmware_exec_selinux "mount -t vmhgfs .host:/ $vmhgfs_mnt"
+
+
+unbuntu 18.04:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	每次下班合上笔记本就回家，所以直到有一次周末关机了才发现这个问题：unbuntu 18.04关机
+重启之后共享文件夹不能进入了。看wmware的共享文件夹设置还是“总是启用”状态，可以点“已禁用”-
+“确定”后再点“总是启用”-“确定”重新开始。但这样这样显然比较麻烦
+
+	我们要研究的是“如何开机自动启用共享文件夹”。显然，我们必须先找到正确的挂载指令。我们
+先使用ubuntu 10.04下能够使用的"mount -t vmhgfs .host:/ /mnt/hgfs"指令，发现这个指令
+在unbuntu 18.04下会报错(后面可以看到是参数没用对)。网络上一篇帖子
+"https://github.com/vmware/open-vm-tools/issues/248"这样说到：
+
+You should change your mount command format:
+mount -t fuse.vmhgfs-fuse .host:/ /mnt/hgfs
+
+to the FUSE mount
+/usr/bin/vmhgfs-fuse .host:/ /mnt/hgfs -o subtype=vmhgfs-fuse,allow_other
+
+	ubuntu 18.04下，在共享文件夹可以正常工作时，执行"grep -r 'vmhgfs-fuse' /etc/*"输出：
+/etc/mtab:vmhgfs-fuse /mnt/hgfs fuse.vmhgfs-fuse rw,nosuid,nodev,relatime,user_id=0,group_id=0,allow_other 0 0
+/etc/mtab是/proc/self/mount的一个符号链接，说明当前有这样一个挂载，但没有此挂载的静态配置，
+掉电后就丢失了。
+
+	挂载的静态配置应该放在那里呢，答案是/etc/fstab文件。上面提到的帖子建议这样的配置：
+.host:/   /mnt/hgfs   fuse.vmhgfs-fuse allow_other,defaults   0       0
+但从mtab的内容可以看到，vmhgfs-fuse这样更多的选项：
+rw,nosuid,nodev,relatime,user_id=0,group_id=0,allow_other
+
+	另一方面：读取和执行/etc/fstab文件的是mount指令，而不是vmhgfs-fuse命令。所以如果
+这样设置/etc/fstab能正常工作，那用这些选项手动执行mount指令应该也能成功：
+mount -t fuse.vmhgfs-fuse rw,nosuid,nodev,relatime,user_id=0,group_id=0,allow_other .host:/ /mnt/hgfs
+实际操作了一下，发现有些参数不支持，改成这样就好了：
+mount -t fuse.vmhgfs-fuse rw,nosuid,nodev,allow_other .host:/ /mnt/hgfs
+
+所以，把下面这条配置放到/etc/fstab文件中就好了。
+.host:/   /mnt/hgfs   fuse.vmhgfs-fuse   rw,nosuid,nodev,allow_other   0   0

@@ -1,0 +1,8 @@
+1、malloc()、calloc()、realloc()
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+malloc用来分配size字节的内存
+
+calloc分配n个size大小的连续的空间
+
+
+realloc用于修改一个已经分配的内存块的大小

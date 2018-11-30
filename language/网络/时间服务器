@@ -1,0 +1,11 @@
+NTP时钟源
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/maxsky/article/details/53866475
+
+rdate -s ip不行
+设置/etc/resolv.conf后“rdate -s 域名”可以，但阿里的域名不行。
+
+
+linux如何修改时区
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：

@@ -1,0 +1,97 @@
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/zhouyongku/article/details/53432245
+
+1、设置的时机
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	libevent在进程中有一些影响整个库的全局设置。这些设置需在libevent库开始工作之前进行,
+否则libEvent将会进入不一致的状态。
+
+2、libevent日志消息
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	libevent能记录内部的错误和警告日志，如果编译进日志支持功能，也会记录调试信息。默认
+情况下这些消息都是输出到stderr，你也可以通过提供自己的日志函数的方法来覆盖这种行为。
+
+typedef void (*event_log_cb)(int severity, const char* msg);
+void event_set_log_callback(event_log_cb cb);
+
+	为了覆盖LibEvent的日志行为，你需要自己编写满足event_log_cb格式的函数，然后将函数作
+为参数传入event_set_log_callback()。无论什么时候只要LibEvent需要写一个日志，都会进入到
+你提供的日志函数。你需要让libevent日志回到默认功能的时候只需要再次调用event_set_log_callback
+并且传一个NULL即可。
+
+【注意】:
+	在用户提供的event_log_cb回调函数中进行LibEvent的函数调用是不安全的。如果你想写一个
+用bufferevents去发送告警信息给一个网络socket的日志回调函数，你就可能会遇到非常奇怪和难
+以诊断的错误。在将来的版本中将会为一些函数移除这些限制。
+
+	通常调试日志都是禁用的，也都不会发送给日志回调函数，但是如果libEvent是编译成支持打
+开调试日志，你就可以手动打开调试日志。
+
+#define EVENT_DBG_NONE 0
+#define EVENT_DBG_ALL 0xffffffffu
+void event_enable_debug_logging(ev_uint32_t which);
+
+	大多数情况下调试日志都是冗余、不必要、没什么用的。调用event_enable_debug_logging()
+使用EVENT_DBG_NONE得到默认行为，使用EVENT_DBG_ALL开启所有可支持的调试日志，未来会有更
+多更细的选项支持。
+
+	这些函数定义在<event2/event.h>中，首先出现是在LibEvent的1.0c版本。
+而event_enable_debug_logging()首次出现在2.1.1-alpha版本中。
+
+3、致命错误的处理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+当LibEvent检测到一个不可恢复的致命错误(比如数据结构损坏),它的默认行为是调用exit()或abort()来退出当前运行的进程.这意味着有一个错误,要么在你的代码中,要么在LibEvent中.
+
+ 
+
+如果你想让你的程序更从容地应对致命错误,你可以为LibEvent提供退出时候应该调用的函数,覆盖默认行为.
+
+typedef void ( * event_fatal_cb)(int err);
+void event_set_fatal_callback(event_fatal_cb cb);
+
+要使用这些函数,你首先需要定义一个当LibEvent遇到错误时候需要调用的函数,并且将它传到event_set_fata_callback()函数.之后如果LibEvent遇到致命错误,它就会调用你提供的函数.
+
+ 
+
+你的函数不可以控制返回到LibEvent,因为这样做可能会导致未定义行为发生,为了避免崩溃,LibEvent还是会退出.一旦你的程序被调用了,在你的函数中就不应该再调用别的LibEvent的函数.
+
+ 
+
+这些函数被定义在<event2/event.h>,第一次出现在LibEvent2.0.3-alpha版本中.
+
+4、内存管理函数设置
+
+默认情况下,LibEvent使用c语言库中提供的内存管理函数在堆上分配内存,你也可以替换malloc、realloc和free,让LibEvent使用别的内存管理.你想用一个更有效的内存分配器,或者用一个内存分配工具来检查内存泄露你都可能会这样做.
+
+void event_set_mem_functions(void*(*malloc_fn)(size_t sz),
+	void*(*realloc_fn)(void *ptr, size_t sz),
+	void(*free_fn)(void *ptr));
+
+注意:更换内存管理函数将会影响LibEvent后续所有调用allocate、resize和free内存的函数.因此你需要确保在LibEvent调用其它函数之前替换掉这些函数.否则LibEvent将会调用你提供的free函数来释放从C语言库版本的malloc分配的内存.
+
+    你的malloc和realloc函数需要返回和C语言库相同的内存对齐.
+
+    你的realloc函数需要正确处理realloc(NULL,sz),也就是说当做(malloc(sz)处理).
+
+    你的realloc函数需要正确处理realloc(ptr,0),也就是说当做free(ptr)处理.
+
+    你的free函数不必去处理free(NULL).
+
+    你的malloc函数不必去处理malloc(0).
+
+    如果你不止一个线程使用LibEvent,那么你提供的的内存管理替代函数必须是线程安全的.
+
+    LibEvent会使用这些函数分配返回给你的内存.
+
+     
+
+    如果你已经替换了malloc和realloc函数并且想释放LibEvent分配的内存,那么就需要使用你替换的free函数来释放.
+
+    event_set_mem_functions()函数在<event2/event.h>中申明,首次出现是在LibEvent2.0.1alpha版本.
+
+    LibEvent可以被编译为event_set_mem_functions()禁用,如果这样,event_set_mem_functions()函数不会被编译和链接到程序.LibEvent2.0.2-alpha版本之后,你可以检查是否定义了EVENT_SET_MEM_FUNCTIONS_IMPLEMENTED宏来检测event_set_mem_functions()函数是否存在.
+
+
+5、锁
+晦涩

@@ -1,0 +1,7 @@
+1、telnet口要授权才能登陆
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	新建一个文件夹，把TelnetTool_V1.0.2.0_R6301_20180411.rar放进去，解压，然后执行
+“TelnetOperateTool.exe”，获取“客户凭证码”发给集光，集光生成“unlock.key”发过来，放到
+文件夹中就可以登陆telnet了。
+
+2、

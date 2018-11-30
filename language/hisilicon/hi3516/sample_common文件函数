@@ -1,0 +1,71 @@
+1、VPSS属性：
+	VPSS_MAX_GRP_NUM：定义VPSS GROUP 的最大个数。
+	VPSS_MAX_CHN_NUM：定义VPSS 通道的最大个数。
+	VPSS_MAX_PHY_CHN_NUM：定义VPSS 物理通道的最大个数。
+	VPSS_MAX_EXT_CHN_NUM：定义VPSS 扩展通道的最大个数。
+	VPSS_HD_PRE_CHN：定义高清预览通道的ID 号。
+	VPSS_MULTI_PRE_CHN：定义多画面预览通道的ID 号。
+	VPSS_SD_PRE_CHN：定义标清预览通道的ID 号。
+	VPSS_GRP：定义VPSS_GRP 类型。
+	VPSS_CHN：定义VPSS_CHN 类型。
+	VPSS_DIE_MODE_E：定义DIE 模式。
+	VPSS_FRAME_WORK_E：定义视频边框。
+	VPSS_CROP_COORDINATE_E：定义CROP 起点坐标的模式。
+	LDC_VIEW_TYPE_E：定义畸变校正的类型。
+	ROTATE_E：旋转枚举。
+	VPSS_REF_SEL_MODE_E：NR 的参考帧来源选择枚举。
+	RECT_S：定义一个矩形区域。
+	VPSS_CROP_INFO_S：定义CROP 功能所需信息。
+	VPSS_GRP_ATTR_S：定义VPSS GROUP 静态属性。
+	VPSS_FRAME_S：定义视频边框属性。
+	VPSS_CHN_ATTR_S：定义VPSS 物理通道静态属性。
+	VPSS_GRP_PARAM_S：定义VPSS 高级属性。
+	VPSS_CHN_MODE_E：定义VPSS CHN 工作类型。
+	VPSS_CHN_MODE_S：定义VPSS CHN 工作模式结构。
+	VPSS_CHN_PARAM_S：定义通道高级属性。
+	VPSS_FRAME_RATE_S：定义VPSS 帧率控制属性。
+	VPSS_EXT_CHN_ATTR_S：定义VPSS 扩展通道的属性。
+	VPSS_REGION_INFO_S：定义VPSS 区域信息，用于获取区域亮度总和。
+	VPSS_LDC_ATTR_S：定义VPSS 的校正属性，用于控制通道图像校正功能。
+	VPSS_LOW_DELAY_INFO_S：定义VPSS 的通道的低延时属性。
+
+我们要涉及的：
+	VPSS_GRP_ATTR_S：定义VPSS GROUP 静态属性。
+	VPSS_CHN_ATTR_S：定义VPSS 物理通道静态属性。
+	VPSS_EXT_CHN_ATTR_S：定义VPSS 扩展通道的属性。
+
+
+
+
+
+
+
+
+
+
+
+
+
+1、SAMPLE_COMM_VPSS_StartGroup函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+调用MPP api：
+	HI_MPI_VPSS_CreateGrp
+	HI_MPI_VPSS_GetGrpParam
+	HI_MPI_VPSS_SetGrpParam
+	HI_MPI_VPSS_StartGrp
+
+	组属性VPSS_GRP_ATTR_S首先由HI_MPI_VPSS_CreateGrp函数引入，而后可以通过
+HI_MPI_VPSS_GetGrpAttr、HI_MPI_VPSS_SetGrpAttr两个函数来获取或设置。
+
+	VPSS_GRP_ATTR_S的有些字段是静态属性，不支持动态修改。如要修改这些参数，需先停用组，
+然后再启用组。不过幸运的是，我们不支持修改这些参数：最大图像高度，最大图像宽度，像素格式。
+
+	HI_MPI_VPSS_GetGrpParam、HI_MPI_VPSS_SetGrpParam获取和设置的是VPSS_GRP_PARAM_S
+类型参数，这个类型的变量涉及的都是3D降噪的参数，比较复杂，当前我们还都是使用的默认值，没有
+配置项与之相关。
+
+2、SAMPLE_COMM_VPSS_StopGroup函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+调用MPP api：
+	HI_MPI_VPSS_StopGrp
+	HI_MPI_VPSS_DestroyGrp

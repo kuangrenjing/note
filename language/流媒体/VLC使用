@@ -1,0 +1,27 @@
+VLC播放用ORTP封装的H264H264的RTP流时有抖动和延迟现象，为什么？
+	Check whether VLC log has "drop buffer" ... , if yes , check your CPU decoding.
+
+1、VLC怎样直接播RTP流？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+步骤：
+	打开vlc
+	选择“媒体(Media)”菜单
+	选择“打开网络串流(Open network stream)”子菜单，显示“打开媒体”对话框
+	选择“网络(network)”标签页
+	输入rtp路径譬如“rtp://@192.168.1.101:1234”
+	选择“文件(file)”标签页
+	点击“添加(add)”按钮，把形如“w.sdp”的文件添加进去
+	点击下方“播放(play)”按钮
+	完成
+
+w.sdp文件格式
+	m=video 1234 RTP/AVP 96 //96表示的是动态净荷类型号 意思就是负载类型不确定，要通过其他方式来确定
+	a=rtpmap:96 H264        //这里确定96类型代表的是H264
+	a=framerate:15
+	c=IN IP4 192.168.0.30
+
+2、VLC播放RTP视频延时较大的可能原因及解决方案：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)、VLC网络流的缓存开得较大，那么把它设置的小一些即可。
+	工具->偏好设置->输入/编解码器标签页->网络->默认缓存策略->最低延迟 完成。
+

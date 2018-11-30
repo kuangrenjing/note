@@ -1,0 +1,35 @@
+ntohs    网络序(n)的短整型(s)转化为主机序(h)的短整型(s)
+htons    主机序(n)的短整型(s)转化为网络序(h)的短整型(s)
+ntohl    网络序(n)的长整型(l)转化为主机序(h)的长整型(l)
+htonl    主机序(n)的长整型(l)转化为网络序(h)的长整型(l)
+【注】：短整型2字节，长整型4字节
+
+
+sockaddr
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#include <sys/socket.h>
+sockaddr的缺陷是：sa_data把目标地址和端口信息混在一起了，如下：
+
+struct sockaddr {
+	sa_family_t sin_family;//地址族
+	char sa_data[14]; //14字节，包含套接字中的目标地址和端口信息
+};
+
+sockaddr_in
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#include <netinet/in.h>
+#include <arpa/inet.h>
+两个可能的定义位置
+该结构体解决了sockaddr的缺陷，把port和addr 分开储存在两个变量中，如下：
+
+struct sockaddr_in {
+	short int sin_family;         //地址族，AF_xxx 在socket编程中只能是AF_INET 
+	unsigned short int sin_port;  // 端口号 （使用网络字节顺序） 
+	struct in_addr sin_addr;      //存储IP地址 4字节
+	unsigned char sin_zero[8];    // 总共8个字节，实际上没有什么用，只是为了和struct sockaddr保持一样的长度 
+};
+
+sockaddr、sockaddr_in比较
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+sockaddr更通用
+sockaddr_in符合AF_INET协议族下的一般用法

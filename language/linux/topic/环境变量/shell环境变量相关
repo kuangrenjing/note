@@ -1,0 +1,35 @@
+1、子shell进程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一般大型shell程序工程都有很多个脚本，彼此间可能存在调用关系。在脚本中调用另一个脚本，
+默认情况下是创建一个子shell进程，执行完这个被调用脚本后这个子shell进程就退出了，返回父
+shell进程。但我们知道进程变量的传递只能从父进程向子进程传递，子进程修改进程变量不会影响
+到父进程，如下图所示，第一个子shell进程的环境变量不能传递到父shell进程，所以也就不能传
+递到第二个shell进程。
+
+   +------------+                     +-----------------+
+   | 父shell进程 |------------------> | 第一个子shell进程 |
+   +------------+                     +-----------------+
+        |
+        |                             +----------------+
+        ----------------------------> | 第二子shell进程 |
+                                      +----------------+
+
+所以，想要脚本执行完后环境变量能继续向下传递，就不能创建子进程运行，而必须在当前进程中
+运行。到达到这个效果，需使用source或点命令，像这样：
+	source **.sh
+	.      **.sh
+
+2、shell中定义局部变量、环境变量
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	shell直接定义的变量是局部变量，局部变量是不能被子进程继承的。
+
+	使用export指令或declare指令定义环境变量：
+
+	局部变量不能与环境变量重名，定义一个与环境变量重名的局部变量相当于在修改环境变量。
+
+	var=value
+	export var
+	千万不要认为这两条指令定义了一个局部变量和一个环境变量
+
+	export、declare定义的环境变量在shell进程退出后就失效了，后面重新登陆就没办法使用了。
+要永久有效需改变文件配置。

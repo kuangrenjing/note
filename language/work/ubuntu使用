@@ -103,7 +103,15 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	dvsdk安装过程中会提示你安装fakeroot:"sudo apt-get install fakeroot"
 
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-7、安装、设置SAMBA
+7、用户相关：
+启用root用户
+	ubuntu安装之后我们并不知道root密码，怎么拿root账户登陆呢。前辈们说可以先把root密码
+取消掉，然后设置一个新的root密码。
+	sudo passwd -u root  #取消掉root密码
+	sudo passwd root     #设置新的root密码
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+8、安装、设置SAMBA
 先安装相应软件包：
 	#apt-get install samba
 	#apt-get install smbfs
@@ -129,7 +137,6 @@ available = yes
 browseable = yes
 
 sudo ufw disable
-
 sudo service smbd restart
 sudo service nmbd restart
 

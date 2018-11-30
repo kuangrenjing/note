@@ -1,0 +1,127 @@
+https://github.com/nodejs/http-parser
+https://blog.csdn.net/qq_36482772/article/details/80174358
+
+1、45个方法(OPTIONS重复)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+DELETE
+GET
+HEAD
+POST
+PUT
+CONNECT
+OPTIONS
+TRACE
+COPY
+LOCK
+MKCOL
+MOVE
+PROPFIND
+PROPPATCH
+SEARCH
+UNLOCK
+BIND
+REBIND
+UNBIND
+ACL
+REPORT
+MKACTIVITY
+CHECKOUT
+MERGE
+MSEARCH
+NOTIFY
+SUBSCRIBE
+UNSUBSCRIBE
+PATCH
+PURGE
+MKCALENDAR
+LINK
+UNLINK
+SOURCE
+
+
+DESCRIBE
+ANNOUNCE
+GET_PARAMETER
+OPTIONS
+PAUSE
+PLAY
+RECORD
+REDIRECT
+SETUP
+SET_PARAMETER
+TEARDOWN
+
+
+2、方法名按字母排序：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ACL      ANNOUNCE
+BIND
+CONNECT COPY CHECKOUT
+DELETE    DESCRIBE
+GET       GET_PARAMETER
+HEAD
+LOCK LINK
+MKCOL MOVE MKACTIVITY MERGE M-SEARCH MKCALENDAR
+NOTIFY
+OPTIONS
+POST PROPFIND PROPPATCH PUT PATCH PURGE    PAUSE PLAY
+REPORT REBIND        RECORD REDIRECT
+SUBSCRIBE  SEARCH  SOURCE      SETUP SET_PARAMETER
+TRACE      TEARDOWN
+UNLOCK UNSUBSCRIBE UNBIND UNLINK
+
+
+3、方法名按字母排序：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ACL      ANNOUNCE
+BIND
+CONNECT COPY CHECKOUT
+DELETE    DESCRIBE
+GET       GET_PARAMETER
+HEAD
+LOCK LINK
+MKCOL MOVE MKACTIVITY MERGE M-SEARCH MKCALENDAR
+NOTIFY
+OPTIONS
+POST
+	PUT
+		PURGE
+	PATCH
+		PAUSE
+	PROPFIND
+		PROPPATCH
+	PLAY
+REPORT
+	REBIND
+	RECORD
+	REDIRECT
+SUBSCRIBE
+	SEARCH
+		SETUP
+			SET_PARAMETER
+	SOURCE
+TRACE      TEARDOWN
+UNLOCK UNSUBSCRIBE UNBIND UNLINK
+
+
+3、http-parser方法名的解码策略：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+例如：
+	首字母是A，那就假设方法是ACL，首字母是P，那就假设方法是POST...。但是，然后就是比较
+这个假设的方法名和真实方法名的第二、第三...个字面，遇到不一样的，再通过查表假设一个方法
+名，然后接着向后比对。
+
+
+4、编程接口：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http_parser_init
+http_parser_execute
+
+parser->state初始化为：
+	s_start_req
+	s_start_res
+	s_start_req_or_res
+
+譬如解析请求，其状态改变如下：
+                                                     s_req_path
+s_start_req  s_req_method  s_req_spaces_before_url

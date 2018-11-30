@@ -1,0 +1,46 @@
+1、分析与猜想
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+如果选择自动曝光控制，那么相机工作过程中AE库需要不定时更新sensor的曝光控制寄存器。这一点
+从AE提供的回调函数上可以看出：
+
+AE_SENSOR_EXP_FUNC_S
+
+pfn_cmos_get_ae_default     获取AE算法库的初始值的回调函数指针。
+pfn_cmos_fps_set            设置sensor的帧率。
+pfn_cmos_slow_framerate_set 设置sensor的降帧。
+pfn_cmos_inttime_update     设置sensor的曝光时间。
+pfn_cmos_gains_update       设置sensor的模拟增益和数字增益。
+pfn_cmos_again_calc_table   计算TABLE类型sensor模拟增益。
+pfn_cmos_dgain_calc_table   计算TABLE类型sensor数字增益。
+pfn_cmos_get_inttime_max    帧合成WDR模式下，获取长、短帧不同曝光倍数时所允许的短曝光时间最大值，与sensor强相关。
+
+但实际上，sensor的写入不是AE驱动的，而是由ISP库统一进行的。这一点从ISP提供给sensor驱动的
+回调函数上可以看出来：
+
+ISP_SENSOR_EXP_FUNC_S
+
+pfn_cmos_sensor_init          初始化sensor 的回调函数指针。
+pfn_cmos_sensor_global_init   初始化全局变量的回调函数指针。
+pfn_cmos_set_image_mode       设置分辨率和帧率切换的回调函数指针。返回值0表
+                              示sensor模式发生改变，ISP会调用
+                              pfn_cmos_sensor_init 重新配置sensor；其他返回值表
+                              示sensor 模式没有变化，ISP 不会重新配置sensor。
+pfn_cmos_set_wdr_mode         设置wdr模式的回调函数指针。
+pfn_cmos_get_isp_default      获取ISP基础算法的初始值的回调函数指针。
+pfn_cmos_get_isp_black_level  获取sensor 的黑电平值的回调函数指针，支持根据
+                              sensor增益动态调整黑电平值。若此处动态调整黑电
+                              平值，则无法通过接口
+                              HI_MPI_ISP_SetBlackLevelAttr 设置黑电平。
+pfn_cmos_get_sns_reg_info     获取sensor 寄存器信息的回调函数指针，用于实现内
+                              核态配置AE信息。
+                              这个函数是什么机制驱动调用的文档并没有说，我怀疑是周期性驱动调用的
+pfn_cmos_set_pixel_detect     设置坏点校正开关的回调函数指针。
+
+imx178_cmos.c:
+pfn_cmos_get_sns_reg_info = cmos_get_sns_reg_info
+
+
+四个库对sensor的调用，
+
+
+https://blog.csdn.net/edw200/article/details/52170034

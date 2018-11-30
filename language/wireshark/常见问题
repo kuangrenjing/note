@@ -1,0 +1,9 @@
+1、no interface found
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	注意安装wireshark时需要选择安装winpcap，如果没有安装winpcap，启动wireshark时会报
+no interfaces found错误。报这个错，网络上的解决方法是"net start npf"，npf驱动是winpcap
+的组件，因为你没有安装winpcap，所以"net start npf"会报"服务未安装"这样的错误。
+
+	winpcap是什么呢？
+	winpcap全称"windows packet capture"。开发winpcap这个项目的目的在于为win32应用程
+序提供访问网络底层的能力。

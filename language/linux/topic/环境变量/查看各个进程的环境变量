@@ -1,0 +1,16 @@
+1、环境变量是每个进程都有的概念，而不是shell的专属
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我们在shell脚本编程时经常提及环境变量，所以就误认为环境变量是shell的专属概念。其实
+每一个进程都有环境变量。
+
+2、如何查看进程的变量
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当然是强大的虚拟文件系统/proc，在/proc/$pid/environ文件中，每个环境变量以^@分隔。
+在这里我们可以看到init进程有很多环境变量，常见的HOME、PATH等环境变量在这里就已经被创建
+了。init进程是所有进程的父进程，所以其它进程都继承了这些环境变量，当然子进程可以取消某些
+环境变量，我们可以看到/sbin/getty终端进程的环境变量就比init进程的少了很多。
+
+3、environ指针
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	进程的环境变量放在哪个呢，答案是environ指针，这个指针定义在Glibc的源文件posix/environ.c
+中，要使用时需包含unistd.h文件，且做外部声明"extern char **environ"。

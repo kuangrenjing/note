@@ -1,0 +1,7 @@
+1、什么是nfs
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+我们在samba一文中已经提到了nfs，它是UNIX LIKE机器之间的Network File System，而samba
+是Unix Like机器和windows机器之间的网络文件系统。
+
+
+1、/etc/exports

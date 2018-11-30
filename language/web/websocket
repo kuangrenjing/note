@@ -1,0 +1,40 @@
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	https://www.cnblogs.com/jingmoxukong/p/7755643.html
+
+1、WebSocket是什么？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	WebSocket是一种网络通信协议。RFC6455定义了它的通信标准。
+
+	WebSocket是HTML5开始提供的一种在单个TCP连接上进行全双工通讯的协议。
+
+2、为什么需要WebSocket？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	了解计算机网络协议的人，应该都知道：HTTP协议是一种无状态的、无连接的、单向的应用层协
+议。它采用了请求/响应模型。通信请求只能由客户端发起，服务端对请求做出应答处理。
+
+	这种通信模型有一个弊端：HTTP协议无法实现服务器主动向客户端发起消息。
+
+	这种单向请求的特点，注定了如果服务器有连续的状态变化，客户端要获知就非常麻烦。大多数
+Web应用程序将通过频繁的异步JavaScript和XML(AJAX)请求实现长轮询。轮询的效率低，非常浪费
+资源(因为必须不停连接，或者HTTP连接始终打开)。
+
+	因此，工程师们一直在思考，有没有更好的方法。WebSocket就是这样发明的。WebSocket连接
+允许客户端和服务器之间进行全双工通信，以便任一方都可以通过建立的连接将数据推送到另一端。
+WebSocket只需要建立一次连接，就可以一直保持连接状态。这相比于轮询方式的不停建立连接显然
+效率要大大提高。
+
+3、WebSocket如何工作？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Web浏览器和服务器都必须实现WebSockets协议来建立和维护连接。由于WebSockets连接长期
+存在，与典型的HTTP连接不同，对服务器有重要的影响。
+
+	基于多线程或多进程的服务器无法适用于WebSockets，因为它旨在打开连接，尽可能快地处理
+请求，然后关闭连接。任何实际的WebSockets服务器端实现都需要一个异步服务器。
+
+
+4、websocket通信实例
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/rkun595/article/details/77966852
+
+https://www.aliyun.com/jiaocheng/645478.html

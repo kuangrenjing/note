@@ -1,0 +1,18 @@
+1、概述
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+坏点校正模块通过使用内部坏点校正逻辑完成坏点检测，校正过程完成之后，获取到了坏点坐标，
+通常的做法是将坏点坐标存在Flash中，以后断电重新启动之后加载坏点坐标，无须重新校正。
+
+2、坏点类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+静态坏点：
+	亮点：一般来说像素点的亮度值是正比于入射光的，而亮点的亮度值明显大于入射光乘以相应
+比例，并且随着曝光时间的增加，该点的亮度会显著增加；
+	暗点：无论在什么入射光下，该点的值接近于0；
+
+动态坏点：在一定像素范围内，该点表现正常，而超过这一范围，该点表现的比周围像素要亮。
+与sensor 温度、增益有关，sensor 温度升高或者gain 值增大时，动态坏点会变的更加明显。
+
+3、坏点校正类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+分为静态校正和动态校正。与静态坏点和动态坏点不完全对应，静态坏点也可以动态校正。

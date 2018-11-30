@@ -1,0 +1,28 @@
+1、捕获菜单
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	指定网络适配器之后，就可以通过"捕获"菜单来控制捕获了。包括开始、停止、重新开始等等选
+项。
+
+
+2、表达式写法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、表达式组合
+与组合，譬如：
+	ip.addr == 192.168.15.129 && tcp.port == 554
+或组合，譬如：
+	ip.addr == 192.168.15.129 || tcp.port == 554
+
+2.2、网络地址、端口指定
+网络地址是网络层的概念，所以要带上网络层协议前缀，譬如：
+	ip.addr == 192.168.15.129
+端口是传输层的概念，所以要带上传输层协议前缀，譬如：
+	tcp.port == 554
+	udp.port == 50000
+
+2.3、指定协议
+不管是网络层、传输层的还是应用层的直接写协议名即可，不需要指定层次。譬如：
+	tcp
+	rtp
+	rtcp
+	http
+等等。

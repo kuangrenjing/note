@@ -1,0 +1,85 @@
+1、报头分类
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Http报头分为通用报头，请求报头，响应报头和实体报头。
+	请求方的http报头结构：通用报头|请求报头|实体报头
+	响应方的http报头结构：通用报头|响应报头|实体报头
+
+通用头general-header(rfc2616 4.5)
+	有这么几个头对请求消息和响应消息具有通用的适用性，但不应用于实体(负载)。
+
+请求头request-header(rfc2616 5.3)
+	请求头允许客户端向服务端传输关于的请求的额外信息，包括客户端自己的一些属性。这些头就
+像是编程语言的函数调用时传入的参数一样。
+
+响应头response-header(rfc2616 6.2)
+	响应头允许服务端向客户端传输那些不能放在状态行的额外信息，这些头部包含服务器信息和对
+请求URL将来进一步请求时的一些信息。
+
+实体头(rfc2616 7.1)
+	“实体头”定义“entity-body”也就是http负载的元信息，如果没有负载，则是关于请求url指示
+的资源的元信息。后者的一个例子是“Allow”头。
+
+	实体头是描述的实实在在的实体，也就是此消息自己的负载。举个列子：Accept是请求头，代表
+客户端希望接受的数据类型，是期望的响应的负载。Content-Type才是实体头，描述是消息的负载的
+格式。
+
+Cache-Control        g      opt.      SETUP
+Connection           g      req.      all
+CSeq                 g      req.      all
+Date                 g      opt.      all
+Accept               R      opt.      entity
+Accept-Encoding      R      opt.      entity
+Accept-Language      R      opt.      all
+Authorization        R      opt.      all   (带用户名密码请求时携带)
+Bandwidth            R      opt.      all
+Blocksize            R      opt.      all but OPTIONS, TEARDOWN
+Conference           R      opt.      SETUP
+From                 R      opt.      all
+If-Modified-Since    R      opt.      DESCRIBE, SETUP
+Proxy-Authenticate
+Proxy-Require        R      req.      all
+Range                R      opt.      PLAY, PAUSE, RECORD
+Referer              R      opt.      all
+Require              R      req.      all
+User-Agent           R      opt.      all
+Allow                r      opt.      all
+Content-Type         r      req.      entity
+Public               r      opt.      all
+Range                r      opt.      PLAY, PAUSE, RECORD
+Retry-After          r      opt.      all
+RTP-Info             r      req.      PLAY
+Server               r      opt.      all
+Unsupported          r      req.      all
+Content-Base         e      opt.      entity
+Content-Encoding     e      req.      SET_PARAMETER
+Content-Encoding     e      req.      DESCRIBE, ANNOUNCE
+Content-Language     e      req.      DESCRIBE, ANNOUNCE
+Content-Length       e      req.      SET_PARAMETER, ANNOUNCE
+Content-Length       e      req.      entity
+Content-Location     e      opt.      entity
+Content-Type         e      req.      SET_PARAMETER, ANNOUNCE
+Expires              e      opt.      DESCRIBE, ANNOUNCE
+Last-Modified        e      opt.      entity
+Scale                Rr     opt.      PLAY, RECORD
+Session              Rr     req.      all but SETUP, OPTIONS
+Speed                Rr     opt.      PLAY
+Transport            Rr     req.      SETUP
+Via                  g      opt.      all
+WWW-Authenticate     r      opt.      all   （匿名登陆拒绝响应中携带）
+
+2、Allow头
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这个头用在405(Method Not Allowed)响应中。用于告知客户端它请求的那个URL只支持Allow
+头里说的那些方法。
+
+
+2、Accept、Content-Type
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Accept属于请求头， Content-Type属于实体头。
+
+
+
+
+
+
+

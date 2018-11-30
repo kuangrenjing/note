@@ -1,0 +1,19 @@
+New Snippet  创建可复用的代码片段
+
+
+File "./python3.3/threading.py", line 901, in _bootstrap_inner
+  File "package_control.commands.install_package_command in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 45, in run
+  File "package_control.package_installer in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 58, in make_package_list
+  File "package_control.package_manager in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 694, in list_available_packages
+  File "package_control.package_manager in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 554, in _list_available
+  File "package_control.package_manager in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 453, in list_repositories
+  File "package_control.providers.channel_provider in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 201, in get_repositories
+  File "package_control.providers.channel_provider in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 86, in fetch
+  File "./python3.3/contextlib.py", line 48, in __enter__
+  File "package_control.download_manager in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 50, in downloader
+  File "package_control.download_manager in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 75, in _grab
+  File "package_control.download_manager in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 183, in __init__
+  File "package_control.http_cache in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 19, in __init__
+  File "package_control.http_cache in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 39, in clear
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Program Files (x86)\\sublime text3\\Data\\Packages\\User\\Package Control.cache\\01524fae79697630d0454ba3fabd9414'
+

@@ -1,0 +1,7 @@
+1、添加菜单项
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在“解决方案资源管理器”窗口中选择“资源文件”下的rc文件，双击就打开了“资源视图”窗口，在其
+中可以图形化编程，也可以右键选择以“C++源代码编辑器”打开，选择文本编辑。
+
+2、给菜单项添加消息响应
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

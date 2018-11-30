@@ -1,0 +1,48 @@
+1.Mat类
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.0、参考
+	https://blog.csdn.net/CV_Jason/article/details/54928920
+
+1.1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	OpenCV作为强大的计算机视觉开源库，很大程度上参考了MatLab的实现细节和语法风格，比如
+说，在OpenCV2.x版本以后，越来越多的函数实现了MatLab所具有的功能，甚至干脆连函数名都一
+模一样(如imread, imshow,imwriter等)。这一做法，不仅拉近了产品开发与学术研究的距离，并
+极大程度的提高了开发人员的研发效率，不得不说，Intel公司真的是一个伟大的公司。
+
+	在计算机内存中，数字图像以矩阵的形式存储和运算，比如，在MatLab中，图像读取之后对应
+一个矩阵，在OpenCV中，同样也是如此。
+
+	在早期的OpenCV1.x版本中，图像的处理是通过IplImage（该名称源于Intel的另一个开源库
+Intel Image Processing Library，缩写成IplImage）结构来实现的。早期的OpenCV是用C语言
+编写，因此提供的借口也是C语言接口，其源代码完全是C的编程风格。IplImage结构是OpenCV矩阵
+运算的基本数据结构。
+
+	到OpenCV2.x版本，OpenCV开源库引入了面向对象编程思想，大量源代码用C++重写，Mat类(
+Matrix的缩写) 是OpenCV用于处理图像而引入的一个封装类。从功能上讲，Mat类在IplImage结构
+的基础上进一步增强，并且，由于引入C++高级编程特性，Mat类的扩展性大大提高，Mat类的内容在
+后期的版本中不断丰富，如果你查看Mat类的定义的话（OpenCV3.1\sources\modules\core\incl
+ude\opencv2\core\mat.hpp），会发现其设计实现十分全面而具体，基本覆盖计算机视觉对于图
+像处理的基本要求。
+
+	因此，在当前的OpenCV开发中，Mat可以说是最最最常见的数据单元，深入了解Mat类对于
+OpenCV深入开发有着重大意义。
+
+
+
+
+
+
+opencv之Mat数据类型
+
+data：Mat对象中的一个指针，指向内存中存放矩阵数据的一块内存 (uchar* data)
+
+dims：Mat所代表的矩阵的维度，如 3 * 4 的矩阵为 2 维， 3 * 4 * 5 的为3维
+
+channels：通道，矩阵中的每一个矩阵元素拥有的值的个数，比如说 3 * 4 矩阵中一共 12 个元素，如果每个元素有三个值，那么就说这个矩阵是 3通道的，即 channels = 3。常见的是一张彩色图片有红、绿、蓝三个通道。
+
+depth：深度，即每一个像素的位数(bits)，在opencv的Mat.depth()中得到的是一个 0 – 6 的数字，分别代表不同的位数：enum { CV_8U=0, CV_8S=1, CV_16U=2, CV_16S=3, CV_32S=4, CV_32F=5, CV_64F=6 }; 可见 0和1都代表8位， 2和3都代表16位，4和5代表32位，6代表64位；
+
+step：是一个数组，定义了矩阵的布局，具体见下面图片分析，另外注意 step1 (step / elemSize1)，M.step[m-1] 总是等于 elemSize，M.step1(m-1)总是等于 channels；
+
+elemSize : 矩阵中每一个元素的数据大小，如果Mat中的数据的数据类型是 CV_8U 那么 elemSize = 1，CV_8UC3 那么 elemSize = 3，CV_16UC2 那么 elemSize = 4；记住另外有个 elemSize1 表示的是矩阵中数据类型的大小，即 elemSize / channels 的大小

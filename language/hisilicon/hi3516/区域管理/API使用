@@ -1,0 +1,49 @@
+RGN_CHN_ATTR_S
+功能：
+	区域(RGN_HANDLE)在通道(MPP_CHN_S)上的显示属性
+
+定义：
+
+typedef struct hiRGN_CHN_ATTR_S
+{
+	HI_BOOL        bShow;      （不显示定义了有什么用？）
+	RGN_TYPE_E     enType;      (OVERLAY_RGN COVER_RGN COVEREX_RGN OVERLAYEX_RGN RGN_BUTT)
+	RGN_CHN_ATTR_U unChnAttr;   (各种类型的属性联合体，定义见下)
+}RGN_CHN_ATTR_S;
+
+
+typedef union hiRGN_CHN_ATTR_U
+{
+	OVERLAY_CHN_ATTR_S stOverlayChn;
+	COVER_CHN_ATTR_S stcoverChn;                 (定义见下)
+	COVEREX_CHN_ATTR_S stcoverExChn;
+	OVERLAYEX_CHN_ATTR_S stOverlayEXChn;
+}RGN_CHN_ATTR_U;
+
+typedef struct hiCOVER_CHN_ATTR_S
+{
+	RGN_AREA_TYPE_E enCoverType;       (AREA_RECT AREA_QUAD_RANGLE AREA_BUTT 区域可以是长方形或任意四边形)
+	union                              (长方形、任意四边形的联合体)
+	{
+		RECT_S stRect;
+		RGN_QUADRANGLE_S stQuadRangle;
+	};
+	HI_U32 u32Color;                  (纯色块区域的颜色，颜色格式固定为PIXEL_FORMAT_RGB_888)
+	HI_U32 u32Layer;                  (显示层次)
+}COVER_CHN_ATTR_S;
+说明：
+
+
+
+HI_S32 HI_MPI_RGN_Create(RGN_HANDLE Handle,const RGN_ATTR_S *pstRegion);
+
+
+osd(区域) + freetype(字体库) + SDL(跨平台的DirectX) + SDL_ttf(TrueType字体渲染支持)
+
+SDL_CreateRGBSurface
+SDL_Rect bounds;
+SDL_LowerBlit
+
+
+SDL学习：
+https://blog.csdn.net/a332324956/article/details/78378715?locationNum=2&fps=1

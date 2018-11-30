@@ -1,1 +1,36 @@
 https://blog.csdn.net/occupy8/article/details/48010811
+
+
+
+2、时间格式：strftime、strptime
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	RTSP协议中有“Date头”，形如“Date: Tue, Jul 22 2014 02:41:21 GMT”。如果自己手动做
+struct tm和这个格式的相互转化的话非常费时费力，还好，c库给我们提供了这两个强大的函数。
+
+strftime：
+功能：
+	format date and time
+原型：
+	size_t strftime(char *s, size_t max, const char *format, const struct tm *tm);
+描述：
+	把分解时间struct tm(broken-down time)依照format格式化为字符串格式，存储在s中。
+
+strptime
+功能：
+	convert a string representation of time to a time tm structure
+
+用法
+	#define _XOPEN_SOURCE /* glibc2 needs this */
+	#include <time.h>
+
+	char *strptime(const char *s, const char *format, struct tm *tm);
+
+描述：
+	strptime()函数实现strftime的反功能。
+
+【注】：如何查询libc的版本
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://blog.csdn.net/feisy/article/details/17792093
+执行/lib/libc.so.6（这个库可执行是因为做了小手脚，不是所有库都可执行）
+

@@ -1,0 +1,142 @@
+本文适用hi3516A c050 SDK版本
+
+1、VPSS概述：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	VPSS(Video Process Sub-System)支持对一幅输入图像进行统一预处理，如去噪、去隔行等，
+然后再对各通道分别进行缩放、锐化等处理，最后输出多种不同分辨率的图像。
+
+2、概念
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+组：
+	VPSS对用户提供组(GROUP)的概念。最大可用数为128 个，各GROUP分时复用VPSS硬件。每个
+VPSS GROUP包含多个通道，通道数目视方案实现有所不同，具体描述请参见CHANNEL(在线时一个通道，
+离线时多个通道？？)。
+
+通道：
+	VPSS组的通道分为2种：物理通道和扩展通道。VPSS硬件提供多个物理通道，每个通道具有缩放、
+裁剪等功能。扩展通道具备缩放功能，它通过绑定物理通道，将物理通道输出作为自己的输入，把图像
+缩放成用户设置的目标分辨率输出。
+
+【注】
+	物理通道的属性是静态的，扩展通道的属性可以动态设置。
+
+	由于扩展通道只有缩放功能，所以不能拿它来实现算法通道。
+
+3、VPSS功能：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+帧率控制:
+	帧率控制，分为2种：group帧率控制和chn帧率控制：
+	Group帧率控制：用于控制各group对输入图像的接收，只应用在VI—VPSS的离线方案中。
+	Chn帧率控制：用于控制各个物理通道图像的处理，只应用在VI—VPSS的在线方案中。
+
+【注】
+	我们方案是离线模式的，所以只能用组帧率控制，即标定通道和算法通道的帧率是一样的。
+
+裁剪:
+	裁剪，分为2种：group的裁剪和Chn的裁剪。
+	group的裁剪，VPSS对输入图像进行裁剪。
+	Chn的裁剪，VPSS对各个物理通道的输出图像进行裁剪。
+
+去隔行DIE:
+	De-interlace，去隔行。将交错的隔行视频源还原成逐行视频源。
+
+去噪NR:
+	去噪。通过参数配置，把图像中的高斯噪声去除，使得图像变得平滑，有助于降低编码码率。
+
+缩放Scale:
+	缩放，对图像进行缩小放大。
+
+【注】Hi3516a各通道的缩放能力是不一样的：
+通道0 不支持缩放
+通道1 水平、垂直均最大支持15 倍缩小；缩放的输出图像宽小于1280（缩放输出超过1280，自动不支持缩放）
+通道2 水平、垂直均最大支持15 倍缩小；缩放的输出图像宽小于720（缩放输出超过720，自动不支持缩放）
+通道3 水平、垂直均最大支持15 倍缩小；缩放的输出图像宽小于1920（缩放输出超过1920，自动不支持缩放）
+
+动态对比度调节DCI:
+	Dynamic Contrast Improvement，动态对比度调节。对图像进行动态的对比度调节，即在增
+强图像暗区亮度时而不使亮区过亮，或降低亮区亮度时而不使暗区过暗。
+
+视频遮挡Cover:
+	视频遮挡区域，对VPSS 的输出图像填充纯色块。
+
+视频叠加Overlay:
+	视频叠加区域，在GROUP 上进行位图的加载和背景色更新，支持ARGB4444、ARGB1555、ARGB8888
+三种格式的位图。
+
+边框Border:
+	边框，VPSS 在输出图像上加边框。
+
+4、VPSS数据类型：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	VPSS_MAX_GRP_NUM：定义VPSS GROUP 的最大个数。
+	VPSS_MAX_CHN_NUM：定义VPSS 通道的最大个数。
+	VPSS_MAX_PHY_CHN_NUM：定义VPSS 物理通道的最大个数。
+	VPSS_MAX_EXT_CHN_NUM：定义VPSS 扩展通道的最大个数。
+	VPSS_HD_PRE_CHN：定义高清预览通道的ID 号。
+	VPSS_MULTI_PRE_CHN：定义多画面预览通道的ID 号。
+	VPSS_SD_PRE_CHN：定义标清预览通道的ID 号。
+	VPSS_GRP：定义VPSS_GRP 类型。
+	VPSS_CHN：定义VPSS_CHN 类型。
+	VPSS_DIE_MODE_E：定义DIE 模式。
+	VPSS_FRAME_WORK_E：定义视频边框。
+	VPSS_CROP_COORDINATE_E：定义CROP 起点坐标的模式。
+	LDC_VIEW_TYPE_E：定义畸变校正的类型。
+	ROTATE_E：旋转枚举。
+	VPSS_REF_SEL_MODE_E：NR 的参考帧来源选择枚举。
+	RECT_S：定义一个矩形区域。
+	VPSS_CROP_INFO_S：定义CROP 功能所需信息。
+	VPSS_GRP_ATTR_S：定义VPSS GROUP 静态属性。
+	VPSS_FRAME_S：定义视频边框属性。
+	VPSS_CHN_ATTR_S：定义VPSS 物理通道静态属性。
+	VPSS_GRP_PARAM_S：定义VPSS 高级属性。
+	VPSS_CHN_MODE_E：定义VPSS CHN 工作类型。
+	VPSS_CHN_MODE_S：定义VPSS CHN 工作模式结构。
+	VPSS_CHN_PARAM_S：定义通道高级属性。
+	VPSS_FRAME_RATE_S：定义VPSS 帧率控制属性。
+	VPSS_EXT_CHN_ATTR_S：定义VPSS 扩展通道的属性。
+	VPSS_REGION_INFO_S：定义VPSS 区域信息，用于获取区域亮度总和。
+	VPSS_LDC_ATTR_S：定义VPSS 的校正属性，用于控制通道图像校正功能。
+	VPSS_LOW_DELAY_INFO_S：定义VPSS 的通道的低延时属性。
+
+我们要涉及的：
+	VPSS_GRP_ATTR_S：定义VPSS GROUP静态属性。
+	VPSS_CHN_ATTR_S：定义VPSS物理通道静态属性。
+	VPSS_CHN_MODE_S：定义VPSS CHN工作模式结构。
+	VPSS_CROP_INFO_S：定义CROP功能所需信息。
+
+	因为VPSS物理通道的属性是静态的，不能通道修改，所以如果用户要修改帧率控制，需停用
+VPSS、包括VPSS后面的模块，然后再启用。（动态配置看看呢）
+
+
+typedef struct{
+	EChannel;  HI_MPI_VPSS_CreateGrp  HI_MPI_VPSS_DestroyGrp
+	u32CropX;  HI_MPI_VPSS_SetChnCrop  HI_MPI_VPSS_GetChnCrop
+	u32CropY;  HI_MPI_VPSS_SetChnCrop  HI_MPI_VPSS_GetChnCrop
+	u32CropWidth; HI_MPI_VPSS_SetChnCrop  HI_MPI_VPSS_GetChnCrop
+	u32CropHeight; HI_MPI_VPSS_SetChnCrop  HI_MPI_VPSS_GetChnCrop
+	u32DestWidth;
+	u32DestHeight;
+	u32FrameRate;
+	u32SensorWidth;  HI_MPI_VPSS_CreateGrp
+	u32SensorHeight;  HI_MPI_VPSS_CreateGrp
+	u32SensorFrameRate;  HI_MPI_VPSS_CreateGrp
+}SDFSMPPPicAttr;
+
+
+5、要用到的API：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+HI_MPI_VPSS_CreateGrp
+HI_MPI_VPSS_DestroyGrp
+
+HI_MPI_VPSS_SetRotate：设置VPSS 通道图像旋转属性，只能旋转90°的整数倍。
+HI_MPI_VPSS_GetRotate：获取VPSS 通道图像旋转属性。
+
+HI_MPI_VPSS_SetChnCrop：设置VPSS 通道裁剪功能属性。
+HI_MPI_VPSS_GetChnCrop：获取VPSS 通道裁剪功能属性。
+
+HI_MPI_VPSS_SetLDCAttr：设置通道的畸变校正属性。
+HI_MPI_VPSS_GetLDCAttr：获取通道的畸变校正属性。
+
+HI_MPI_VPSS_SetChnNR：设置VPSS 通道NR 使能开关。
+HI_MPI_VPSS_GetChnNR：获取VPSS 通道NR 开关状态。
+

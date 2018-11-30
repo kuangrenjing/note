@@ -1,0 +1,115 @@
+1.MFC中的消息分为三种
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+(1)标准消息,也叫窗口消息(例：WM_PAINT,WM_CREATE,WM_LBUTTONDOWN,WM_CHAR)
+(2)命令消息，来自菜单，工具栏和加速键,都以WM_COMMAND表示
+(3)控件消息，控件消息又分为三小类，第一类和标准消息格式一样，第二类和命令消息格式一样(
+   不过多了一个控件窗口的句柄)，第三类是WM_NOTIFY。
+
+2.为什么要消息路由？什么叫消息路由？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+如果像SDK那样，我们的程序只有一个窗口，一个窗口函数，那哪还有消息路由呢？所有的消息都有
+一个窗口函数来处理了。至所以要消息路由，是因为MFC程序中有CMyView,CMyDoc,CMyFrameWnd,
+CMyApp等，MFC框架要做的工作是给用户提供一个机会，让用户可以选择这些类当中的任意一个来处
+理我们的命令消息。
+
+注意，消息路由主要是针对上述的第二类消息（命令消息）。对于第一类窗口消息，其消息的接收者
+是确定的，不需要路由。比如：对于WM_CREATE消息，处理这个消息的类就是产生这个消息的窗口，
+你不可能让CMyDoc,CMyFrame，CMyApp去处理CView的WM_CREATE消息,那根本不符合逻辑，MFC框
+架当然也不会让你那么做。而对于来自菜单，工具栏的命令消息，用户是有选择权的，用户可以选择
+其接收者为View,Doc,App,Frame等当中的任意一个。下面就详细说一下命令消息的路由过程，主要
+通过分析MFC源代码。
+
+3、消息路由详细流程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                                           1、OnWndMsg()自己处理
+全局函数AfxWndProc -> pWnd->WindowProc -> pWnd->OnWndMsg    2、OnCommand()处理
+                                                           3、OnNotify()处理
+
+具体来说：所有的三类消息初始都被送入一个全局函数AfxWndProc，之后是pWnd->WindowProc，
+pWnd->OnWndMsg，在OnWndMsg()中这三类消息分道扬镳了，其中第一类消息由OnWndMsg自己处理，
+第二类交给了OnCommand()，第三类交给了OnNotify()。
+
+单文档类OnCommand()流程：
+
+　AfxWndProc()
+
+AfxCallWndProc
+
+pWnd->WindowProc(注意，这里的pWnd指向的是产生消息的那个窗口，可能是CMyView,CMyFrameWnd等)
+
+pWnd->OnWndMsg()
+
+pWnd->OnCommand()
+
+....
+
+注意：WindowProc和OnWndMsg这两个函数实际只有CWnd类中才有，在其它类中并没有重写这两个虚函数，所以我们调用的是CWnd::WindowProc()和CWnd::OnWndMsg()，但要注意：它们的this指针是指向我们的程序中的具体类对象（这是下面运用多态的前提）。
+
+4、多文档类OnCommand()流程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+对于多文档来说，命令消息都来自我们自己的主框架窗口(CMyFrameWnd),因为菜单是属于主框架窗
+口。
+
+AfxWndProc-->CWnd::WindProc()-->CWnd::OnWndMsg()(此处三类消息分道扬镳)-->CMyFrameWnd::OnCommand(不存在)-->CMDIFrameWnd::OnCommand(),
+
+下面是CMDIFrameWnd::OnCommand()的源代码：
+
+{
+    CMDIChildWnd* pActiveChild = MDIGetActive();
+
+    if(pActiveChild != NULL && AfxCallWndProc(pActiveChild,　　　　　　　　　　（1)
+        pActiveChild->m_hWnd, WM_COMMAND, wParam, lParam) != 0)
+        return TRUE; // handled by child
+
+    if(CFrameWnd::OnCommand(wParam, lParam))(2)
+        return TRUE; // handled through normal mechanism (MDI child or frame)
+...
+}
+
+父框架窗口是先认子框架窗口来处理，如果其不处理，再自己处理。
+
+那子框架窗口又是如何处理的呢？由于子框架窗口没有重写上面的WindowProc,OnWndMsg,OnCommand,所以最终调用的是其父类CFrameWnd::OnCommand（）.注意：这里虽然调用了两次CFrameWnd::OnCommand,
+
+但其this指针却不同，一个this指针指向的是CMyChildWnd,一个指向的是CFrameWnd.下面是CFrameWnd::OnCommand（）源代码:
+
+{
+...
+
+CMyView* pView=GetActiveView()
+
+pView->OnCmdMsg() (1.1)
+
+CWnd::OnCmdMsg(); (1.2)
+
+CMyApp* pApp=(CMyApp*)AfxGetApp(); (1.3)
+
+pApp->OnCmdMsg();
+
+...
+}
+
+子框架窗口是先让CMyView处理，如果其不处理，再自己处理（CWnd::OnCmdMsg),否则，再 App处理.
+
+那CMyView又是如何处理的呢，下面是其CView::OnCmdMsg()源代码
+
+{
+CWnd::OnCmdMsg(); (1.1.1)
+
+m_pDocument->OnCmdMsg(); (1.1.2)
+}
+
+CMyView是先让自己处理，如果其不处理，再让其对应的Document处理，而Document是先自己处理，如果自己不处理，现让CDocTemplate处理（此处这一代码就不在写出，因为通常不会让文档模板处理）
+
+　　所谓自己处理，就是调用CCmdTarget::OnCmdMsg(),CWnd并没有重写这个函数，调用CWnd::OnCmdMsg就是调用CCmdTarget::OnCmdMsg(),这个函数的主要干的事情就是：调用GetMessageMap()这个虚函数，获得我们的子类的消息映射表，然后把该消息和此消息映射表对照，看其是否有对应的消息响应函数。如果没有，再看其父类是否有,父类也没有，就返回false,让其它的类来处理了。
+
+通过以上函数调用和返回顺序，可以总结出其消息处理顺序：首先命令消息来自主框架窗口，它把消息交给了子框架窗口，子框架窗口又交给了View,View自己处理，否则就交给文档，所以最终的顺序是:
+
+CMyView--->CMyDoc-->CMultiDocTemplate(它通常不会处理)-->CMyChildFrame-->CMyApp->CMyFrameWnd
+
+注意：这里App先于MainFrame,在有些书上说成是App最后（特纠正）
+
+5、单文档，那就比这简单了，
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CMyView-->CMyDoc-->CSingleDocTemplate-->CMyFrame-->CMyApp
+
+注意：在单文档中CMyApp是最后，因为这里的主框架实际占据的是MDI中子框架的位置。

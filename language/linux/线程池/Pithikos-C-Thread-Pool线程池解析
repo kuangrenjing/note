@@ -1,0 +1,9 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这个线程池的结构非常简单，详见《C-Thread-Pool结构.jpg》文件。基本上应用程序只要调用
+一下thpool_init函数初始化线程池，然后有任务就调用thpool_add_work函数把任务加入线程池
+任务队列。其它事情就都交给线程池处理了。
+
+
+Pithikos-C-Thread-Pool线程池缺陷
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	

@@ -1,0 +1,2 @@
+链接libevent_pthreads库，调用evthread_use_pthreads()函数，不然bufferevent_socket_new(
+			base, fd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE)会返回NULL(不用BEV_OPT_THREADSAFE标志就没事)

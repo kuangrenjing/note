@@ -1,0 +1,34 @@
+DESCRIBE rtsp://192.168.0.186:554/mpeg4/ch01/main/av_stream RTSP/1.0
+CSeq:1
+Accept:application/sdp
+Authorization: Digest username="admin", realm="c056e3f5d007", nonce="17a6accbfba1e0534b5856e9c942bfd4", uri="rtsp://192.168.0.186:554/mpeg4/ch01/main/av_stream", response="2593e5f13edb6b31bbe9ef4f043a93dd"
+User-Agent:NKPlayer-1.00.00.081112
+
+
+RTSP/1.0 200 OK
+CSeq: 1
+Content-Type: application/sdp
+Content-Length: 584
+
+v=0
+o=- 1459962821590000 1459962821590000 IN IP4 192.168.0.186
+s=Media Presentation
+e=NONE
+b=AS:5100
+t=0 0
+a=control:*
+m=video 0 RTP/AVP 96
+c=IN IP4 0.0.0.0
+b=AS:5000
+a=recvonly
+a=control:trackID=1
+a=rtpmap:96 H264/90000
+a=fmtp:96 profile-level-id=420029; packetization-mode=1; sprop-parameter-sets=Z00AH5pkAoAt/zUBAQFAAAD6AAAw1AE=,aO48gA==
+m=audio 0 RTP/AVP 8
+c=IN IP4 0.0.0.0
+b=AS:50
+a=recvonly
+a=control:trackID=2
+a=rtpmap:8 PCMA/8000
+a=Media_header:MEDIAINFO=494D4B48010100000400010011710110401F000000FA000000000000000000000000000000000000;
+a=appversion:1.0

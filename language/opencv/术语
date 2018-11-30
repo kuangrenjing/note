@@ -1,0 +1,5 @@
+contours              外形、轮廓
+convexhull            凸包
+watershed             分水岭
+watershed algorithm   分水岭算法
+threshold             阈值

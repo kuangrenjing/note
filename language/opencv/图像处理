@@ -1,0 +1,15 @@
+1、Miscellaneous Image Transformations
+
+
+
+threshold函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	图像的二值化就是将图像上的像素点的灰度值设置为0或255，这样将使整个图像呈现出明显的
+黑白效果。在数字图像处理中，二值图像占有非常重要的地位，图像的二值化使图像中数据量大为减
+少，从而能凸显出目标的轮廓。OpenCV中提供了函数cv::threshold();
+
+
+https://blog.csdn.net/keith_bb/article/details/70194073
+
+
+https://blog.csdn.net/dcrmg/article/details/52498440

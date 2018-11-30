@@ -1,0 +1,8 @@
+1、总体描述:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+C2390芯片由一个分辨率为1080 p BSI QPIX™1/2.7-inch的CMOS图像传感器和一个具有BPC/AEC/
+BLC/AWB/MEC/lens补偿等功能的ISP(图像信号处理器)组成。C2390支持MIPI CSI2规范的串行接口，
+最多支持两个数据通道。有效像素阵列1936 x 1096，可以输出1080 p分辨率60fps；具有优越的低
+光灵敏度和较低的暗电流, 通过ADC、可编程门阵列、相关双采样等模块减少的固态噪声可以获得更好
+更清晰的图像。C2390还拥有4kb OTP的存储区。所有的ISP功能和传感器操作都可以通过I2C接受主机
+的控制。C2390芯片适合安全监视应用程序以及低端的相机，目前支持的芯片级封装CSP。

@@ -1,0 +1,27 @@
+makefile这么写：
+OBJS = \
+  lib/lib.o \
+  lib/codec_avx2.o \
+  lib/codec_choose.o \
+  lib/codec_neon32.o \
+  lib/codec_neon64.o \
+  lib/codec_plain.o \
+  lib/codec_ssse3.o
+
+lib/codec_avx2.o:   CFLAGS += $(AVX2_CFLAGS)
+lib/codec_neon32.o: CFLAGS += $(NEON32_CFLAGS)
+lib/codec_neon64.o: CFLAGS += $(NEON64_CFLAGS)
+lib/codec_ssse3.o:  CFLAGS += $(SSSE3_CFLAGS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+
+编译结果：
+arm-hisiv300-linux-gcc -std=c99 -O3 -Wall -Wextra -pedantic -o lib/lib.o -c lib/lib.c
+arm-hisiv300-linux-gcc -std=c99 -O3 -Wall -Wextra -pedantic  -o lib/codec_avx2.o -c lib/codec_avx2.c
+arm-hisiv300-linux-gcc -std=c99 -O3 -Wall -Wextra -pedantic -o lib/codec_choose.o -c lib/codec_choose.c
+arm-hisiv300-linux-gcc -std=c99 -O3 -Wall -Wextra -pedantic -mcpu=cortex-a7 -mfpu=neon -o lib/codec_neon32.o -c lib/codec_neon32.c
+arm-hisiv300-linux-gcc -std=c99 -O3 -Wall -Wextra -pedantic  -o lib/codec_neon64.o -c lib/codec_neon64.c
+arm-hisiv300-linux-gcc -std=c99 -O3 -Wall -Wextra -pedantic -o lib/codec_plain.o -c lib/codec_plain.c
+arm-hisiv300-linux-gcc -std=c99 -O3 -Wall -Wextra -pedantic  -o lib/codec_ssse3.o -c lib/codec_ssse3.c

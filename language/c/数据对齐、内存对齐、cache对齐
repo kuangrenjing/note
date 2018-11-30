@@ -4,3 +4,44 @@ https://link.springer.com/chapter/10.1007%2F3-540-63138-0_16
 https://stackoverflow.com/questions/8469427/how-and-when-to-align-to-cache-line-size
 https://blog.csdn.net/xiazhiyiyun/article/details/53813007
 https://blog.csdn.net/haiross/article/details/38899019
+
+
+
+https://blog.csdn.net/hemengsi123/article/details/49814881
+
+Linux源码里提供了利用GCC的__attribute__扩展属性定义的宏来做这种对齐处理，在文件/linux-2.6.xx/include/linux/cache.h内可以找到多个相类似的宏，比如：
+#define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+
+
+https://blog.csdn.net/ai297313/article/details/44726187
+
+
+
+
+https://stackoverflow.com/questions/150294/how-to-programmatically-get-the-cpu-cache-page-size-in-c
+问：如何获取cache行的大小
+
+sysconf (_SC_LEVEL1_DCACHE_LINESIZE)或者
+getconf LEVEL1_DCACHE_LINESIZE
+
+github上有一个开源项目是来获取cache line size的
+https://github.com/NickStrupat/CacheLineSize
+
+
+https://www.cnblogs.com/tsw123/p/5837273.html  结构体总结
+
+
+alignment的解释
+
+1、自然对齐、自然对界
+http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1507.htm
+
+2、VC可以设置对齐长度，而gcc就是4？？？
+
+
+https://gcc.gnu.org/onlinedocs/gcc/PowerPC-SPE-Options.html
+
+GCC defaults to the standard alignment defined in the ABI
+
+
+Note that the alignment of any given struct or union type is required by the ISO C standard to be at least a perfect multiple of the lowest common multiple of the alignments of all of the members of the struct or union in question. This means that you can effectively adjust the alignment of a struct or union type by attaching an aligned attribute to any one of the members of such a type, but the notation illustrated in the example above is a more obvious, intuitive, and readable way to request the compiler to adjust the alignment of an entire struct or union type. 

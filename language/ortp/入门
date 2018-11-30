@@ -1,0 +1,109 @@
+1、linux下初始化oRTP库需要调用的函数：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ortp_init();
+	ortp_scheduler_init();
+	ortp_set_log_level_mask(ORTP_MESSAGE|ORTP_WARNING|ORTP_ERROR);
+
+
+1.1、void ortp_init(void)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+功能：此函数的功能非常明显，就是初始化ortp库，具体如下：
+	ortp_init_logger();            //初始化ortp的日志模块
+	av_profile_init(&av_profile)   //获取ortp所支持的av profile
+	ortp_global_stats_reset        //ortp状态机重置？
+	init_random_number_generator   //随机数生成器初始化
+
+av_profile_init：
+	av_profile_init(RtpProfile *profile)
+	av_profile_init的参数是被设置对象，即av_profile_init负责对这个参数进行配置。
+
+说明：
+	av_profile_init函数在windows上是由DllMain函数调用的，DllMain函数是自动调用的；
+在linux上需要自己手动调用。
+
+1.2、ortp_scheduler_init();
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+功能：ortp调度模块初始化
+
+2、ortp对rtp会话的管理：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	RtpSession *rtp_session_new(int mode);
+	void rtp_session_set_scheduling_mode(RtpSession *session, int yesno);
+
+
+
+	rtp_session_new(RTP_SESSION_SENDONLY);
+	rtp_session_set_scheduling_mode(session,1);
+	rtp_session_set_blocking_mode(session,0);
+	//rtp_session_set_connected_mode(session,TRUE);
+	rtp_session_set_remote_addr(session,ipStr,port);
+	rtp_session_set_payload_type(session,Y_PLOAD_TYPE);
+
+看上去不会对session创建新的线程，用户自己好像也不用创建。那调度是怎么进行的？
+
+这些函数线程安全吗？
+
+3、oRTP调度
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	对于Hi3516a MPP编程而言，我感觉不应该使用调度功能。
+
+	要使用oRTP的调度功能，需要在初始化oRTP库时调用接口ortp_scheduler_init对调度模块
+进行初始化。在该接口中创建一个RtpScheduler类型的结构体__ortp_scheduler，并调用
+rtp_scheduler_init初始化它。
+
+	oRTP在posixtimer.c中定义了一个全局时间变量RtpTimer posix_timer，调度器的调度精度
+由这个结构体的struct timeval interval成员决定。
+
+	总的来看，调度器就是检查各个会话设置的唤醒点是否到了。如果到了则设置其在会话集合中的
+掩码标志位，同时唤醒所有收发任务，收发任务通过检查掩码标志位就知道是否可以继续进行收发了。
+
+	唤醒是通过unblock_select_cond进行的，具体可见“3.1、调度的实现”一节。
+
+
+3.1、调度的实现
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	scheduler.h中RtpScheduler结构体中定义了一个变量：
+ortp_cond_t unblock_select_cond;
+ortp_cond_t在linux下就是pthread_cond_t，即“条件变量”。
+
+	scheduler.c中rtp_scheduler_schedule函数调用了：
+ortp_cond_broadcast(&sched->unblock_select_cond);
+ortp_cond_broadcast在linux下就是pthread_cond_broadcast，它会唤醒所有阻塞在pthread_cond_wait
+上的线程。
+
+	sessionset.c中session_set_select函数调用了
+ortp_cond_wait(&sched->unblock_select_cond,&sched->lock);等待调度器唤醒。
+
+
+4、网络传输：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+rtp、rtcp端口
+int
+rtp_session_set_remote_addr (RtpSession * session, const char * addr, int port){
+	return rtp_session_set_remote_addr_full(session, addr, port, addr, port+1);
+}
+
+可以看出，oRTP可以帮我们自动设置RTCP端口。
+
+
+走UDP协议还是走TCP协议
+rtpsession_inet.c对此应该有回答
+	rtp_session_set_local_addr()->create_and_bind()
+查看create_and_bind函数，感觉它直接使用了UDP协议。
+
+rtp_session_set_remote_addr会调用rtp_session_set_local_addr函数，所以我们没有必要手动
+调用rtp_session_set_local_addr函数。
+
+UDP会阻塞吗？
+https://bbs.csdn.net/topics/390275060
+
+
+rtp_session_send_with_ts(RtpSession * session, const char * buffer, int len,uint32_t userts)
+最后一个参数是时间戳，它的调整是解决码流卡顿、白屏、拖尾的关键所在。
+
+
+
+
+rtp_set_markbit函数
+
+rtp_session_create_telephone_event_packet

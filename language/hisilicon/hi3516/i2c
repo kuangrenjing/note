@@ -1,0 +1,15 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+海思的I2C除了提供读写API，还提供了读写工具，分别叫做i2c_read和i2c_write，这两个工具可
+用于读取和写入I2C设备寄存器值。
+
+用法是：
+	i2c_read <device_addr> <reg_addr>
+譬如：
+	i2c_read 0x34 0x30
+
+但是海图的板子使用gpio模拟i2c，所以我们不能使用i2c_read和i2c_write工具，而要使用
+gpio-i2c-16bit驱动提供的i2c_read16和i2c_write16工具。这两个工具地址是16位的，数据
+是8位的。
+
+用法譬如：
+	i2c_read16 0x34 0x302D

@@ -1,0 +1,149 @@
+typedef struct hiISP_EXPOSURE_ATTR_S
+{
+	HI_BOOL bByPass;
+	ISP_OP_TYPE_E enOpType;
+	HI_U8 u8AERunInterval;
+	HI_BOOL bHistStatAdjust;
+	ISP_ME_ATTR_S stManual;
+	ISP_AE_ATTR_S stAuto;
+} ISP_EXPOSURE_ATTR_S;
+
+bByPass          AE模块bypass功能使能，默认为HI_FALSE。
+enOpType         自动曝光或手动曝光开关，默认为OP_TYPE_AUTO。
+u8AERunInterval  AE算法运行的间隔，取值范围为[1,255]，取值为1时表示每帧都运行AE算法，
+                 取值为2时表示每2帧运行1次AE算法，依此类推。建议该值设置不要大于2，否
+                 则AE调节速度会受到影响。WDR模式时，该值建议设置为1，这样AE收敛会更加平滑。
+bHistStatAdjust  256段直方图统计方式是否根据场景进行调整开关，默认为HI_TRUE。
+stManual         手动曝光属性结构体
+stAuto           自动曝光属性结构体
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+AE ByPass为HI_TRUE时，AE模块被bypass，任何AE配置都不会对图像亮度产生影响。
+
+海思AE主要基于全局256段直方图信息进行亮度调整，正常场景256段直方图只统计Gb或Gr分量。
+bHistStatAdjust为HI_TRUE时，若进入了大面积单色场景（如大面积红色或蓝色），AE 算法会根
+据全局平均值信息对256段直方图统计方式进行调整，把R分量或B分量也考虑进来，如此可以防止大
+面积红色或蓝色场景画面亮度偏高。bHistStatAdjust为HI_FALSE时，AE算法不会调整256段直方图
+统计方式。红外场景建议将bHistStatAdjust设置为HI_FALSE。
+
+
+typedef struct hiISP_AE_ATTR_S
+{
+	ISP_AE_RANGE_S stExpTimeRange;
+	ISP_AE_RANGE_S stAGainRange;
+	ISP_AE_RANGE_S stDGainRange;
+	ISP_AE_RANGE_S stISPDGainRange;
+	ISP_AE_RANGE_S stSysGainRange;
+	HI_U32 u32GainThreshold;
+	HI_U8 u8Speed;
+	HI_U8 u8Tolerance;
+	HI_U8 u8Compensation;
+	HI_U16 u16EVBias;
+	ISP_AE_STRATEGY_E enAEStrategyMode;
+	HI_U16 u16HistRatioSlope;
+	HI_U8 u8MaxHistOffset;
+	ISP_AE_MODE_E enAEMode;
+	ISP_ANTIFLICKER_S stAntiflicker;
+	ISP_SUBFLICKER_S stSubflicker;
+	ISP_AE_DELAY_S stAEDelayAttr;
+	HI_U8 au8Weight[AE_ZONE_ROW][AE_ZONE_COLUMN];
+} ISP_AE_ATTR_S;
+
+stExpTimeRange     曝光时间范围，设置最大值和最小值，以微秒(us)为单位。取值范围：
+                   [0x0, 0xFFFFFFFF]，具体范围与sensor 相关。
+stAGainRange       Sensor模拟增益范围，设置最大值和最小值，10bit小数精度。取值范围：
+                   [0x400, 0xFFFFFFFF]，具体范围与sensor相关。
+stDGainRange       Sensor数字增益范围，设置最大值和最小值，10bit小数精度。取值范围：
+                   [0x400, 0xFFFFFFFF]，具体范围与sensor相关。
+stISPDGainRange    ISP 数字增益范围，设置最大值和最小值，10bit 小数精度。取值范围：[0x400, 0xFFFFFFFF]。
+stSysGainRange     系统增益范围，设置最大值和最小值，10bit 小数精度。取值范围：[0x400, 0xFFFFFFFF]，
+                   具体范围与sensor 相关。
+u32GainThreshold   自动降帧时的系统增益门限值，10bit 小数精度。取值范围：[0x400, 0xFFFFFFFF]。
+u8Speed            自动曝光调整时的速度。取值范围：[0x0, 0xFF]，默认值为0x40。
+u8Tolerance        自动曝光调整时对画面亮度的容忍偏差。取值范围：[0x0, 0xFF]，默认值为0x2。
+u8Compensation     自动曝光调整时的目标亮度。取值范围：[0x0, 0xFF]，默认值为0x38。
+u16EVBias          自动曝光调整时的曝光量偏差值，10bit 小数精度。取值范围：[0x0, 0xFFFF]，默认值为0x400。
+enAEStrategyMode   自动曝光策略，高光优先或低光优先。
+u16HistRatioSlope  感兴趣区域的权重。取值范围：[0x0, 0xFFFF]，默认值为0x80。
+u8MaxHistOffset    感兴趣区域对统计平均值影响的最大程度。取值范围：[0x0, 0xFF]，默认值为0x10。
+enAEMode           自动曝光模式，自动降帧模式或固定帧率模式。
+stAntiflicker      抗闪属性设置。默认抗闪不使能。
+stSubflicker       亚抗闪属性设置。默认亚抗闪不使能。
+stAEDelayAttr      延时属性设置。默认u16BlackDelayFrame=8，u16WhiteDelayFrame=0。
+au8Weight[AE_ZONE_ROW][AE_ZONE_COLUMN]  自动曝光15*17 的区域权重表，只影响全局5 段直方图和256段直方图统计信息。
+
+自动曝光的最大最小时间及增益可根据不同的场景对曝光时间及增益进行限定，如有高速运动物体
+场景可限定最大曝光时间值为较小值，这样可减轻运动物体拖影现象。
+
+自动曝光的系统增益若(sensor模拟增益最小值*sensor数字增益最小值*ISP数字增益最小值)小于
+系统增益最小值，则AE算法内部计算时最小增益会被限制到系统增益的最小值。若(sensor模拟增益
+最大值*sensor数字增益最大值*ISP数字增益最大值)大于系统增益最大值，则AE算法内部计算时最
+大增益会被限制到系统增益的最大值。推荐通过设置系统增益的最大、最小值进行增益限制，分别限
+制sensor模拟增益、sensor数字增益和ISP数字增益时，若把较高精度的ISP数字增益限制到1倍，容
+易导致闪烁。
+
+自动降帧时的系统增益门限值在SLOW_SHUTTER模式下，当系统增益达到所设置的门限值时，系统将
+自动进入SLOW_SHUTTER模式。
+
+u8Speed用于设定自动曝光时的收敛速度，该值越大曝光的收敛速度越快，但也会导致收敛过程中出
+现反复震荡。对于Panasonic mn34220这款sensor，受sensor性能限制，在2帧合成WDR模式下，建
+议u8Speed设置不能超过64，否则在光线剧烈变化场景时可能出现闪烁。
+
+亮度补偿属性 u8Compensation用于调节曝光的目标亮度。曝光亮度补偿值越大则图像亮度越高。
+
+曝光偏差属性u16EVBias用于在特殊场景下对画面的目标亮度进行微调，也可认为是更高精度的亮度
+补偿值，通过调节该值来改变画面目标亮度，真实生效的AE目标亮度为u8Compensation*u16EVBias/1024。
+u8Compensation不变时，该值越大则图像亮度越高。
+
+曝光容忍偏差属性u8Tolerance用于调节曝光对环境的灵敏度，曝光容忍偏差值越大则曝光越不敏感，
+且可能导致同一目标亮度值多次调节得到的亮度差异越大，所以该属性推荐不能设定过大。尤其当目
+标亮度较低时，Tolerance较大，最终画面收敛亮度可能会有明显差异。通过改变EVBias对画面目标
+亮度进行微调时，若Tolerance较大，过小的EVBias 变化量可能会看不出调整效果。
+
+曝光策略属性enAEStrategyMode用于选择对高光优先或低光优先的曝光策略。高光优先意味着对高
+光敏感，尽量避免画面过曝。低光优先意味着对低光敏感，尽量看清楚暗处区域，不管画面是否过曝。
+默认的曝光策略是高光优先，用户可根据场景需要进行调整。
+
+u16HistRatioSlope用于设定感兴趣区域的权重。若是高光优先曝光模式，则该值设置的是高光区域
+的权重，该值越大，则意味着对高光区域越敏感。反之，若是低光优先模式，则该值设置的是低光区
+域的权重，该值越大，则意味着对暗处区域越敏感，建议u16HistRatioSlope的值设置不要超过
+0x100。高光优先曝光模式下，如果该值过大，只要画面中有一小部分过曝区域，AE算法就会认为画
+面亮度远大于目标亮度，这样曝光量就会不断往下调，导致画面变得很黑，同时画面中的过曝区域也
+在快速变小，达到某个程度的话AE算法又会认为画面亮度比目标亮度小了，曝光量又会往上调，如
+此反复出现来回调的现象，看起来像是画面闪烁。类似的，在低光优先模式下，如果AE目标亮度设置
+得比较低，若画面中有黑色物体来回移动，对画面亮度也会有较大影响，此时调低曝光调整步长
+u8ExpStep和提高容忍偏差s16ExpTolerance能够缓解该问题。
+
+自动曝光时，可设定感兴趣区域对统计平均值影响的最大程度 u8MaxHistOffset。该值相当于对提
+高u16HistRatioSlope 时增加的权重做限制，若该值为0，无论u16HistRatioSlope多大，也不会
+对高光或低光区域做特殊处理，此时的统计平均值就是原始值。通过合理设置该值，可以保证任何场
+景AE稳定后画面平均亮度都在一定范围内，在高光优先曝光模式下，如果该值设置较大，在对比度稍
+高一些的场景，如睛天室外场景，有天空有树木，则可能导致整体画面亮度偏低，因为此时优先保证
+了亮区天空的效果，通过限制该值从而限制对亮区的倾斜程度可以解决该问题。
+
+曝光策略切换时，最好同时更新u16HistRatioSlope和u8MaxHistOffset的值，否则这2个值会采
+用上一种策略下的配置，效果可能与预期不符。
+
+在做强光抑制方案时，建议在高光优先曝光模式下，通过降低AE目标亮度，同时合理设置
+u16HistRatioSlope和u8MaxHistOffset来抑制强光，暗区则可以通过使能DRC来看清楚。低光优先
+则可以用于实现非指定区域的背光补偿。
+
+AE曝光控制类型为自动时，可设定曝光模式enAEMode。该值可设定为慢快门模式(SLOW_SHUTTER)
+或固定帧率模式。慢快门模式通常用于低照度场景下进行自动降帧，以减少画面噪声。Built-In WDR
+模式和多帧合成WDR模式不支持降帧。
+
+抗闪属性结构体 stAntiflicker 可用于设定抗闪使能，抗闪频率和抗闪模式等属性。
+
+亚抗闪属性结构体 stSubflicker 可用于设定亚抗闪使能及抗闪程度属性。若有自动光圈，建议关
+闭亚抗闪功能。
+
+AE曝光控制类型为自动时，可设定AE延时生效属性结构体stAEDelayAttr。该值的合理设置可提高
+画面亮度的稳定性，防止快速运动物体经过导致画面亮度发生变化。低码率设置时可适当增加该值，
+以避免AE 调节时出现块效应。
+
+自动曝光的权重表：自动曝光的静态统计信息分为15*17 个区域，可通过设定权重表改变每个区域的
+权重。如可使中心区域的权重加大，则中心区域的亮度变化会使图像的全局直方图统计信息产生更多
+的变化。该属性可调节感兴趣区域的曝光权重，可用于实现指定区域的背光补偿。
+
+
+2、sensor的曝光时间上下限、模拟增益上下限、数字增益上下限怎么获取？

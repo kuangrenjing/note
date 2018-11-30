@@ -1,0 +1,451 @@
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://tools.ietf.org/html/rfc2326      rtsp1.0
+https://tools.ietf.org/html/rfc7826      rtsp2.0
+https://tools.ietf.org/html/rfc4566      sdp
+https://tools.ietf.org/html/rfc3556      sdp bandwidth modifiers
+
+
+0.1、session与presentation
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+presentation： 报告、演示？？
+
+在rfc2326术语解释一章中是这样介绍"presentation"的
+
+Presentation（表示？？？）:
+          A set of one or more streams presented to the client as a
+          complete media feed, using a presentation description as
+          defined below. In most cases in the RTSP context, this implies
+          aggregate control of those streams, but does not have to.
+
+Presentation description（表示描述？？？）:
+
+
+
+1、RTP、RTCP区别
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+RTP(Real-time Transport Protocol 实时传输协议）
+RTCP(Real-time Transport Control Protocol 即实时传输控制协议）
+
+RTP用来为IP网上的语音、图像、传真等多种需要实时传输的多媒体数据提供端到端的实时传输服务。
+RTP为Internet上端到端的实时传输提供时间信息和流同步，但并不保证服务质量，服务质量由RTCP
+来提供。
+
+2、RTSP目的
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Real-Time Streaming Protocol(RTSP)用于建立和控制(指的是播放、回退、暂停、结束等，但不
+包括同步)一个或多个时间同步的连续媒体流。
+
+3、RTSP连接是长连接还是短连接
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+RTSP协议跟HTTP类似，都是无状态协议，也就是可以短连接。在rfc2326中有这样一句话"During an
+RTSP session, an RTSP client may open and close many reliable transport connections 
+to the server to issue RTSP requests.Alternatively, it may use a connectionless 
+transport protocol such as UDP."意思是可以采用短连接的方式来发送RTSP请求。
+
+rfc2326还说到"There is no notion of an RTSP connection; instead, a server maintains
+a session labeled by an identifier."意思是RTSP没有连接的概念，而是使用一个session id来
+标识会话。后面我们会知道，session id是在服务器响应SETUP请求时建立起来的。
+
+https://bbs.csdn.net/topics/310258679 这篇帖子有这样的见解：
+RTSP服务器与客户端之间的保活，有几种不同的做法。
+1). 首先，RTSP服务器对于每个客户端，都应该有一个超时定时器，一旦客户端超时，就将对应的会
+话删除。如果会话还活着，就应该一直刷新这个定时器，这就是保活。
+
+2). 根据客户端请求的传输方式的不同，保活的方法也不同。对于TCP传输方式，服务器需要在每次向
+客户端成功传输一个数据包之后刷新超时定时器。
+
+3). 对于udp传输方式，服务器发出的数据包，并不知道客户端是否成功接收。标准的做法是在服务器
+每次收到客户端的RTCP包（receiver report）之后刷新超时定时器。但是有些客户端软件并不会发
+送receiver report，而是定期向服务器发送OPTIONS或GET_PARAMETER或SET_PARAMETER，那么
+服务器在收到这些消息时也需要刷新超时定时器。
+
+RTSP没有“连接”这个概念，而由RTSP会话（session）代替（服务器端保持一个由识别符标记的会话）。
+RTSP会话没有绑定传输层连接（如TCP连接）。在RTSP会话期间，RTSP客户端可以打开或关闭多个到服
+务器端的可靠传输连接以发出RTSP请求。但也可以使用无连接传输协议，比如UDP，来发送RTSP请求。
+
+4、RTSP请求行
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+方法 rtsp://(域名:端口|ip:端口)/abs_path    RTSP/版本号
+
+
+版本号不支持返回"505 RTSP Version Not Supported"
+
+
+4、RTSP消息种类及功能
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+RTSP设计上就是为了兼容HTTP，所以它也由若干方法组成：
+OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, SCALE, GET_PARAMETER
+
+各方法的功能：
+	OPTIONS         用于获取服务器提供的可用方法
+	DESCRIBE        C向S发起DESCRIBE请求,为了得到会话描述信息
+	SETUP           客户端提醒服务器建立会话,并确定传输模式
+	TEARDOWN        客户端发起关闭请求
+	PLAY            客户端发送播放请求
+	PAUSE
+	SCALE
+	GET_PARAMETER
+
+【重要注】
+我们可以看到SETUP才是会话建立的起始方法。OPTIONS、DESCRIBE两个方法与会话无关。而会话第一
+次SETUP之后的请求(第一SETUP之后的其它SETUP、TEARDOWN、PLAY、PAUSE等)都要带上Session头
+来指定操作的是哪个会话。
+
+5、RTSP头
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+01 Accept
+02 Accept-Encoding
+03 Accept-Language
+04 Allow
+05 Authorization
+06 Bandwidth
+07 Blocksize
+08 Cache-Control
+09 Conference
+10 Connection
+11 Content-Base        【RTSP头注1】
+12 Content-Encoding
+13 Content-Language
+14 Content-Length
+15 Content-Location
+16 Content-Type
+17 CSeq                【RTSP头注2】用于RTSP请求和响应的配对
+18 Date
+19 Expires
+20 From
+21 Host
+22 If-Match
+23 If-Modified-Since
+24 Last-Modified
+25 Location
+26 Proxy-Authenticate
+27 Proxy-Require
+28 Public
+29 Range
+30 Referer
+31 Retry-After
+32 Require
+33 RTP-Info
+34 Scale
+35 Speed
+36 Server
+37 Session             【RTSP头注3】
+38 Timestamp
+39 Transport           【RTSP头注4】
+40 Unsupported
+41 User-Agent
+42 Vary
+43 Via
+44 WWW-Authenticate
+
+Authorization(当需要权限管理时)  所有请求都要带
+User-Agent                     所有请求都要带
+Date                           所有请求和响应都要带
+CSeq                           所有请求和响应都要带
+Public                         OPTIONS响应中需携带
+Accept                         DESCRIBE请求中需携带
+Content-Type                   DESCRIBE请求中需携带
+Content-Length                 DESCRIBE请求中需携带
+Session                        SETUP请求(第一次后)、响应；TEARDOWN PLAY PAUSE请求、响应中需携带
+Transport                      SETUP请求、响应中需携带
+Range                          PLAY请求中需携带
+RTP-Info                       PLAY响应中需携带
+
+【RTSP头注3】
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	此头的值由服务端决定，首先出现在会话的一个SETUP请求的响应中，后面的其它方法请求(包
+括第2，3...SETUP请求)都要带上这个头来指定操作的是哪个会话。
+
+	session头可设置超时
+
+【RTSP头注4】
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这个响应头指明会话将采用的
+	This request header indicates which transport protocol is to be used
+   and configures its parameters such as destination address,
+   compression, multicast time-to-live and destination port for a single
+   stream. It sets those values not already determined by a presentation
+   description.
+
+   Transports are comma separated, listed in order of preference.
+   Parameters may be added to each transport, separated by a semicolon.
+
+   The Transport header MAY also be used to change certain transport
+   parameters. A server MAY refuse to change parameters of an existing
+   stream.
+
+
+Tranport头用法见SETUP方法篇
+
+6、DESCRIBE方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+我们在DESCRIBE方法的请求头中带上Accept行来制定服务器以什么样的方式来说明流的属性，譬如
+使用SDP。
+
+在DESCRIBE中，我们需要获取具体实时流的名字，以便在SETUP中向RTSP服务器申请实时流。由
+Content-Base头描述？
+
+重点是考察sdp(会话描述协议)
+
+参考文献：
+	https://blog.csdn.net/machh/article/details/51873690
+	https://www.cnblogs.com/idignew/p/7249056.html
+
+sdp主要描述三个方面：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/xyblog/article/details/49741267
+	会话描述
+	时间描述
+	媒体描述
+3种类型的具体描述又由若干行组成(行组成：<类型>=<值>，值由若干字段组成，字段间一般是空格
+分隔)，这些行有些是可选的，会话描述和媒体描述的行有些是重合的。
+
+譬如i行在会话描述中表示“会话信息”，在媒体描述中表示“媒体标题”。
+
+3-1)、会话描叙
+	v = (sdp协议版本)目前为0版本，无子版本号
+	o = (会话源)格式：[(用户名)（会话标识）（版本）（网络类型）（地址类型）（地址）]【注1】
+	s = (会话名)，每个会话描述必须只有一个会话名
+	i = (会话信息) 此字段并非必须，建议包括进来用于描叙相应会话文字性说明，每个会话描叙最多只能有一个
+	u = (URL) 此字段并非必须,提供url的描叙信息
+	c = (连接信息)格式：[(网络类型)（地址类型）（连接地址）]
+	e = (email地址)负责人的email地址
+	p = (电话号码)负责人的电话号码
+	k = (密匙)交换密匙使用，但几乎不用
+	b = (带宽限制) 格式：[<类型>:<带宽>] 我觉得我们暂时可以不用 【注2】
+
+【注1】如果不存在用户登录名，该字段标志位“-”，会话标识为一随机数字串，版本为该会话公告的
+版本，网络类型为文本串， \n “IN”表示internet 地址类型为文本串，目前定义为“IP4”和“IP6”
+两种地址
+
+【注2】带宽类型有
+rfc3556专门讲SDP的带宽修饰符的
+	AS (Application-Specific)
+	RS
+	RR
+	X-AV
+
+【示例】
+o=OnewaveUServerNG 1451516402 1025358037 IN IP4 192.168.20.136
+
+3-2)、时间描述
+	t = （会话活动时间）
+	r = * （0或多次重复次数）
+
+3-3)、媒体描述
+	m =   （媒体名称和传输地址）【注2】
+	i = * （媒体标题） 【注3】
+	c = * （连接信息 — 如果包含在会话层则该字段可选）
+	b = * （带宽信息）
+	k = * （加密密钥）
+	a = * （0 个或多个会话属性行）【注4】
+
+
+【注2】
+格式： m=(媒体类型)（端口）（传送层）（格式列表）
+	媒体类型：目前定义的有音频（audio）,视频(video), "text", "application", "message"
+	端口：媒体传送层端口
+	传送层：ip4上大多基于rtp/udp上传送（RTP/AVP）IETF RTP协议，在udp上传输
+	格式列表： 一般是RTP协议中负载类型(payload type PT)。H.264出现较晚，没有自己的专有
+负载类型号，只能在动态类型区域(96-127)内选择一个号，但这个号其实没多少用(因为不是专用的，
+客户端也不知道它代表什么类型)，所以此时的实际类型是由MIME决定的。
+
+【示例】
+	m=video 0 RTP/AVP 96
+
+RTP/AVP = RTP/AVP/UDP  音视频RTP通过UDP传输
+RTP/AVP/TCP            音视频RTP通过TCP传输
+
+
+【注3】会话描述中也有i字段，以m分隔，m以前的i属于会话描述，m以后的i属于媒体描述，同理适
+用c字段
+
+【注4】常见的会话属性：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)rtpmap a=rtpmap:<payload type> <encoding name>/<clock rate> [/<encoding parameters>]
+此属性行用于把m行中媒体PT号映射到具体的编码名、时钟频率以及其它编码属性。很显然，当PT处
+于动态范围(96-127)时rtpmap属性行必须出现，当然<96的负载类型也可以使用rtpmap属性行。
+
+2)sendrecv a=sendrecv/sendonly/recvonly/inactive/broadcast
+这些属性行用于描述收发属性
+
+3)ptime a=ptime:<packet time>
+这个属性行用于描述一个RTP包包含多长时间的媒体信息，单位时毫秒
+
+4)fmtp a=fmtp:<format> <format specific parameters>
+这个属性用于定义给定PT号的特定属性，SDP不需要理解这些属性，它只负责传输它们。
+
+5)control a=control:url
+这个属性可用于session或media(参见rfc2326 C.1.1)
+如果在media中存在，则内容为控制指定流的URL，在Setup时就是用这个URL。
+如果在session中存在，则内容为用于aggregate control的URL，在PLAY，TEARDOWN时使用。
+
+control中的url可以是相对url或绝对url(RFC 1808)，如果使用相对url(没有rtsp://前缀)，则
+url前缀的顺序是：
+	The RTSP Content-Base field
+	The RTSP Content-Location field
+	The RTSP request URL
+我们的应用场景下基本都会有"RTSP request URL"，所以用不上Content-Base头
+
+sdp如何描述H.264
+参考资料：
+	https://blog.csdn.net/wh8_2011/article/details/70230952
+
+【实例】
+下面描述了如何在SDP中表示一个H.264流:
+"m=" 行中的媒体名必须是 "video"
+"a=rtpmap" 行中的编码名称必须是 "H264"
+"a=rtpmap" 行中的时钟频率必须是 90000
+其他参数都包括在 "a=fmtp" 行中.
+
+如:
+m=video 49170 RTP/AVP 98
+a=rtpmap:98 H264/90000
+a=fmtp:98 profile-level-id=42A01E; packetization-mode=1; sprop-parameter-sets=Z0IACpZTBYmI,aMljiA==
+
+fmtp设置
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	H264一般就设置profile-level-id、packetization-mode、sprop-parameter-sets三项。具
+体怎么设置呢？
+
+	packetization-mode = 1
+	sprop-parameter-sets = SPS_base64,PPS_base64
+	profile-level-id设置为SPS中的第二至四个字节(譬如420066，SPS第4字节是42，第二字节是66)
+
+H265呢？
+
+profile-level-id正好是SPS中的第二至四个字节的base16编码。这三个字节的具体含义是
+http://yeyingxian.blog.163.com/blog/static/34471242013112711825953/
+https://blog.csdn.net/liang12360640/article/details/52096499
+sps[1]  AVCProfileIndication
+sps[2]  profile_compatibility
+sps[3]  AVCLevlIndication
+
+
+7、SETUP方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+客户端提醒服务器建立会话,并确定传输模式，传输方式可以是TCP、UDP或者是MULTICAST其中之一。
+通过在SETUP方法中定义Transport头，可以定义RTSP客户端和RTSP服务端使用什么方式进行流传输。
+
+客户端发送SETUP方法消息给服务端商定：
+	底层传输协议使用TCP还是UDP
+	使用单播还是组播方式
+	客户端RTP、RTCP端口，服务端RTP、RTCP端口或者就使用RTSP端口交错传输RTP、RTCP
+
+服务端在DESCRIBE响应中m行已经告诉了客户端它支持的底层协议(有可能video有两个m行分别支持
+tcp和udp)，客户端可以选择其中一个m行来SETUP，或者也可能不管DESCRIBE响应而依次使用UDP、
+TCP来尝试(参见VLC的实现)。
+
+像VLC,Quicktime, RealPlayer都是这么干的：
+	优先试SETUP udp
+	如果不行的话，再SETUP TCP
+	如果还是不行的话，就转RTP over HTTP
+
+SETUP方法里最重要的头应该就是Transport了，请求和响应中都带有这个头，我们来看看其具体格式：
+参考文献：
+https://www.cnblogs.com/canphp/p/3424720.html
+
+Transport=transport-protocol/profile[/lower-transport][;parameter]
+基本上:
+transport-protocol就是"RTP"
+profile就是"AVP"
+lower-transport(底层传输协议)默认是"UDP"，其它还可以是"TCP"
+参数有：
+	unicast | multicast
+	destination [= addr]
+	interleaved = channel [ - channel ] 【注5】
+	append
+	ttl = ttl
+	layers = 1*DIGIT
+	port = port [ - port ]
+	client_port = port [ - port ]
+	server_port = port [ - port ]
+	ssrc = ssrc
+	mode = "PLAY or RECORD" 【注6】
+
+【注5】：
+一般而言，SETUP过程中，客户端要在Transport中带上两个端口(client_port)，服务端回复是也
+要带上两个端口(server_port)，用于RTP视频流和RTCP控制流的通信。但也可以不新开这四个端口，
+就复用RTSP端口来传RTP和RTCP(一般只有在底层传输协议为TCP时才能这么做)，这时候就需要带上
+interleaved参数(交错传输)。
+
+【注6】：
+mode参数指明会话支持的操作，有效值为"PLAY"和"RECORD"，默认是"PLAY"。
+
+【实例】
+请求
+
+SETUP rtsp://myserver/live.mp4?trackID=1 RTSP/1.0
+CSeq: 2
+User-Agent: Vision MC
+Transport: RTP/AVP;unicast;client_port=20000-20001
+Authorization: Basic cm9vdDpwYXNz
+
+应答
+
+RTSP/1.0 200 OK
+CSeq: 2
+Session: 12345678; timeout=60
+Transport: RTP/AVP;unicast;client_port=20000-20001;server_port=50000-50001;ssrc=B0BA7855;mode="PLAY"
+Date: Wed, 16 Jul 2008 12:48:47 GMT
+
+
+Transport: RTP/AVP/TCP;unicast;interleaved=0-1
+interleaved=0-1  表示用的是 rtp  over tcp  ,   也就是说 rtsp消息 和 rtp包 都是通过tcp传输， 都用554端口
+
+8、RTSP URL格式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+8、RTP时间戳
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：
+	http://blog.sina.com.cn/s/blog_67a6d62e0101c34u.html
+
+时间戳单位：时间戳计算的单位不是秒之类的单位，而是由采样频率所代替的单位，这样做的目的就
+是为了是时间戳单位更为精准。比如说一个音频的采样频率为8000Hz，那么我们可以把时间戳单位设
+为1/8000。
+
+video一般用90k，至少H.264是这么规定的，我觉得这个值没有多少实际意义，就是用作一个标尺而已
+
+时间戳增量：相邻两个RTP包之间的时间差（以时间戳单位为基准）。这种说法我觉得不对，对FU-A方式
+           多个RTP包的时间戳是一样的。
+采样频率：  每秒钟抽取样本的次数，例如音频的采样率一般为8000Hz
+帧率：      每秒传输或者显示帧数，例如25f/s
+如果一帧图像封装到了多个rtp包中，那这些rtp包的时间戳是相同的。
+
+
+7、RTP包与帧
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：
+https://blog.csdn.net/mo4776/article/details/78391969
+https://blog.csdn.net/duan_jin_hui/article/details/67638024   介绍FU-A分包方式，我们需要用到
+
+rtp打包h264，包含了三种类型的包:
+	一个rtp包携带了一帧数据(single)
+	多个rtp包携带了一帧数据(FU-A)
+	一个rtp包携带了多帧数据(STAP-A)
+
+
+RTSP推流
+https://blog.csdn.net/gmer1/article/details/53064582
+
+
+8、通过RTSP或者RTP感知客户端已断开，然后停止向客户端发送rtp流。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+rtp_session_signal_disconnect_by_callback函数
+
+
+9、RTSP会话
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+会话
+    该请求和响应头部域标识出一个根据表示URL，由媒体服务器的SETUP响应开始，由TEARDOWN终止的会话。会话标识由媒体服务器给出（见3.4节）。一旦客户端收到一个会话标识，它【必须】对每个与该会话关联的请求都返回该标识。如果服务器有其他能唯一标识出一个会话的途径，如动态产生的URL，它并不一定要建立一个会话标识。
+Session  = "Session" ":" session-id [ ";" "timeout" "=" delta-seconds ]
+超时（timeout）参数只允许出现在响应头部。服务器用它向客户端指示，服务器打算在由于缺少反馈信息（见章节A）而关闭会话前等RTSP命令等多久。timeout的单位是秒，默认值为60秒（1分钟）。
+ 注意：会话标识把横跨传输会话或连接的RTSP会话标识出来。一个RTSP会话可能会发送对应多个RTSP URL的控制消息。因此，客户端可以用同一个会话控制一个表示中的多个流，只要这些流来自于同一个服务器。（见章节14的例子）。但是，同一个客户端对于同一个URL的多个“用户”【必须】使用不同的会话标识。
+ 区分来自于同一个客户端针对同一个URL的不同传输请求时需要会话标识。
+ 如果会话标识是非法的，则返回454响应（找不到会话）。
+
+

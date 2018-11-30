@@ -1,0 +1,64 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+公共示例代码使用HI_S32 SAMPLE_COMM_VENC_Start(VENC_CHN VencChn, PAYLOAD_TYPE_E enType, 
+VIDEO_NORM_E enNorm, PIC_SIZE_E enSize, SAMPLE_RC_E enRcMode, HI_U32  u32Profile)
+函数来完成设置编码通道属性、启动编码通道的工作。
+	VencChn     编码通道号，譬如0
+	enType      负载类型，譬如PT_H264
+	enNorm      电视制式，譬如VIDEO_ENCODING_MODE_PAL
+	enSize      图像尺寸，譬如PIC_HD720
+	enRcMode    码流控制模式，譬如SAMPLE_RC_CBR
+	u32Profile  协议框架，譬如0(Baseline)
+
+HI_S32 HI_MPI_VENC_CreateChn(VENC_CHN VeChn, const VENC_CHN_ATTR_S *pstAttr);
+
+编码通道属性结构体：
+typedef struct hiVENC_CHN_ATTR_S
+{
+	VENC_ATTR_S stVeAttr;
+	VENC_RC_ATTR_S stRcAttr;
+}VENC_CHN_ATTR_S;
+
+编码器属性结构体：
+typedef struct hiVENC_ATTR_S
+{
+	PAYLOAD_TYPE_E enType;
+	union
+	{
+		VENC_ATTR_H264_S stAttrH264e;
+		VENC_ATTR_MJPEG_S stAttrMjpeg;
+		VENC_ATTR_JPEG_S stAttrJpeg;
+		VENC_ATTR_MPEG4_S stAttrMpeg4;
+		VENC_ATTR_H265_S stAttrH265e;
+	};
+}VENC_ATTR_S;
+
+H.264 编码器属性结构体
+typedef struct hiVENC_ATTR_H264_S
+{
+	HI_U32 u32MaxPicWidth;
+	HI_U32 u32MaxPicHeight;
+	HI_U32 u32BufSize;
+	HI_U32 u32Profile;
+	HI_BOOL bByFrame;
+	HI_U32 u32PicWidth;
+	HI_U32 u32PicHeight;
+	HI_U32 u32BFrameNum;
+	HI_U32 u32RefNum;
+}VENC_ATTR_H264_S;
+
+编码通道属性由两部分组成，编码器属性和码率控制器属性。
+编码器属性：
+	编码器属性首先需要选择编码协议，然后分别对各种协议对应的属性进行赋值。[enType]
+	编码器属性最大宽高，通道宽高必须满足如下约束：
+		MaxPicWidth∈[MIN_WIDTH, MAX_WIDTH]
+		MaxPicHeight∈[MIN_HEIGHT, MAX_HEIGHT]
+		PicWidth∈[MIN_WIDTH, MaxPicwidth]
+		PicHeight∈[MIN_HEIGHT, MaxPicHeight]
+		最大宽高，通道宽高必须是MIN_ALIGN的整数倍。
+其中MIN_WIDTH，MAX_WIDTH，MIN_HEIGHT，MAX_HEIGHT，MIN_ALIGN分别表示编码通道支持的最
+小宽度，最大宽度，最小高度，最大高度，最小对齐单元(像素)。hi_defines.h对这些常数都进行
+了定义。[u32MaxPicWidth、u32MaxPicHeight、u32PicWidth、u32PicHeight]
+	编码器属性必须设置编码码流buffer深度(编码图片像素尺寸的1/2-无限大，推荐1.5-2倍)，
+获取码流方式(按片还是按帧)。[u32BufSize、u32Profile]
+
+

@@ -1,0 +1,12 @@
+https://www.rt-thread.org/document/site/submodules/rtthread-manual-doc/zh/0preface/00-chapter1-preface/
+
+
+rtthread启动过程：
+https://wenku.baidu.com/view/f79678097cd184254b35358d.html
+
+
+链接脚本有两个：
+	bsp/stm32f107/stm32_rom.ld    用于gcc
+	bsp/stm32f107/stm32_rom.sct   用于armcc
+
+https://blog.csdn.net/aping_cs_dn/article/details/38760163

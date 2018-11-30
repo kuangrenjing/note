@@ -1,0 +1,31 @@
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/whxngb/article/details/50427964
+
+1、下载STM32F103C8系列的固件库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	进入意法首页“https://www.st.com”，点“Product Catalog”->“Microcontrollers”，选“
+STM32 32-bit Arm Cortex MCUs”->“STM32 Mainstream MCUs”->“STM32F1 Series”->“STM32F103”
+点“STM32F103C8” 点“Tools&Software”，进入资源页面，搜索“peripheral”，20181129时搜到的是
+STSW-STM32054包，进去后版本是3.5.0。
+
+2、在工程文件夹下新建一些比较的文件夹
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	CMSIS、libraries、Libaries、List(用于链接的)、Obj(工程文件)、output(输出hex文件)、
+User。
+
+	下面一步我们只使用了CMSIS、libraries、User三个文件夹。
+
+	Libaries、List(用于链接的)、Obj(工程文件)、output(输出hex文件)四个文件夹什么时候用。
+
+3、把固件库的一些文件移到项目文件夹下
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	将固件库里Libraries--->STM32F10x_StdPeriph_Driver下的inc和src文件夹复制到
+fisrt_project文件夹下的libraries里；
+
+	将固件库里Libraries--->CMSIS--->CM3--->CoreSupport文件夹里面的core_cm3.c和
+core_cm3.h文件复制到我们新建的fisrt_project文件夹下的CMSIS里；
+
+	将固件库里Project---->STM32F10x_StdPeriph_Template(这个文件夹里有KEIL和IAR建好工
+程的模板)里的stm32f10x_conf.h、stm32f10x_it.c、stm32f10x_it.h、system_stm32f10x.c四个
+文件复制到我们新建的fisrt_project文件夹下的User里；

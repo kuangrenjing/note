@@ -1,0 +1,44 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当一个NAL单元比较大时可能要分为几个小的RTP发出去，这时候RTP头部后面紧跟的第一个字
+节就不再是NALU type了，这时候要解析RTP头部后面的两个字节，低地址字节称为FU indicator，高
+地址字节称为FU header。
+
+原始的NAL头的前三位为FU indicator的前三位，原始的NAL头的后五位为FU header的后五位
+
+Nalu header构成：
++---------------+
+|0|1|2|3|4|5|6|7|
++-+-+-+-+-+-+-+-+
+|F|NRI| Type    |
++---------------+
+
+FU indicator构成：
++---------------+
+|0|1|2|3|4|5|6|7|
++-+-+-+-+-+-+-+-+
+|F|NRI| FU-Type |
++---------------+
+
+FU header构成：
++---------------+
+|0|1|2|3|4|5|6|7|
++-+-+-+-+-+-+-+-+
+|S|E|R|  Type   |
++---------------+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我们可以看到，FU indicator记录了Nalu header中的禁止位(F)和重要级别(NRI)，FU header
+记录了Nalu header中的类型部分(Type)。
+
+	那剩下的FU-Type、S、E、R分别代表什么意思呢？
+		FU-Type总是28，代表负载是经过FU-A分包过的。
+		S、E、R代表包是位置，是Nalu的头、中间还是尾部，但中间包的顺序这里并不区分(因为有
+RTP序号来保证前后顺序)，这里区分头尾的目的不是为了确认顺序，而是为了确认开始和结束。具体如下：
+			S = 1，E = 0，R = 0 是头包
+			S = 0，E = 0，R = 0 是中间包
+			S = 0，E = 1，R = 0 是尾包
+
+	那么，是时候总结以下我们拿到一个大的Nalu怎么来组织FU-A头了：
+		FU indicator = (Nalu header)&0xc0|28
+		FU header    = (Nalu header)&0x1f|0x80   头包
+		FU header    = (Nalu header)&0x1f        中间包
+		FU header    = (Nalu header)&0x1f|0x40   尾包

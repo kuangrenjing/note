@@ -1,0 +1,419 @@
+0、测试URL
+
+
+
+
+1、OPTIONS
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	客户端询问服务端能支持的方法。
+
+请求需携带的头：
+	CSeq:消息序号
+	User-Agent:提供客户端软件名字、版本、编译时间
+	*Authorization:用于权限控制，暂不支持
+
+响应需携带的头：
+	CSeq:消息序号
+	Server:一般填服务端软件名字、版本、编译时间
+	Public:填服务端支持的方法名，以逗号分隔
+	Date:客户端用来判断响应是来自服务端还是缓存
+
+
+2、DESCRIBE
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	客户端指定服务端按照客户端能理解的格式(服务端可拒绝，协商不成)描述会话或媒体(通过
+URL指定，但服务端可拒绝单独描述媒体)。
+
+	我看到有服务器是这样做的，当指定描述媒体时，它也返回200，但SDP中没有m行，只有若干
+媒体属性行a，导致VLC无法发送PLAY命令。
+
+如果服务端提供多路码流，应分别DESCRIBE、PLAY，譬如海康的：
+rtsp://admin:12345@192.0.0.64:554/h264/ch1/main/av_stream
+rtsp://admin:12345@192.0.0.64:554/h264/ch1/sub/av_stream
+可以看到，海康的视频流分为了三个层次：编码类型、通道、主子码流，每一种组合方式都是一个RTSP
+会话，这个RTSP会话包含相应的音频、视频、字幕等等流。
+
+请求需携带的头：
+	CSeq:消息序号
+	User-Agent:提供客户端软件名字、版本、编译时间
+	Accept:期望服务端返回的媒体描述的格式
+	*Authorization:用于权限控制，暂不支持
+
+响应需携带的头：
+	CSeq:消息序号
+	Server:一般填服务端软件名字、版本、编译时间
+	Content-length:媒体描述的长度
+	Content-type:媒体描述的格式
+	Date:客户端用来判断响应是来自服务端还是缓存
+
+
+sdp主要描述三个方面：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/xyblog/article/details/49741267
+	会话描述
+	时间描述
+	媒体描述
+3种类型的具体描述又由若干行组成(行组成：<类型>=<值>，值由若干字段组成，字段间一般是空格
+分隔)，这些行有些是可选的，会话描述和媒体描述的行有些是重合的。
+
+譬如i行在会话描述中表示“会话信息”，在媒体描述中表示“媒体标题”。
+
+3-1)、会话描叙
+	v = (sdp协议版本)目前为0版本，无子版本号
+	o = (会话源)格式：[(用户名)（会话标识）（版本）（网络类型）（地址类型）（单播地址）]【注1】
+	s = (会话名)，每个会话描述必须只有一个会话名
+	i = (会话信息) 此字段并非必须，建议包括进来用于描叙相应会话文字性说明，每个会话描叙最多只能有一个
+	u = (URL) 此字段并非必须,提供url的描叙信息
+	c = (连接信息)格式：[(网络类型)（地址类型）（连接地址）]【注2】
+	e = (email地址)负责人的email地址
+	p = (电话号码)负责人的电话号码
+	k = (密匙)交换密匙使用，但几乎不用
+	b = (带宽限制) 格式：[<类型>:<带宽>] 我觉得我们暂时可以不用 【注3】
+	a = * （0 个或多个会话属性行）【注4】
+
+3-2)、时间描述
+	t = （会话活动时间）
+	r = * （0或多次重复次数）
+
+3-3)、媒体描述
+	m =   （媒体名称和传输地址）【注5】
+	i = * （媒体标题） 【注6】
+	c = * （连接信息 — 如果包含在会话层则该字段可选）【注2】
+	b = * （带宽信息）
+	k = * （加密密钥）
+	a = * （0 个或多个会话属性行）【注4】
+
+【注1】
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	此字段用于描述会话发起者信息。
+
+	如果不存在用户登录名，该字段标志位“-”，会话标识为一随机数字串，版本为该会话公告的
+版本，网络类型为文本串，“IN”表示internet 地址类型为文本串，目前定义为“IP4”和“IP6”
+两种地址。
+
+	RTSP并不适用这个会话ID，所以在RTSP会话中此行好像并不重要。
+
+【注2】连接信息
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	连接信息字段总是要有的。要么每个媒体描述段都要有一个，要么会话描述段要有一个。当会话
+描述有，媒体描述又有时，媒体描述的优先级高。
+
+	我看海康返回的是0.0.0.0，这个地址对客户端肯定是没意义的，我看RTSP基本也不用这个字段。
+
+【注3】带宽类型有：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+rfc3556专门讲SDP的带宽修饰符的
+	AS (Application-Specific)
+	RS
+	RR
+	X-AV
+
+【示例】
+o=OnewaveUServerNG 1451516402 1025358037 IN IP4 192.168.20.136
+
+【注4】常见的会话属性：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)rtpmap a=rtpmap:<payload type> <encoding name>/<clock rate> [/<encoding parameters>]
+此属性行用于把m行中媒体PT号映射到具体的编码名、时钟频率以及其它编码属性。很显然，当PT处
+于动态范围(96-127)时rtpmap属性行必须出现，当然<96的负载类型也可以使用rtpmap属性行。
+
+2)sendrecv a=sendrecv/sendonly/recvonly/inactive/broadcast
+这些属性行用于描述收发属性
+
+3)ptime a=ptime:<packet time>
+这个属性行用于描述一个RTP包包含多长时间的媒体信息，单位时毫秒
+
+4)fmtp a=fmtp:<format> <format specific parameters>
+这个属性用于定义给定PT号的特定属性，SDP不需要理解这些属性，它只负责传输它们。
+
+5)control a=control:url
+这个属性可用于session或media(参见rfc2326 C.1.1)
+如果在media中存在，则内容为控制指定流的URL，在Setup时就是用这个URL。
+如果在session中存在，则内容为用于aggregate control的URL，在PLAY，TEARDOWN时使用。
+
+control中的url可以是相对url或绝对url(RFC 1808)，如果使用相对url(没有rtsp://前缀)，则
+url前缀的顺序是：
+	The RTSP Content-Base field
+	The RTSP Content-Location field
+	The RTSP request URL
+我们的应用场景下基本都会有"RTSP request URL"，所以用不上Content-Base头
+
+【注5】
+格式： m=(媒体类型)（端口）（传送层）（格式列表）
+	媒体类型：目前定义的有音频（audio）,视频(video), "text", "application", "message"
+	端口：媒体传送层端口
+	传送层：ip4上大多基于rtp/udp上传送（RTP/AVP）IETF RTP协议，在udp上传输
+	格式列表： 一般是RTP协议中负载类型(payload type PT)。H.264出现较晚，没有自己的专有
+负载类型号，只能在动态类型区域(96-127)内选择一个号，但这个号其实没多少用(因为不是专用的，
+客户端也不知道它代表什么类型)，所以此时的实际类型是由MIME决定的。
+
+【示例】
+	m=video 0 RTP/AVP 96
+
+RTP/AVP = RTP/AVP/UDP  音视频RTP通过UDP传输
+RTP/AVP/TCP            音视频RTP通过TCP传输
+
+
+【注6】会话描述中也有i字段，以m分隔，m以前的i属于会话描述，m以后的i属于媒体描述，同理适
+用c字段
+
+海康RTSP抓包“会话描述”部分：
+v=0
+o=- 1459962821590000 1459962821590000 IN IP4 192.168.0.186
+s=DFS Media Presentation
+e=NONE
+b=AS:5100
+a=control:*
+
+海康RTSP抓包“媒体描述”部分：
+m=video 0 RTP/AVP 96
+c=IN IP4 0.0.0.0
+b=AS:5000
+a=recvonly
+a=control:trackID=1
+a=rtpmap:96 H264/90000
+a=fmtp:96 profile-level-id=420029; packetization-mode=1; sprop-parameter-sets=Z00AH5pkAoAt/zUBAQFAAAD6AAAw1AE=,aO48gA==
+
+sdp如何描述H.264
+参考资料：
+	https://blog.csdn.net/wh8_2011/article/details/70230952
+
+【实例】
+下面描述了如何在SDP中表示一个H.264流:
+"m=" 行中的媒体名必须是 "video"
+"a=rtpmap" 行中的编码名称必须是 "H264"
+"a=rtpmap" 行中的时钟频率必须是 90000
+其他参数都包括在 "a=fmtp" 行中.
+
+如:
+m=video 49170 RTP/AVP 98
+a=rtpmap:98 H264/90000
+a=fmtp:98 profile-level-id=42A01E; packetization-mode=1; sprop-parameter-sets=Z0IACpZTBYmI,aMljiA==
+
+fmtp设置
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	H264一般就设置profile-level-id、packetization-mode、sprop-parameter-sets三项。具
+体怎么设置呢？
+
+	packetization-mode = 1
+	sprop-parameter-sets = SPS_base64,PPS_base64
+	profile-level-id设置为SPS中的第二至四个字节(譬如420066，SPS第4字节是42，第二字节是66)
+
+H265呢？
+
+profile-level-id正好是SPS中的第二至四个字节的base16编码。这三个字节的具体含义是
+http://yeyingxian.blog.163.com/blog/static/34471242013112711825953/
+https://blog.csdn.net/liang12360640/article/details/52096499
+sps[1]  AVCProfileIndication
+sps[2]  profile_compatibility
+sps[3]  AVCLevlIndication
+
+RTSP组装媒体类型为H264的SDP描述信息时要用哪些参数呢？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	1)负载格式编号
+	2)packetization-mode
+	3)sprop-parameter-sets
+	4)profile-level-id
+这些参数应属于源属性。
+
+3、ANNOUNCE
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	给客户端、服务端修修改改会话描述的机会，与其它方法不同，这是一个客户端和服务端都能发
+送的方法。太宽容了，我们不允许。
+
+4、SETUP
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SETUP请求指定流媒体(请求中的URL标识这个流媒体)的传输方式。有时候也可以对正在播放中
+的流媒体SETUP，如果服务端不支持这种方式需返回"455 Method Not Valid In This State"。
+
+	SETUP请求中的客户端IP端口可能需要防火墙和NAT服务端的参与，如果客户端端给出的IP和
+端口是局域网的而服务端又不在同一网段，那服务端就没办法向客户端通信了
+
+	这个东西取决于rtsp的客户端，正常情况下是rtsp客户端向服务器通过setup请求发送自己的
+接受数据的ip和端口，然后服务器向这个ip和端口发送剩下的数据，也就是数据流部分。由于这种方
+式服务器和客户端是无法建立数据流传输的（setup中是私网ip和端口），因此，rtsp有的客户端在
+setup后会主动打洞。
+
+在网关上打洞？应该是在NAT服务器上打洞。但一般NAT服务器就是网关吧。
+
+	UDP正常情况下是无法把数据发送到局域网内部的播放器的，在SETUP建立端口后会首先向服务
+器的RTP和RTCP端口发送4字节的数据进行穿透，服务器自动更改端口发送视频数据。通过抓包可以发现，
+VLC就是这么做的。
+
+	具体穿透流程是怎么样的呢？
+
+	setup方法中比较重要的头是"Transport"头。请求中的"Transport"头包含客户端可接受的传
+输参数；响应中的"Transport"头包含经服务端“筛选过的客户端”和“添加的服务端”传输参数。
+
+会话ID
+
+请求需携带的头：
+	CSeq:消息序号
+	User-Agent:提供客户端软件名字、版本、编译时间
+	Transport:
+	Session:
+	*Authorization:用于权限控制，暂不支持
+
+响应需携带的头：
+	CSeq:消息序号
+	Server:一般填服务端软件名字、版本、编译时间
+	Session:
+	Transport:
+	Date:客户端用来判断响应是来自服务端还是缓存
+
+Session头格式及说明：
+	"Session" ":" session-id [ ";" "timeout" "=" delta-seconds ]
+
+	rfc2326对Session-id有这样的要求：任意长度的字符串，如果字符串中含有空白字符，需把
+空白字符进行URL转义。Session-id需随机生成且至少8字节长度以增加猜测的难度。
+
+	timeout参数是可选的，默认为60s。
+
+	在实际操作时，一般适用一个随机int32整型来表示Session-id。
+
+	请求Session id无效时，返回454(Session Not Found)
+
+Transport头格式及说明：
+
+Transport           =    "Transport" ":" 1\#transport-spec
+transport-spec      =    transport-protocol/profile[/lower-transport][;*parameter]
+transport-protocol  =    "RTP"
+profile             =    "AVP"
+lower-transport     =    "TCP" | "UDP"
+parameter           =    ( "unicast" | "multicast" )
+                    |    ";" "destination" [ "=" address ]
+                    |    ";" "interleaved" "=" channel [ "-" channel ]
+                    |    ";" "append"
+                    |    ";" "ttl" "=" ttl
+                    |    ";" "layers" "=" 1*DIGIT
+                    |    ";" "port" "=" port [ "-" port ]
+                    |    ";" "client_port" "=" port [ "-" port ]
+                    |    ";" "server_port" "=" port [ "-" port ]
+                    |    ";" "ssrc" "=" ssrc
+                    |    ";" "mode" = <"> 1\#mode <">
+ttl                 =    1*3(DIGIT)
+port                =    1*5(DIGIT)
+ssrc                =    8*8(HEX)
+channel             =    1*3(DIGIT)
+address             =    host
+mode                =    <"> *Method <"> | Method
+
+1\#表示可以指定多个，之间使用逗号分开，譬如：
+	Transport: RTP/AVP;multicast;ttl=127;mode="PLAY",RTP/AVP;unicast;client_port=3456-3457;mode="PLAY"
+这个例子中指定了一个组播，还指定了一个单播。
+
+
+参数说明：
+destination：
+	客户端可以通过此参数指定组播地址，我们不用，暂不研究。
+
+interleaved：
+	交错模式。利用rtsp连接进行RTP和RTCP的传输，我们不用，暂不研究。
+
+append:
+	如果mode中有“RECORD”，也就是说媒体支持录制，需设置此参数，我们不用，暂不研究。
+
+ttl:
+	多播模式时指定，指定多播的生存期。我们不用，暂不研究。
+
+port:
+	多播模式时RTP、RTCP端口，我们不用，暂不研究。
+
+client_port:
+	单播模式时RTP、RTCP端口。我们需要，譬如client_port=3456-3457
+
+server_port:
+	单播模式时RTP、RTCP端口。我们需要，譬如server_port=3456-3457
+
+ssrc:
+	单播模式时有效。请求和响应中都可携带，在请求中携带，表示客户端指定服务端在RTP中用此
+ssrc来标识与媒体流相关联的同步源；在响应中携带，标识服务端通知客户端服务端将在RTP流中使
+用此ssrc来标识与媒体流相关联的同步源。一个同步源在多个RTSP会话中不需要ssrc相同。
+
+mode：
+	mode参数指明媒体流支持的RTSP操作，有效值为"PLAY"和"RECORD"，默认是"PLAY"。
+
+【实例】
+请求：
+SETUP rtsp://myserver/live.mp4?trackID=1 RTSP/1.0
+CSeq: 2
+User-Agent: Vision MC
+Transport: RTP/AVP;unicast;client_port=20000-20001
+Authorization: Basic cm9vdDpwYXNz
+
+应答：
+RTSP/1.0 200 OK
+CSeq: 2
+Session: 12345678; timeout=60
+Transport: RTP/AVP;unicast;client_port=20000-20001;server_port=50000-50001;ssrc=B0BA7855;mode="PLAY"
+Date: Wed, 16 Jul 2008 12:48:47 GMT
+
+5、PLAY
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过SETUP中指定的格式(TCP交错的，还是单开的UDP端口等等)开始播放媒体流(一个RTSP会
+话)。
+
+	play可以指定播放时间(通过Range头指定时间区间)。时间又分媒体时间，开始播放时间，监控
+等流的存储时间等等。这些时间通过Range头的各种参数指定，譬如：ntp、smpte、time、clock等等。
+但我们的实时流可以不带Range头的，代表立即可以播放，且从头播到尾。
+
+	对正在play的会话调用PLAY方法不会有什么副作用，这也是客户端用来“判活”的一种手段。具体
+是这样的：定时对RTSP会话进行PLAY操作，如果RTSP会话正在播放(或者处于暂停中？)，这个动作不
+会影响播放，但会返回200，表示会话正在播放中；如果会话ID已经失效，调用play是会报错的。
+
+请求需携带的头：
+	CSeq:消息序号
+	User-Agent:提供客户端软件名字、版本、编译时间
+	Session:
+	*Authorization:用于权限控制，暂不支持
+
+响应需携带的头：
+	CSeq:消息序号
+	Server:一般填服务端软件名字、版本、编译时间
+	Session:
+	Date:客户端用来判断响应是来自服务端还是缓存
+
+6、TEARDOWN
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	调用了这个方法以后，会话id就失效了，如果要重新播放，客户端至少需从SETUP开始调用。
+
+请求需携带的头：
+	CSeq:消息序号
+	User-Agent:提供客户端软件名字、版本、编译时间
+	Session:
+	*Authorization:用于权限控制，暂不支持
+
+响应需携带的头：
+	CSeq:消息序号
+	Server:一般填服务端软件名字、版本、编译时间
+	Session:
+	Date:客户端用来判断响应是来自服务端还是缓存
+
+7、GET_PARAMETER
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	客户端向服务端请求此方法获取某些参数的值，格式如下：
+
+GET_PARAMETER rtsp://ip:port/main RTSP/1.0
+CSeq: 8
+User-Agent: LibVLC/2.2.8(LIVE555 Streaming Media v2016.02.22)
+Session:62686386
+
+framerate
+pixelx
+
+	GET_PARAMETER除了获取参数外，还用于心跳功能。在SETUP响应中，服务器会在Session头中带
+上timeout参数，客户端需以小于此参数值的时间间隔不断发送GET_PARAMETER方法请求。
+
+
+请求需携带的头：
+	CSeq:消息序号
+	User-Agent:提供客户端软件名字、版本、编译时间
+	Session:
+	*Authorization:用于权限控制，暂不支持
+
+响应需携带的头：
+	CSeq:消息序号
+	Server:一般填服务端软件名字、版本、编译时间
+	Session:
+	Date:客户端用来判断响应是来自服务端还是缓存
+

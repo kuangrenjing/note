@@ -1,0 +1,587 @@
+1、更改开发环境说明：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	原先使用的是在临境声学打造的ubuntu 10.04 LTS版本开发环境，但这个版本太老了，经常会
+出现不能满足工作条件的情况，譬如ortp编译需要cmake-3.0以上版本，cmake-3.0需要ubuntu 
+14.04.5 LTS以上版本才能支持。所以基于这些原因，更换到高版本的开发环境。
+
+	本次下载的是ubuntu-18.04.1-desktop-amd64.iso，即桌面版版本。
+
+
+2、ubuntu 18.04.1终端选择
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	用惯了linux的人都知道，按ctrl+alt+(F1-F6)会显示6个虚拟终端登陆界面，ctrl+alt+F7
+显示windows x界面，但ubuntu 18.04.1似乎不是这样。其实ubuntu 17.10版本网路上就有人问这
+个问题了：
+https://wyldeplayground.net/ubuntu-17-10-ctrlaltf1-locks-the-screen/
+
+这可能是个未解决的问题
+
+
+3、用户相关：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+启用root用户
+	ubuntu安装之后我们并不知道root密码，怎么拿root账户登陆呢。前辈们说可以先把root密码
+取消掉，然后设置一个新的root密码。
+	sudo passwd -u root  #取消掉root密码
+	sudo passwd root     #设置新的root密码
+
+
+4、安装vmware tools或者open-vm-tools
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在ubuntu 18.04.1上安装vmware tools时，系统会提醒我们：
+open-vm-tools are available from the OS vendor and VMware recommends using open-vm-tools.
+See http://kb.vmware.com/kb/2073803 for more information.
+Do you still want to proceed with this legacy installer?[no]
+意思是此发行版自己提供了一个vm-tools可替代vmware tools使用，推荐我们使用替代软件。
+
+	常见发行版开始提供open-vm-tools的版本：
+		Ubuntu 14.04 / Debian 7
+		OpenSUSE 12.2
+		CentOS 7
+		Fedora 19
+
+	安装方法：
+		apt-get install open-vm-tools
+
+	当然，我们可以选择继续使用vmware tools:
+
+	安装了vmware tools后，主机和客户机可以共享文件夹，这会给我们的工作带来极大的便利。
+点击vmware->安装vmware tools，客户机的虚拟光驱中就载入了linux.iso，这个文件就是我们要
+的vmware tools安装镜像，在ubuntu客户机中是/dev/cdrom。这个设备需要挂载后才能使用，我们
+用先建立挂载点"mkdir /mnt/cdrom"，然后执行"mount /dev/cdrom /mnt/cdrom"把虚拟光驱设备
+/dev/cdrom挂载到/mnt/cdrom文件夹。
+
+	挂载成功之后，执行"cp /mnt/cdrom/VMwareTools-10.2.0-7259539.tar.gz /home/mqs"。
+在我的文件夹下展开:"cd /home/mqs"，"tar -xzvf VMwareTools-10.2.0-7259539.tar.gz"。
+
+
+5、ubuntu下的vi的使用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	vi有三种模式：命令模式、底航模式、编辑模式。默认进入的是命令模式，在命令模式下可以进
+入底航模式或编辑模式，也可从后两者退回到命令模式。底航模式与编辑模式之间不能直接切换。
+
+	在编辑模式下可以像记事本一样输入文本
+
+	在命令模式下可以使用特定的命令进行操作不能随意输入，可以用命令进行模式转换
+
+	在底航模式下光标停在最底部，可以使用一些该模式下的命令
+
+三种模式的切换
+	命令模式      ： / ？                                        底航模式
+	底航模式       return                                        命令模式
+	命令模式       a(在光标前面插入) i(后插入) o(下一行插入)        编辑模式
+	编辑模式       escape                                        命令模式
+
+命令模式下常用命令及作用
+	1、x命令删除（一个）光标所在位置字符
+	2、dw连按删除光标所在位置的一个单词（3dw删除三个单词）
+	3、dd删除光标所在的行（5dd删除五行）
+	4、r替换光标所在字符（1个）
+	5、cw替换光标所在位置一个单词
+	6、cc替换贯标所在位置一行
+	7、C（大写）从光标所在位置替换到文件尾部
+	8、yw拷贝一个词
+	9、yy拷贝当前行
+
+底航模式下面常用的命令
+	1、：1,2co3拷贝第一第二行插入到第三行之后（下一行）
+	2、1,2m3移动第一行第二行到第三行之后（下一行）
+	3、：w保存，w filename保存成新文件
+	4、：wq保存并退出vi编辑器
+	5、：q!强行退出不保存
+
+
+6、linux update与upgrade
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	linux的软件管理工具都需要update连接到源，并从源获取软件的列表后才能使用。所以update
+和upgrade的区别在于：update是下载源里面的metadata的，包括这个源有什么包，每个包什么版本
+之类的。upgrade是根据update命令下载的metadata决定要更新什么包(同时获取每个包的位置)。安
+装软件之前, 可以不upgrade, 但是要update，因为旧的信息指向了旧版本的包, 但是源的服务器
+更新了之后旧的包可能被新的替代了, 于是你会遇到404...
+
+	在ubuntu调用"sudo apt-get update"更新metadata之前，我们需要先手动设置源地址，配置
+文件是"/etc/apt/sources.list"。这里我们需要注意的是不同版本的ubuntu的源是不一样的，我们
+要找到自己使用的ubuntu版本的相应的源。
+
+	在寻找ubuntu版本相应源之前我们需要先了解下ubuntu版本的代号规则。ubuntu的每个版本的代
+号都是由两个单词组成，且这两个单词的首字母相同。10.04版本的版本代号是Lucid Lynx，所以我们
+如果寻找ubuntu 10.04的源，就要找URL中有Lucid Lynx源地址了。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ubuntu的版本更新淘汰是很快的，ubuntu LTS版支持5年，非LTS版支持18个月。之后不再支持
+在线安装软件和更新。还好，ubuntu把不支持的源都放在一个地方了：
+"http://old-releases.ubuntu.com/ubuntu/dists/"。
+
+	ubuntu 10.04是2010年发布的版本，所以此时(2018年)，我们应该这样设置
+"/etc/apt/sources.list"文件：
+
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid-security main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid-updates main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid-proposed main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ Lucid-backports main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid-security main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid-updates main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid-proposed main restricted universe multiverse
+deb-src http://old-releases.ubuntu.com/ubuntu/ Lucid-backports main restricted universe multiverse
+
+
+7、ubuntu desktop版本安装OpenSSH-server
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	如果我们直接操作虚拟机往往不很方便，譬如窗口太小，shell输出不能复制，光标控制不方便。
+我们使用诸如xshell、secureCRT等远程终端连接虚拟机操作起来就方便多了。这些远程终端有多种
+通信协议可供选择，通过网络接口访问远程设备时一般选择ssh协议。
+
+	常见的ssh协议软件有SSH和OpenSSH，SSH收费，所以我们一般选择OpenSSH。
+
+	使用SSH协议通信，那远程终端譬如xshell就是ssh客户端，相应地ubuntu虚拟机上就要安装ssh
+服务端，也就是需要安装OpenSSH-server。
+
+	我们使用"sudo apt-get install openssh-server"命令安装，如果安装失败，那一般意味着我们
+需要更新下系统。
+
+	我们在ubuntu 18.04.1下安装的是OpenSSH_7.6p1
+
+【注1】一般用户远程登陆可以，root用户登陆提示“服务器拒绝了密码”
+需修改/etc/ssh/sshd_config
+	PermitRootLogin yes
+	StrictModes yes
+
+	然后执行service sshd restart命令
+
+【注2】分清两个文件ssh_config和sshd_config：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ssh_config和sshd_config都是ssh服务器的配置文件，二者区别在于，前者是针对客户端的
+配置文件，后者则是针对服务端的配置文件。两个配置文件都允许你通过设置不同的选项来改变客户
+端程序的运行方式。
+
+	我root用户登陆不上，拼命修改ssh_config，当然不能成功。
+
+【注3】登陆日志等信息怎么查看呢？？
+
+8、系统日志
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Linux发行版一般都有一个日志守护进程，如syslogd或者rsyslogd(配置文件路径：
+/etc/rsyslog.d)，c库还有调用它们的公共接口。
+
+	rsyslogd是一个syslogd的多线程增强版。现在Fedora、Ubuntu和rhel6默认的日志系统都是
+rsyslog了。rsyslogd负责写入日志, logrotate负责备份和删除旧日志, 以及更新日志文件。
+
+rsyslogd配置文件：/etc/rsyslog.conf、/etc/rsyslog.d/50-default.conf
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	rsyslogd的配置系统是一个总分结构：在/etc/rsyslog.conf文件的最后有一句：
+$IncludeConfig /etc/rsyslog.d/*.conf
+
+9、虚拟机网络配置成桥接模式，ifconfig配置的IP总是丢失(耗时2.5小时)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	分析了/var/log/syslog日志，发现了这一句：
+avahi-daemon: Withdrawing address record for 192.168.15.127 on ens33.
+
+Zeroconf
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Zero configuration networking(zeroconf)零配置网络服务规范，是一种用于自动生成可
+用IP地址的网络技术，不需要额外的手动配置和专属的配置服务器。
+
+	“零配置网络服务”的目标，是让非专业用户也能便捷的连接各种网络设备，例如计算机，打印
+机等。整个搭建网络的过程都是通过程式自动化实现。如果没有 zeroconf，用户必须手动配置一些
+服务，例如DHCP、DNS，计算机网络的其他设置等。这些对非技术用户和新用户们来说是很难的事情。
+
+	Zeroconf规范的提出者是Apple公司.
+
+Avahi
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Avahi 是Zeroconf规范的开源实现，常见使用在Linux上。包含了一整套多播DNS
+(multicastDNS)/DNS-SD网络服务的实现。它使用的发布授权是LGPL。Zeroconf规范的另一个实现
+是Apple公司的Bonjour程式。Avahi和Bonjour相互兼容(废话，都走同一个规范标准嘛，就象IE，
+Firefox，chrome都能跑HTTP1.1一样)。
+
+禁止avahi-daemon守护进程启动
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我把/etc/init.d/avahi_daemon文件中的名字改成不存在的名字或者把/etc/rc5.d/S01avahi-daemon
+删掉都没用，看来还有其它开机自启动的路径。
+
+	分析/var/log/syslog日志，发现ubuntu 18.04.1用的是systemd，而不是initd，真是坑爹，
+不用的init.d配置的这么详实，误导用户。
+
+	systemd守护进程启动脚本在/etc/systemd/system目录下，删除这个目录下的
+dbus-org.freedesktop.Avahi.service -> /lib/systemd/system/avahi-daemon.service
+发现不起作用，再删除/lib/systemd/system/avahi-daemon.service，好了，MMB的，还真是个
+牛皮癣。
+
+10、网络配置(NetworkManager、Networkd、netplan)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：
+	http://blog.sina.com.cn/s/blog_5373bcf40102xk5g.html
+
+Ubuntu 18.04 采用netplan作为网络配置管理，与16.04及之前的版本区别很大。
+vi /etc/netplan/50-cloud-init.yaml
+
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    ens33:   #配置的网卡名称
+      dhcp4: no    #dhcp4关闭
+      dhcp6: no    #dhcp6关闭
+      addresses: [192.168.1.128/24]   #设置本机IP及掩码
+      gateway4: 192.168.1.1   #设置网关
+      nameservers:
+          addresses: [114.114.114.114, 8.8.8.8]   #设置DNS
+
+要连外网时，改成Nat模式，dhcp4: ture，注释gateway4行
+
+netplan apply
+
+	Networkd-dispatcher is a dispatcher daemon for systemd-networkd connection 
+status changes. This daemon is similar to NetworkManager-dispatcher, but is much 
+more limited in the types of events it supports due to the limited nature of 
+systemd-networkd.
+
+NetworkManager
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	nmcli命令
+
+11、安装rz、sz命令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	sudo apt-get install lrzsz
+
+12、防火墙:iptables与SELinux
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+iptables
+	ufw disable  #关闭iptables
+
+SELinux
+
+13、安装、设置SAMBA
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+先安装相应软件包：
+	#apt-get install samba
+	#apt-get install smbfs
+	#apt-get install samba-common-bin
+	#apt-get install system-config-samba
+
+设置samba用户密码
+	touch /etc/samba/smbpasswd
+	sudo smbpasswd -a mqs
+
+编辑/etc/samba/smb.conf文件，在最后加入：
+[mqs] #这里的用户要设置对，最好是创建root的权限，不然/home/mqs的权限要设置为777
+;comment = Shared Folder with username and password
+path = /home/mqs   #sudo chmod 777 /home/mqs
+public = yes
+writable = yes
+valid users = mqs
+create mask = 0777
+directory mask = 0777
+force user = nobody
+force group = nogroup
+available = yes
+browseable = yes
+
+sudo ufw disable
+sudo service smbd restart
+sudo service nmbd restart
+
+samba的日志在/var/log/samba下
+
+【注】拒绝访问
+
+https://websiteforstudents.com/samba-setup-on-ubuntu-16-04-17-10-18-04-with-windows-systems/
+
+
+14、海图测试版海思SDK版本说明：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	常州海图“Hi3516A_IMX178开发板资料”目录下的readme指出，海州海图的开发板应使用
+“Hi3516A_V100R001C01SPC050.rar”
+
+
+15、海思SDK安装
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	把“Hi3516A_V100R001C01SPC050.rar”解压后，进入“01.software”->“board”，此目录下
+有“Hi3516A_SDK_V1.0.5.0.tgz”，上传到虚拟机。
+
+	在虚拟机相关目录“tar -xzf Hi3516A_SDK_V1.0.5.0.tgz”解压SDK包。
+
+	进入“Hi3516A_SDK_V1.0.5.0”目录，执行“./sdk.unpack”。执行的时候你会发现它要你先安
+装交叉编译链。“be sure”你大爷呀，你把交叉编译链打包在SDK包里边，我怎么先安装呀。
+
+【注】：./sdk.unpack: 2: ./sdk.unpack: source: not found
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：
+	https://blog.csdn.net/jd404647184/article/details/44593587
+
+	ubuntu 18.04.1系统默认的SH(脚本解析器)为dash，可以使用"ls -l /bin/sh"命令查看。
+dash解析器的解析效率很高，但是功能不如bash那么强大，因此，在解析有些命令时，会出现找不
+到的错误。
+
+修改默认脚本解析器为bash，方法如下：
+	命令行输入：sudo dpkg-reconfigure dash
+	选择<no>
+	ls -l /bin/sh 查询确认
+
+16、交叉链安装
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SDK安装好之后，进入“Hi3516A_SDK_V1.0.5.0/osdrv/opensource/toolchain”目录，这下
+面有两个子目录，分别是“arm-hisiv300-linux”和“arm-hisiv400-linux”，分别是uclibc和glibc
+的工具链。hi3531是“arm-hisiv100-linux”、“arm-hisiv100nptl-linux”和“arm-hisiv200-linux”
+三个，所以不冲突。
+
+	进入“arm-hisiv300-linux”子目录，执行“tar -xvf arm-hisiv300-linux.tar.bz2”，然后
+执行“chmod 700 ./cross.v300.install  ./cross.v300.install”安装
+
+	进入“arm-hisiv400-linux”子目录，执行“tar -xvf arm-hisiv400-linux.tar.bz2”，然后
+执行“chmod 700 ./cross.v400.install  ./cross.v400.install”安装
+
+	执行source /etc/profile， 安装交叉编译器的脚本配置的环境变量就可以生效了，或者请重
+新登陆也可
+
+17、64bit ubuntu兼容海思32位交叉工具链
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我在交叉编译oRTP的时候发现，明明工具链存在，但报“No such file or directory”错误，
+网路上说这是64位宿主机编译32位交叉程序的缘故。
+
+参考文献：
+	https://blog.csdn.net/chxw098/article/details/79470508
+
+执行：/opt/hisi-linux/x86-arm/arm-hisiv300-linux/bin/arm-hisiv300-linux-uclibcgnueabi-gcc -v
+报错：-bash: /opt/hisi-linux/x86-arm/arm-hisiv300-linux/bin/arm-hisiv300-linux-uclibcgnueabi-gcc: 
+		No such file or directory
+
+安装lib32ncurses5 lib32z1这两个库即可(64位系统使用32位交叉编译链)
+
+执行：/opt/hisi-linux/x86-arm/arm-hisiv300-linux/bin/arm-hisiv300-linux-uclibcgnueabi-gcc -v
+报错：/opt/hisi-linux/x86-arm/arm-hisiv300-linux/bin/arm-hisiv300-linux-uclibcgnueabi-gcc: 
+		error while loading sared libraries: libstdc++.so.6: cannot open shared object file: 
+		No such file or directory.
+
+安装lib32stdc++6库即可
+
+
+18、编译内核、uboot等
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/qq_29350001/article/details/52447485
+
+
+19、libevent的交叉编译
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+19.1、配置
+./configure --prefix=/opt/crossinstall/libevent --host=arm-hisiv300-linux 
+CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+19.2、编译
+make
+
+19.3.安装
+make install
+
+
+20、oRTP移植
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：
+	https://github.com/BelledonneCommunications/ortp
+	https://www.cnblogs.com/xianghang123/p/3556423.html   CMAKE使用
+	https://blog.csdn.net/wang3141128/article/details/80481111  这个教程好
+	http://blog.sina.com.cn/s/blog_4c02ba150102wxg3.html    这个教程不是很好，略参考
+
+要求：
+	cmake 3.0以上版本
+
+交叉链的cmake文件
+	在/home/mqs文件夹下建立一个文件，叫做cmake_toolchain，内容如下：
+
+# this is required
+SET(CMAKE_SYSTEM_NAME Linux)
+
+# specify the cross compiler
+SET(CMAKE_C_COMPILER   arm-hisiv300-linux-gcc)
+SET(CMAKE_CXX_COMPILER arm-hisiv300-linux-g++)
+
+# where is the target environment 
+SET(CMAKE_FIND_ROOT_PATH /opt/crossinstall)
+
+# search for programs in the build host directories (not necessary)
+SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+# for libraries and headers in the target directories
+SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+mbedTLS库安装：
+	下载地址：https://github.com/ARMmbed/mbedtls/releases/tag/mbedtls-2.9.0
+
+	库说明：
+		这个库时TLS和SSL协议的实现
+
+	安装过程：
+		unzip mbedtls-2.9.0.zip
+		cmake . -DCMAKE_INSTALL_PREFIX=/opt/crossinstall -DUSE_SHARED_MBEDTLS_LIBRARY=On -DCMAKE_TOOLCHAIN_FILE=/home/mqs/cmake_toolchain
+		make
+		make install
+
+	安装结果：
+		库安装到了/opt/crossinstall/lib目录下
+		头文件安装到了/opt/crossinstall/include/mbedtls目录下
+
+bcunit安装(如果不编译bctoolbox的测试代码则不需要这个库，我就没编译测试代码，因为我搞不定)
+	下载地址：https://github.com/BelledonneCommunications/bcunit
+
+	库说明：
+		C语言单元测试框架，好像是个好东西呀，可以单独研究研究
+
+	安装过程：
+		cd bcunit-master/BCUnit可能更合适
+		Makefile.am -> Makefile.in
+		autoconf
+		automake
+		./configure --prefix=/opt/bcunit
+		make
+		make install
+
+
+bctoolbox安装：
+	下载地址：https://github.com/BelledonneCommunications/bctoolbox/releases/tag/0.6.0
+
+	库说明：
+		这是个工具库，不知道有什么用
+
+	安装过程：
+		cmake . -DCMAKE_INSTALL_PREFIX=/opt/crossinstall -DENABLE_TESTS_COMPONENT=NO -DCMAKE_TOOLCHAIN_FILE=/home/mqs/cmake_toolchain
+
+
+		make
+		make install
+
+	安装结果：
+		#cmake文件们安装在了/usr/share/bctoolbox/cmake下面
+		库安装在了/opt/crossinstall/lib
+		头文件安装在了/opt/crossinstall/include/bctoolbox
+
+
+oRTP PC安装：
+	下载地址：
+		https://github.com/BelledonneCommunications/ortp/releases/tag/1.0.2
+
+	库说明：
+		rtp协议的实现
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	代码修改：
+		现在ortp的协议框架已经支持H264了(不然要自己在avprofile.c中定义)，类型名为：
+PayloadType payload_type_h264。但是因为H264的媒体编码是动态编码，所以并没有加入到
+av_profile_init函数中去。所以我们要自己要加入，在av_profile_init函数的最后加入：
+	rtp_profile_set_payload(profile, 96, &payload_type_h264)
+
+	安装过程：
+		cmake . -DCMAKE_INSTALL_PREFIX=/opt/crossinstall -DCMAKE_TOOLCHAIN_FILE=/home/mqs/cmake_toolchain
+
+	安装结果：
+		#cmake文件们安装在了/usr/share/ortp/cmake下面
+		库安装在了/opt/crossinstall/lib
+		头文件安装在了/opt/crossinstall/include/ortp
+
+21、nfs服务器搭建
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献
+	http://blog.51cto.com/zjbintsystem/2130236   这个是靠谱的
+ubuntu虚拟机上需要做的工作：
+	rpc.nfsd和rpc.mountd
+
+新版的ubuntu已使用rpcbind代替portmap
+新版的ubuntu也不用initd而是使用systemd
+
+1、安装nfs服务
+	apt-get install nfs-kernel-server
+	apt-get install portmap
+	apt-get install nfs-common
+	
+journalctl -xe查看错误消息
+
+
+Ubuntu 17.10 之后 nfs 默认就只支持协议3和协议4，但是嵌入式板子 uboot 默认启动的是协议2，若想要求主机 nfs 支持协议2，就得：
+#gedit /etc/default/nfs-kernel-server
+
+2、修改配置文件/etc/exports，内容如下：
+/home *(rw,sync,no_root_squash)
+
+22、字体库相关
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：
+https://blog.csdn.net/u011011827/article/details/58709139
+
+	为了在海思平台上支持文字OSD，可以选择两种方案：
+官方的HiFB文档方式处理
+第三方函数库：freetype+SDL+SDL_ttf
+大家一般选择后者
+
+
+freetype-2.4.10.tar.gz  SDL-1.2.15.tar.gz  SDL_ttf-2.0.11.tar.gz
+
+22.1、freetype-2.4.10
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+22.1.0、freetype-2.4.10下载
+https://download.savannah.gnu.org/releases/freetype/
+
+22.1.1、配置
+./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+22.1.2、编译
+make
+
+22.1.3.安装
+make install
+
+22.2、SDL-1.2.15
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+22.2.0、SDL-1.2.15下载
+https://www.libsdl.org/download-1.2.php
+
+22.2.1、配置
+./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+22.2.2、编译
+make
+
+22.2.3.安装
+make install
+
+22.3、SDL_ttf-2.0.11
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+22.3.0、SDL_ttf-2.0.11下载
+https://www.libsdl.org/projects/SDL_ttf/release-1.2.html
+
+22.3.1、配置
+./configure --prefix=/opt/crossinstall --with-freetype-prefix=/opt/crossinstall --with-sdl-prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+22.3.2、编译
+make
+
+22.3.3.安装
+
+23、其它库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+23.1、json
+https://github.com/DaveGamble/cJSON
+
+23.2、base64
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+地址：
+https://github.com/aklomp/base64
+
+说明：
+这是一个c语言的base64编解码库，作者号称它非常地快，库的名字叫“Fast Base64 stream encoder/decoder”
+
+它为什么快呢，作者是这么解释的：
+	一般base64编解码是以字节为单位操作的，而这个库是以机器字宽为单位的，譬如32位机上就
+一次操作4字节，64位机上一次操作8字节。
+
+	更重要的是，这个库使用了SIMD指令，在Intel上就是MMX/SSE/AVX，在ARM上就是NEON。
+
+	www.shlf.net/forum.php
+
+base64_stream_encode_init -> codec_choose
+
+https://www.sohu.com/a/105812781_119709
+make lib/libbase64.o CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++ LD=arm-hisiv300-linux-ld OBJCOPY=arm-hisiv300-linux-objcopy NEON32_CFLAGS="-mcpu=cortex-a7 -mfpu=neon"
+
+
+
+

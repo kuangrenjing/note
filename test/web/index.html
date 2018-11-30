@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<body>
+<div id=topCoverDiv style="display:none;"></div>
+
+<!--textarea id="zsj" cols="100" rows="1"></textarea><input type="button" value="clear" onclick="clearZsj()" />-->
+
+<table cellpadding="0" cellspacing="0" border="0" id="login" align="center" height="100%" width="100%" class="hidden">
+    <tr>
+        <td align="center">
+            <table cellpadding="0" cellspacing="0" border="0" class="login">
+                <tr>
+                    <td class="login_left"></td>
+                    <td  class="login_middle">
+                        <table cellpadding="0" cellspacing="0" border="0" height="80%">
+                            <tr>
+                                <td colspan="2" align="left"  class="title">
+                                    <div class="login_logo"></div></td>
+                            </tr>
+
+                            <tr>
+                                <td><label langKey="username"></label></td>
+                                <td><input class="text_middle" type="text" id="loginUsername" onkeydown="javascript:if (event.keyCode==13) document.getElementById('loginPassword').focus();" /></td>
+                            </tr>
+
+                            <tr>
+                                <td><label langKey="password"></label></td>
+                                <td><input class="text_middle" type="password"  id="loginPassword" onkeydown="javascript:if (event.keyCode==13) login();"/></td>
+                            </tr>
+                            <tr>
+                                <td><label langKey="language"></label></td>
+                                <td>
+                                    <select onchange="selectLang(this)" id="select_lang_type">
+                                        <option value="0" langKey="lang_ch"></option>
+                                        <option value="1" langKey="lang_us"></option>
+
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" class="checkbox_style" id="checkbox_save" /><label langKey="pass_rem"></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label><a href="Setup.msi" langKey="download"></a></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="op">
+                                    <button id="btn_login" langKey="login" disabled="disabled" class="button_middle_disable" onclick="login()"></button>&nbsp;&nbsp;
+                                    <button id="btn_cancel" langKey="cancel" disabled="disabled" class="button_middle_disable" onclick="cancel()"></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="login_right"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+
+<div id="dialogTip" title="" class="hidden" style="overflow:hidden;border:#999999 solid 1px; background-color:#3c3c3c;">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+        <tr><td class="tip_alarm"></td><td class="tip"><label></label></td></tr>
+    </table>
+</div>
+
+<div id="dialogRecTip" title="" class="hidden" style="overflow:hidden;border:#999999 solid 1px; background-color:#3c3c3c;">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+        <tr><td class="tip_alarm"></td><td class="tip"><label></label></td></tr>
+    </table>
+</div>
+</body>
+</html>

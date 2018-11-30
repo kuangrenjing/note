@@ -1,0 +1,371 @@
+0、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.jianshu.com/p/9522c4a7818d
+https://www.cnblogs.com/cy568searchx/p/6125031.html
+
+1、术语
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)、NAL(Network Abstract Layer)
+
+2)、NALU(Network Abstract Layer Unit)
+
+
+1、H264简介：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参照一段时间内图像的统计结果表明，在相邻几幅图像画面中，一般有差别的像素只有10%以内的点,
+亮度差值变化不超过2%，而色度差值的变化只有1%以内。所以对于一段变化不大图像画面，我们可以
+先编码出一个完整的图像帧A，随后的B帧就不编码全部图像，只写入与A帧的差别，这样B帧的大小
+就只有完整帧的1/10或更小！B帧之后的C帧如果变化不大，我们可以继续以参考B的方式编码C帧，
+这样循环下去。这段图像我们称为一个序列（序列就是有相同特点的一段数据），当某个图像与之前
+的图像变化很大，无法参考前面的帧来生成，那我们就结束上一个序列，开始下一段序列，也就是对
+这个图像生成一个完整帧A1，随后的图像就参考A1生成，只写入与A1的差别内容。
+
+在H264协议里定义了三种帧，完整编码的帧叫I帧，参考之前的I帧生成的只包含差异部分编码的帧叫
+P帧，还有一种参考前后的帧编码的帧叫B帧。
+
+H264采用的核心算法是帧内压缩和帧间压缩，帧内压缩是生成I帧的算法，帧间压缩是生成B帧和P帧
+的算法。
+
+在H264中图像以序列为单位进行组织，一个序列是一段图像编码后的数据流，以I帧开始，到下一个I帧
+结束。
+
+I、B、P各帧是根据压缩算法的需要，是人为定义的,它们都是实实在在的物理帧。一般来说，I帧的压缩率
+是7（跟JPG差不多），P帧是20，B帧可以达到50。可见使用B帧能节省大量空间，节省出来的空间可以用
+来保存多一些I帧，这样在相同码率下，可以提供更好的画质。
+
+2、H264 profile、level
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	H.264包括baseline(基本)、main(主要)、extended(扩展)三种档次，只有extended档次支
+持data partition。
+
+	Profile是用来描述视频压缩特性的，profile越高，就说明采用了越高级的压缩特性，大致分
+为三大类：BP，MP，HP。
+
+	Level是对视频本身特性的描述（码率、分辨率、fps）,Level越高，视频的码率、分辨率、fps越
+高,而level主要是对码流的关键参数的取值范围作了限定，与解码器的处理能力和存储能力相关联。
+
+	Profile、level信息在SPS中定义。
+
+3、H264组成
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	H.264是一次概念的革新，它打破常规，在数据组织上完全没有I帧、P帧、B帧的概念，也没有
+IDR帧的概念。对于H.264中出现的一些概念从大到小排序依次是：序列、图像、片组、片、NALU、宏块、
+亚宏块、块、像素。这里有几点值得说明：
+1)、在 H.264 协议中图像是个集合概念，顶场、底场、帧都可以称为图像。因此我们可以知道，对于
+H.264协议来说，我们平常所熟悉的那些称呼，例如：I帧、P帧、B帧等等，实际上都是我们把图像这
+个概念具体化和细小化了。我们在H.264里提到的“帧”通常就是指不分场的图像；
+2)、如果不采用FMO(灵活宏块排序)机制，则一幅图像只有一个片组；
+3)、如果不使用多个片，则一个片组只有一个片；
+4)、如果不采用DP(数据分割)机制，则一个片就是一个NALU，一个NALU也就是一个片。否则，一个
+片由三个NALU组成(片分组A、B、C)。
+
+【注】
+“IDR图像片段数据”中有字段表示数据分割方式。
+
+	在H.264/AVC视频编码标准中，整个系统框架被分为了两个层面：视频编码层面(VCL)和网络
+抽象层面(NAL)。其中，前者负责有效表示视频数据的内容，而后者则负责格式化数据并提供头信息，
+以保证数据适合各种信道和存储介质上的传输。NAL占一个字节。
+
+	NAL单元(NALU)：NAL的基本语法结构，它包含一个字节的头信息和一系列来自VCL的称为原始
+字节序列载荷(RBSP)的字节流。数据流是储存在介质上时：每个NALU前添加起始码：0x00000001(
+或者0x000001)，用来指示一个NALU的起始和终止位置。我们平时的每帧数据就是一个NAL单元(SPS
+与PPS除外)。
+
+
+
+NAL字节头的构成：
+
+0x67: SPS
+0x68: PPS
+0x65: IDR
+0x61: non-IDR Slice
+0x01: B Slice
+0x06: SEI
+0x09: AU Delimiter
+
+0：     未定义
+1：     非IDR图像不采用数据划分片段
+2：     非IDR图像采用数据划分片段A部分
+3：     非IDR图像采用数据划分片段B部分
+4：     非IDR图像采用数据划分片段C部分
+5：     IDR图像片段
+6：     补充增强信息 SEI
+7：     序列参数集 SPS
+8：     图像参数集 PPS
+9：     分隔符(图像分割符)
+10：    序列结束符
+11：    流结束符
+12：    填充数据
+13：    序列参数集扩展
+14：    带前缀的NALU
+15：    子序列参数集
+16-18： 保留
+19：    不采用数据划分的辅助编码图像片段
+20：    编码片段扩展
+21-23： 保留
+24-31： 未定义
+
+VCL NAL 单元是指那些nal_unit_type 值等于 1 到 5(包括 1 和 5)的 NAL 单元，这些单元都包含了视频数据。所有其他的 NAL 单元都称作非 VCL NAL 单元，PPS和SPS都是非VCLNAL单元。
+关于字节流NAL单元的格式：（起始码中0的长度）
+
+【注】Hi3516a输出nalu序列结构
+	0x67 0x68 0x6 0x65 0x61(*29) 0x67 0x68 0x6 0x65 0x61(*29)...
+	即一帧关键帧后跟着29帧非关键帧。
+
+
+
+NALU的顺序要求：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	H.264/AVC标准对送到解码器的NAL单元顺序是有严格要求的，如果NAL单元的顺序是混乱的，
+必须将其重新依照规范组织后送入解码器，否则解码器不能够正确解码。
+
+1.序列参数集NAL单元：
+	必须在传送所有以此参数集为参考的其他NAL单元之前传送，不过允许这些NAL单元中间出现重
+复的序列参数集NAL单元。所谓重复的详细解释为：序列参数集NAL单元都有其专门的标识，如果两
+个序列参数集NAL单元的标识相同，就可以认为后一个只不过是前一个的拷贝，而非新的序列参数集。
+
+2.图像参数集NAL单元：
+	必须在所有以此参数集为参考的其他NAL单元之前传送，不过允许这些NAL单元中间出现重复的
+图像参数集NAL单元，这一点与上述的序列参数集NAL单元是相同的。
+
+3.
+	不同基本编码图像中的片段(slice)单元和数据划分片段(data partition)单元在顺序上不
+可以相互交叉，即不允许属于某一基本编码图像的一系列片段(slice)单元和数据划分片段(data 
+partition)单元中忽然出现另一个基本编码图像的片段(slice)单元片段和数据划分片段(data 
+partition)单元。
+
+4.参考图像的影响：
+	如果一幅图像以另一幅图像为参考，则属于前者的所有片段(slice)单元和数据划分片段(data 
+partition)单元必须在属于后者的片段和数据划分片段之后，无论是基本编码图像还是冗余编码图
+像都必须遵守这个规则。
+
+5.
+	基本编码图像的所有片段(slice)单元和数据划分片段(data partition)单元必须在属于相应
+冗余编码图像的片段(slice)单元和数据划分片段(data partition)单元之前。
+
+6.
+	如果数据流中出现了连续的无参考基本编码图像，则图像序号小的在前面。
+
+7.
+	如果arbitrary_slice_order_allowed_flag置为1，一个基本编码图像中的片段(slice)单
+元和数据划分片段(data partition)单元的顺序是任意的，如果arbitrary_slice_order_allowed_flag
+置为零，则要按照片段中第一个宏块的位置来确定片段的顺序，若使用数据划分，则A类数据划分片
+段在B类数据划分片段之前，B类数据划分片段在C类数据划分片段之前，而且对应不同片段的数据划
+分片段不能相互交叉，也不能与没有数据划分的片段相互交叉。
+
+
+8.
+	如果存在SEI(补充增强信息)单元的话，它必须在它所对应的基本编码图像的片段(slice)单元
+和数据划分片段(data partition)单元之前，并同时必须紧接在上一个基本编码图像的所有片段(
+slice)单元和数据划分片段(data partition)单元后边。假如SEI属于多个基本编码图像，其顺序
+仅以第一个基本编码图像为参照。
+
+
+9.
+	如果存在图像分割符的话，它必须在所有SEI 单元、基本编码图像的所有片段(slice)单元和
+数据划分片段(data partition)单元之前，并且紧接着上一个基本编码图像那些NAL单元。
+
+10.
+	如果存在序列结束符，且序列结束符后还有图像，则该图像必须是IDR(即时解码器刷新)图像。
+序列结束符的位置应当在属于这个IDR图像的分割符、SEI单元等数据之前，且紧接着前面那些图像
+的NAL单元。如果序列结束符后没有图像了，那么它的就在比特流中所有图像数据之后。
+
+11.
+	流结束符在比特流中的最后。
+
+
+
+VLC NALU
+
+块==》宏块(MB)==》片(Slice)==》片组==》图像(picture)
+
+
+
+
+2、SPS、PPS、IDR
+https://blog.csdn.net/maopig/article/details/6671251  H.264视频RTP负载格式/NALU的类型
+SPS（序列参数集Sequence Parameter Set）
+PPS（图像参数集Picture Parameter Set）
+
+	H.264的SPS和PPS串，包含了初始化H.264解码器所需要的信息参数，包括编码所用的
+profile，level，图像的宽和高，deblock滤波器等。
+
+sdp中的SPS、PPS怎么来？
+	使用RTP传输H264的时候，可以选用sdp协议来描述媒体信息，这些信息中就包括SPS、PPS信息
+(sdp媒体属性a有一个参数叫sprop-parameter-sets，其值是用逗号分隔的两部分，前面是SPS信息，
+后面是PPS信息)。SPS、PPS信息从H264码流中提取。在H264码流中,都是以"0x00 0x00 0x01"或者
+"0x00 0x00 0x00 0x01"为开始码的，找到开始码之后，使用开始码之后的第一个字节的低5位判断
+是否为7(sps)或者8(pps), 即data[4] & 0x1f == 7 || data[4] & 0x1f == 8.然后对获取的
+两个nal去掉开始码之后进行base64编码，拿编码后的值设置sprop-parameter-sets(注意两者要
+用逗号隔开)。
+
+SPS、PPS分析工具：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	前面说到SPS、PPS串包含了编码profile，level，图像的宽和高，deblock滤波器等，那具体
+包含哪些信息呢，可以使用解码工具来查看：
+
+spsparser sps.txt pps.txt output.txt
+例如sps.txt中的内容为：  Z0LgFNoFglE=
+pps.txt中的内容为：      aM4wpIA=
+
+最终解析的到的结果为：
+
+Start dumping SPS:
+	profile_idc = 66
+	constrained_set0_flag = 1
+	constrained_set1_flag = 1
+	constrained_set2_flag = 1
+	constrained_set3_flag = 0
+	level_idc = 20
+	seq_parameter_set_id = 0
+	chroma_format_idc = 1
+	bit_depth_luma_minus8 = 0
+	bit_depth_chroma_minus8 = 0
+	seq_scaling_matrix_present_flag = 0
+	log2_max_frame_num_minus4 = 0
+	pic_order_cnt_type = 2
+	log2_max_pic_order_cnt_lsb_minus4 = 0
+	delta_pic_order_always_zero_flag = 0
+	offset_for_non_ref_pic = 0
+	offset_for_top_to_bottom_field = 0
+	num_ref_frames_in_pic_order_cnt_cycle = 0
+	num_ref_frames = 1
+	gaps_in_frame_num_value_allowed_flag = 0
+	pic_width_in_mbs_minus1 = 21
+	pic_height_in_mbs_minus1 = 17
+	frame_mbs_only_flag = 1
+	mb_adaptive_frame_field_flag = 0
+	direct_8x8_interence_flag = 0
+	frame_cropping_flag = 0
+	frame_cropping_rect_left_offset = 0
+	frame_cropping_rect_right_offset = 0
+	frame_cropping_rect_top_offset = 0
+	frame_cropping_rect_bottom_offset = 0
+	vui_parameters_present_flag = 0
+
+Start dumping PPS:
+	pic_parameter_set_id = 0
+	seq_parameter_set_id = 0
+	entropy_coding_mode_flag = 0
+	pic_order_present_flag = 0
+	num_slice_groups_minus1 = 0
+	slice_group_map_type = 0
+	num_ref_idx_l0_active_minus1 = 0
+	num_ref_idx_l1_active_minus1 = 0
+	weighted_pref_flag = 0
+	weighted_bipred_idc = 0
+	pic_init_qp_minus26 = 0
+	pic_init_qs_minus26 = 0
+	chroma_qp_index_offset = 10
+	deblocking_filter_control_present_flag = 1
+	constrained_intra_pred_flag = 0
+	redundant_pic_cnt_present_flag = 0
+	transform_8x8_mode_flag = 0
+	pic_scaling_matrix_present_flag = 0
+	second_chroma_qp_index_offset = 10
+
+
+这里需要特别提一下这两个参数
+	pic_width_in_mbs_minus1 = 21
+	pic_height_in_mbs_minus1 = 17
+分别表示图像的宽和高，以宏块(16x16)为单位的值减1，因此，实际的宽为：
+	(21+1)*16 = 352
+
+
+3、宏块、slice
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+具体的压缩算法我们暂时不管，只是了解下因压缩算法带来的相关数据块格式。
+
+1)、宏块（Macro Block）：一个编码图像首先要划分成多个块（4x4 像素）才能进行处理，显然宏
+块应该是整数个块组成，通常宏块大小为16x16个像素。宏块分为I、P、B宏块，I宏块只能利用当前片
+中已解码的像素作为参考进行帧内预测；P宏块可以利用前面已解码的图像作为参考图像进行帧内预
+测；B宏块则是利用前后向的参考图形进行帧内预测；
+
+2)、片（Slice）：一帧视频图像可编码成一个或者多个片，每片包含整数个宏块，即每片至少一个宏
+块，最多时包含整个图像的宏块。
+
+片的目的：为了限制误码的扩散和传输，使编码片相互间保持独立。片共有5种类型：I片（只包含I宏块）、
+P片（P和I宏块）、B片（B和I宏块）、SP片（用于不同编码流之间的切换）和SI片（特殊类型的编码宏块）。
+
+3)、片组是一个编码图像中若干宏块的一个子集，包含一个或若干个片。一般一个片组中，每片的宏块是
+按扫描次序进行编码的，除非使用任意片次序（Arbitrary Slice Order, ASO）一个编码帧中的片之
+后可以跟随任一解码图像的片。
+
+
+4、I帧、IDR帧、P帧、B帧
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+I帧:
+	帧内编码帧是一种自带全部信息的独立帧，无需参考其它图像便可独立进行解码，视频序列中
+的第一个帧始终都是I帧。
+
+IDR帧
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	I和IDR帧都是使用帧内预测的。它们都是同一个东西而已,在编码和解码中为了方便，要首个I
+帧和其他I帧区别开，所以才把第一个首个I帧叫IDR，这样就方便控制编码和解码流程。IDR帧的作用
+是立刻刷新,使错误不致传播,从IDR帧开始,重新算一个新的序列开始编码。而I帧不具有随机访问的
+能力，这个功能是由IDR承担。IDR会导致DPB（DecodedPictureBuffer 参考帧列表——这是关键所在
+）清空，而I不会。IDR图像一定是I图像，但I图像不一定是IDR图像。一个序列中可以有很多的I图像，
+I图像之后的图像可以引用I图像之间的图像做运动参考。一个序列中可以有很多的I图像，I图像之后的
+图象可以引用I图像之间的图像做运动参考。 
+
+	对于IDR帧来说，在IDR帧之后的所有帧都不能引用任何IDR帧之前的帧的内容，与此相反，对于
+普通的I-帧来说，位于其之后的B-和P-帧可以引用位于普通I-帧之前的I-帧。从随机存取的视频流中，
+播放器永远可以从一个IDR帧播放，因为在它之后没有任何帧引用之前的帧。但是，不能在一个没有
+IDR帧的视频中从任意点开始播放，因为后面的帧总是会引用前面的帧 。
+
+	收到IDR帧时，解码器另外需要做的工作就是：把所有的PPS和SPS参数进行更新。
+
+	对IDR帧的处理(与I帧的处理相同)：(1)进行帧内预测，决定所采用的帧内预测模式。(2)像素值减
+去预测值，得到残差。(3) 对残差进行变换和量化。(4) 变长编码和算术编码。(5) 重构图像并滤波，
+得到的图像作为其它帧的参考帧。
+
+
+P帧:前向预测编码帧
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在针对连续动态图像编码时，将连续若干幅图像分成P,B,I三种类型，P帧由在它前面的P帧或
+者I帧预测而来，它比较与它前面的P帧或者I帧之间的相同信息或数据，也即考虑运动的特性进行帧
+间压缩。P帧法是根据本帧与相邻的前一帧（I帧或P帧）的不同点来压缩本帧数据。采取P帧和I帧联合
+压缩的方法可达到更高的压缩且无明显的压缩痕迹。
+
+	P帧的预测与重构:P帧是以I帧为参考帧，在I帧中找出P帧“某点”预测值和运动矢量，取预测差
+值和运动矢量一起传送。在接收端根据运动矢量从I帧中找出P帧“某点”的预测值并与差值相加以得到
+P帧某点样值，从而可得到完整的P帧。
+
+有的视频序列比较简单，就没有B帧，
+
+B帧：双向预测内插编码帧
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+B帧的预测与重构
+
+	B帧法是双向预测的帧间压缩算法。当把一帧压缩成B帧时，它根据相邻的前一帧、本帧以及后一
+帧数据的不同点来压缩本帧，也即仅记录本帧与前后帧的差值。只有采用B帧压缩才能达到200：1的
+高压缩。
+
+	B帧是以前面的I或P帧和后面的P帧为参考帧，找出B帧“某点”的预测值和两个运动矢量，并取
+预测差值和运动矢量传送。接收端根据运动矢量在两个参考帧中。
+
+
+
+
+
+
+3.  H.264 基本流结构及其传输机制
+3.1  H.264 基本流的结构
+H.264 的基本流（elementary stream,ES）的结构分为两层，包括视频编码层（VCL）和网络适配层（NAL）。视频编码层负责高效的视频内容表示，而网络适配层负责以网络所要求的恰当的方式对数据进行打包和传送。引入NAL并使之与VCL分离带来的好处包括两方面：其一、使信号处理和网络传输分离，VCL 和NAL 可以在不同的处理平台上实现；其二、VCL 和NAL 分离设计，使得在不同的网络环境内，网关不需要因为网络环境不同而对VCL比特流进行重构和重编码。
+       H.264 的基本流由一系列NALU （Network Abstraction Layer Unit ）组成，不同的NALU数据量各不相同。H.264 草案指出[2]，当数据流是储存在介质上时，在每个NALU 前添加起始码：0x000001，用来指示一个 NALU的起始和终止位置。在这样的机制下，*在码流中检测起始码，作为一个NALU得起始标识，当检测到下一个起始码时，当前NALU结束。每个NALU单元由一个字节的 NALU头（NALU Header）和若干个字节的载荷数据（RBSP）组成。其中NALU 头的格式如图2 所示：
+
+
+
+
+一个完整的流媒体传输系统包含服务器端和客户端两个部分[5][6]。对于服务器端，其主要任务是读取H.264 视频，从码流中分离出每个NALU 单元，分析NALU 的类型，设置相应的 RTP 包头，封装 RTP 数据包并发送。而对于客户端来说，其主要任务则是接收 RTP数据包，从RTP 包中解析出NALU 单元，然后送至*进行解码播放。该流媒体传输系统的框架如图3 所示。
+
+
+
+BT656/BT601/BT1120
+用于传输数字电视信号，逐行隔行？？远程电视传输的是射频信号，譬如DVB-S，而不是BT601之类的。
+
+601是SDTV的数据结构 656是SDTV的interface
+709是HDTV的数据结构 1120是HDTV的interface
+
+
+尽管目前绝大部分电视广播都是隔行扫描的，但在播出、制作和交换以及发行领域已经开始采用逐行扫描格式。

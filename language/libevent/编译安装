@@ -1,0 +1,8 @@
+./configure –prefix=/usr
+make
+make install
+
+make install会把库放在/usr/lib中，头文件放在/usr/include中，event_rpcgen.py放在/usr/bin中
+/usr/lib
+/usr/include
+/usr/bin

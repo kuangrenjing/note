@@ -1,0 +1,49 @@
+1、查看时区
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+date命令的默认显示结果跟时区设置有关。譬如：
+	Fri Sep 7 06:34:18 UTC 2018
+	Fri Sep 7 13:48:57 CST 2018
+
+	这两个结果里边的"UTC"、"CST"代表时区：
+		UTC是协调世界时(Universal Time Coordinated)，跟格林威治时间(GMT)是一样的，
+代表0时区。
+		奇葩的是，CST是四个时区的缩写：
+			Central Standard Time (USA) UT-6:00
+			Central Standard Time (Australia) UT+9:30
+			China Standard Time UT+8:00
+			Cuba Standard Time UT-4:00
+
+所以我们有必要看看系统的时区到底是怎么设置的，命令是：
+	date -R
+
+结果：
+	Fri, 07 Sep 2018 14:28:59 +0800
+
+现在我们可以看到，我们的这个"CST"代表的就是东八区，中国标准时间。
+
+2、修改时区
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+命令方法：
+	方法A
+		tzselect
+	方法B 仅限于RedHat Linux 和 CentOS
+		timeconfig
+	方法C 适用于Debian
+		dpkg-reconfigure tzdata
+
+替换文件方法
+	复制相应的时区文件，替换系统时区文件；或者创建链接文件
+	cp /usr/share/zoneinfo/$主时区/$次时区 /etc/localtime
+	例如：在设置中国时区使用亚洲/上海（+8）
+	cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+海思linux的文件系统高度精简，不支持命令方法，所以可以把虚拟机上的/usr/share/zoneinfo/Asia/Shanghai
+下载下来，弄成板子上的/etc/localtime文件。
+
+3、同步时间
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+vi /etc/resolv.conf
+rdate -s time.nist.gov
+
+
+

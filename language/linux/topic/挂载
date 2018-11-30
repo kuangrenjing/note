@@ -1,0 +1,122 @@
+1、交换分区
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Linux内核为了提高读写效率与速度，会将文件在内存中进行缓存，这部分内存就是Cache 
+Memory(缓存内存)。即使你的程序运行结束后，Cache Memory也不会自动释放。这就会导致你在
+Linux系统中程序频繁读写文件后，你会发现可用物理内存变少。当系统的物理内存不够用的时候，
+就需要将物理内存中的一部分空间释放出来，以供当前运行的程序使用。那些被释放的空间可能来自
+一些很长时间没有什么操作的程序，这些被释放的空间被临时保存到Swap空间中，等到那些程序要运
+行时，再从Swap分区中恢复保存的数据到内存中。这样，系统总是在物理内存不够时，才进行Swap交
+换。
+
+
+1、/etc/fstab、/etc/mtab和/proc/mounts
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这三个文件的格式都一样，关于“/etc/fstab”的信息可以通过“man fstab”查看。
+
+/etc/fstab
+	此文档描述文件系统的静态信息。
+
+/etc/mtab
+	基本已废弃，由/proc/mounts接替它工作
+
+/proc/mounts
+	也基本已废弃，由/proc/self/mountinfo接替它的工作
+
+The first column specifies the device that is mounted, the second column reveals the mount point, and the third column tells the file system type, and the fourth column tells you if it is mounted read-only (ro) or read-write (rw). The fifth and sixth columns are dummy values designed to match the format used in /etc/mtab. 
+
+
+exec start --no-wait mountall
+
+
+3、通过"cat /proc/mounts"命令可以看到/上挂载了两个设备
+4、/proc/self/mountinfo
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://forums.whirlpool.net.au/archive/1955812
+
+	这一点要先从根文件系统的加载说起。在linux启动的时候，把根文件系统安装为ramfs(initramfs)
+initramfs的工作是离开并找到真正的根文件系统，通常在一些本地存储设备上，挂载它，最后执行
+chroot来更改初始进程的根文件系统。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在非常古老的系统中，mount只是简单地解析和格式化/etc/mtab。每当文件系统被安装和卸载
+时，这个文件就会被修改(格式化过程？？)。但是，它存在缺陷(具体见参考吧，参考说的很混乱，不
+能理解)。
+
+	较新的系统改变了一些东西，使得/etc/mtab只是到/proc/mounts的一个符号链接，它本身是
+到/proc/self/mounts的一个符号链接，因为不同的进程可以在不同的挂载名称空间中。虽然这意味
+着它永远不会失去同步，保持向后兼容性带来了一些问题。另外：它的格式没有明确区分挂载点的选
+项(例如，是否挂载noexec)和文件系统的选项(例如，是否需要日志)。对于大多数伪文件系统，它不
+能正确区分设备——设备字段是没有用的，比如“tmpfs”。更糟糕的是，当你使用chroot改变了根文件
+系统以后，它会继续显示之前的根文件系统挂载情况(通常就是rootfs)。
+
+	当下(不知道从什么时候开始，反正ubuntu10.04上已经有了)，linux引入了/proc/self/mountinfo
+解决了上面提到的问题。
+
+5、mount命令：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+1、如何确定一个文件夹是属于根文件系统，还是挂载在根文件系统上：
+cat /proc/mounts
+
+ file /etc/mtab
+/etc/mtab: symbolic link to `/proc/mounts'
+
+2、文件系统类型：
+
+
+在Kernel启动的初始阶段，首先去创建虚拟的根文件系统(rootfs)，接下来再去调用do_mount来加载真正的文件系统，并将根文件系统切换到真正的文件系统，也即真实的文件系统。
+
+
+不是内核，是udev的bug，某个版本的udev对btrfs支持有bug，具体你可以直接google关键词”/dev/root btrfs udev”
+
+
+https://unix.stackexchange.com/questions/295060/why-on-some-linux-systems-does-the-root-filesystem-appear-as-dev-root-instead
+cat /proc/cmdline
+mem=128M console=ttyAMA0,115200 root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=hi_sfc:1M(boot),3M(kernel),12M(rootfs)
+
+通过fdisk -l可以看到：
+Disk /dev/mtdblock0: 1 MB, 1048576 bytes
+255 heads, 63 sectors/track, 0 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+Disk /dev/mtdblock0 doesn't contain a valid partition table
+
+Disk /dev/romblock1: 3 MB, 3145728 bytes
+255 heads, 63 sectors/track, 0 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+Disk /dev/romblock1 doesn't contain a valid partition table
+
+Disk /dev/mtdblock2: 12 MB, 12582912 bytes
+255 heads, 63 sectors/track, 1 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+Disk /dev/mtdblock2 doesn't contain a valid partition table
+
+
+
+vfsmount和dentry之间的关系
+
+对于每一个 mount 的文件系统，都由一个 vfsmount 结构来表示。
+对于每一个目录项，都用一个dentry来表示，例如对于/usr/local/lib ： / usr local lib 表示4个目录项
+
+两者关系以一个例子来说明：
+例如我们要mount一个设备 /dev/sdb1 到 /home/my目录下，
+我们假设 /home/my 就是当前进程的根文件系统中的目录（即 home 和 my 都没有mount任何文件系统），
+命令行是： mount -t ext2 /dev/sdb1 /home/my
+我们mount的时候，传入的参数有三个： 要mount的设备( /dev/sdb1 ) ， 设备的文件系统 ( ext2 之类的)， mount到什么目录 ( /home/my )
+
+mount的过程就是把设备的文件系统加入到 vfs 框架中
+1. 首先，要mount一个新的设备，需要创建一个新的 super block。 这通过要mount的文件系统的 file_system_type， 调用其 get_sb 方法来创建一个新的 super block。
+2. 需要创建一个新的vfsmount ，对于任何一个 mount 的文件系统，都要有一个 vfsmount， 创建这个vfsmount， 并设置好vfsmount 中的各个成员
+3. 将创建好的 vfsmount 加入到系统中。
+
+对于新的vfsmount:
+其mountpoint为目录 "my" 的dentry，
+其mnt_root 是设备sdb1上的根目录的 dentry
+其父 vfsmount 就是原文件系统中的那个 vfsmount
+
+
+vfs、根目录、挂载点

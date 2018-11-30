@@ -1,0 +1,59 @@
+1、开发板、windows PC机、ubuntu虚拟机相互ping通
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+windows PC机：
+	ip:       192.168.15.77
+	netmask:  255.255.255.0
+
+ubuntu虚拟机
+	网络模式：桥接模式
+	ip:      192.168.15.128
+	netmask  255.255.255.0
+
+Hi3531开发板:
+	ip:      192.168.15.129
+	netmask: 255.255.255.0
+
+
+【遇到的问题】：
+1、windows PC机可以ping通Hi3531开发板，也可以通过telnet协议连接Hi3531开发板。Hi3531开发板
+不能ping通windows PC机。
+
+把windows PC机的防火墙关闭就可以了。
+
+2、ubuntu虚拟机可以ping通Hi3531开发板，Hi3531开发板不能ping通ubuntu虚拟机。
+
+NAT模式只对宿主机可见，对局域网的其他设备(譬如开发板)是不可见的。如需开发板可见，需使用桥接
+模式。
+
+
+
+2、ubuntu上建立nfs文件系统，开发板挂载这个文件系统。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ubuntu虚拟机上需要做的工作：
+
+
+
+rpc.nfsd和rpc.mountd
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+《Hi3531/Hi3532 Linux开发环境 用户指南.pdf》
+
+mount -t nfs -o nolock 10.85.180.133:/home/ glibc-nfs /mnt
+
+
+
+modprobe mmz mmz=ddr,0,0xC2000000,16M /*插入mmz模块，网口驱动会使用该模块*/
+ifconfig eth0 hw ether 00:10:85:18:01:84 /*配置MAC地址*/
+ifconfig eth0 10.85.180.184 netmask 255.255.254.0 /*配置IP地址和子网掩码*/
+route add default gw 10.85.180.1 /*配置默认网关*/
+mount -t nfs -o nolock 10.85.180.133:/home/ glibc-nfs /mnt /*挂载NFS目
+
+
+
+
+>10ps/s
+剪裁后的视频图像
+液面位置（像素位置，尺寸转化）
+告警信息：网络断开 侵入

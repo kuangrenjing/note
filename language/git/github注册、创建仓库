@@ -71,4 +71,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	git init，note目录下多了一个".git"目录。
 
-	git remote add origin git@github.com:kuangrenjing/note.git，上传到github
+	git remote add origin https://github.com/kuangrenjing/note.git，在本地建立了一个可以推送的分支
+
+	git push -u origin master
+
+4、从远程仓库把笔记拉到本地来
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

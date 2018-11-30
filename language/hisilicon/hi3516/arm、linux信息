@@ -1,0 +1,15 @@
+1、参考资料
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ARM内核全解析，从ARM7,ARM9到Cortex-A7,A8,A9,A12,A15到Cortex-A53,A57
+	http://www.myir-tech.com/resource/448.asp  
+
+2、Hi3516a的CPU介绍
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Hi3516a搭载的cpu是具有armv7架构的cortex-A7，单处理器群集中的 1-4X SMP通过 AMBA® 4技
+术实现多个一致的SMP处理器群集。
+
+也就是说cortex-A7只有一个物理core，但可以通过SMP技术实现4个逻辑core，但通过uname -a查
+看可以发现Hi-linux并不支持SMP，所以只有一个core可用。
+
+3、top命令查看资源使用率
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

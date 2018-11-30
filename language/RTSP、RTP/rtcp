@@ -1,0 +1,297 @@
+https://blog.csdn.net/bytxl/article/details/50400987
+
+https://www.jianshu.com/p/409f20b7e813
+
+
+网络视频抓包分析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
+
+发送端首先发送RTCP包，但发送的是send report而不是Source description
+
+
+RTP/RTCP的时间同步机制
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+RTP支持传送不同codec的steaming，不同codec的clock rate的也不一样，不同的media之间需要
+依靠RTCP进行同步。这里简单介绍一下他们的机制。
+
+在每个RTCP SR包中对应有一个RTP时间和一个NTP时间，它表达的意思很明确，那就是这个RTP时间
+对应的绝对时间， 不同media的RTP时间尽管不同，但可以通过NTP时间映射到同一个时间轴上，从
+而实现同步。
+
+
+NTP时钟源
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/maxsky/article/details/53866475
+参见/linux/时钟    /网络/时间服务器 两篇
+
+rdate -s ip不行
+设置/etc/resolv.conf后“rdate -s 域名”可以，但阿里的域名不行。
+
+重启后要从rtc读取出时间，然后设置到系统，你肯定没有做这一步。
+
+
+RTP、RTCP术语
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、RTP负载(RTP payload):
+	通过RTP 传输的包中的数据，例如，音频样本或压缩好的视频数据。负载格式与解释不在本文
+讨论范围。
+
+2、RTP包(RTP packet):
+	一种数据包，其组成部分有：一个固定RTP 报头，一个可能为空的作用源(contributing sources
+ CSRC)列表，以及负载数据。一些下层协议可能要求对RTP包的封装进行定义。一般地，下层协议的一
+个包包含一个RTP包，但若封装方法允许，也可包含数个RTP包（见章节11）。
+
+3、RTCP包(RTCP packet):
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一种控制包，其组成部分有：一个类似RTP包的固定报头，后跟一个结构化的部分，该部分具体
+元素依不同RTCP包的类型而定。格式的定义见章节６。一般地，多个RTCP包将在一个下层协议的包中
+以合成RTCP包的形式传输；这依靠RTCP 包的固定报头中的长度字段来实现。
+
+4、端口(Port):
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	“传输协议用来在同一主机中区分不同目的地的一种抽象。TCP/IP协议使用正整数来标识不同端
+口”。OSI传输层使用的传输选择器（TSEL,the transport selectors）等同于这里的端口。RTP需
+依靠低层协议提供的多种机制，如“端口”用以多路复用会话中的RTP和RTCP包。
+
+5、传输地址(Transport address)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	是网络地址与端口的结合，用来标识一个传输层次的终端，例如一个IP地址与一个UDP端口。包
+是从源传输地址发送到目的传输地址。
+
+6、RTP 媒体类型(RTP media type):
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一个RTP媒体类型是一个单独RTP会话所载有的负载类型的集合。RTP配置文件把RTP媒体类型指
+派给RTP负载类型。
+
+7、多媒体会话(Multimedia session):
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在一个参与者公共组中，并发的RTP会话的集合。例如，一个视频会议(为多媒体会话)可能包含
+一个音频RTP会话和一个视频RTP会话。
+
+8、RTP会话(RTP session)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一群参与者通过RTP 进行通信时所产生的关联。一个参与者可能同时参与多个RTP会话。在一个
+多媒体会话中，除非编码方式把多种媒体多路复用到一个单一数据流中，否则每种媒体都将使用各自
+的RTCP包，通过单独的RTP会话来传送。通过使用不同的目的传输地址对(一个网络地址加上一对分别
+用于RTP和RTCP的端口，构成了一个传输地址对)来接收不同的会话，参与者能把多个RTP会话区隔开
+来。单个RTP会话中的所有参与者，可能共享一个公用目的传输地址对，比如IP多播的情况；也可能
+各自使用不同的目的传输地址对，比如个体单播网络地址加上一个端口对。对于单播的情况，参与者可
+能使用相同端口对来收听其他所有参与者，也可能对来其他每个参与者使用不同的端口对来收听。
+
+	RTP会话间相互区别的特征，在于每个RTP会话都维护一个用于SSRC 标识符的独立完整的空间。
+RTP会话所包含的参与者组，由能接收SSRC标识符的参与者组成，这些SSRC标识符由RTP(同步源或作
+用源)或RTCP中的任意参与者传递。例如，考虑下述情况，用单播UDP实现的三方会议，每方都用不同
+的端口对来收听其他两方。如果收到一方的数据，就只把RTCP反馈发送给那一方，则会议就相当于由三
+个单独的点到点RTP会话构成；如果收到一方的数据，却把RTCP反馈发送另两方，则会议就是由一个多
+方(multi-party)RTP会话构成。后者模拟了三方间进行IP 多播通信时的行为。
+
+	RTP框架允许上述规定发生变化，但一个特定的控制协议或者应用程序在设计时常常对变化作出约束。
+
+9、同步源(SSRC，Synchronization source)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+RTP包流的源，用RTP报头中32位数值的SSRC标识符进行标识，使其不依赖于网络地址。一个同步源
+的所有包构成了相同计时和序列号空间的一部分，这样接收方就可以把一个同步源的包放在一起，来
+进行重放。举些同步源的例子，像来自同一信号源的包流的发送方，如麦克风、摄影机、RTP混频器(见
+下文)就是同步源。一个同步源可能随着时间变化而改变其数据格式，如音频编码。SSRC标识符是一个
+随机选取的值，它在特定的RTP会话中是全局唯一（globally unique）的（见章节8）。参与者并不
+需要在一个多媒体会议的所有RTP会话中，使用相同的SSRC标识符；SSRC标识符的绑定通过RTCP(见章
+节6.5.1)。如果参与者在一个RTP会话中生成了多个流，例如来自多个摄影机，则每个摄影机都必须
+标识成单独的同步源。
+
+10、作用源（CSRC，Contributing source )：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	若一个RTP包流的源，对由RTP混频器生成的组合流起了作用，则它就是一个作用源。对特定包
+的生成起作用的源，其SSRC 标识符组成的列表，被混频器插入到包的RTP报头中。这个列表叫做CSRC
+表。相关应用的例子如，在音频会议中，混频器向所有的说话人(talker)指出，谁的话语(speech)将被组合到即将发出的包中，即便所有的包都包含在同一个(混频器的)SSRC标识符中，也可让听者(
+接收者)可以清楚谁是当前说话人。
+
+
+11、终端系统（End system)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一种应用程序，它产生发送出的RTP包中内容，或者使用接收到的RTP包中内容。在一个特定的
+RTP会话中，一个终端系统可以扮演一个或多个同步源角色，但通常是一个。
+
+12、混频器(Mixer)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一种中间系统，它从一个或多个源中接收RTP包，可能改变其数据格式，再按某种方式把这些
+包组合成一个新的包，然后转发出去。由于多个输入源的计时一般不会同步，所以混频器会对各个流
+的计时作出调整，并为组合流生成一个新的计时。因此，混频器将被标识成它所产生所有数据包的同
+步源。
+
+13、转换器（Translator)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一种中间系统，它转发RTP包而不改变各包的同步源标识符。转换器的例子如下：不作混频地转
+变编码的设备，把多播复制到单播的重复装置，以及防火墙里应用层次的过滤器。
+
+14、监视器(Monitor)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一种应用程序，它接收RTP 会话参与者所发送的RTCP 包，特别是接收报告(reception 
+report)，而且对当前服务质量进行评估，评估结果用于分配监视任务，故障诊断和长期统计。监视
+器常常被内建到参与会话的应用程序中，但也可以是一个的独立的应用程序——不参加会话、也不发送
+或接收RTP数据包（因为它们在不同的端口上）。这些被称作第三方监视器。还有一种情况也是可以接
+受的，第三方监视器只接收但不发送数据包，或者另外地算入到会话中。
+
+15、非RTP途径(Non-RTP means)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	为提供一个可用的服务，可能还需要其他的协议和机制。特别地，对多媒体会议来说，一个控制
+协议可以发布多播地址，发布加密密钥，协商所用的加密算法，以及为没有预定义负载类型值的格式，
+建立负载类型值和其所代表的负载格式之间的动态映射。其他协议的例子如下：会话初始化协议(
+SIRFC3261[13])，ITU推荐的H.323[14]，还有使用SDP(RFC2327[15])的应用程序，如RTSP(RFC
+2326[16]). 对于简单的应用程序，电子邮件或者会议数据库也可能用到。对这些协议和机制的详细说明已
+经超出了本文档的讨论范围。
+
+
+SR：发送者报告RTCP 包
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+header |V=2|P|    RC   |   PT=SR=200   |          length               |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                     SSRC of sender                            |
+       +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+sender |           NTP timestamp, most significant word                |
+info   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |           NTP timestamp, least significant word               |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                      RTP timestamp                            |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                   sender's packet count                       |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                    sender's octet count                       |
+       +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+report |                     SSRC_1 (SSRC of first source)             |
+block  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 1     | fraction lost |       cumulative number of packets lost       |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |         extended highest sequence number received             |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |              interarrival jitter                              |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                      last SR (LSR)                            |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                 delay since last SR (DLSR)                    |
+       +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+report |              SSRC_2 (SSRC of second source)                   |
+block 2+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+       |                    profile-specific extensions                |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+第一部分，头部，8 字节长。该域有以下意义：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+版本(V)：
+	2比特RTP版本识别符，在RTCP包内的意义与RTP包中的相同。此协议中定义的版本号为2。
+
+填充(P)：
+	1比特若设置填充比特，该RTCP 包在末端包含一些附加填充比特，并不是控制信息的基本部分。
+填充的最后一个比特统计了多少个字节必须被忽略。填充可能会用于需要固定长度块的加密算法。在
+复合RTCP包中，复合包作为一个整体加密，填料比特只能加在最后一个单个RTCP包的后面。
+
+接收报告块计数(RC)：
+	5比特。该包中所含接收报告块的数目。零值有效。
+
+包类型(PT)：
+	8比特。包含常数200，用以识别这个为SR包。
+
+长度：
+	16比特。该RTCP包的长度减1。其单位是32比特字，包括头和任何填充字节。(偏移量1保证零值有效，
+避免了在扫描RTCP 包长度时可能发生的无限循环，同时以32 比特为单位避免了对以4 为倍数的有效性
+检测。)
+
+SSRC：
+	32比特。 SR包发送者的同步源标识符。
+
+
+第二部分，发送者信息，20字节长。在每个发送者报告包中出现。它概括了从此发送者发出的数据传输情况。
+此域有以下意义：
+NTP时间戳：
+	64比特。指示了此报告发送时的背景时钟（wallclock）时刻，它可以与从其它接收者返回的接收报告
+块中的时间标志结合起来，计算往返每个接收者所花的时间。接收者应让NTP 时间戳的精度远大于其他时间
+戳的精度。时间戳测量的不确定性不可知，因此也无需指示。一个系统可能没有背景时钟的概念，而只有系
+统指定的时钟，如系统时间（system uptime）。在这样的系统中，此时钟可以作为参考计算相对NTP时间
+戳。选择一个公用的时名是非常重要的。这样多个独立的应用都可以使用相同的时钟。到2036年，相对和绝对
+NTP时间戳会产生大的差异。到那时，我们希望不再需要相对时钟。一个发送者，如果不用背景时钟时间或逝
+去时间，可以设置此项为零。
+
+RTP时间戳：
+	32比特。与以上的NTP时间标志对应同一时刻。与数据包中的RTP时间戳具有相同的单位和偏移量。
+这个一致性可以用来让NTP时间标志已经同步的源之间进行媒体内/间同步，还可以让与媒体无关的接收者估
+计名义RTP时钟频率。注意在大多数情况下此时间戳不等于任何临近的RTP包中的时间戳。
+RTP时间戳可以由相应的NTP时间戳计算得到。依据的是“RTP时间戳计数器”和“在采样时通过周期性检
+测背景时钟时间得到的实际时间”两者之间的关系。
+（在RTCP SR包中有NTP时间戳、RTP时间戳，它们可以计算背景时钟和RTP时钟之间的对应关系，
+通过这个关系，可以由RTP数据包中的RTP时间戳计算也相应的回放时刻。这样就可以进行多个流的同步了。
+之所以要有NTP时间戳，是因为不同流的RTP时间戳有不同的随机偏移量，无法直接进行同步：笔者注。）
+
+发送的报文数：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	32比特。从开始传输到此SR包产生时该发送者发送的RTP数据包总数。若发送者改变SSRC识别符，
+该计数器重设。
+
+发送的字节文数：
+	32比特。从开始传输到此SR包产生时该发送者在RTP数据包发送的字节总数(不包括头和填充)。若
+发送者改变SSRC识别符，该计数器重设。此域可以用来估计平均的负载数据发送速率。
+
+
+第三部分：零到多个接收报告块。块数等于从上一个报告以来该发送者侦听到的其它源（不包括自身）
+的数目。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+每个接收报告块传输从某个同步源来的数据包的接收统计信息。若数据源因冲突而改变其SSRC标识符，
+接收者重新设置统计信息。这些统计信息有：
+
+SSRC_n(同步源标识符)：
+	32比特 在此接收报告块中信息所属源的SSRC 标识符。
+
+丢包率：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	8比特。自从前一SR包或RR包发送以来，从SSRC_n传来的RTP数据包的丢失比例。以定点小数的形
+式表示。该值定义为损失包数／期望接收的包数。若由于包重复而导致包丢失数为负值，丢包率设为零。
+注意在收到上一个包后，接收者无法知道以后的包是否丢失。如：若在上一个接收报告间隔内从某个源
+发出的所有数据包都丢失，那么将不为此数据源发送接收报告块。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	累计包丢失数：24比特。从开始接收到现在，从源SSRC_n发到本源的RTP数据包的丢包总数。该
+值定义为：期望接收的包数－实际接收的包数。接收的包括复制的或迟到的。由于迟到的包不算作损失，
+在发生复制时丢包数可能为负值。期望接收的包数定义为：扩展的上一接收序号(随后定义)减去最初接
+收序号。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+接收到的扩展的最高序列号：
+	32比特。低16比特包含从源SSRC_n来的最高接收序列号，高16比特用相应的序列号周期计数器
+扩展该序列号。注意在同一会议中的不同接收者，若启动时间明显不同，将产生不同的扩展项。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+到达间隔抖动：
+	32比特。RTP数据包到达时刻统计方差的估计值。测量单位同时间戳单位，用无符号整数表达。
+到达时间抖动定义为一对包中接收者相对发送者的时间间隔差值的平均偏差(平滑后的绝对值)。
+如以下等式所示，该值等于两个包相对传输时间的差值。相对传输时间是指：包的RTP 时间戳和到达时刻接
+收者时钟时间的差值。若Si 是包i 中的RTP 时间戳，Ri 是包i 到达时刻（单位为：RTP 时间戳单位）。对
+于两个包i 和j，D 可以表示为 D(i，j)=(Rj-Sj)-(Ri-Si)；
+到达时刻抖动可以在收到从源SSRC_n 来的每个数据包i 后连续计算。利用该包和前一包i-1 的偏差D(按
+到达顺序，而非序号顺序)，根据公式J=J+(|D(i-1，i)|-J)/16 计算。无论何时发送接收报告，都用当前的
+J 值。
+此处描述的抖动计算允许与协议独立的监视器对来自不同实现的报告进行有效的解释。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+上一SR报文(LSR)：
+	32比特。接收到的来自源SSRC_n的最新RTCP发送者报告(SR)的64位NTP时间标志的中间32位。
+若还没有接收到SR，该域值为零。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+自上一SR的时间(DLSR)：
+	32比特。是从收到来自SSRC_n的SR包到发送此接收报告块之间的延时，以1/65536秒为单位。若
+还未收到来自SSRC_n的SR包，该域值为零。假设SSRC_r为发出此接收报告块的接收者。源SSRC_n可以
+通过记录收到此接收报告块的时刻A来计算到SSRC_r的环路传输时延。可以利用最新的SR时间标志(LSR)
+计算整个环路时间A-LSR，然后减去此DLSR域得到环路传输的时延。
+
+
+接收者报告包(RR)与发送者报告包基本相同，除了包类型域包含常数201 和没有发送者信息的5 个字
+(NTP 和RTP 时间标志和发送者包和字节计数)。余下区域与SR 包意义相同。若没有发送和接收据报告，在
+RTCP 复合包头部加入空的RR 包(RC=0)。
+
+
+
+
+SSRC的确定和改变规则：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+热重启或SSRC冲突需发送“Source description”包

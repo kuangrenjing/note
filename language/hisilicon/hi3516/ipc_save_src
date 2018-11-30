@@ -1,0 +1,3 @@
+
+1、编译时带了sensor驱动
+/home/mqs/Hi3516A_SDK_V1.0.5.0/test/ipc_save_src/Debug/objects.mk:LIBS := -lpthread -lmpi -live -ltde -lVoiceEngine -lupvqe -ldnvqe -ldl -lisp -l_hiae -l_hiaf -l_hiawb -l_cmoscfg -l_hidefog -l_iniparser -lsns_imx178

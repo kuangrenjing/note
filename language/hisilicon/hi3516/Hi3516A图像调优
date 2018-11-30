@@ -1,0 +1,103 @@
+http://bbs.ebaina.com/thread-9047-1-1.html
+http://blog.51cto.com/shugenyin/1878262
+https://wenku.baidu.com/view/884c5e37905f804d2b160b4e767f5acfa1c783fc.html
+http://bbs.ebaina.com/thread-9870-1-1.html      matlab插件
+http://bbs.ebaina.com/thread-14187-1-1.html     [hi3516] HI3516A+IMX185白天曝光严重过度问题
+
+-1、网友的一些问题
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://bbs.ebaina.com/thread-10936-1-1.html
+3518E+ov9712，海思的uboot，kernel，以及文件系统，跑sampe_venc，看到图像严重不清晰，遮盖光敏电阻之后ir-cut无切换声音。
+我的问题是：
+1、我自己并没有写ir-cut切换的程序，所以要想切换ir-cut还需要我自己根据原理图，找到ircut的gpio来控制？
+2、图像质量的问题，海思的sample_venc中并没有看到调节图像的接口，但是我单独运行ittb_control看到的那些值是怎么来的呢？
+
+你单独运行ittb_control的时候会调用到你文件夹下的.cfg文件和库文件，这些文件里面有对应9712的一些配置信息
+
+
+
+0、PQTools在哪里
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+位置在Hi3516A V100R001C01SPC050\01.software\pc\PQ_TOOL。其中"Hi3516A_PQ_V1.0.5.0.tgz"
+为设备端工具。"PQTools_V3.9.6.zip"为PC端工具。
+
+Hi3516A V100R001C01SPC050\01.software\pc\PQ_TOOL\documents_cn\图像质量调试工具使用指南.pdf
+Hi3516A V100R001C01SPC050\02.Only for Reference\04.other\documents_cn\Hi3516A／Hi3516D IPC图像质量调优.pdf
+
+
+
+1、设备端使用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+PQTools很有可能是连接sensor的动态库，然后直接修改sensor。
+
+
+2、ittb_control考察
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+根据《HiISP开发参考》一文图1-1描述，PQTOOL直接连接ISP逻辑和通过I2C直写sensor。我们使用
+readelf工具发现ittb_control没有链接I2C的动态库：
+
+arm-hisiv300-linux-readelf -d ./Hi3516A_PQ_V1.0.5.0/Hi3516A_PQ_V1.0.5.0/ittb_control
+
+Dynamic section at offset 0x1817c contains 34 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [lib_hiae.so]
+ 0x00000001 (NEEDED)                     Shared library: [lib_hiaf.so]
+ 0x00000001 (NEEDED)                     Shared library: [lib_hiawb.so]
+ 0x00000001 (NEEDED)                     Shared library: [libisp.so]
+ 0x00000001 (NEEDED)                     Shared library: [libmpi.so]
+ 0x00000001 (NEEDED)                     Shared library: [libVoiceEngine.so]
+ 0x00000001 (NEEDED)                     Shared library: [lib_iniparser.so]
+ 0x00000001 (NEEDED)                     Shared library: [lib_hidefog.so]
+ 0x00000001 (NEEDED)                     Shared library: [libupvqe.so]
+ 0x00000001 (NEEDED)                     Shared library: [libdnvqe.so]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+ 0x0000000c (INIT)                       0x9b48
+ 0x0000000d (FINI)                       0x1afb8
+ 0x00000019 (INIT_ARRAY)                 0x28170
+ 0x0000001b (INIT_ARRAYSZ)               4 (bytes)
+ 0x0000001a (FINI_ARRAY)                 0x28174
+ 0x0000001c (FINI_ARRAYSZ)               4 (bytes)
+ 0x00000004 (HASH)                       0x8108
+ 0x00000005 (STRTAB)                     0x8e48
+ 0x00000006 (SYMTAB)                     0x8558
+ 0x0000000a (STRSZ)                      2295 (bytes)
+ 0x0000000b (SYMENT)                     16 (bytes)
+ 0x00000015 (DEBUG)                      0x0
+ 0x00000003 (PLTGOT)                     0x282b4
+ 0x00000002 (PLTRELSZ)                   1016 (bytes)
+ 0x00000014 (PLTREL)                     REL
+ 0x00000017 (JMPREL)                     0x9750
+ 0x00000011 (REL)                        0x9740
+ 0x00000012 (RELSZ)                      16 (bytes)
+ 0x00000013 (RELENT)                     8 (bytes)
+ 0x00000000 (NULL)                       0x0
+
+但我们使用另一个命令可以看到ittb_control包含了i2c的静态库：
+arm-hisiv300-linux-readelf -a ./Hi3516A_PQ_V[图片]1.0.5.0/Hi3516A_PQ_V1.0.5.0/ittb_control | grep i2c
+ 822: 0000e56c   336 FUNC    GLOBAL DEFAULT    9 HI_i2c_write
+ 1034: 0000e6bc   384 FUNC    GLOBAL DEFAULT    9 HI_i2c_read
+
+所以ittb_control直写sensor是可信的，那又如何给ittb_control配置sensor的i2c设备号等
+信息呢？
+
+图中PQTool直连ISP逻辑应该是错误的，从ittb_control链接的一堆动态库，我认为它连到的是
+ISP FIREWARE。
+
+但这里有个问题，海图给的ipc_caster、ipc_save_src可执行测试文件对ISP FIREWARE是静态
+链接，也就是说ISP FIREWARE完全是状态无关的？不然ittb_control是动态链接，测试程序是
+静态链接会有冲突吧。
+
+
+
+最近移植公司的图像算法到Hi3516A开发板，我遇到了两个难题:
+
+1，曝光度调整无效，曝光度只有在AE设置有接口HI_MPI_ISP_SetExposureAttr，在AE设置曝光度了，但VENC模块demo抓图看不到效果，没有变化，是什么原因呢，我想得到不同曝光度的图片；
+
+2，彩色转黑白模式设置跨模块无效，我在VENC模块用color2grey设置为黑白的，在VENC抓图看确实有效果，是黑白的了，但在VPSS模块和VI模块GetFrame获取YUV图片却还是彩色的，为什么呢，我想得到黑白的YUV图像buffer。
+
+请问有对这个熟悉的朋友吗？VENC，VI，VPSS各个模块都是独立的吗？设置属性在其他模块无效吗？我就想获取不同曝光度，黑白的YUV图像buffer，怎么做到呢？
+
+1. 设置曝光度，你要看一下isp实际生效的AE参数：cat /proc/umap/isp

@@ -1,0 +1,17 @@
+1、RAW RGB、BAYER RGB
+
+我们知道，Sensor的感光原理是通过一个一个的感光点对光进行采样和量化，但在Sensor中，每一个感光点只能感光RGB中的一种颜色。所以，通常所说的30万像素或130万像素等，指的是有30万或130万个感光点。每一个感光点只能感光一种颜色。
+
+但是，要还原一个真正图像，需要每一个点都有RGB三种颜色，所以，对于CCIR601或656的格式，在Sensor模组的内部会有一个ISP模块，会将Sensor采集到的数据进行插值和特效处理，例如：如果一个感光点感应的颜色是R，那么，ISP模块就会根据这个感光点周围的G、B感光点的数值来计算出此点的G、B值，那么，这一点的RGB值就被还原了，然后在编码成601或656的格式传送给Host。
+
+而RGB RAW格式的Sensor则是将每个感光点感应到的RGB数值直接传送给Host，由Host来进行插值和特效处理。由此可见RGB RAW DATA才是真正的原始数据。
+
+RGB RAW DATA是指原始的数据，单个pixle只能感应一种颜色。
+
+如果这个原始数据的排列格式是 RGRG/GBGB排列的，我们叫做 Bayer pattern（这个最最常见）。所以 Bayer RGB是属于 RGB RAW data的，但是 RGB RAW data不一定是bayer pattern，不同厂家的sensor,其RGB RAW DATA排列是不同的， 不过对于我们来说不必过于关心扫描格式，反正厂家都会提供API.
+
+
+
+https://www.cnblogs.com/fjutacm/p/220631977df995512d136e4dbd411951.html
+
+摄像头模组，Camera Compact Module，简写为CCM

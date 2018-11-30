@@ -1,0 +1,4 @@
+glib库是Linux平台下最常用的C语言函数库，它具有很好的可移植性和实用性。glib是Gtk +库和Gnome的基础。
+
+
+apt-get install libglib2.0-dev

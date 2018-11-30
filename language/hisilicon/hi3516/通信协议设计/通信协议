@@ -1,0 +1,143 @@
+1、AE属性：
+1.1、获取AE属性
+
+请求消息：
+GET /dfs_level_monitor/ae HTTP/1.1
+accept: application/json; version=1.0
+Host: 10.7.36.222
+Content-Length: 1146
+Accept-Encoding: gzip, deflate
+Connection: Close
+
+
+
+响应消息：
+HTTP/1.1 200 OK
+Date: Wed, 23 Aug 2018 17:21:22 GMT
+Server: 10.7.36.222
+Connection: close
+Content-Length: 6378
+Content-Type: application/json; charset=utf-8
+
+{
+	"target_luminance": 50, //百分率
+}
+
+1.2、设置AE属性
+
+请求消息：
+POST /dfs_level_monitor/ae HTTP/1.1
+accept: application/json; version=1.0
+Host: 10.7.36.222
+Content-Length: 1146
+Accept-Encoding: gzip, deflate
+Connection: Close
+
+{
+	"target_luminance": 50, //百分率
+}
+
+响应消息：
+HTTP/1.1 200 OK
+Date: Wed, 23 Aug 2018 17:21:22 GMT
+Server: 10.7.36.222
+Connection: close
+Content-Length: 6378
+Content-Type: application/json; charset=utf-8
+
+{
+	"result": 0, //0:成功，1：参数错误...
+}
+
+2、图像属性
+2.1、获取图像属性
+
+请求消息：
+GET /dfs_level_monitor/picture_attr HTTP/1.1
+accept: application/json; version=1.0
+Host: 10.7.36.222
+Content-Length: 1146
+Accept-Encoding: gzip, deflate
+Connection: Close
+
+
+
+响应消息：
+HTTP/1.1 200 OK
+Date: Wed, 23 Aug 2018 17:21:22 GMT
+Server: 10.7.36.222
+Connection: close
+Content-Length: 6378
+Content-Type: application/json; charset=utf-8
+
+{
+	"max_width": 1920,
+	"max_height": 1080,
+	"max_frame_rate": 60,
+	"width": 960,
+	"height": 540,
+	"frame_rate": 10
+}
+
+2.2、修改
+
+请求消息：
+GET /dfs_level_monitor/picture_attr HTTP/1.1
+accept: application/json; version=1.0
+Host: 10.7.36.222
+Content-Length: 1146
+Accept-Encoding: gzip, deflate
+Connection: Close
+
+{
+	"width": 960,
+	"height": 540,
+	"frame_rate": 10
+}
+
+响应消息：
+HTTP/1.1 200 OK
+Date: Wed, 23 Aug 2018 17:21:22 GMT
+Server: 10.7.36.222
+Connection: close
+Content-Length: 6378
+Content-Type: application/json; charset=utf-8
+
+{
+	"result": 0, //0:成功，1：参数错误...
+}
+
+
+3、图像
+3.1、获取图像：
+
+请求消息：
+GET /dfs_level_monitor/picture HTTP/1.1
+accept: application/json; version=1.0
+Host: 10.7.36.222
+Content-Length: 1146
+Accept-Encoding: gzip, deflate
+Connection: Close
+
+响应消息：
+HTTP/1.1 200 OK
+Date: Wed, 23 Aug 2018 17:21:22 GMT
+Server: 10.7.36.222
+Connection: close
+Content-Length: 6378
+Content-Type: application/json; charset=utf-8
+
+{
+	"picture_attr":
+	{
+		"width": 960,
+		"height": 540,
+		"frame_rate": 10
+	},
+	"level_info":
+	{
+		"unit_type": 0, //0: 像素 1： 百分百
+		"level": 100
+	}
+}
+//图像数据

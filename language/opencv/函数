@@ -1,0 +1,32 @@
+1、颜色
+1.1、转换颜色(convert color)
+cvtColor()
+
+2、Image Processing - Feature Detection(图像处理 - 特征检测)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+void cv::Canny(InputArray  image,
+		OutputArray        edges,
+		double             threshold1,
+		double             threshold2,
+		int                apertureSize = 3,
+		bool               L2gradient = false
+)
+
+Finds edges in an image using the Canny algorithm [32] .
+
+The function finds edges in the input image and marks them in the output map edges using the Canny algorithm. The smallest value between threshold1 and threshold2 is used for edge linking. The largest value is used to find initial segments of strong edges. See http://en.wikipedia.org/wiki/Canny_edge_detector
+
+函数 cvCanny 采用 CANNY 算法发现输入图像的边缘而且在输出图像中标识这些边缘。threshold1和threshold2 当中的小阈值用来控制边缘连接，大的阈值用来控制强边缘的初始分割。
+
+
+
+3、Image Processing - Miscellaneous Image Transformations
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+double cv::threshold(InputArray  src,
+		OutputArray              dst,
+		double                   thresh,
+		double                   maxval,
+		int                      type
+)
+
+用于8位灰度图二值化(事实上，根据type，有些情况下只有部分灰度值会被二值化，其它灰度值还保持原值)

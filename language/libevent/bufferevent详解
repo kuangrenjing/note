@@ -1,0 +1,206 @@
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/zhouyongku/article/details/53434623
+https://blog.csdn.net/educast/article/details/38019079
+	这是非常重要的write回调发不出去的解释，搜EINPROGRESS错误。
+
+无法解决write回调的EINPROGRESS问题，所以不搞write回调了。
+
+解决了write回调问题：bufferevent_disable(bev, EV_WRITE)应在最后一次bufferevent_write
+之后的一次回调中调用，而不是在最后一次的当前回调中调用。
+
+伪代码如下：
+void write_cb(struct bufferevent* bev, void* arg)
+{
+	if(数据还没有发完)
+	{
+		size_t len = bufferevent_write(bev, msg, strlen(msg));
+	}
+	else
+	{
+		bufferevent_disable(bev, EV_WRITE);
+	}
+}
+
+
+1、bufferevent简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+很多时候，除了响应事件之外，应用还希望做一定的数据缓冲。比如说，写入数据的时候，通常的运
+行模式是：
+
+	决定要向连接写入一些数据，把数据放入到缓冲区中
+	等待连接可以写入
+	写入尽量多的数据
+	记住写入了多少数据，如果还有更多数据要写入，等待连接再次可以写入
+
+这种缓冲IO模式很通用，libevent为此提供了一种通用机制，即bufferevent。bufferevent由一
+个底层的传输端口（如套接字），一个读取缓冲区和一个写入缓冲区组成。与通常的事件在底层传输
+端口已经就绪，可以读取或者写入的时候执行回调不同的是，bufferevent在读取或者写入了足够量
+的数据之后调用用户提供的回调。
+
+有多种共享公用接口的bufferevent类型，编写本文时已存在以下类型：
+	基于套接字的bufferevent：使用event_*接口作为后端，通过底层流式套接字发送或者接收数
+据的bufferevent
+	异步IO bufferevent：使用Windows IOCP接口，通过底层流式套接字发送或者接收数据的
+bufferevent（仅用于Windows，试验中）
+	过滤型bufferevent：将数据传输到底层bufferevent对象之前，处理输入或者输出数据的
+bufferevent：比如说，为了压缩或者转换数据。
+	成对的bufferevent：相互传输数据的两个bufferevent。
+
+【注】
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+截止2.0.2-alpha版，这里列出的bufferevent接口还没有完全正交于所有的bufferevent类型。
+也就是说，下面将要介绍的接口不是都能用于所有bufferevent类型。libevent开发者在未来版本
+中将修正这个问题。
+
+也请注意：当前bufferevent只能用于像TCP这样的面向流的协议，将来才可能会支持像UDP这样的
+面向数据报的协议。
+
+本节描述的所有函数和类型都在event2/bufferevent.h中声明。特别提及的关于evbuffer的函数
+声明在event2/buffer.h中，详细信息请参考下一章。
+
+2、四个水位
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	每个bufferevent有两个evBuffer结构的缓冲区，一个用于读，一个用于写。用户可以提供两个
+回调函数，用于当两个evBuffer满足一定条件时通知用户；在某些情况下，evBuffer将停止工作。
+这里“满足一定条件”由读低水位、写低水位控制；“某些情况下”由读高水位、写高水位控制。
+
+每个 bufferevent有四个水位:
+	读取低水位:读取操作使得输入缓冲区的数据量比此级别高时，读取回调将被调用。默认值为0，
+此时表示一旦读缓冲区内有数据了，回调函数将被调用。
+
+	读取高水位:输入缓冲区中的数据量达到此级别后，bufferevent将停止读取，直到输入缓冲区
+中足够量的数据被抽取，使得数据量低于此级别。默认值是无限，所以永远不会因为输入缓冲区的大
+小而停止读取。
+
+	写入低水位:写入操作使得输出缓冲区的数据量达到或者低于此级别时，写入回调将被调用。默
+认值是0，所以只有输出缓冲区空的时候才会调用写入回调。
+
+	写入高水位:bufferevent没有直接使用这个水位。它在bufferevent用作另外一个bufferevent
+的底层传输端口时有特殊意义。请看后面关于过滤型bufferevent的介绍。
+
+【注】：
+问题来了，读写evBuffer最大能多大呢？
+	给我感觉，两个evBuffer是以能从系统申请到的内存为限的，所以它们可能会撑爆系统。也就是说
+高水位最好还是限制一下的好。
+
+
+2、创建基于套接字的bufferevent
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+struct bufferevent *bufferevent_socket_new(struct event_base *base,
+	evutil_socket_t fd, enum bufferevent_options options);
+
+int bufferevent_socket_connect(struct bufferevent *bev,
+	struct sockaddr *address, int addrlen);
+
+int bufferevent_setfd(struct bufferevent *bufev, evutil_socket_t fd);
+
+evutil_socket_t bufferevent_getfd(struct bufferevent *bufev);
+
+void bufferevent_setcb(struct bufferevent *bufev,
+	bufferevent_data_cb readcb, bufferevent_data_cb writecb,
+	bufferevent_event_cb eventcb, void *cbarg);
+
+bufferevent_socket_new创建的不是socket，而是创建的基于socket的bufferevent。如果创建
+bufferevent时还没有socket，fd可设为-1。bufferevent_socket_new()函数由2.0.1-alpha版
+新引入。
+
+如果还没有为bufferevent设置套接字，调用bufferevent_socket_connect函数将为其分配一个
+新的流套接字，并且设置为非阻塞的。如果已经为bufferevent设置套接字，调用
+bufferevent_socket_connect()将告知libevent套接字还未连接，直到连接成功之前不应该对
+其进行读取或者写入操作。但在连接完成之前可以向输出缓冲区添加数据。如果连接成功启动，函数
+返回0；如果发生错误则返回-1。bufferevent_socket_connect()函数由2.0.2-alpha版引入。在
+此之前，必须自己手动在套接字上调用connect()，连接完成时，bufferevent将报告写入事件。
+如果使用bufferevent_socket_connect()发起连接，将只会收到BEV_EVENT_CONNECTED事件()。如
+果自己调用connect()，则连接上将被报告为写入事件。
+
+【注】：
+bufferevent_socket_connect()内部是通过监听socket的可写状态来判断socket是否连接上的。
+连接结果通过调用bufferevent_setcb设置的eventcb通知用户(BEV_EVENT_CONNECTED、BEV_EVENT_ERROR)，
+如果是BEV_EVENT_CONNECTED，则用户可以调用bufferevent_enable来启动读写监听了。
+
+对于监听需求，libevent也提供了一个一揽子函数evconnlistener_new_bind()，使用这个函数
+就不用自己手动调用socket、bind、listen函数了。
+
+bufferevent_setfd、bufferevent_getfd用于设置或者返回基于fd的事件的文件描述符。只有基
+于套接字的bufferevent支持它们。两个函数都在失败时返回-1；setfd()成功时返回0。
+bufferevent_setfd()函数由1.4.4版引入，bufferevent_getfd()函数由2.0.2-alpha版引入。
+
+3、bufferevent的套接字监听哪些事件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+void bufferevent_enable(struct bufferevent *bufev, short events);
+void bufferevent_disable(struct bufferevent *bufev, short events);
+short bufferevent_get_enabled(struct bufferevent *bufev);
+
+默认情况下，新创建的bufferevent的写入是启用的，但是读取没有启用。
+可以调用bufferevent_get_enabled()确定bufferevent上当前启用的事件。
+除了bufferevent_get_enabled()由2.0.3-alpha版引入外，其它两个函数都由0.8版引入。
+
+可以启用或者禁用bufferevent上的EV_READ、EV_WRITE或者EV_READ|EV_WRITE事件。没有启用读
+取或者写入事件时，bufferevent将不会试图进行数据读取或者写入。
+
+4、evconnlistener_new_bind函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+struct evconnlistener * evconnlistener_new(struct event_base *base,
+	evconnlistener_cb cb, void *ptr, unsigned flags, int backlog,
+	evutil_socket_t fd);
+
+struct evconnlistener * evconnlistener_new_bind(struct event_base *base,
+	evconnlistener_cb cb, void *ptr, unsigned flags, int backlog,
+	const struct sockaddr *sa, int socklen);
+
+void evconnlistener_free(struct evconnlistener *lev);
+
+typedef void (* evconnlistener_cb)(struct evconnlistener *listener, 
+	evutil_socket_t fd, struct sockaddr *addr, int socklen, void *user_arg);
+
+
+5、bufferevent超时机制
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+struct timeval tv = {1,0};
+bufferevent_set_timeouts (evClient, &tv, NULL);
+
+
+6、bufferevent"错误"或者"事件"回调
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	bufferevent_setcb函数有一个回调函数参数：“bufferevent_event_cb eventcb”，用于
+向应用通知非面向数据的事件，如连接已经关闭或者发生错误等。与面对数据的读、写回调函数不同，
+这个回调带有三个参数，第二个参数为“short event”，具体的事件类型就是通过这个参数带回的：
+	BEV_EVENT_READING:读取操作时发生某事件，具体是哪种事件请看其他标志。
+	BEV_EVENT_WRITING:写入操作时发生某事件，具体是哪种事件请看其他标志。
+	BEV_EVENT_ERROR :操作时发生错误，关于错误的更多信息,请调用EVUTIL_SOCKET_ERROR()。
+	BEV_EVENT_TIMEOUT:发生超时。
+	BEV_EVENT_EOF:遇到文件结束指示。
+	BEV_EVENT_CONNECTED:请求的连接过程已经完成。
+这些标志是2.0.2版本引入的。
+
+6.1、BEV_EVENT_TIMEOUT
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+void bufferevent_set_timeouts(struct bufferevent *bufev,
+		const struct timeval *timeout_read, const struct timeval *timeout_write);
+
+	设置超时为NULL可以取消超时。
+
+	试图读取数据的时候，如果至少等待了timeout_read秒，则读取超时事件将被触发。试图写入
+数据的时候，如果至少等待了timeout_write秒,则写入超时事件将被触发。
+
+	注意：只有在读取或者写入的时候才会计算超时。也就是说：如果bufferevent的读取被禁止，
+或者输入缓冲区满(达到其高水位)，则读取超时被禁止。类似的：如果写入被禁止，或者没有数据待
+写入，则写入超时被禁止。
+
+	读取或者写入超时发生时，相应的读取或者写入操作被禁止，如果向继续读取或写入，需再次手
+动调用bufferevent_enable函数。
+
+	超时事件回调被调用时，第二个参数是标志BEV_EVENT_TIMEOUT|BEV_EVENT_READING或者
+BEV_EVENT_TIMEOUT|BEV_EVENT_WRITING。
+
+	这个函数从2.0.1-alpha版就存在了，但是直到2.0.4-alpha版才对于各种bufferevent类型行
+为一致。
+
+
+
+
+5、bufferevent_socket_new
+https://blog.csdn.net/rin_cherish/article/details/78465788
+
+https://github.com/armink/EasyLogger

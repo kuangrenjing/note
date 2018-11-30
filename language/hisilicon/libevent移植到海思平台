@@ -1,0 +1,29 @@
+1、libevent的交叉编译
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、配置
+./configure --prefix=/opt/crossinstall/libevent --host=arm-hisiv300-linux 
+CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+1.2、编译
+make
+
+3.安装
+make install
+
+
+2、tmux是什么？？ 我不知道啊
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+二,tmux的交叉编译
+1.配置
+./configure
+2.然后修改config.mk
+添加两行：
+CPPFLAGS+=/opt/crossinstall/libevent/include /opt/ncurses-5.7/include
+LDFLAGS+=/opt/crossinstall/libevent/lib /opt/ncurses-5.7/lib
+3.编译
+make
+4.在目标板上建立如下文件夹
+ /usr/share/terminfo/v/
+ 将PC机的同样文件夹下的vt100 vt102拷贝到目标板上
+5.将tmux拷贝到目标板/usr/sbin下， tmux需要的库拷贝到目标板/lib下
+大功告成

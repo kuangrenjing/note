@@ -1,0 +1,4 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、已计划将多个默认网关用于提供单一网络(例如Intrannet或Internet)的冗余。如果这些网关在
+两个分离且不相互连接的网络上(例如，一个在Intrannet上，一个在Internet上)，则它们不能正
+常工作。是否保存此配置？

@@ -1,0 +1,50 @@
+1、/etc/init.d/rcS 开机自启动脚本
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+这个脚本就是做一个开机自启动的设置，主要做了这么几件事情：
+
+1.1、设置网络
+#set ip
+ifconfig eth0 192.168.15.129 netmask 255.255.255.0 up
+route add default gw 192.168.15.1
+
+ifconfig lo 127.0.0.1
+telnetd &
+
+mount -t ramfs none /tmp  #挂载这个文件系统不知有什么用 使用内存做Linux下的/tmp目录
+
+1.2、调用load3516a
+# insmod
+cd /3516Ako
+./load3516a -i -sensor imx178 -osmem 128 -offline
+insmod /3516Ako/extdrv/gpioi2c_16.ko
+
+1.3、设置串口寄存器
+# uart1&uart3 mux
+himm 0x200f0084 0x01
+himm 0x200f007c 0x01
+himm 0x200f0078 0x02
+himm 0x200f0080 0x02
+
+1.4、设置IR_cut寄存器
+#IR_cut
+himm 0x200f01a0 0x00
+himm 0x200f01a4 0x00
+himm 0x20260400 0x03
+himm 0x2026000c 0x00
+himm 0x2026000c 0x01
+
+1.5、app后台运行
+cd /mnt/test
+./ipc_caster &
+
+
+
+
+
+
+
+himm不是linux命令，应该是“海思memory工具”的意思。实际上，那就是用来写海思寄存器的。
+
+xxx/osdrv/tools/board_tools/reg-tools-1.0.0/source/tools/下提供了himm的读写工具源码
+我们可以用这个源码来写GPIO的驱动，相关细节详见博客：
+https://blog.csdn.net/faihung/article/details/60469288

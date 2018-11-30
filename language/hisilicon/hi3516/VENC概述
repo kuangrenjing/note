@@ -1,0 +1,68 @@
+
+
+1、从编码器获取码流
+VENC_PACK_S代表一个NULU单元。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef struct hiVENC_PACK_S
+{
+	HI_U32 u32PhyAddr;
+	HI_U8 *pu8Addr;
+	HI_U32 u32Len;
+	VENC_DATA_TYPE_U DataType;
+	HI_U64 u64PTS;
+	HI_BOOL bFrameEnd;
+	HI_U32 u32Offset;
+	HI_U32 u32DataNum;
+	VENC_PACK_INFO_S stPackInfo[8];
+}VENC_PACK_S;
+码流包结构
+
+typedef struct hiVENC_STREAM_S
+{
+	VENC_PACK_S *pstPack;
+	HI_U32 u32PackCount;
+	HI_U32 u32Seq;
+	union
+	{
+		VENC_STREAM_INFO_H264_S stH264Info;
+		VENC_STREAM_INFO_JPEG_S stJpegInfo;
+		VENC_STREAM_INFO_MPEG4_S stMpeg4Info;
+		VENC_STREAM_INFO_H265_S stH265Info;
+	};
+}VENC_STREAM_S
+帧码流包结构
+
+2、帧/包模式获取码流控制
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	HI_MPI_VENC_GetStream函数可以按包取流或按帧取流，这两种模式是怎么设置的呢？
+
+	VENC_ATTR_H264_S.bByFrame为HI_TRUE时，按帧获取。
+	VENC_ATTR_H264_S.bByFrame为HI_FALSE时，按包获取。
+
+	VENC_ATTR_H264_S变量一般作为VENC_ATTR_S的union成员出现
+	VENC_ATTR_S变量一般又作为VENC_CHN_ATTR_S的成员出现
+
+	所以，“帧/包模式获取码流控制”是通过HI_MPI_VENC_GetStream函数设置的
+	HI_S32 HI_MPI_VENC_CreateChn(VENC_CHN VeChn, const VENC_CHN_ATTR_S *pstAttr);
+
+	包，对H264、H265而言就是NAL单元，即NALU。
+
+	HI_MPI_VENC_CreateChn在common示例代码中是由SAMPLE_COMM_VENC_Start函数调用的。在
+SAMPLE_COMM_VENC_START函数中VENC_ATTR_H264_S.bByFrame被设置为HI_TRUE，也就是按帧获
+取。
+
+3、VENC通道与VI、VPSS通道对数据获取的处理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我们前面已经知道，HI_MPI_VI_GetFrame、HI_MPI_VPSS_GetFrame不管什么时候调用获取到
+的都是最近的图像。
+
+	但文档对HI_MPI_VENC_GetStream函数的解释是这样的：
+	如果用户长时间不获取码流，码流缓冲区就会满。一个编码通道如果发生码流缓冲区满，就会
+不再启动编码，直到用户获取码流，从而有足够的码流缓冲可以用于编码时，才开始继续编码。
+
+	建议用户获取码流接口调用与释放码流的接口调用成对出现，且尽快释放码流，防止出现由于
+用户态获取码流，释放不及时而导致的码流buffer满，停止编码。
+
+	可以看出来，对HI_MPI_VENC_GetStream而言，你不读不行，读了不释放也不行，所以基本上
+应该设置一个线程专职主动调用HI_MPI_VENC_GetStream函数。而不能用其它条件来触发被动调用
+HI_MPI_VENC_GetStream函数。

@@ -1,0 +1,35 @@
+1、版本说明：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	常州海图“Hi3516A_IMX178开发板资料”目录下的readme指出，海州海图的开发板应使用
+“Hi3516A_V100R001C01SPC050.rar”
+
+
+2、SDK安装
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	把“Hi3516A_V100R001C01SPC050.rar”解压后，进入“01.software”->“board”，此目录下
+有“Hi3516A_SDK_V1.0.5.0.tgz”，上传到虚拟机。
+
+	在虚拟机相关目录“tar -xzf Hi3516A_SDK_V1.0.5.0.tgz”解压SDK包。
+
+	进入“Hi3516A_SDK_V1.0.5.0”目录，执行“./sdk.unpack”。执行的时候你会发现它要你先安
+装交叉编译链。“be sure”你大爷呀，你把交叉编译链打包在SDK包里边，我怎么先安装呀。
+
+3、交叉链安装
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SDK安装好之后，进入“Hi3516A_SDK_V1.0.5.0/osdrv/opensource/toolchain”目录，这下
+面有两个子目录，分别是“arm-hisiv300-linux”和“arm-hisiv400-linux”，分别是uclibc和glibc
+的工具链。hi3531是“arm-hisiv100-linux”、“arm-hisiv100nptl-linux”和“arm-hisiv200-linux”
+三个，所以不冲突。
+
+	进入“arm-hisiv300-linux”子目录，执行“tar -xvf arm-hisiv300-linux.tar.bz2”，然后
+执行“chmod 700 ./cross.v300.install  ./cross.v300.install”安装
+
+	进入“arm-hisiv400-linux”子目录，执行“tar -xvf arm-hisiv400-linux.tar.bz2”，然后
+执行“chmod 700 ./cross.v400.install  ./cross.v400.install”安装
+
+	执行source /etc/profile， 安装交叉编译器的脚本配置的环境变量就可以生效了，或者请重
+新登陆也可
+
+4、编译内核、uboot等
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/qq_29350001/article/details/52447485

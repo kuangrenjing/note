@@ -1,0 +1,70 @@
+
+1、事件条件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+libevent的基本操作单元是事件。每个事件代表一组条件的集合，这些条件包括：
+	文件描述符已经就绪，可以读取或者写入
+	文件描述符变为就绪状态，可以读取或者写入（仅对于边沿触发IO）
+	超时事件
+	发生某信号
+	用户触发事件
+
+这些条件可以使用事件标志或事件标志的组合来表示：
+
+EV_TIMEOUT
+	这个标志表示某超时时间流逝后事件成为激活的。构造事件的时候，EV_TIMEOUT标志是被忽略
+的：可以在添加事件的时候设置超时，也可以不设置。超时发生时，回调函数的what参数将带有这个
+标志。
+
+EV_READ
+	表示指定的文件描述符已经就绪，可以读取的时候，事件将成为激活的。
+
+EV_WRITE
+	表示指定的文件描述符已经就绪，可以写入的时候，事件将成为激活的。
+
+EV_SIGNAL
+	用于实现信号检测，请看下面的“构造信号事件”节。
+
+EV_PERSIST
+	表示事件是“持久的”，持久的意思就是事件可以被反复激活。也就是说激活状态时，调用回调
+前，先把它设置为未决状态，如果没有设置这个表示，会进入非未决状态，详见“event状态机.png”。
+
+EV_ET
+	表示如果底层的event_base后端支持边沿触发事件，则事件应该是边沿触发的。这个标志影响
+EV_READ和EV_WRITE的语义。
+
+
+2、事件集合
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+使用libevent函数之前需要分配一个或者多个event_base结构体。每个event_base结构体持有一
+个事件集合，可以检测以确定哪个事件是激活的。
+
+如果设置event_base使用锁，则可以安全地在多个线程中访问它。然而，其事件循环只能运行在一个
+线程中。如果需要用多个线程检测IO，则需要为每个线程使用一个event_base。
+
+每个event_base都有一种用于检测哪种事件已经就绪的“方法”，或者说“后端”。可以识别的方法有：
+	select
+	poll
+	epoll
+	kqueue
+	devpoll
+	evport
+	win32
+
+用户可以用环境变量(譬如EVENT_NOKQUEUE)或编程的方法(event_config_avoid_method)禁止某些
+特定的后端。
+
+
+3、创建事件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+struct event *event_new(struct event_base *base, evutil_socket_t fd,
+	short what, event_callback_fn cb, void *arg);
+typedef void (*event_callback_fn)(evutil_socket_t, short, void *);
+
+event_new()试图分配和构造一个用于base的新的事件。what参数是上述标志的集合。如果fd非负(
+文件描述符、事件编号)，则它是将被观察其读写事件的文件，如果为-1，则表示纯超时事件。事件被
+激活时，libevent将调用event_callback_fn函数，传递这些参数：文件描述符fd，表示所有被触
+发事件的位字段，以及构造事件时的arg参数。发生内部错误，或者传入无效参数时，event_new()
+将返回NULL。
+
+我们可以看到event_new只能设置一个回调函数，所以我们最好不要设置EV_READ|EV_WRITE组合事件
+，而是要把它们单独设置成两个事件。

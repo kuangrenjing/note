@@ -1,0 +1,57 @@
+/etc/init.d/rcS是海图提供的开机自启动脚本，具体内容如下：
+
+
+
+#! /bin/sh                                
+. /etc/profile 
+                                                   
+/bin/mount -a                                      
+                                                   
+echo "                                             
+            _ _ _ _ _ _ _ _ _ _ _ _                
+            \  _  _   _  _ _ ___                   
+            / /__/ \ |_/                           
+           / __   /  -  _ ___                      
+          / /  / /  / /                            
+  _ _ _ _/ /  /  \_/  \_ ______                    
+___________\___\__________________                 
+"                                                  
+for initscript in /etc/init.d/S[0-9][0-9]*       
+do                                               
+        if [ -x $initscript ] ;                  
+        then                                       
+                echo "[RCS]: $initscript"          
+                $initscript                        
+        fi                                         
+done                                               
+                                                   
+########################################           
+#set ip                                            
+ifconfig eth0 192.168.1.22 netmask 255.255.255.0 up
+route add default gw 192.168.1.1
+                        
+ifconfig lo 127.0.0.1                            
+telnetd & 
+
+mount -t ramfs none /tmp                           
+                                                   
+# insmod                                           
+cd /3516Ako                                        
+./load3516a -i -sensor imx178 -osmem 128 -offline  
+insmod /3516Ako/extdrv/gpioi2c_16.ko             
+                                                 
+# uart1&uart3 mux                                
+himm 0x200f0084 0x01                               
+himm 0x200f007c 0x01                               
+himm 0x200f0078 0x02                               
+himm 0x200f0080 0x02                               
+                                                   
+#IR_cut                                            
+himm 0x200f01a0 0x00                               
+himm 0x200f01a4 0x00                               
+himm 0x20260400 0x03                               
+himm 0x2026000c 0x00            
+himm 0x2026000c 0x01    
+                                                 
+cd /mnt/test                                     
+./ipc_caster &

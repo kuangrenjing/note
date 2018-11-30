@@ -1,0 +1,11 @@
+1、查看某个软件包是否已经安装
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+dpkg -s firefox
+dpkg -l | grep gcc
+
+apt-get --purge remove  software_name
+
+apt-get安装软件包如何知道他的编译参数
+
+
+

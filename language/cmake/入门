@@ -1,0 +1,182 @@
+1、最简实例
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、helloworld.c
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char *argv[])
+{
+	printf("hello world\n");
+}
+
+1.2、CMakeLists.txt
+
+cmake_minimum_required(VERSION 2.6)
+project(Hello)
+add_executable(HelloWorld helloworld.c)
+
+1.3、编译
+	cmake .
+	make
+
+1.4、执行
+	./HelloWorld
+	显示： hello world
+
+1.5、解释
+	cmake_minimum_required对cmake的版本作出规定
+	project用于检查工程名，linux下这一行可以不要
+	add_executable定义可执行文件名，及可执行文件由哪些源文件编译而来
+
+2、模块实例
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、文件架构
+├── cmake
+│   └── FindPRINTDEMOLIB.cmake
+├── CMakeLists.txt
+├── print_demo.c
+├── print_demo.h
+└── print_demo_main.c
+其中print_demo.h和print_demo.cpp生成lib，print_demo_main.cpp链接对应的lib生成可执行文件
+
+2.2、print_demo.h
+
+//=========================demo9.h===================
+#ifndef _PRINT_DEMO_H_
+#define _PRINT_DEMO_H_
+
+void print_demo();
+
+#endif //_PRINT_DEMO_H_
+
+2.3、print_demo.cpp
+
+//======================demo9.cpp==================
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "print_demo.h"
+
+void print_demo()
+{
+	printf("print demo print\n");
+}
+
+
+2.4、print_demo_main.c
+
+//======================print_demo_main.cpp==================
+#include "print_demo.h"
+
+int main()
+{
+	print_demo();
+	return 0;
+}
+
+2.5、FindPRINTDEMOLIB.cmake
+
+#======================FindPRINTDEMOLIB.cmake==================
+# 辅助输出信息
+message("now using FindPRINTDEMOLIB.cmake find print_demo_lib")
+
+# 将print_demo.h文件路径赋值给PRINTDEMOLIB_INCLUDE_DIR
+FIND_PATH(PRINTDEMOLIB_INCLUDE_DIR print_demo.h /usr/include/print_demo/
+        /usr/local/print_demo/include/)
+message(".h dir: ${PRINTDEMOLIB_INCLUDE_DIR}")
+
+# 将libprint_demo_lib.a文件路径赋值给PRINTDEMOLIB_LIBRARY
+FIND_LIBRARY(PRINTDEMOLIB_LIBRARY libprint_demo_lib.a /usr/local/print_demo/lib/)
+message("lib dir: ${PRINTDEMOLIB_LIBRARY}")
+
+if(PRINTDEMOLIB_INCLUDE_DIR AND PRINTDEMOLIB_LIBRARY)
+	# 设置变量结果
+	set(PRINTDEMOLIB_FOUND TRUE)
+endif(PRINTDEMOLIB_INCLUDE_DIR AND PRINTDEMOLIB_LIBRARY)
+
+2.6、CMakeLists.txt
+
+#======================CMakeLists.txt==================
+cmake_minimum_required(VERSION 3.5)
+
+project(print_demo)
+
+# create libprint_demo_lib.a
+set(SRC_LIB print_demo.cpp)
+add_library(print_demo_lib STATIC ${SRC_LIB})
+
+# install it
+install(TARGETS print_demo_lib DESTINATION print_demo/lib)
+install(FILES print_demo.h DESTINATION print_demo/include)
+
+# create print_demo_main exectuable
+set(SRC_EXE print_demo_main.cpp)
+
+# set print_demo_lib cmake module path
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+message("cmake_module_path: ${CMAKE_MODULE_PATH}")
+find_package(PRINTDEMOLIB)
+
+if(PRINTDEMOLIB_FOUND)
+	add_executable(print_demo_main ${SRC_EXE})
+	message("found print_demo ${PRINTDEMOLIB_INCLUDE_DIR} ${PRINTDEMOLIB_LIBRARY}")
+	include_directories(${PRINTDEMOLIB_INCLUDE_DIR})
+	target_link_libraries(print_demo_main ${PRINTDEMOLIB_LIBRARY})
+else()
+	message("not found PRINTDEMOLIB_FOUND")
+endif(PRINTDEMOLIB_FOUND)
+
+这个实例中我们重点是要考察cmake中模块的用法，交叉编译ortp时我被模块查找害苦了。
+
+
+3、常见简单问题：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、如何删除CMakeCache.txt
+
+模块模式、配置模式
+
+
+
+4、搜寻类指令：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、find_package
+
+当编译一个需要使用第三方库的软件时，我们需要知道：
+	去哪儿找头文件.h 	                           对比GCC的-I参数
+	去哪儿找库文件(.so/.dll/.lib/.dylib/…)      对比GCC的-L参数
+	需要链接的库文件的名字                       对比GCC的-l参数
+
+比如说，我们需要一个第三方库curl，那么我们的CMakeLists.txt需要指定头文件目录，和库文件，类似：
+	include_directiories(/usr/include/curl)
+	target_link_libraries(myprogram path/curl.so)
+
+为了智能化移植，我们不能假设库的具体位置，那就需要使用cmake的finder，finder怎么用呢？
+
+
+.cmake必须放在cmake目录下才能被find_package找到
+
+
+5、cmake对交叉编译的支持：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/bytxl/article/details/50635788
+
+	把交叉编译所要使用的参数都放在一个文件里，然后在命令行里用CMAKE_TOOLCHAIN_FILE引
+用这个文件即可。
+
+# this is required
+SET(CMAKE_SYSTEM_NAME Linux)
+
+# specify the cross compiler
+SET(CMAKE_C_COMPILER   arm-hisiv300-linux-gcc)
+SET(CMAKE_CXX_COMPILER arm-hisiv300-linux-g++)
+
+# where is the target environment 
+SET(CMAKE_FIND_ROOT_PATH /opt/crossinstall)
+
+# search for programs in the build host directories (not necessary)
+SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+# for libraries and headers in the target directories
+SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)

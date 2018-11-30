@@ -1,0 +1,22 @@
+normal exposure operation(controlling the integration time in 1H units)
+积分时间与电子快门时间相关，电子快门时间可设置为0~帧行数-1
+帧行数由运行模式决定(drive mode),总动模式和被动模式是不一样的。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+slave mode and master mode
+imx178是主动模式还是被动模式是由XMASTER管脚决定的，正常操作时不应改变这个管脚的信号。
+
+XMSTA寄存器作用
+
+
+1H period
+
+
+在主动模式下，XVS、XHS两引脚无效，即帧同步与行同步都无效。接收端根据cmos插入的sync code
+来识别帧数据和行数据。
+
+此时帧率通过1/(每帧的行数*行时间)来计算，每帧行数通过VMAX寄存器获取，行时间通过HMAX寄存器
+计算。
+
+添加新的sensor：
+https://blog.csdn.net/zhang_danf/article/details/80752229
