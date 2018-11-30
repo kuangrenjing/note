@@ -77,3 +77,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 4、从远程仓库把笔记拉到本地来
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	登陆我的github，进入要拉的那个仓库，点"Clone or download"，点"clone with ssh"，
+获取ssh地址，我的笔记为"git@github.com:kuangrenjing/note.git"
+
+	创建一个空的本地仓库
+
+	在空仓库下执行"git clone git@github.com:kuangrenjing/note.git"
