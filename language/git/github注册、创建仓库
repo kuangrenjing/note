@@ -64,8 +64,12 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	在"setting"->"SSH and GPG keys"中设置SSH keys
 
+3、查看本地仓库与哪些远程仓库相关联
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git remote -v
 
-3、把本地的note笔记上传到github上去
+
+4、把本地的note笔记上传到github上去
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	在D:\Program Files\VMware\share\note上右键选择"git bash here"，进入bash界面。
 
@@ -75,7 +79,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	git push -u origin master
 
-4、从远程仓库把笔记拉到本地来
+5、从远程仓库把笔记拉到本地来
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	登陆我的github，进入要拉的那个仓库，点"Clone or download"，点"clone with ssh"，
 获取ssh地址，我的笔记为"git@github.com:kuangrenjing/note.git"
