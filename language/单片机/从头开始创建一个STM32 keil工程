@@ -1,31 +1,70 @@
 0、参考文献
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://blog.csdn.net/whxngb/article/details/50427964
+http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0206ic/Chdefbgg.html  arm官网非常详尽的文档
 
-1、下载STM32F103C8系列的固件库
+1、下载STM32F103C8系列的固件库：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	进入意法首页“https://www.st.com”，点“Product Catalog”->“Microcontrollers”，选“
 STM32 32-bit Arm Cortex MCUs”->“STM32 Mainstream MCUs”->“STM32F1 Series”->“STM32F103”
 点“STM32F103C8” 点“Tools&Software”，进入资源页面，搜索“peripheral”，20181129时搜到的是
 STSW-STM32054包，进去后版本是3.5.0。
 
-2、在工程文件夹下新建一些比较的文件夹
+2、STM32启动文件的选择：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	CMSIS、libraries、Libaries、List(用于链接的)、Obj(工程文件)、output(输出hex文件)、
-User。
+	在STM32F系列固件库Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup子
+目录下有四个子文件夹arm、gcc_ride7、iar、TrueSTUDIO，给人的第一感觉就是这是针对
+四个不同编译器的启动文件系列，是不是这样呢，我们来考察一下。
 
-	下面一步我们只使用了CMSIS、libraries、User三个文件夹。
+	我的猜测是对的，就是针对四种不同编译器编写的启动文件。不同的编译器调用的指令
+集是不同的，arm适用于arm编译器(就是keil uVision??)；gcc_ride7适用基于GCC_ride7编
+译器的；iar编译器我不太懂，TrueSTDIO是ST自己的编译器当然也是基于GCC的。
 
-	Libaries、List(用于链接的)、Obj(工程文件)、output(输出hex文件)四个文件夹什么时候用。
+	所以，对于keil项目而言，我们应选择arm子文件夹下的启动文件。
 
-3、把固件库的一些文件移到项目文件夹下
+3、给项目添加文件(Manage Project Items -> Project Items)：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	将固件库里Libraries--->STM32F10x_StdPeriph_Driver下的inc和src文件夹复制到
-fisrt_project文件夹下的libraries里；
+	在工程文件夹下新建四个文件夹(不是非要这么做，只是为了方便管理源文件)：CMSIS、
+Libraries、Startup、User。
+
+	将固件库里Libraries--->STM32F10x_StdPeriph_Driver下的inc和src文件夹拷贝到
+Libraries文件夹下；
 
 	将固件库里Libraries--->CMSIS--->CM3--->CoreSupport文件夹里面的core_cm3.c和
-core_cm3.h文件复制到我们新建的fisrt_project文件夹下的CMSIS里；
+core_cm3.h文件拷贝到CMSIS文件夹下；
 
-	将固件库里Project---->STM32F10x_StdPeriph_Template(这个文件夹里有KEIL和IAR建好工
-程的模板)里的stm32f10x_conf.h、stm32f10x_it.c、stm32f10x_it.h、system_stm32f10x.c四个
-文件复制到我们新建的fisrt_project文件夹下的User里；
+	将固件库里Project---->STM32F10x_StdPeriph_Template(这个文件夹里有KEIL和IAR建
+好工程的模板)里的stm32f10x_conf.h、stm32f10x_it.c、stm32f10x_it.h、
+system_stm32f10x.c四个文件拷贝到User文件夹下；
+
+	将固件库里Libraries---->CMSIS---->CM3---->DeviceSupport---->ST---->STM32F10x
+---->startup---->arm目录下的startup_stm32f10x_md.s文件拷贝到Startup文件夹下。
+
+	这些目录与keil的项目管理是没有关系的，keil uVision有自己的管理策略，称为
+"group",打开"Manage Project Items"页面，选择"Project Items"标签页，新建若干
+"group"，并加入一些文件到这些group中去。这里我就根据我新建的这些文件夹来创建
+"group"和添加文件。
+
+	创建工程时，keil还会自动给我们创建若干文件夹：List(用于链接的)、Obj(工程文
+件)、output(输出hex文件)三个文件夹什么时候用。
+
+4、选择编译器、文件扩展名、工具链位置(Manage Project Items -> Folders/Extension)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	默认是使用armcc的
+
+5、keil uVision如何编辑include路径
+
+5、定制编译选项：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+6、keil打印详细编译过程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+
+
+
+
+
+

@@ -1,15 +1,29 @@
 0、参考文献：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
+1、安装：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	去keil官网下载安装软件，当前(2019)一般使用uVision5版本
 
+	下载了安装文件之后，点击安装，一切选择默认即可
 
-1、arm公司：
+	安装完以后要破解，win10的防火墙很厉害，破解工具总会被它杀掉，我们需要如此这
+般来设置防火墙：
+	设置->更新和安全->windows安全->病毒和威胁防护->"病毒和威胁防护"设置
+	1）关闭实时保护
+	2）在“排除项”中添加破解文件所在目录
+
+	破解时，以管理员身份运行"keil uVision5"，点击"File"->"License Management"，
+复制"CID"到破解机中生成"LIC"，把"LIC"再复制到"License Management"，点击"Add LIC"
+按钮，显示"***LIC Added Successfully***"则表示破解成功。
+
+2、arm公司：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	Acorn计算机公司是现在著名的ARM公司的前身。Acorn计算机公司(Acorn Computers)创立于
 1978年，公司位于英格兰的剑桥，它在80年代PC革命初期的贡献，相当于美国的“苹果公司”。1991
 年，Acorn计算机公司剥离了ARM部门，成立了ARM公司。
 
-2、keil公司：
+3、keil公司：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	Keil公司是一家业界领先的微控制器（MCU）软件开发工具的独立供应商。Keil公司由两家私人
 公司联合运营，分别是德国慕尼黑的Keil Elektronik GmbH和美国德克萨斯的Keil Software Inc。
@@ -20,7 +34,7 @@ Keil公司制造和销售种类广泛的开发工具，包括ANSI C编译器、�
 
 	Keil公司在2005年被ARM公司收购。
 
-3、uVision开发环境
+4、uVision开发环境
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	keil的IDE(集成开发环境)叫做uVision，vision有“视窗”的意思。到目前为止，keil已经发
 布了多个uVision版本。
@@ -56,14 +70,14 @@ Keil μVision5
 keil现在针对C51 C166 C251 ARM开发了四套开发工具。uVision界面是一样的，只是Toolchain不同?
 
 
-4、MDK(Microcontroller Development Kit)
+5、MDK(Microcontroller Development Kit)
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 https://www.keil.com/pack/doc/CMSIS/Core/html/startup_s_pg.html
 
 Reset_Handler
 
-5、keil选择编译器-armcc或者gcc
+6、keil选择编译器-armcc或者gcc
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 在“Manage Project Items”->“Folders/Extensions”标签页中。
 
@@ -71,7 +85,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 rtthread-stm32.lnp中放着链接选项
 
 
-6、keil工程内各个后缀名文件的作用
+7、keil工程内各个后缀名文件的作用
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 1 test1 无后缀文件，这个是最终生成的文件，只要有这个文件KEIL就可以软件仿真，不能打开
 2 test1.hex 这个文件可以直接下载到单片机里，他就是从无后缀文件test1里提取的，去掉了调试信息，可以打开
@@ -87,7 +101,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 12 lnp算是连接日志，告诉你连接器连接了哪些OBJ等，可以用文本编辑器打开
 
 
-7、下载STM32F103C8系列的固件库
+8、下载STM32F103C8系列的固件库
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	进入意法首页“https://www.st.com”，点“Product Catalog”->“Microcontrollers”，选“
 STM32 32-bit Arm Cortex MCUs”->“STM32 Mainstream MCUs”->“STM32F1 Series”->“STM32F103”

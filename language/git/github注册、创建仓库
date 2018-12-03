@@ -87,3 +87,14 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	创建一个空的本地仓库
 
 	在空仓库下执行"git clone git@github.com:kuangrenjing/note.git"
+
+	以后就使用"git pull origin master:master"命令来拉取远程仓库了，origin是使用
+"git remote add"设置的远程仓库的本地别名。
+
+【注1】git pull用法：
+	git pull <远程主机名> <远程分支名>:<本地分支名>
+当“远程分支名”与“本地分支名”相同时，可以这样写：
+	git pull <远程主机名> <远程分支名>
+
+【注2】git remote add用法
+	git remote add <远程仓库本地别名> <远程仓库的ssh url/远程仓库的https url>
