@@ -1,0 +1,16 @@
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://bbs.csdn.net/topics/350071534
+https://blog.csdn.net/u012722571/article/details/47295245
+https://blog.csdn.net/Cacti_one/article/details/72625228    搜MSP
+
+
+ARM核在reset之后取得的第一条指令的地址取决于给ARM核输入的一个信号VINITHI，如果在设计的时候给ARM输入的VINITHI信号是低电平，那么ARM核将从0x00000000这个地址来获取它要执行的第一条指令，反之，如果给ARM输入的VINITHI信号是高电平，那么它将从0xFFFF0000地址处获取它要执行的第一条指令。
+
+boot引脚
+
+这是ARM核的一个PIN，在CPU设计（或SOC设计）的时候会决定这个引脚。
+一般的SOC设计都会包含一块很小的boot ROM，根据设计这块ROM放置的地址决定了ARM核的那个引脚是高或低。 
+最终的芯片一般都不会引出这个引脚，所以我们根本看不到。
+
+总的来说，这属于SOC设计需要考虑的，板级电路设计不需要考虑。
