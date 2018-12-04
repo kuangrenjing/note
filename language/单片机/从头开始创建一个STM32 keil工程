@@ -53,6 +53,52 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	默认是使用armcc的
 
 5、keil uVision如何编辑include路径
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在"Options for Target"->"C/C++"->"Include Paths"，最好不要手动输入，推荐点后
+面的"..."通过"Folder Setup"页面添加。
+
+6、错误排查
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#223-D: function "assert_param" declared implicitly
+问题分析：
+	函数assert_param是STM32官方库文件中用到的
+
+	assert_param函数在文件“stm32f10x_conf.h”的第59-73行定义
+
+	查看函数说明可知，assert_param是一个条件表达式宏定义，主要作用是对函数的输入
+参数进行检查。仔细查看程序段，不管是否定义USE_FULL_ASSERT，函数assert_param均有
+定义，编译时不应该出现上述警告。
+
+	还有一种可能，那就是虽然定义了函数assert_param，但是包含定义的文件
+“stm32f10x_conf.h”没有被编译。
+
+	通过搜索发现文件“stm32f10x_conf.h”是在文件“stm32f10x.h”中条件包含的，只有定义
+了"USE_STDPERIPH_DRIVER"，"stm32f10x_conf.h"才会被包含编译。
+
+	文本“USE_STDPERIPH_DRIVER”的字面意思：使用标准外设驱动。也就是说如果需要使
+用ST官方提供的外设驱动库则需要定义“USE_STDPERIPH_DRIVER”。
+
+	很明显问题出在使用了官方的标准外设库又没有定义“USE_STDPERIPH_DRIVER”。
+
+问题解决：
+	"Options for Target"->"C/C++"->"Preprocessor Symbols"->"Define"
+
+6、在user文件夹下添加"main.c"文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	添加"main.c"，并编写main函数
+
+7、定制编译输出
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	包括输出目录、可执行文件名、可执行文件类型
+
+	输出目录默认为"Objects";
+	可执行文件名默认为工程名;
+	可以选择编译为可执行文件还是链接库文件，可执行文件时可选择是否生成Hex文件或
+batch文件。
+
+8、意法中文文档下载
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://www.stmcu.org.cn/document/list/index/category-158
 
 5、定制编译选项：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
