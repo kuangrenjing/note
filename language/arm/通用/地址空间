@@ -1,0 +1,13 @@
+
+
+问：I know that some Cortex-M chips can run from RAM, but I've heard that this is not universal.
+
+答：You heard wrong. All Cortex-M chips can execute code from RAM addresses and from off-chip external ram should they support an external memory controller.
+
+Only the interrupt vector table has a few more restrictions, which require you to put that table into on-chip ram or flash - see VTOR register description.
+
+Note: Memory maps which describe where code is executable can be found in the coresponding ARM Architexture Reference Manual.
+
+
+
+2、memory remap和PC寄存器

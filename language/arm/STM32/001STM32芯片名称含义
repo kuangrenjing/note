@@ -1,4 +1,18 @@
-1、意法半导体公司"微处理器"产品编号各字段含义说明
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.stmcu.com.cn/aboutstmcu
+
+1、意法半导体单片机
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	意法半导体单片机包含低成本的8位单片机和基于ARM Cortex-M0、M0+、M3、M4及M7内
+核并具备丰富外设选择的32位单片机。
+
+	我们主要关心它的ARM内核的32位单片机。目前提供12大产品线(F0, F1, F2, F3, F4, 
+F7, H7, L0, L1, L4, L4+,WB)，超过800个型号。
+
+	STM32命名规则详见“001STM32命名规则.jpg”。
+
+2、意法半导体公司"微处理器"产品编号各字段含义说明
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	每种STM32的产品都由16个字母或数字构成的编号标示，用户向ST订货时必须使用这个
 编号指定需要的产品。这16个字符分为8个部分，下面通过一个例子说明它们的意义：

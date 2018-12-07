@@ -1,0 +1,32 @@
+1、STM32F1产品线产品又细分以下类型
+根据内置FLASH大小分为：
+	低密度   16-32KB
+	中密度   64-128KB
+	高密度   256-512KB
+	超大密度 768KB-1024KB
+	超值型(value line) STM32F100 - 24MHz
+	基本型             STM32F101 - 36MHz
+	增强型             STM32F103 - 72MHz
+	互联型             STM32F105/107 - 72MHz
+
+为了在软件中区分这些产品的不同，可以定义以下几个宏：
+#define STM32F10X_LD
+#define STM32F10X_LD_VL
+#define STM32F10X_MD
+#define STM32F10X_MD_VL
+#define STM32F10X_HD
+#define STM32F10X_HD_VL
+#define STM32F10X_XL
+#define STM32F10X_CL
+
+宏中“缩略”字段的含义：
+cl：互联型产品，stm32f105/107系列 
+vl：超值型产品，stm32f100系列 
+xl：超高密度产品，stm32f101/103系列
+ld：低密度产品，FLASH小于64K 
+md：中等密度产品，FLASH=64 or 128 
+hd：高密度产品，FLASH大于128
+
+可以看到，我们在程序中只区分FLASH密度、互联型、超值型。基本型和增强型不做区分
+
+这些一般需要用户根据选用的芯片自行定义。

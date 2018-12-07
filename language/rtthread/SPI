@@ -1,0 +1,65 @@
+
+
+1、RT-Thread的SPI驱动文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+rtthread提供的SPI驱动文件为"spi_core.c"、"spi_dev.c"。
+
+spi_core.c提供的函数有：
+	rt_err_t rt_spi_bus_register(struct rt_spi_bus     *bus,
+								const char             *name, 
+								const struct rt_spi_ops *ops);
+
+	rt_err_t rt_spi_bus_attach_device(struct rt_spi_device *device,
+										const char         *name,
+										const char         *bus_name,
+										void               *user_data);
+
+	rt_err_t rt_spi_configure(struct rt_spi_device      *device, 
+							struct rt_spi_configuration *cfg);
+
+	rt_err_t rt_spi_send_then_send(struct rt_spi_device  *device,
+									const void           *send_buf1,
+									rt_size_t            send_length1,
+									const void           *send_buf2,
+									rt_size_t            send_length2);
+
+	rt_err_t rt_spi_send_then_recv(struct rt_spi_device *device,
+									const void          *send_buf,
+									rt_size_t           send_length,
+									void                *recv_buf,
+									rt_size_t           recv_length);
+
+	rt_size_t rt_spi_transfer(struct rt_spi_device *device,
+								const void         *send_buf,
+								void               *recv_buf,
+								rt_size_t          length);
+
+	struct rt_spi_message *rt_spi_transfer_message(struct rt_spi_device   *device,
+													struct rt_spi_message *message);
+
+
+	rt_err_t rt_spi_take_bus(struct rt_spi_device *device);
+
+	rt_err_t rt_spi_release_bus(struct rt_spi_device *device);
+
+	rt_err_t rt_spi_take(struct rt_spi_device *device);
+
+	rt_err_t rt_spi_release(struct rt_spi_device *device);
+
+2、SPI介绍
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SPI连接有三线、四线两种方式。四线连接方式使用的四个接口分别是：输入、输出、
+时钟、使能(片选)。
+
+	一般而言，单片机芯片都有多个硬件SPI控制器，每个SPI控制器连接一条SPI总线，其上
+可挂载多个SPI设备，SPI控制器通过片选信号区分这些设备。
+
+2、RT-Thread操控SPI总线的流程：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	定义SPI设备对象
+	调用rt_spi_bus_attach_device()挂载SPI设备到SPI总线。
+	调用rt_spi_configure()配置SPI总线模式(数据位宽、时钟极性和相位、最大带宽，
+主从两端设置要一样)。
+	使用rt_spi_send()等相关数据传输接口传输数据。
+
+

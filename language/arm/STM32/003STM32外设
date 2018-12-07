@@ -1,0 +1,29 @@
+
+1、从头文件看外设
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	从STM32F10x_StdPeriph_Lib_V3.5.0\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h
+中可以看到，APH总线接了以下外设：
+	TIM
+	RTC
+	WWDG
+	IWDG
+	SPI
+	UART
+	I2C
+	CAN
+	BKP
+	PWR
+	DAC
+	CEC
+	AFIO
+	EXTI
+	GPIOA-G
+	ADC
+	SDIO
+
+系统总线连接有：
+	DMA
+	RCC        复位与时钟控制Reset Clock Controller
+	CRC        校验模块
+	ETH        网卡
+	FLASH      FLASH存储器

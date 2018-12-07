@@ -1,10 +1,44 @@
+
+1、高级微控制器总线结构Advanced Microcontroller Bus Architecture(AMBA)
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-1、Principles of ARM Memory Maps White Paper
-	这是arm公司给出的存储映射的规则文档。但看了几家公司的实际arm芯片文档都没有完全遵循
-这个白皮书的存储空间的划分。
+	随着深亚微米工艺技术日益成熟，集成电路芯片的规模越来越大。数字IC从基于时序
+驱动的设计方法，发展到基于IP复用的设计方法，并在SOC设计中得到了广泛应用。在基于
+IP复用的SoC设计中，片上总线设计是最关键的问题。为此，业界出现了很多片上总线标准。
+其中，由ARM公司推出的AMBA片上总线受到了广大IP开发商和SoC系统集成者的青睐，已成为
+一种流行的工业标准片上结构。AMBA规范主要包括了AHB(Advanced High performance Bus)
+系统总线和APB(Advanced Peripheral Bus)外围总线。
 
-	
+AMBA 2.0版本标准定义了三组总线：
+	ASB(AMBA系统总线)：用来作处理器与外设之间的互连，将被AHB取代。
+	AHB(AMBA高性能总线)：用于高性能。高数据吞吐部件，如CPU、DMA、DSP之间的连接。
+	APB（AMBA外设总线）：为系统的低速外部设备提供低功耗的简易互连。
 
+	系统总线和外设总线之间的桥接器提供AHB/ASB部件与APB部件之间的访问代理与缓冲。
+
+
+Advanced High-performance Bus(AHB)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	AHB总线用于高性能，高时钟工作频率模块。AHB在AMBA架构中为系统的高性能运行起到
+了基石作用。AHB为高性能处理器，片上内存，片外内存提供接口，同时桥接慢速外设。
+
+	AHB可以认为是AMBA体系中新一代的系统总线，将会取代ASB
+
+Advanced System Bus(ASB)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ASB总线主要用于高性能系统模块。ASB是可用于AHB不需要的高性能特性的芯片设计上
+可选的系统总线。ASB也支持高性能处理器，片上内存，片外内存提供接口和慢速外设。
+
+Advanced Peripheral Bus(APB)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	APB总线用于为慢速外设提供总线技术支持。
+
+	APB是一种优化的，低功耗的，精简接口总线，可以技术多种不同慢速外设。由于APB是
+ARM公司最早提出的总线接口，APB可以桥接ARM体系下每一种系统总线。
+
+2、Principles of ARM Memory Maps White Paper
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这是arm公司给出的存储映射的规则文档。但看了几家公司的实际arm芯片文档都没有
+完全遵循这个白皮书的存储空间的划分。
 
 
 1、arm存储器类型：
