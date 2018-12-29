@@ -1,0 +1,353 @@
+1、哪一个版本的freemodbus
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://github.com/armink/FreeModbus_Slave-Master-RTT-STM32
+
+
+
+
+
+
+
+
+
+
+
+接口 	功能描述
+xMBMasterPortEventInit                    主机事件初始化
+xMBMasterPortEventPost                    主机发送事件
+xMBMasterPortEventGet                     主机获取事件
+vMBMasterOsResInit                        主机操作系统资源初始化
+xMBMasterRunResTake                       主机资源获取
+vMBMasterRunResRelease                    主机资源释放
+vMBMasterErrorCBRespondTimeout            主机响应超时回调接口
+vMBMasterErrorCBReceiveData               主机接收数据出错回调接口
+vMBMasterErrorCBExecuteFunction           主机执行Modbus方法出错回调接口
+vMBMasterCBRequestScuuess                 主机请求执行成功回调接口
+eMBMasterWaitRequestFinish                主机等待请求完成处理回调接口
+
+
+thread_entry_ModbusSlavePoll(app_task.c)->
+eMBPoll(mb.c给应用层提供Modbus从机设置及轮询相关接口) -> 
+static xMBFunctionHandler xFuncHandlers[MB_FUNC_HANDLERS_MAX](mb.c) -> 
+eMBFuncReadInputRegister(mbfuncinput.c从机输入寄存器相关功能) -> 
+eMBRegInputCB(port\user_mb_app.c需要移植的)
+
+modbus\include\mbport.h
+EV_READY
+EV_FRAME_RECEIVED
+EV_EXECUTE
+EV_FRAME_SENT
+
+modbus/rtu/mbrtu.c:321
+BOOL xMBRTUTimerT35Expired(void)
+{
+    BOOL            xNeedPoll = FALSE;
+
+    switch ( eRcvState )
+    {
+        /* Timer t35 expired. Startup phase is finished. */
+    case STATE_RX_INIT:
+        xNeedPoll = xMBPortEventPost( EV_READY );
+        break;
+
+        /* A frame was received and t35 expired. Notify the listener that
+         * a new frame was received. */
+    case STATE_RX_RCV:
+        xNeedPoll = xMBPortEventPost( EV_FRAME_RECEIVED );
+        break;
+
+        /* An error occured while receiving the frame. */
+    case STATE_RX_ERROR:
+        break;
+
+        /* Function called in an illegal state. */
+    default:
+        assert_param( ( eRcvState == STATE_RX_INIT ) ||
+                ( eRcvState == STATE_RX_RCV ) || ( eRcvState == STATE_RX_ERROR ) );
+         break;
+    }
+
+    vMBPortTimersDisable(  );
+    eRcvState = STATE_RX_IDLE;
+
+    return xNeedPoll;
+}
+
+eRcvState 静态全局非寄存器变量
+
+1、APP入口：
+APP\src\app.c:main
+->
+	level = rt_hw_interrupt_disable();
+	/* init system setting */
+	SystemInit();
+	/* startup RT-Thread RTOS */
+	rtthread_startup();
+	->
+		rt_application_init(void)
+		->
+			SysMonitor线程
+		->
+			MBSlavePoll线程(thread_entry_ModbusSlavePoll函数)
+
+定时器是怎么融入进来的？
+
+2、modbus/rtu/mbrtu.h:39开始定义了一些列函数
+eMBErrorCode    eMBRTUInit( UCHAR slaveAddress, UCHAR ucPort, ULONG ulBaudRate,
+						    eMBParity eParity );
+void            eMBRTUStart( void );
+void            eMBRTUStop( void );
+eMBErrorCode    eMBRTUReceive( UCHAR * pucRcvAddress, UCHAR ** pucFrame, USHORT * pusLength );
+eMBErrorCode    eMBRTUSend( UCHAR slaveAddress, const UCHAR * pucFrame, USHORT usLength );
+BOOL            xMBRTUReceiveFSM( void );           没有使用
+BOOL            xMBRTUTransmitFSM( void );          没有使用
+BOOL            xMBRTUTimerT15Expired( void );      没有使用
+BOOL            xMBRTUTimerT35Expired( void );
+
+void thread_entry_ModbusSlavePoll(void* parameter)
+->  modbus/mb.c:132
+	eMBErrorCode eMBInit(...)
+	->  前五个是frame的处理函数，后三个是回调函数
+	    三个回调函数是在中断处理函数中调用的
+	    peMBFrameReceiveCur、peMBFrameSendCur在eMBPoll中调用
+	    pvMBFrameStartCur在eMBEnable中调用 <- thread_entry_ModbusSlavePoll
+	    pvMBFrameStopCur在eMBDisable中调用 <-实际我们不调用
+	    pvMBFrameCloseCur在eMBClose中调用 <-实际我们不调用
+		pvMBFrameStartCur = eMBRTUStart;
+		pvMBFrameStopCur = eMBRTUStop;
+		peMBFrameSendCur = eMBRTUSend;
+		peMBFrameReceiveCur = eMBRTUReceive;
+		pvMBFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBPortClose : NULL;
+		pxMBFrameCBByteReceived = xMBRTUReceiveFSM;
+		pxMBFrameCBTransmitterEmpty = xMBRTUTransmitFSM;
+		pxMBPortCBTimerExpired = xMBRTUTimerT35Expired;
+		eMBRTUInit(...)
+		->
+			xMBPortSerialInit
+			->
+				prvvTIMERExpiredISR
+				->
+					pxMBPortCBTimerExpired初始化定时器
+
+		->
+			xMBPortTimersInit
+
+->
+	eMBEnable()
+	->
+		pvMBFrameStartCur
+		->
+			eMBRTUStart
+			->
+				vMBPortSerialEnable(TRUE, FALSE)，之后串口中断就可以发生了
+
+			->
+				vMBPortTimersEnable()
+
+->
+	eMBPoll()
+	->
+		xMBPortEventGet这是一个阻塞函数，死等事件发生，超时后返回（事件由定时函数发出）。
+	->
+		peMBFrameReceiveCur
+
+
+	->
+		peMBFrameSendCur
+
+
+xMBPortSerialInit串口初始化
+->
+	serial_rx_ind
+	->
+		prvvUARTRxISR
+		->
+			pxMBFrameCBByteReceived
+			->
+				xMBRTUReceiveFSM中断处理函数
+
+
+modbus/mb.c中维护modbus状态机eMBState
+	STATE_ENABLED,
+	STATE_DISABLED,
+	STATE_NOT_INITIALIZED
+
+使用RTU、ASCII还是使用TCP由三个宏控制
+	MB_SLAVE_RTU_ENABLED
+	MB_SLAVE_ASCII_ENABLED
+	MB_SLAVE_TCP_ENABLED
+
+从机poll线程接受状态机eRcvState
+	STATE_RX_INIT, 接收器处于初始状态     eMBRTUStart函数进入
+	STATE_RX_IDLE, 接收器处于空闲状态     35timer发生时设置为这个态
+	STATE_RX_RCV,  接收器接受到一个字符   STATE_RX_IDLE时中断接受到一个字符后进入这个态
+	STATE_RX_ERROR 接受器接受到的帧无效
+
+从机EVENT事件类型eMBEventType
+modbus/include/mbport.h
+	EV_READY             /*!< Startup finished. */  从机定时器发现eMBRTUStart函数执行完发送此事件，poll线程接受到这个事件不做任何处理
+	EV_FRAME_RECEIVED    /*!< Frame received. */
+	EV_EXECUTE           /*!< Execute function. */
+	EV_FRAME_SENT        /*!< Frame sent. */
+
+xMBRTUTimerT35Expired函数做了什么？
+
+
+
+	BOOL xMBRTUTimerT35Expired( void )
+	{
+		BOOL            xNeedPoll = FALSE;
+
+		switch ( eRcvState )
+		{
+			/* Timer t35 expired. Startup phase is finished. */
+			case STATE_RX_INIT:
+				xNeedPoll = xMBPortEventPost( EV_READY );
+				break;
+
+			/* A frame was received and t35 expired. Notify the listener that
+			* a new frame was received. */
+			case STATE_RX_RCV:
+				xNeedPoll = xMBPortEventPost( EV_FRAME_RECEIVED );
+				break;
+
+			/* An error occured while receiving the frame. */
+			case STATE_RX_ERROR:
+				break;
+
+			/* Function called in an illegal state. */
+			default:
+				assert_param( ( eRcvState == STATE_RX_INIT ) ||
+				( eRcvState == STATE_RX_RCV ) || ( eRcvState == STATE_RX_ERROR ) );
+				break;
+		}
+
+		vMBPortTimersDisable(  );
+		eRcvState = STATE_RX_IDLE;
+
+		return xNeedPoll;
+	}
+
+
+	BOOL xMBRTUReceiveFSM( void )
+	{
+		BOOL            xTaskNeedSwitch = FALSE;
+		UCHAR           ucByte;
+
+		assert_param( eSndState == STATE_TX_IDLE );
+
+		/* Always read the character. */
+		( void )xMBPortSerialGetByte( ( CHAR * ) & ucByte );
+
+		switch ( eRcvState )
+		{
+			/* If we have received a character in the init state we have to
+			* wait until the frame is finished.
+			*/
+		case STATE_RX_INIT:
+			vMBPortTimersEnable( );
+			break;
+
+			/* In the error state we wait until all characters in the
+			 * damaged frame are transmitted.
+			 */
+		case STATE_RX_ERROR:
+			vMBPortTimersEnable( );
+			break;
+
+			/* In the idle state we wait for a new character. If a character
+			 * is received the t1.5 and t3.5 timers are started and the
+			 * receiver is in the state STATE_RX_RECEIVCE.
+			 */
+		case STATE_RX_IDLE:
+			usRcvBufferPos = 0;
+			ucRTUBuf[usRcvBufferPos++] = ucByte;
+			eRcvState = STATE_RX_RCV;
+
+			/* Enable t3.5 timers. */
+			vMBPortTimersEnable( );
+			break;
+
+			/* We are currently receiving a frame. Reset the timer after
+			 * every character received. If more than the maximum possible
+			 * number of bytes in a modbus frame is received the frame is
+			 * ignored.
+			 */
+		case STATE_RX_RCV:
+			if( usRcvBufferPos < MB_SER_PDU_SIZE_MAX )
+			{
+				ucRTUBuf[usRcvBufferPos++] = ucByte;
+			}
+			else
+			{
+				eRcvState = STATE_RX_ERROR;
+			}
+			vMBPortTimersEnable();
+			break;
+		}
+		return xTaskNeedSwitch;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Callback functions required by the porting layer. They are called when
+ * an external event has happend which includes a timeout or the reception
+ * or transmission of a character.
+ * Using for Modbus Slave
+ */
+BOOL( *pxMBFrameCBByteReceived ) ( void );
+BOOL( *pxMBFrameCBTransmitterEmpty ) ( void );
+BOOL( *pxMBPortCBTimerExpired ) ( void );
+BOOL( *pxMBFrameCBReceiveFSMCur ) ( void );
+BOOL( *pxMBFrameCBTransmitFSMCur ) ( void );
+
+FreeModbus\modbus\mb.c:158
+	pxMBPortCBTimerExpired = xMBRTUTimerT35Expired;
+
+port\rtt\porttimer.c:55
+	void prvvTIMERExpiredISR(void)
+	{
+		(void) pxMBPortCBTimerExpired();
+	}
+
+	static void timer_timeout_ind(void* parameter)
+	{
+		prvvTIMERExpiredISR();
+	}
+
+	BOOL xMBPortTimersInit(USHORT usTim1Timerout50us)
+	{
+		rt_timer_init(&timer, "slave timer",
+			timer_timeout_ind, /* bind timeout callback function */
+			RT_NULL,
+			(50*usTim1Timerout50us)/(1000*1000/RT_TICK_PER_SECOND),
+			RT_TIMER_FLAG_ONE_SHOT); /* one shot */
+		return TRUE;
+	}
+
+
+pxMBPortCBTimerExpired函数都在哪些地方调用呢？
+

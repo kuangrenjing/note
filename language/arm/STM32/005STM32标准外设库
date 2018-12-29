@@ -1,0 +1,39 @@
+1、 标准外设库概述
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	STM32标准外设库是一个固件函数包，它由程序、数据结构和宏组成，包括了微控制器
+所有外设的性能特征，该函数库还包括每一个外设的驱动描述和应用实例，为开发者访问
+底层硬件提供了一个中间API，通过使用固件函数库，无需深入掌握底层硬件细节，开发者
+就可以轻松应用每一个外设。因此，使用固态函数库可以大大减少开发者开发使用片内外设
+的时间，进而降低开发成本。每个外设驱动都由一组函数组成，这组函数覆盖了该外设所有
+功能。每个器件的开发都由一个通用的标准化的API去驱动。这里介绍的是V3.5版本的外设库，
+也是迄今最新的版本。
+
+2、 STM32F10x标准外设库文件结构
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+一个例子：
+STM32F10x_StdPeriph_Lib_V3.5.0
+	_htmresc
+	Libraries
+	Project
+	Utilities
+
+	ARM是一家做芯片标准的公司，他们负责的是芯片内核的架构设计，而像ST、三星他们
+则是根据ARM公司的提供的内核标准设计自己的芯片。所以，任何一个Cortex-M3芯片，其
+内核结构都是一样的，区别在于他们的存储器容量，片上外设，IO以及其他模块。ARM公司
+为了能让不同的芯片公司生产的Cortex-M3芯片能在软件上基本兼容，与芯片生产商共同提
+出CMSIS标准。当然，ST官方库也是根据这套标准设计的。
+
+3、 CMSIS
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	最初ARM公司仅是出售自己的知识产权（IP核）给各大芯片公司，由于最初ARM公司处
+于劣势，所以给芯片厂商很大的自主权，在ARM7、 ARM9和ARM11芯片时代，我们知道每家芯
+片的地址空间，寄存器操作各异，大不相同，也只能在代码编译的时候才能发现ARM公司的
+存在。随后ARM公 司推出了Cortex系列的芯片，就如我以前文章所提及，其志不小：“对早
+已经被绑入其战车的各大芯片厂商，又勒紧了一下枷锁，对ARM最新的内核的架构做了进一
+步限定，如对SysTick、NVIC和FMSC芯片设计的限定。特别是CMSIS接口的标准推出，简直是
+卡住了各大芯片厂商的脖子，他们不加入这种计划，难免被边缘化，加入了，难免沦为ARM公
+司的一个生产车间。”
+
+	ARM公司于2008年11月12日发布了ARM Cortex微控制器软件接口标准CMSIS 1.0。CMSIS
+是独立于供应商的Cortex-M处理器系列硬件抽象层，为芯片厂商和中间件供应商提供了简单
+的处理器软件接口，简化了软件复用工作，降低了Cortex-M上操作系统的移植难度。

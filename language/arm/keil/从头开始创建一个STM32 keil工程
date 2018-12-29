@@ -3,7 +3,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://blog.csdn.net/whxngb/article/details/50427964
 http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0206ic/Chdefbgg.html  arm官网非常详尽的文档
 
-1、下载STM32F103C8系列的固件库：
+1、下载STM32F103C8系列的标准外设库：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	进入意法首页“https://www.st.com”，点“Product Catalog”->“Microcontrollers”，选“
 STM32 32-bit Arm Cortex MCUs”->“STM32 Mainstream MCUs”->“STM32F1 Series”->“STM32F103”
@@ -105,12 +105,3 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 6、keil打印详细编译过程
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-
-
-
-
-
-
-
-

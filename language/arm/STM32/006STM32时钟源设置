@@ -1,0 +1,51 @@
+0、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://www.eeworld.com.cn/mcu/2018/ic-news101341740.html
+
+
+1、时钟源
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	STM32F4有5个时钟源，分别是HSI、HSE、LSI、LSE、PLL(H：高速、L：低速、I：内部、
+E：外部)。从名字上看出HSI和HSE是高速时钟源，HSI是高速内部时钟源，HSE是高速外部时
+钟源，同样的LSI是低速内部时钟源，LSE是低速内部时钟源。低速时钟源是RC振荡器，高速
+时钟源是石英晶体。
+
+LSI频率32kHz左右，供给独立看门狗和自动唤醒单元使用；
+LSE接32.768kHz晶振，主要是RTC(实时时钟)的时钟源；
+HSE接4M~26MHz晶振，我手上的这块接的8MHz，主要是为了分频的时候还是整数；
+HSI频率16MHz，可以直接作为系统时钟或者PLL输入；
+
+HSE、HSI可以作为PLL时钟源；
+HSE、HSI、PLL可以作为系统时钟SYSCLK(最大72MHz)；
+SYSCLK经过AHB预分频器(1、2...512倍，最大72MHz)分频后成为HCLK供给AHB总线；
+HCLK经过APB1预分频器(1、2、4、8、16倍，最大36MHz)分频后成为PCLK1供给APB1总线外设；
+PCLK1经过倍频后(1、2)供给定时器2~7；
+HCLK经过APB2预分频器(1、2、4、8、16倍，最大72MHz)分频后成为PCLK2供给APB2总线外设；
+PCLK2经过倍频后(1、2)供给定时器1和8；
+PCLK2经过ADC预分频器(2、4、6、8倍，最大14MHz)后供给ADC1、2、3；
+SysTick(系统定时器)的时钟可以是HCLK或HCLK/8(通过SysTick控制与状态寄存器控制)。
+
+【注】
+	当HSI作为PLL输入源时，系统时钟最大只能达到64MHz
+
+2、STM32外设库对时钟源的支持
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+STM32外设库提供了RCC_ClocksTypeDef结构体定义，包含五个字段：
+	uint32_t SYSCLK_Frequency;   系统时钟
+	uint32_t HCLK_Frequency;     AHB总线时钟
+	uint32_t PCLK1_Frequency;    APB1总线时钟
+	uint32_t PCLK2_Frequency;    APB2总线时钟
+	uint32_t ADCCLK_Frequency;   ADC总线时钟
+
+
+#if defined (STM32F10X_LD_VL) || (defined STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
+/* #define SYSCLK_FREQ_HSE    HSE_VALUE */
+ #define SYSCLK_FREQ_24MHz  24000000
+#else
+/* #define SYSCLK_FREQ_HSE    HSE_VALUE */   取消？？？
+/* #define SYSCLK_FREQ_24MHz  24000000 */ 
+/* #define SYSCLK_FREQ_36MHz  36000000 */
+/* #define SYSCLK_FREQ_48MHz  48000000 */
+/* #define SYSCLK_FREQ_56MHz  56000000 */
+#define SYSCLK_FREQ_72MHz  72000000
+#endif

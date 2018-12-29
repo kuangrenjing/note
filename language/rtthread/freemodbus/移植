@@ -1,0 +1,88 @@
+1、板子情况：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+2、头文件删除、合并
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	BSP/inc/bsp.h合并到bsp/stm32f10x/drivers/board.h中。
+
+3、源文件删除、合并
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+portserial.c移植
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+xMBPortSerialInit函数移植：
+	DE_RE引脚设置
+
+MODBUS_SLAVE_RT_CONTROL_PIN_INDEX
+rt_pin_mode
+
+
+
+
+eMBRegCoilsCB     线圈寄存器回调
+eMBRegDiscreteCB  离散寄存器回调
+eMBRegHoldingCB   保持寄存器回调
+eMBRegInputCB     输入寄存器回调
+放在port/user_mb_app.c中。
+
+
+4、功能号
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在bsp/stm32f10x/modbus/mbproto.h中定义了modbus功能号：
+#define MB_FUNC_NONE                          (  0 )
+#define MB_FUNC_READ_COILS                    (  1 )
+#define MB_FUNC_READ_DISCRETE_INPUTS          (  2 )
+#define MB_FUNC_WRITE_SINGLE_COIL             (  5 )
+#define MB_FUNC_WRITE_MULTIPLE_COILS          ( 15 )
+#define MB_FUNC_READ_HOLDING_REGISTER         (  3 )
+#define MB_FUNC_READ_INPUT_REGISTER           (  4 )
+#define MB_FUNC_WRITE_REGISTER                (  6 )
+#define MB_FUNC_WRITE_MULTIPLE_REGISTERS      ( 16 )
+#define MB_FUNC_READWRITE_MULTIPLE_REGISTERS  ( 23 )
+#define MB_FUNC_DIAG_READ_EXCEPTION           (  7 )
+#define MB_FUNC_DIAG_DIAGNOSTIC               (  8 )
+#define MB_FUNC_DIAG_GET_COM_EVENT_CNT        ( 11 )
+#define MB_FUNC_DIAG_GET_COM_EVENT_LOG        ( 12 )
+#define MB_FUNC_OTHER_REPORT_SLAVEID          ( 17 )
+#define MB_FUNC_ERROR                         ( 128 )
+
+
+4、串口初始化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+eMBInit
+->
+	eMBRTUInit
+	->
+		xMBPortSerialInit
+		->
+			serial->ops->configure
+			->
+				stm32_configure(bsp/stm32f10x/drivers/usart.c:59)
+
+
+
+5、数据发送流程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+6、数据接受流程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+USART3_IRQHandler(bsp/stm32f10x/drivers/usart.c:363)
+->
+	uart_isr(bsp/stm32f10x/drivers/usart.c:233)
+	->
+		rt_hw_serial_isr(components/drivers/serial/serial.c:1119)
+		->
+			serial_rx_ind(xMBPortSerialInit函数设置到serial->parent.rx_indicate postserial.c:220)
+			->
+				prvvUARTRxISR(postserial.c:190)
+				->
+					xMBRTUReceiveFSM(pxMBFrameCBByteReceived mbrtu.c)
+
+
+回调流程
+eMBFuncWriteHoldingRegister                写保持寄存器
+eMBFuncWriteMultipleHoldingRegister        写多个保持寄存器
+eMBFuncReadHoldingRegister                 读保持寄存器
+eMBFuncReadWriteMultipleHoldingRegister    读写多个保持寄存器

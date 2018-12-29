@@ -1,0 +1,96 @@
+0、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+1、keil uVision安装：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	去keil官网下载安装软件，当前(2019)一般使用uVision5版本
+
+	下载了安装文件之后，点击安装，一切选择默认即可
+
+	安装完以后要破解，win10的防火墙很厉害，破解工具总会被它杀掉，我们需要如此这
+般来设置防火墙：
+	设置->更新和安全->windows安全->病毒和威胁防护->"病毒和威胁防护"设置
+	1）关闭实时保护
+	2）在“排除项”中添加破解文件所在目录
+
+	破解时，以管理员身份运行"keil uVision5"，点击"File"->"License Management"，
+复制"CID"到破解机中生成"LIC"，把"LIC"再复制到"License Management"，点击"Add LIC"
+按钮，显示"***LIC Added Successfully***"则表示破解成功。
+
+2、keil uVision5安装设备包
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在创建针对特定芯片的工程之前，先要安装芯片的软件包。
+
+什么是MDK软件包(Software Packs)
+	keil官网是这么说的"For MDK, additional software components and support for 
+microcontroller devices is provided by software packs. DFP(Device Family Pack)
+indicates that a software pack contains support for microcontroller devices.
+意思是说，MDK的软件管理方式是通过"包"的方式进行的，包括Keil提供的或者第三方提供的。
+DFP(keil提供的一种Software Packs)提供的是特定微处理器的软件支持包(一般就是对特定
+微处理器的固件库进行了封装)。
+
+	对比"Pack Installer"安装的"STM32F1xx_DFP"和从意法官网下载的"STM32F10x_StdPeriph_Lib_V3.5.0"
+可以发现，DFP包确实是对器件固件库(又称为标准外设库？)的封装。
+
+	从uVersionV5"菜单栏"或"工具栏"都可以进入"Pack Installer"页面。"Pack Installer"
+页面分左右两栏，每栏又分为两个标签页面：左栏分为"Devices"、"Boards"(设备、开发板)
+两个标签页，右栏分为"Packs"、"Examples"(软件包、例程)两个标签页。
+
+	我们的开发目标芯片是"STM32F103C8T6"，从"Devices"标签页选择"STMicroelectronics"、
+"STM32F1 Series"、"STM32F103"、"STM32F103C8"。这时候，右栏这时出现了这个系列芯片的
+软件包，我们选择安装"Device Specific"的两个："STM32F1xx_DFP"、"STM32NUCLEO_BSP"。
+
+	完成以上工作后，再"New uVision Project"的时候，就会出现"STMicroelectronics"选择
+项了，在这之前只有"ARM"选择项。
+
+	在"Pack Installer"对话框中，packs标签页上分为"Device Specific"和"Generic"两
+个子项。"Device Specific"是必须安装的，而"Generic"所列软件包可选择安装。
+
+包的安装目录：
+	"Device Specific"软件包放在"keil安装目录/ARM/PACK/Keil/"目录下。譬如常用芯片
+STM32F103的"Device Specific Software Pack"就放在"C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP"
+中
+
+	ARM家族处理器都需要的CMSIS、CMSIS-Driver放在"keil安装目录/ARM/PACK/ARM/"目录下；
+
+	其它第三方软件包放在"C:\Keil_v5\ARM\PACK"目录下
+
+
+
+6、keil选择编译器-armcc或者gcc
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在“Manage Project Items”->“Folders/Extensions”标签页中。
+
+
+rtthread-stm32.lnp中放着链接选项
+
+
+7、keil工程内各个后缀名文件的作用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1 test1 无后缀文件，这个是最终生成的文件，只要有这个文件KEIL就可以软件仿真，不能打开
+2 test1.hex 这个文件可以直接下载到单片机里，他就是从无后缀文件test1里提取的，去掉了调试信息，可以打开
+3 test1.DSN，这个是另外一个软件PROTUES软件的工程文件，里面是电路图，用来和KEIL联合仿真
+4 test1.LST 列表文件，这个文件是某个C文件编译后的文件，在你工程选项里，可以配置他是否显示头文件，显示符号表，显示程序汇编后的汇编代码等等，可以打开
+5 test1.OBJ 这个是编译器编译后的最终文件，用来给连接器连接和定位，连接器对OBJ连接后就变成了无后缀文件，然后提取变成HEX
+6 DBK PWI 是test1.DSN的附带文件，这就属于PROTUES软件了
+7 plg keil 的编译日志文件
+8 test1.M51文件，这个文件很重要，可以打开，出了大问题必须打开它，比如覆盖分析，混合编程时查看函数段名等，里面都是连接器的连接信息，例如你有哪些代码段、数据段，都是多大，被定位到单片机哪个地址里了，哪个函数调用了哪个函数，没有调用哪个函数，工程代码总大小，内存使用总大小等
+9 uvopt和uvproj都是keil工程文件，共同说明这你工程里有哪些文件，文件有没有被编译过，工程目录树是怎么组织的等等信息
+10 bak就是对工程文件的备份
+11 asm 就是汇编文件了
+12 lnp算是连接日志，告诉你连接器连接了哪些OBJ等，可以用文本编辑器打开
+
+
+8、下载STM32F103C8系列的固件库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	进入意法首页“https://www.st.com”，点“Product Catalog”->“Microcontrollers”，选“
+STM32 32-bit Arm Cortex MCUs”->“STM32 Mainstream MCUs”->“STM32F1 Series”->“STM32F103”
+点“STM32F103C8” 点“Tools&Software”，进入资源页面，搜索“peripheral”，20181129时搜到的是
+STSW-STM32054包，进去后版本是3.5.0。
+
+9、keil链接脚本
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+链接脚本有两个：
+	bsp/stm32f107/stm32_rom.ld    用于gcc
+	bsp/stm32f107/stm32_rom.sct   用于armcc

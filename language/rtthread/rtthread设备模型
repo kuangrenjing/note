@@ -1,0 +1,32 @@
+1、rt_object、rt_device、rt_serial_device
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	rt_device继承于rt_object，RT-Thread通过rt_device实现统一设备模型。
+
+	rt_serial_device继承于rt_device，实现串口特定的功能。
+
+
+2、rt_object
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	rt_object定义在include/rtdef.h:326，可以看到rt_object是一个链表元素，RT-Thread
+内核会根据object种类把注册到系统的rt_object链接起来，譬如"RT_Object_Class_Device"
+就代表是设备object。
+
+	rt_device_find就是通过设备对象链表查找对应name的设备的，譬如"uart1"。
+
+
+
+
+
+1、重点是设备树
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+main
+->
+	rtthread_startup(src/components.c:214)
+	->
+		rt_hw_board_init(bsp/stm32f10x/drivers/board.c:173)
+		->
+			rt_hw_usart_init(bsp/stm32f10x/drivers/usart.c:503)
+			rt_serial_device.ops赋值
+			->
+				rt_hw_serial_register(components/drivers/serial/serial.c:1080)
+				rt_serial_device.rt_device.ops赋值

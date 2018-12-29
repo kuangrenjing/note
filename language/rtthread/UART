@@ -1,0 +1,25 @@
+RT-Thread提供的函数：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	rt_event_send
+	rt_event_recv
+	rt_device_find            此函数根据指定的设备名称查找设备。
+	rt_device_set_rx_indicate 
+	rt_device_open
+	rt_device_write
+	rt_device_read
+
+	这些函数都在RT-Thread的核心代码中定义，具体位于src/device.c文件中。
+
+rt_device_find
+
+
+rt_device_set_rx_indicate
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	此函数可设置一个回调函数，当硬件设备收到数据时回调以通知应用程序有数据到达。
+
+	当硬件设备接收到数据时，会回调rt_device_set_rx_indicate设置的函数并把收到的
+数据长度放在size参数中传递给上层应用。上层应用线程应在收到指示后，立刻从设备中
+读取数据。
+
+
+USART3_IRQHandler(bsp/stm32f10x/drivers/usart.c:363)这个函数是在汇编代码里安装的

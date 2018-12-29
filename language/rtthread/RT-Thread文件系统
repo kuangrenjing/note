@@ -1,0 +1,40 @@
+1、dfs
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	RT-Thread的文件系统称为"dfs"，类似于linux的"vfs"。其总的特点如下：
+
+1，dfs就是RT-Thread的虚拟文件系统，像linux的vfs一样；
+2，dfs以统一操作接口封装不同文件系统的差异；
+3，文件系统(如：fat)挂载后，就是rtos知道有这么文件系统，但还无法使用。(没有物理设备，你往哪写数据)
+4，设备挂载后与文件系统配对挂载到一个特定路径。(这点和linux好像)
+5，文件操作时，根据路径就能找到所属的具体文件系统。
+6，elm是啥玩意儿？elm就是fat接入dfs的连接件。由于fat不是针对RT-Thread的，rtos作者本人也没有修改出一稿RT-Thread专用的fat源码，所有就有了elm这一层。其实elm就可以看作是RT-Thread下的fat文件系统–封装fat操作并提供底层硬件操作回调。
+7，关于sd卡驱动，RT-Thread有设备驱动接口，本文不涉及了。
+8，总的来说dfs这部分不难，同时可能对后续了解linux的vfs时会有些帮助。
+
+2、dfs文件系统目录结构
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+2、dfs->devfs
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	前面说到，dfs以统一操作接口封装不同文件系统的差异，所以dfs也把设备驱动进行了
+封装，这样，用户就可以通过dfs接口访问诸如串口、SPI、USB等接口设备了。
+
+
+int open(const char *file, int flags, ...)(components\dfs\src\dfs_posix.c:32)
+->
+	dfs_file_open(d, file, flags);
+
+dfs_file_open
+
+
+
+
+
+
+
+
+3、代码分析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	devfs所做的工作就是定义一个struct dfs_filesystem_ops变量，并通过函数
+dfs_register()把这个变量注册到系统。

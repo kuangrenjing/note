@@ -1,0 +1,113 @@
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.rt-thread.org/document/site/rtthread-tutorial/gd0001-rtthread-introducing/
+
+1、RT-Thread组成：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+rtthread包含两部分的内容：
+	内核
+	软件组件
+	应用模块
+
+内核：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	RT-Thread拥有一个自有的、传统的硬实时内核：：可抢占的多任务实时调度器，信号
+量，互斥量，邮箱，消息队列，信号等。
+
+软件组件：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	软件组件是位于RT-Thread内核上的软件单元，例如命令行（finsh/msh shell），虚
+拟文件系统（FAT，YAFFS，UFFS，ROM/RAM文件系统等），TCP/IP网络协议栈（lwIP），
+Libc/POSIX标准层等。一般的，一个软件组件放置于一个目录下，例如RT-Thread/components
+目录下的文件夹，并且每个软件组件通过一个 SConscript文件来描述并被添加到RT-Thread的
+构建系统中。当系统配置中开启了这一软件组件时，这个组件将被编译并链接到最终的
+RT-Thread固件中。
+
+RT-Thread平台=内核+软件组件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	RT-Thread内核；
+	shell命令行；
+	虚拟文件系统；
+	TCP/IP网络协议栈；
+	设备驱动框架；
+	Libc/POSIX标准层
+
+应用模块
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	应用模块，或者说用户应用（User Application，UA）是一个可动态加载的模块：它
+可以独立于RT-Thread固件而单独编译。一般的，每个UA都包含一个main函数入口；一个它
+自己的对象容器，用于管理这个应用的任务/信号量/消息队列等内核对象，创建、初始化、
+销毁等。
+
+2、RT-Thread源码目录结构(v3.1.1版)：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bsp的目录结构：
+	https://www.rt-thread.org/document/site/rtthread-application-note/setup/source-code/an0016-rtthread-setup-source-code/
+
+	bsp           - 板级支撑包
+	components    - 软件组件
+	documentation - 文档
+	examples      - 实例代码
+	include       - 包含头文件
+	libcpu        - 对各种不同类型架构cpu芯片的支持文件
+	src           - RT-Thread的核心代码
+	tools         - 自动化构建、编译工具
+
+3、使用scons构建RT-Thread工程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：
+	https://www.rt-thread.org/document/site/submodules/rtthread-manual-doc/zh/1chapters/10-chapter_scons/
+
+	RT-Thread使用了scons做为自身的编译构建系统，并进行一定的定制以满足自身的需
+求(可以通过scons --help查看RT-Thread中额外添加的命令)。在编译RT-Thread前，请先安
+装Python 2.7.x及scons。
+
+	RT-Thread scons支持两种编译方式：命令行编译方式；生成IDE工程(譬如MKD)，然后
+通过IDE编译。
+
+3.1、说在前面：
+	RT-Thread已经在每个板级支撑包下面给我们提供了一个MDK4和一个MDK5工程文件，所以
+如果我们使用MDK编程、调试，那可以先不用研究scons编译系统。
+
+3.2、scons简介
+	SCons是一套由Python语言编写的开源构建系统，类似于Make、CMake。它的编译文件是
+SConstruct和SConscript，类似于Make的Makefile文件。SCons不仅可以完成基本的编译，
+还可以生成MDK/IAR/VS工程。
+
+	SCons使用SConscript和SConstruct文件来组织源码结构，通常来说一个项目只有一个
+SConstruct，但是会有多个SConscript。一般情况下，每个存放有源代码的子目录下都会
+放置一个SConscript。
+
+	为了使RT-Thread更好的支持多种编译器，以及方便的调整编译参数，RT-Thread为每个
+bsp单独创建了一个名为rtconfig.py的文件。因此每一个RT-Thread bsp目录下都会存在下面
+三个文件，它们具体控制BSP的编译。
+	rtconfig.py
+	SConstruct
+	SConscript
+
+	综上，RT-Thread的编译应以一个特定的BSP目录作为发起点(目录下有SConstruct、MDK工程
+文件)。
+
+
+4、RT-Thread命令行编译实验：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、win10安装python2.7.*
+	下载最新版python2：浏览器进入https://www.python.org/，找到Download这个标签，
+找到最新版的python2下载下来。
+
+	把包含python.exe的python27路径添加到path路径中去。
+
+4.2、win10安装scons
+	下载最新版scons：浏览器进入https://scons.org，找到Download这个标签，找到
+“Windows installer scons-3.0.0-setup.exe”(20181212)，下载下来。
+
+	安装时可以能提示“No Python installation found in the registry”错误。可能下载的
+scons是32位版本，而我们安装了64位版本的python27。卸载64位版本的python，重新安装32
+位版本的python就好了。
+
+4.3、下载最新版的RT-Thread源码
+	浏览器进入https://github.com/RT-Thread/rt-thread/releases，下载v3.1.1(20181212
+时是这个版本)。
+
+
+

@@ -1,0 +1,68 @@
+0、参考文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+1、arm公司：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Acorn计算机公司是现在著名的ARM公司的前身。Acorn计算机公司(Acorn Computers)
+创立于1978年，公司位于英格兰的剑桥，它在80年代PC革命初期的贡献，相当于美国的“苹
+果公司”。1991年，Acorn计算机公司剥离了ARM部门，成立了ARM公司。
+
+2、keil公司：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Keil公司是一家业界领先的微控制器（MCU）软件开发工具的独立供应商。Keil公司由
+两家私人公司联合运营，分别是德国慕尼黑的Keil Elektronik GmbH和美国德克萨斯的
+Keil Software Inc。Keil公司制造和销售种类广泛的开发工具，包括ANSI C编译器、宏汇
+编程序、调试器、连接器、库管理器、固件和实时操作系统核心（real-time kernel）。
+有超过10万名微控制器开发人员在使用这种得到业界认可的解决方案。其Keil C51编译器自
+1988年引入市场以来成为事实上的行业标准，并支持超过500种8051变种。
+
+	Keil公司在2005年被ARM公司收购。
+
+3、uVision开发环境
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	keil的IDE(集成开发环境)叫做uVision，vision有“视窗”的意思。到目前为止，keil
+已经发布了多个uVision版本。
+
+Keil μVision2
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	KeilμVision2是美国Keil Software公司出品的51系列兼容单片机C语言软件开发系统，
+使用接近于传统C语言的语法来开发，与汇编相比，C语言易学易用,而且大大的提高了工作
+效率和项目开发周期,他还能嵌入汇编，您可以在关键的位置嵌入，使程序达到接近于汇编
+的工作效率。Keil C51标准C编译器为8051微控制器的软件开发提供了C语言环境,同时保留
+了汇编代码高效,快速的特点。C51编译器的功能不断增强，使你可以更加贴近CPU本身，及
+其它的衍生产品。C51已被完全集成到μVision2的集成开发环境中，这个集成开发环境包含：
+编译器，汇编器，实时操作系统，项目管理器，调试器。μVision2 IDE可为它们提供单一而
+灵活的开发环境。
+
+Keil μVision3
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	2006年1月30日ARM推出全新的针对各种嵌入式处理器的软件开发工具，集成Keil μVision3
+的RealView MDK开发环境。RealView MDK开发工具Keil μVision3源自Keil公司。RealView MDK
+集成了业内领先的技术，包括Keil μVision3集成开发环境与RealView编译器。支持ARM7、
+ARM9和最新的Cortex-M3核处理器，自动配置启动代码，集成Flash烧写模块，强大的Simulation
+设备模拟，性能分析等功能，与ARM之前的工具包ADS等相比，RealView编译器的最新版本可
+将性能改善超过20%。
+
+Keil μVision4
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	2009年2月发布Keil μVision4，Keil μVision4引入灵活的窗口管理系统，使开发人员
+能够使用多台监视器，并提供了视觉上的表面对窗口位置的完全控制的任何地方。新的用户
+界面可以更好地利用屏幕空间和更有效地组织多个窗口，提供一个整洁，高效的环境来开发
+应用程序。新版本支持更多最新的ARM芯片，还添加了一些其他新功能。
+
+	2011年3月ARM公司发布最新集成开发环境RealView MDK开发工具中集成了最新版本的Keil 
+μVision4，其编译器、调试工具实现与ARM器件的最完美匹配。
+
+Keil μVision5
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	2013年10月，Keil正式发布了Keil μVision5 IDE。
+
+keil现在针对C51 C166 C251 ARM开发了四套开发工具。uVision界面是一样的，只是Toolchain不同?
+
+
+4、MDK(Microcontroller Development Kit)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.keil.com/pack/doc/CMSIS/Core/html/startup_s_pg.html
+
+Reset_Handler
+

@@ -1,0 +1,64 @@
+1、LATCH、SCLK、SDIN、SDO四个引脚
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	数据在SCLK的上升沿逐个输入。
+	输入移位寄存器由8个地址位和16个数据位组成，该24位字在LATCH的上升沿无条件地被
+锁存。
+	文档的意思好像是如果使用不连续的时钟，必须在LATCH上形成上升沿
+
+	由上面两方面的信息来考虑AD5410作为从设备时，主设备的时钟极性选择；片选信号选择。
+
+	我们来看STM32 SPI特性：
+STM32 SPI片选信号可以分为两类：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	硬件NSS：是指SPI自动控制SPI的片选信号，发送数据时，输出低电平；不发送数据时，
+输出高电平。但是实际操作中，NSS根本无法自己置位和复位（ST技术人员承认的bug）。
+故一般不用硬件NSS，因为这种方式就只能一个SPI接一个从机。
+
+	软件NSS：就是用软件的方式(普通IO口)控制SPI的片选，发送数据时，软件置片选为
+低；结束传输时，软件置片选为高。优点：一个SPI可以控制多个从机(多个片选线)。
+
+GPIO_Mode_AF_PP复用推挽输出
+
+
+RT-Thread下的SPI驱动设备相关部分可参考bsp/stm32f10x/drivers/touch.c
+
+
+	配置SPI为主模式
+在主配置时，在SCK脚产生串行时钟。
+配置步骤
+1. 通过SPI_CR1寄存器的BR[2:0]位定义串行时钟波特率。
+2. 选择CPOL和CPHA位，定义数据传输和串行时钟间的相位关系(见图212)。
+3. 设置DFF位来定义8位或16位数据帧格式。
+4. 配置SPI_CR1寄存器的LSBFIRST位定义帧格式。
+5. 如果需要NSS引脚工作在输入模式，硬件模式下，在整个数据帧传输期间应把NSS脚连接
+到高电平；在软件模式下，需设置SPI_CR1寄存器的SSM位和SSI位。如果NSS引脚工作
+在输出模式，则只需设置SSOE位。
+6. 必须设置MSTR位和SPE位(只当NSS脚被连到高电平，这些位才能保持置位)。
+在这个配置中，MOSI引脚是数据输出，而MISO引脚是数据输入。
+
+
+
+2、STM32的CPOL和CPHA
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CPOL：时钟极性
+	0：空闲状态时，SCK保持低电平
+	1：空闲状态时，SCK保持高电平
+CPHA：时钟相位
+	0：数据采样从第一个时钟边沿开始
+	1：数据采样从第二个时钟边沿开始
+
+AD5410文档只说数据在上升沿采集，那么STM32 SPI主机可设置两种模式：
+	CPOL = 0 CPHA = 0
+	CPOL = 1 CPHA = 1
+
+
+
+typedef struct
+{
+  uint32_t SYSCLK_Frequency;  /*!< returns SYSCLK clock frequency expressed in Hz */
+  uint32_t HCLK_Frequency;    /*!< returns HCLK clock frequency expressed in Hz */
+  uint32_t PCLK1_Frequency;   /*!< returns PCLK1 clock frequency expressed in Hz */
+  uint32_t PCLK2_Frequency;   /*!< returns PCLK2 clock frequency expressed in Hz */
+  uint32_t ADCCLK_Frequency;  /*!< returns ADCCLK clock frequency expressed in Hz */
+}RCC_ClocksTypeDef;
+

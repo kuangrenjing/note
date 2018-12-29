@@ -1,0 +1,18 @@
+1、简介：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在RT-thread 2.0.0正式版中引入了pin设备作为杂类设备。在3.1.1版本中其设备驱动
+文件pin.c在rt-thread-3.1.1\components\drivers\misc中，主要用于操作芯片GPIO， 如
+点亮led，按键等。同时对于相应的芯片平台，需要自行编写底层gpio驱动，如gpio.c。
+
+设备无关(上层)驱动：
+	components/drivers/misc/pin.c
+
+设备相关(底层)驱动：
+	bsp/stm32f10x/drivers/gpio.c
+
+
+2、引脚定义：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	gpio.c中struct pin_index pins定义。
+
+	rt_pin_mode函数就是使用这个数组来确定引脚的。

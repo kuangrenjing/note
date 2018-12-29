@@ -1,0 +1,75 @@
+1、__CC_ARM 编译器环境下，$Sub$$与$Super$$的“补丁”功能
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这是一种特殊模式：用于有一个已经存在且不能被改变的函数的情况。使用这两个模
+式可以帮原函数打补丁。
+
+如存在一个函数foo()：
+	$Sub$$foo：如果定义了这个函数，那么调用foo函数时会首先进入这个函数。
+	$Super$$foo：在$Sub$$foo内可以调用$Super$$foo(无需定义)，它将直接跳转到foo函数。
+
+	系统在汇编启动代码之后直接就要跳转到main函数，但操作系统厂商可能想在用户main
+函数之前做一些系统配置工作，这时候就可以定义$Sub$$main。
+
+2、RT_USING_USER_MAIN宏
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	此宏开启后进入main函数前会先进入src/componetns.c中的$Sub$$main函数。需注意
+STM32F10x系列不能开启此宏(默认不开启)，开启后会与bsp冲突。
+
+
+
+main(bsp/stm32f10x/applications/startup.c:98)
+->
+	rtthread_startup(bsp/stm32f10x/applications/startup.c:53)
+	->
+		rt_hw_board_init(bsp/stm32f10x/drivers/board.c:173)
+		->
+			rt_hw_spi_init(bsp/stm32f10x/mrtlib/driver/drv_spi.c:239)
+	->
+		rt_application_init(bsp/stm32f10x/application/application.c)
+		->
+			rt_init_thread_entry(bsp/stm32f10x/application/application.c:96)
+			->
+				usart2_thread_entry
+				->
+					rt_mserial_cmd_init(bsp/stm32f10x/mrtlib/lib/rt_mserial_cmd.c)
+					->
+						mserial_open(bsp/stm32f10x/mrtlib/lib/mserial.c)
+				->
+					rt_mserial_cmd_process(bsp/stm32f10x/mrtlib/lib/rt_mserial_cmd.c)
+					->
+						mcmd_bufadd()
+					->
+						mcmd_findcmdbuf()
+					->
+						mcmd_run()
+					->
+						mserial_write
+			->
+				modbus_thread_entry
+
+
+
+2、bsp/stm32f10x/mrtlib/lib/mserial.c文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	mserial.c管理三个串口，mserial_open函数使用用户给的串口名来匹配这三个串口并
+打开匹配到的这个串口。
+
+mserial_open
+mserial_close
+mserial_read
+mserial_write
+mserial_setcfg
+
+mserial_open
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	此函数打开一个串口，并通过rt_device_set_rx_indicate设置串口的接受回调函数，
+每当串口接受到一个字符(或者可以设置为多个字符？？)就会回调设置的这个函数，这个通
+过rt_event_send发出一个事件，使用rt_event_recv等待这个事件的mserial_read函数所在
+线程将被唤醒。
+
+3、rt_mserial_cmd.c
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这个文件负责维护和处理液位仪与单片机通信的buffer，同时处理两者之间通信的协议。
+
+
+mcmd_findcmdbuf

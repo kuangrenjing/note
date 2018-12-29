@@ -1,0 +1,16 @@
+0、参考文献
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.rt-thread.org/document/site/submodules/rtthread-manual-doc/zh/1chapters/03-chapter_timer/
+http://www.cnblogs.com/firege/p/5805734.html
+
+
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	假设timer_thread是一个线程入口函数，在线程中执行rt_thread_delay(n)后，可以
+实现n个OS tick的定时，当执行rt_thread_delay时，线程的内置定时器将会被激活并启动；
+当线程定时器超时时，这个线程将被唤醒，并接着rt_thread_delay运行后续的代码。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SysTick_CLKSourceConfig()设置SysTick定时器的时钟。
