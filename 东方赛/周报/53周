@@ -1,0 +1,9 @@
+1、上周总结：
+接口板软件系统集成(与核心板通信、输出到电流环、输出到RS-485三者集成)
+https://jansonn/svn/DFS_02_tongyong_uncooled_IRay_640_V2/software/%E6%B6%B2%E4%BD%8D%E4%BB%AA/STM32/ywy_stm32
+
+
+
+
+2、本周计划：
+液位仪测试启动，包括redmine服务器搭建、测试项目管理、液位仪生产配置软件使用手册等等。

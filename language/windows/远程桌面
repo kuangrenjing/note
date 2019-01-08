@@ -1,0 +1,13 @@
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+本机打开远程终端：
+"WIN+R"->"run"->"mstsc"
+
+远程主机设置
+"电脑属性"->"远程"->"仅允许运行使用网络级别身份验证的远程桌面的计算机连接(更安全)"
+->"选择用户"
+
+http://www.redmine.org.cn/499.html
+
+
+win10新建用户
