@@ -1,0 +1,12 @@
+1、上周总结：
+
+modbus rtu功能完善(波特率、校验位可配置)
+https://jansonn/svn/DFS_02_tongyong_uncooled_IRay_640_V2/software/%E6%B6%B2%E4%BD%8D%E4%BB%AA/STM32/ywy_stm32
+
+集光RS-485驱动测试、集光周界报警测试
+组织液位仪项目的测试
+
+https://jansonn/svn/DFS_02_tongyong_uncooled_IRay_640_V2/software/documents/%E6%AF%8F%E5%91%A8%E4%BB%BB%E5%8A%A1/%E9%A9%AC%E5%85%A8%E8%83%9C%E5%91%A8%E6%8A%A5/%E6%B6%B2%E4%BD%8D%E4%BB%AA%E7%AC%AC29%E5%91%A8
+
+2、本周计划：
+液位仪测试

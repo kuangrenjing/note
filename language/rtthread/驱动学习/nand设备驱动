@@ -1,0 +1,5 @@
+驱动位置：
+	components/drivers/mtd/mtd_nand.c
+
+
+	rt_mtd_nand_register_device(const char *name, struct rt_mtd_nand_device *device)

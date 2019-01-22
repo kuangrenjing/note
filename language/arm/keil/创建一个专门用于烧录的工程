@@ -1,0 +1,12 @@
+programmer
+
+创建工程、选择目标器件，一个空工程就建好了。
+"Options for Target"->"Output"->"Select Folder for objects"选.hex文件->确定
+"Name of Executable"中输入烧录文件的全名
+
+
+"Options for Target"->"Debug"->"Use"->"J-LINK/J-TRACE Cortex"
+
+
+download
+
