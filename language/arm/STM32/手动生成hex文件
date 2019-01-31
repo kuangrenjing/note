@@ -1,0 +1,11 @@
+1、hex文件简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	hex是文本文件
+
+2、hex行格式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+:  数据长度  地址       数据类型           数据       校验
+1     2        4   2(00/01/02/03/04/05)   数据长度*2    2
+
+
+校验 = 0x100-((数据长度+地址+数据类型+数据)%256)

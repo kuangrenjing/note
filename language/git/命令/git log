@@ -1,0 +1,106 @@
+功能：
+	显示提交日志。
+
+用法：
+	git log [<options>] [<revision range>] [[\--] <path>…​]
+
+解释：
+	git log可以携带git rev-list命令的参数用于控制哪些提交显示及怎么显示；还可以携带git diff-*的选项用于控制提交与父提交的diff是不是显示及怎么显示。
+
+The command takes options applicable to the git rev-list command to control what is shown and how, and options applicable to the git diff-* commands to control how the changes each commit introduces are shown.
+1、选项：
+
+--no-decorate
+--decorate[=short|full|auto|no]
+--no-decorate等同于--decorate=no， --no-decorate是默认行为，short是默认值。--decorate用于控制指向提交的引用（包括tag）如何显示，short和full的区别在于full显示引用的全路径而short只显示引用名。譬如:
+
+复制代码
+
+$ git log --decorate --pretty=oneline
+
+9dc27351221fe5fd58ba71cae60d1e99bc9e5bef (HEAD, master)         modified:   rename_before       modified:   test        branch master, commit 2
+8ae13fcd2263bd97733da65cc824e7015b53faa2 (tag: v1.0.0)  new file:   rename_before       new file:   test        branch master, commit 1
+
+$git log --decorate=full --pretty=oneline
+
+9dc27351221fe5fd58ba71cae60d1e99bc9e5bef (HEAD, refs/heads/master)      modified:   rename_before       modified:   test        branch master, commit 2
+8ae13fcd2263bd97733da65cc824e7015b53faa2 (tag: refs/tags/v1.0.0)        new file:   rename_before       new file:   test        branch master, commit 1
+
+复制代码
+
+ 
+
+Print out the ref names of any commits that are shown. If short is specified, the ref name prefixes refs/heads/, refs/tags/ and refs/remotes/ will not be printed. If full is specified, the full ref name (including prefix) will be printed. If auto is specified, then if the output is going to a terminal, the ref names are shown as if short were given, otherwise no ref names are shown. The default option is short.
+
+2、美化格式(RETTY FORMATS)
+
+我们可以使用--pretty=[oneline|short|medium|full|fuller|email|raw|format:<string>]来指定日志显示格式。
+2.1、各种内建美化格式的具体显示格式：
+2.1.1、oneline
+
+<sha1> <title line>
+
+2.1.2、short
+
+commit <sha1>
+Author: <author>
+
+<title line>
+
+2.1.3、medium
+复制代码
+
+commit <sha1>
+Author: <author>
+Date:   <author date>
+
+<title line>
+
+<full commit message>
+
+复制代码
+2.1.4、full
+复制代码
+
+commit <sha1>
+Author: <author>
+Commit: <committer>
+
+<title line>
+
+<full commit message>
+
+复制代码
+2.1.5、fuller
+复制代码
+
+commit <sha1>
+Author:     <author>
+AuthorDate: <author date>
+Commit:     <committer>
+CommitDate: <committer date>
+
+<title line>
+
+<full commit message>
+
+复制代码
+2.1.6、email
+复制代码
+
+From <sha1> <date>
+From: <author>
+Date: <author date>
+Subject: [PATCH] <title line>
+
+<full commit message>
+
+复制代码
+2.1.7、raw
+
+raw格式下，提交对象内的字段是怎么保存的，就怎么显示出来。要注意，--pretty=raw仅能控制提交对象的显示，raw diff格式需要其它选项控制。
+2.2、自定义格式：
+
+--pretty=format:<string>可以自定义日志显示格式，这里暂略。
+
+ 【注】If the commit is a merge, and if the pretty-format is not oneline, email or raw, an additional line is inserted before the Author: line. This line begins with "Merge: " and the sha1s of ancestral commits are printed, separated by spaces. Note that the listed commits may not necessarily be the list of the direct parent commits if you have limited your view of history: for example, if you are only interested in changes related to a certain directory or file.

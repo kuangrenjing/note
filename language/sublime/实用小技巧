@@ -17,3 +17,16 @@ File "./python3.3/threading.py", line 901, in _bootstrap_inner
   File "package_control.http_cache in C:\Program Files (x86)\sublime text3\Data\Installed Packages\Package Control.sublime-package", line 39, in clear
 PermissionError: [WinError 5] 拒绝访问。: 'C:\\Program Files (x86)\\sublime text3\\Data\\Packages\\User\\Package Control.cache\\01524fae79697630d0454ba3fabd9414'
 
+
+Package Control: Attempting to use Urllib downloader due to WinINet error: Error downloading channel. Connection refused (errno 12029) during HTTP write phase of downloading https://packagecontrol.io/channel_v3.json.
+Package Control: Error downloading channel. URL error [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 downloading https://packagecontrol.io/channel_v3.json.
+Package Control: Attempting to use Urllib downloader due to WinINet error: Error downloading channel. Operation timed out (errno 12002) during HTTP write phase of downloading https://packagecontrol.io/channel_v3.json.
+Package Control: Error downloading channel. URL error [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 downloading https://packagecontrol.io/channel_v3.json.
+Package Control: No updated packages
+Package Control: Error downloading channel. URL error [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 downloading https://packagecontrol.io/channel_v3.json.
+
+原因：
+Sublime Text 3 的插件地址被墙。
+
+解决方法：
+FQ后问题解决。
