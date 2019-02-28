@@ -1,0 +1,29 @@
+MFC开发IM-如何解决“转到定义”却跳转头文件，不跳实现
+
+把IDE关掉
+然后删除工程目录下面的工程名.ncb文件
+在打开就行了
+如果不行。。。。
+那就不行了。。。。 
+
+
+
+如何让PDB文件携带MFC自身源码的调试信息
+
+
+pdb与bsc文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	BSC：(browse source code)BSCMAKE.EXE将所有的SBR文件作为输入，经过处理之后输
+出一个BSC文件，在代码导航的时候实际用到的是BSC文件
+	PDB：(program data base)，即程序数据库文件。用来记录调试信息，是一个相当重要
+的文件，没有他，程序无法正常调试
+
+	在项目属性的All Options中找到Debug Information Format改成None就不会生成pdb，
+找到Enable Browse Information改成否就不会生成bsc文件。
+
+
+
+
+mfc.bsc与mfc.pdb
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	VS2013后默认不再提供mfc.pdb文件，通过设置后会自动从符号服务器下载。

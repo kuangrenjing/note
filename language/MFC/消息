@@ -1,3 +1,70 @@
+1、事件与消息
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+2、队列消息、非队列消息
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)队列消息(Queued Messages)
+	消息会先保存在消息队列中，消息循环会从此队列中取消息并分发到各窗口处理。如
+鼠标，键盘消息。
+2)非队列消息(NonQueued Messages)
+	消息会绕过系统消息队列和线程消息队列直接发送到窗口过程被处理。如：WM_ACTIVATE,
+WM_SETFOCUS,WM_SETCURSOR,WM_WINDOWPOSCHANGED。
+	注意:postMessage发送的消息是队列消息，它会把消息Post到消息队列中；SendMessage
+发送的消息是非队列消息，被直接送到窗口过程处理。
+
+
+3、系统消息队列、线程消息队列
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+4、UI线程、worker线程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Win32说明文件一再强调线程分为UI线程和worker线程两种。GUI线程负责建造窗口以
+及处理主消息循环。Worker负责执行纯粹的运算工作，这些运算工作如果放在UI线程内会导
+致UI线程的消息队列失去反应。一般而言，UI线程绝不会去做那些不能够马上完成的工作。
+
+	在早期的Windows NT操作系统中，对显示器的图形操作是由一个服务进程提供，就像是
+现在Linux上的X Window。但是后来情况发生了变化，微软觉得由服务进程提供图形操作必定
+导致大量的进程间通信，从而使系统的效率下降。因此从Windws NT 4.0开始，微软把图形操
+作移到了内核。为此微软在原有的系统调用基础上增加了一组图形相关的系统调用供应用层
+使用，新增的系统调用我们称之为Win32k扩展系统调用。因此在内核中有两个系统调用表，
+一个是原来就有的系统调用表，一个是新增后的Win32k扩展系统调用表。
+
+	在内核中每个线程都有一个数据结构KTHREAD来存储线程的信息，在线程的KTHREAD结
+构中有一个ServiceTable指针，这个指针指向本线程所用的系统调用表。每个线程在创建之
+初都是使用原本的系统调用表，此后，如果新线程第一次进行了Win32k扩展系统的调用，内
+核就会将该线程转换成UI线程，并修改ServiceTable指针，使其指向Win32k扩展系统调用表。
+除了修改ServiceTable指针，操作系统还会为这个线程创建一个消息队列，并将这个消息队
+列的指针存储到线程的数据结构中。因此我们常说的UI线程，就是比其它普通线程多了一个
+消息队列，这是关键。
+
+	如何将一个普通线程变成UI线程呢？只要调用一个GUI相关的API就可以了，例如
+GetMessage()、CreateWindow()。
+
+5、窗口与消息循环
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	窗口有一个数据结构，里面会存储很多的信息，其中有3个是我们最关注的，一个是指
+向窗口函数的指针WndProc，一个是创建这个窗口的线程指针OwnerThread，还有一个是指向
+OwnerThread消息队列的指针MessageQueue。这样当你向一个窗口发送消息时，操作系统就
+将这个消息放到MessageQueue所指的队列中。因此，你应该明白，只有创建这个窗口的线程
+才能处理这个窗口的消息。那么一个线程如何处理他所创建的窗口消息呢？答案就是在这个
+线程中实现消息循环。
+
+	如果一个UI线程没有实现消息循环，那么就无法处理它所创建的窗口消息了。
+
+6、MFC的UI线程、worker线程封装
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CWinApp是一个用户界面线程对象，派生自CWinThread。
+
+https://zhidao.baidu.com/question/1510355037000365620.html
+
+
+7、MFC主线程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CWinApp是MFC主线程的标准类，派生后的APP类，从InitInstance进入，之后进入了CWinApp类的Run：
+
+
+
 1、消息的定义：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 typedef struct tagMSG

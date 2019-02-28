@@ -1,0 +1,24 @@
+
+
+1、解决方案(solution)与项目(project)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在linux里，我们可能经常把project翻译为“工程”，而在windows系统下我们常翻译为
+“项目”。
+
+	解决方案，是对所有要完成工作的统称，一般叫Solution。
+
+	项目，也叫工程，是将解决方案分成若干个模块进行处理，一般叫做Project。添加项目
+就是添加工程。解决方案是所有项目的总和。
+
+	一个项目里面有各种文件，如图片资源、音频资源、视频资源、ICO、MENU、SCROLLBAR等
+等。是一个独立的包罗各种资源的集合，基本算是功能齐全完备，自给自足的小团体了。因为
+每个项目里面都有一个CWinApp类的全局变量theApp，这就注定项目是可以独立启动运行的。
+
+用VS2012建立的空的单文档程序，为什么编译后出现一个FakeAPP的类？如图
+
+2、VS2010新特性-：
+资源管理器停靠窗格、输出停靠窗格、属性停靠窗格
+
+https://wenku.baidu.com/view/b210d403804d2b160b4ec090.html
+
+Explorer, Output and Properties docking panes selected.  Unselecting those when creating a n

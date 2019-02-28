@@ -1,0 +1,9 @@
+1、入口函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	与普通的WIN32 SDK应用程序相比, 入口函数换成AfxWinMain，在进入AfxWinMain函数
+之前，主线程已经被创建好了。
+
+
+2、theApp初始化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+AfxGetApp ——> afxCurrentWinApp ——> AfxGetModuleState()->m_pCurrentWinApp ——> _afxThreadState->m_pModuleState
