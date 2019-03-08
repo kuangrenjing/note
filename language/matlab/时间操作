@@ -1,0 +1,13 @@
+1、datenum
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	datenum函数创建一个数值数组，将每个时间点表示为从0000年1月0日起的天数。数值
+还能表示以天为单位的过去时间。但是，表示时间点的最佳方式是使用 datetime 数据类型。
+表示过去的时间的最佳方式是使用duration或calendarDuration数据类型。
+
+2、datetime
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+5、转换为数字和字符串
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+datevec - 将日期和时间转换为分量的向量
