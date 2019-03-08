@@ -1,0 +1,49 @@
+1、色度 色调 饱和度 亮度
+
+颜色是由亮度和色度共同表示的,而色度则是不包括亮度在内的颜色的性质,它反映的是颜色的色调和饱和度。
+
+https://zhuanlan.zhihu.com/p/24214731
+https://www.zhihu.com/question/22077462
+
+
+作者：ygh0485
+链接：https://www.zhihu.com/question/21352917/answer/46930355
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	颜色或色彩是通过眼、脑和我们的生活经验所产生的一种对光的视觉效应。人对颜色的感觉不仅
+仅由光的物理性质所决定，还包含心理等许多因素，比如人类对颜色的感觉往往受到周围颜色的影响。
+有时人们也将物质产生不同颜色的物理特性直接称为颜色。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	色彩空间一词源于 “Color Space”。色彩学中，人们建立了多种描述使用一组值（通常使用三
+个、四个值或者颜色成分）表示颜色方法的抽象数学模型。例如三原色光模式（RGB） 和印刷四分色
+模式（CMYK）都是色彩模型。色彩模型，以一维、二维、三维甚至四维空间坐标来表示某一色彩，这种
+坐标系统所能定义的色彩范围即色彩空间,即某种颜色表示模型或方法的所有颜色构成空间。
+
+	色彩空间内所有颜色的集合就构成了色域，色域是对一种颜色进行编码的方法，也指一个技术系
+统能够产生的颜色的总和。在计算机图形处理中，色域是颜色的某个完全的子集。颜色子集最常见的应
+用是用来精确地代表一种给定的情况。例如一个给定的色彩空间或是某个输出装置的呈色范围。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在色彩模型和一个特定的参照色彩空间之间加入一个特定的映射函数就在参照色彩空间中出现
+明确的色域，并且与色彩模型一起定义为一个新的色彩空间,例如Adobe RGB和sRGB是两个基于RGB
+模型的不同绝对色彩空间。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	颜色分为二类：一类是基于人眼视觉的CIE的各种色度系统即色彩科学的各种表示方法来表示，
+称之为与设备无关性颜色表示方法，其构成色彩空间称之为与设备无关的色彩空间，如CIE XYZ、
+CIE Lab。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	另一类是基于设备的颜色就是各种与输出设备有关的色彩空间，他们也可以用CIE的色度系统来
+表示，也可以用其他模拟方法来表示，如CMYK的百分比表示就是一种。RGB、CMYK他们不是表示人眼
+的颜色视觉，不是为了准确描述颜色感觉而设计的数学方法，而是着色剂的数量，设备靠这些数值去
+驱动和运行，他控制颜色的信号的数值，让设备模拟产生我们最终需要的颜色感觉。
+
+
+https://www.zhihu.com/question/38303244/answer/77581900
+
+色彩模型：
+	有GRB色彩模型、CMY色彩模型、YTV（YIQ）色彩模型、HSV色彩模型等。
+
+RGB色彩模型有哪些色彩空间：
+	CIE XYZ色彩空间
