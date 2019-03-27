@@ -1,0 +1,9 @@
+1、编译指令pra
+pragmas (compiler directives)
+
+https://perldoc.perl.org/index-language.html
+
+
+BLOCK package
+
+默认包为“main”
