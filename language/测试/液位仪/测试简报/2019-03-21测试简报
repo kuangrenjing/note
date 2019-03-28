@@ -1,0 +1,5 @@
+加密过程相关的状态
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	修改单片机程序，增加“单片机收到加密消息”状态，配合已有的“开机成功”状态，可以通过查
+询状态位诊断整个加密过程的链路建立情况。菊花链17台机器已更新了新程序，明天可以测试Modbus
+轮询。

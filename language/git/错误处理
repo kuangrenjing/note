@@ -1,0 +1,23 @@
+1、git status显示编码串而不显示中文
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+原因：
+	在默认设置下，中文文件名在工作区状态输出，中文名不能正确显示，而是显示为八进
+制的字符编码。
+
+解决方法：
+	将git配置文件core.quotepath项设置为false(quotepath表示引用路径)
+
+命令：
+	git config --global core.quotepath false
+
+
+
+
+
+
+1、pull错误
+git pull origin master
+error: Pulling is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.

@@ -2,3 +2,12 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 1、已计划将多个默认网关用于提供单一网络(例如Intrannet或Internet)的冗余。如果这些网关在
 两个分离且不相互连接的网络上(例如，一个在Intrannet上，一个在Internet上)，则它们不能正
 常工作。是否保存此配置？
+
+
+
+2、“桌面窗口管理器dwm.exe”进程占用大量CPU
+	“桌面窗口管理器”进程主要是帮助用户实现酷炫的桌面效果，例如3D特效、透明窗口、实时预览，
+如果关闭此特效主题显示会有所变化。
+
+	关闭“Aero主题”
+win7才有这个设置，win10已经没有这个设置了，集成到系统里去了。
