@@ -11,9 +11,10 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	git config --global core.quotepath false
 
 
-
-
-
+2、git bash终端显示乱码
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一般是字符编码未设置对。
+	通过选项->文本->本地 字符集设置就可以解决这个问题。
 
 1、pull错误
 git pull origin master
