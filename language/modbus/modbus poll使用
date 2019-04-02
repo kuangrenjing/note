@@ -1,0 +1,13 @@
+1、Connection Setup设置页
+
+1.1、Response Timeout
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	超时时间
+
+
+1.2、Min Delay Between Polls
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	设置这个值可以达到更快的分辨率，而不管scate rate是怎么设置的。
+
+	设置小于20ms时 响应与下一次请求之间的3.5char time间隙可能无法保障，因为
+windows系统的线程调度间隔大概是10-20ms
