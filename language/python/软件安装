@@ -1,11 +1,26 @@
 1、参考
 http://www.runoob.com/python/python-install.html
 
+2、可以安装哪些东西：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、documentation(文档)
+2.2、pip
+	此工具可用于下载和安装其它python包
+2.3、tcl/tk and IDLE
+	安装tkinter(图形引擎？)和IDLE集成开发环境
+2.4、py launcher
+	有了py launcher，启动python程序会更容易
 
-
-
-
-
+3、高级选项：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、Install for all users
+	不选择这个选项，python会被安装到当前登陆用户的数据目录下。
+3.2、Associate files with Python(requites the py launcher)
+3.3、Crate shortcuts for installed applications
+3.4、Add Python to environment variables
+3.5、Precompile standard library
+3.6、Download debugging symbols
+3.7、Download debug binaries(requires VS 2015 or later)
 
 python shell
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -17,3 +32,5 @@ Python有个shell，提供一个Python运行环境。方便你交互式开发。
 而Python的Shell，在Windows环境下，又分两种：
 
 Python (command line) 和IDLE (Python GUI)
+
+

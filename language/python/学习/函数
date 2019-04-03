@@ -1,3 +1,10 @@
+1、区分内建函数与关键字
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	譬如import是关键字而不是内建函数。
+
+
+
+
 1、3.x内建函数(Built-in Functions)
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 abs() 	delattr() 	hash() 	memoryview() 	set()

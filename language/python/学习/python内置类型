@@ -1,0 +1,14 @@
+1、基本数据类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	布尔型、整型、浮点型、字符串型
+
+2、容器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	列表、元组、字典、集合
+
+列表：
+	[]符号或list()内建函数(list()函数可以带0或者1个参数)可以创建列表
+	list()函数还可以把其它类型转化为列表类型(譬如字符串、元组)
+	列表的各个元素的类型可以不相同(这是它与其它语言中数组类型的区别吧)
+	列表的元素可以是列表
+	使用[offset]可以索引列表元素：删、改、查

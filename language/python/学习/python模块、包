@@ -1,0 +1,47 @@
+1、独立的程序
+	一个以"py"为后缀的文件就是一个独立的python程序。
+
+
+
+2、模块与包
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	python模块就是文件系统的一个文件；python包就是文件系统的一个目录，这个目录下有一个
+__init__.py文件。
+	模块和包都可以使用import指令把它们的代码和变量引入到当前程序中。
+	导入模块： import 模块名
+	导入模块并取一个别名： import 模块名 as 模块别名
+	导入模块中的一个函数或变量 from 模块名 import 函数名/变量名
+	导入模块中的一个函数或变量并取一个别名 from 模块名 import 函数/变量名 as 函数/变量别名
+	导入模块内的所有东西： from 模块名 import *
+	import可以导入动态库(按照python规范使用c语言实现的)
+
+
+3、模块搜索路径：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	标准库sys模块有一个path变量（list类型），这个变量存储着目录路径和zip文件路径的列表，
+python从前到后在这些路径中搜索目标模块。
+
+	在我的win10上，sys.path值是这样的(自定义安装，安装目录为c:/Program Files/Python37)
+'', 'C:\\Program Files\\Python37\\Lib\\idlelib', 'C:\\Program Files\\Python37\\python37.zip', 'C:\\Program Files\\Python37\\DLLs', 'C:\\Program Files\\Python37\\lib', 'C:\\Program Files\\Python37', 'C:\\Program Files\\Python37\\lib\\site-packages'
+
+4、sys.path是如何初始化的？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	内建的
+	pth文件
+	PYTHONPATH环境变量
+
+哪些标准库是使用c/c++实现的
+select.pyd
+
+
+5、python引入动态库(一般是c/c++编译生成的)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	import(语言本身支持)
+	ctype(标准库支持)
+
+
+https://blog.csdn.net/bluehawksky/article/details/51087719
+
+
+6、标准库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
