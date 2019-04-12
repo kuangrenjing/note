@@ -33,5 +33,3 @@ Python有个shell，提供一个Python运行环境。方便你交互式开发。
 而Python的Shell，在Windows环境下，又分两种：
 
 Python (command line) 和IDLE (Python GUI)
-
-
