@@ -1,0 +1,8 @@
+RS-485数据轮询测试
+	今天没有发现错误，清明后再观察。
+
+液位监控平台软件测试
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	2019-04-03陈栋飞提交了新版的“液位监控平台”软件，今天发现了若干功能bug，主要
+是用户管理方面的，还有服务端偶尔会崩溃退出的问题，已反馈给陈栋飞进行修改。性能
+测试计划下周进行。

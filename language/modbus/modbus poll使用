@@ -11,3 +11,13 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	设置小于20ms时 响应与下一次请求之间的3.5char time间隙可能无法保障，因为
 windows系统的线程调度间隔大概是10-20ms
+
+
+2、Read/Write definition
+
+2.1、Scan rate
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	扫描时间可以设置为0到3600000ms(3600秒即1小时)。扫描时间设置得比传输时间还要
+小是没有意义的。譬如波特率为9600，读125个寄存器，那传输时间查不到是8+2+250+2(262ms)
++the gap(>3.5 char time) + min time delay between polls，此时你设置100ms的扫描时间
+可能是不能实现的。

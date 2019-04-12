@@ -1,0 +1,6 @@
+新建标题样式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	word2016默认提供两级标题样式，其它的需要自己手动新建，点击样式栏右下角箭头，
+选择“创建样式”，在对话框中不要点确定，而是点修改：样式类型选段落；样式基准选正文；
+后续段落样式选正文。点击左下角“样式”按钮，选“段落”，大纲级别（几级标题就选几，此
+项特别重要），段前、段后、行距参照“标题2”设置，比“标题2”设置得小一些即可。

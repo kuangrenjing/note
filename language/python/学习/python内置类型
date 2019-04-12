@@ -2,6 +2,26 @@
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	布尔型、整型、浮点型、字符串型
 
+
+1.4、字符串
+	字符串字面量可以用前后单引号、前后双引号、前后三单引号、前后三双引号包裹
+	字符串中可以使用反斜杠来转义字符
+	python shell输出字符串优先使用单引号，字符串中有单引号时使用双引号；字符串中
+既有单引号又有双引号时用单引号并转义字符串中的单引号。
+	单引号中使用双引号时不需要转义
+	前后三单引号、前后三双引号可以用于创建多行字符串
+	使用内置函数str()可以把python的其它数据类型转化为字符串【字符串注1】
+	拼接：字符串1+字符串2
+	复制：字符串*N
+	索引：字符串[n]
+	分片：[start:end:step]
+	分割：字符串函数split()，不带参数时按空白字符分割，带一个参数时按参数字符串分割
+	内置函数len()返回字符串长度
+
+字符串函数介绍：
+
+	https://docs.python.org/3/library/stdtypes.html#string%EF%BF%BEmethods
+
 2、容器
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	列表、元组、字典、集合
