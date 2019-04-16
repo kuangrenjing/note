@@ -1,2 +1,8 @@
-1、windows
+windows系统
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我的PC上安装了两个版本的python, python2.7安装在C:/Python27目录；python37安
+装在C:/Program Files/Python37目录。以目标脚本D:/share/note/language/python/test/0-100/001.py
+为例：
+	d:
+	cd share/note/language/python/test/0-100
+	c:/"program file"/python37/python 001.py
