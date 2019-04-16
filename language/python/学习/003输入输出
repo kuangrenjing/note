@@ -1,0 +1,9 @@
+1、输入
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	输入很简单，只需要使用python的内置函数input即可。
+
+
+1、print函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	print函数的调用方式不同是Python2与Python3最明显的区别，另一个重要的区别则是
+处理Unicode字符的方式。
