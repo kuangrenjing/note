@@ -1,0 +1,46 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Python有两种格式化字符串的方式，我们习惯简单地称之为旧式(old style)和新式(new 
+style)。这两种方式在Python 2和Python 3中都适用(新式格式化方法适用于Python 2.6及
+以上)。
+
+1、旧式格式化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	旧式格式化的形式为string % data，“%”前后的空格是非必须的。
+	string是待插值的字符串，其中需插值的部分用%占位符开头，后面可能跟随多个字符，
+用来表示需替换的类型、域宽、对齐方式、精度
+	完整的格式如下：%[对齐方式][域宽][.][精度]类型
+	对齐方式默认是右对齐，如果想左对齐使用‘-’符号，不能指定居中
+	域宽：指被替换的部分的总长度，目标长度不够的使用空格填充，目标长度超过则指定无效
+	精度：对整数就是长度，目标长度不够用0补齐，目标长度超过则指定无效；对浮点数，
+则是小数部分的长度，目标长度不够用0补齐，目标长度超过则截断；对字符串，则是字符个数，
+目标长度不够则无效，目标长度超过截断
+	类型是必须可以有以下几种：
+		%s 字符串
+		%d 十进制整数
+		%x 十六进制整数
+		%o 八进制整数
+		%f 十进制浮点数
+		%e 以科学计数法表示的浮点数
+		%g 十进制或科学计数法表示的浮点数
+		%% 文本值%本身
+	例子
+		%-10.4d 此部分用一个整数来代替，4个字符长度，在右边填充6个空格
+
+2、新式格式化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	新式格式化使用字符串类的format函数来完成替换的动作
+	新式格式化的占位符是‘{}’
+	完整的格式如下：{[format函数的参数序号/参数名][:][填充字符][对齐方式][域宽][.][精度][类型]}
+	{}内的所有部分都是可选的，但
+		如果要指定‘:’后面的部分，则‘:’必须出现，但之前的‘参数序号/参数名’可以没有
+		如果要指定精度，则‘.’必须要出现
+		如果要指定填充字符，则必须指定对齐方式
+	参数序号从0开始
+	填充字符可以是任意字符，包括‘<’‘^’‘>’‘:’‘.’
+	对齐方式：<左对齐，^居中，>右对齐。字符串默认左对齐，数字默认右对齐
+	域宽：与老式同
+	精度：与老式同
+	类型：与老式同
+
+3、一般使用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
