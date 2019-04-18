@@ -11,3 +11,24 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	关闭“Aero主题”
 win7才有这个设置，win10已经没有这个设置了，集成到系统里去了。
+
+
+3、服务主机：本地系统 CPU使用率高
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Superfetch
+Windows Defender Antivirus Service
+Windows Defender Antivirus Network Inspection Service
+
+
+
+	是这三个服务，要停止改成手动，不用改成禁用。
+	如果不关闭的话，对硬盘读写非常频繁，如果是机械硬盘，那开机还是读写数据，会大大影响性能。
+
+	win+R打开“运行”提示，然后键入services.msc并单击“确定”。“服务”里可以把Superfetch
+改为手动，但无法把后面两个改为手动。
+
+	我们可以在策略组里关闭反病毒(安全防护)程序。方法是运行“gpedit.msc”
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SuperFetch是Windows Vista中引入的一项功能。它静静地置于后台，不断分析RAM使用模式，
+并了解您最常运行的应用程序类型。随着时间的推移，SuperFetch将这些应用程序标记为“经常使用”，
+并提前将它们预加载到RAM中。
