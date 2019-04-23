@@ -6,44 +6,87 @@
 
 #[]创建空列表
 list1 = []
-print("[] will create a list:", list1)
+print("[] will create a list: <", list1, ">")
 
 #list()也可以创建空列表
 list1 = list()
-print("list() will create a list:", list1)
+print("list() will create a list: <", list1, ">")
 
-#list()可以把其它类型转化为列表(但参数必须是可迭代的 iterable，整数是不可迭代的)
+#list()可以把其它类型转化为列表(但参数必须是可迭代类型(iterable)，整数不是可迭代类型)
 list1 = list("abc")
-print("list('abc') will translate 10 to a list:", list1)
+print("list('abc') will translate < abc > to a list: <", list1, ">")
+
+#list string.split(separator) 分割符可以是多个字符
+str1 = "1912ab04ab01"
+sep  = "ab"
+list1 = str1.split(sep)
+print(str1, " separate with <", sep, "> will return <", list1, ">")
+
+#list string.split(separator) 分隔符遵循最长搜索
+str1 = "adminabadminabyes"
+sep  = "ab"
+list1 = str1.split(sep)
+print(str1, " separate with <", sep, "> will return <", list1, ">")
+
+#list[offset]获取/修改列表元素，-> offset从0开始, <- offset从-1开始，offset必须在范围内
+list1 = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+print(list1, "[0] is <", list1[0], ">, [-1] is <", list1[-1], ">")
+
+#切片：list[begin:end:step]，范围：[begin, end)
+list1 = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+list2 = list1[1:3]
+list3 = list1[1:5:2]
+print(list1, "[1:3] is <", list2, ">")
+print(list1, "[1:5:2] is <", list3, ">")
+
+#list.append(元素) 元素也可以是列表，注意与extend区别
+list1=[]
+list1.append("Monday")
+print("[].append('Monday') will be <", list1, ">")
+
+#list.extend(列表)
+list1 = ["Monday", "Tuesday"]
+list2 = list1.copy()
+list3 = list1.copy()
+
+list4 = ["Wednesday"]
+list2.extend(list3)
+print(list1, ".extend(", list4, ") will be <", list2, ">")
+
+list3+=list4
+print(list1, "+=", list4, " will be <", list3, ">")
+
+#list.insert(元素) 在旧索引之前插入元素，越界不产生异常，事实上，要插到最后必须越界
+list1 = ["Monday", "Wednesday"]
+list2 = list1.copy()
+list3 = list1.copy()
+
+list2.insert(-1, "Tuesday")
+print(list1, "insert(-1, 'Wednesday') will be <", list2, ">")
+
+list3.insert(1, "Tuesday")
+print(list1, "insert(1, 'Wednesday') will be <", list3, ">")
+
+#del删除指定位置元素
 
 
-# list1.append("2")
-# print("[].append('2') will be ", list1)
-# #把字符串分割为列表
-# str1="1912/09/01"
-# list3=str1.split('/')
-# print(str1, ".split('/') will be ", list3)
-# str2="1912//09/01"
-# list4=str2.split('/')
-# print(str2, ".split('/') will be ", list4)
-# #extend
-# list5=['red', 'blue']
-# list6=['black', 'green']
-# list7=[]
-# list7.extend(list4)
-# list7.extend(list5)
-# print(list5, ".extend ", list6, " is ", list7)
-# #+
-# list8=list5+list6
-# print(list5, " + ", list6, " is ", list8)
-# #insert函数的使用
-# list9=["red", "blue", "green"]
-# list9.insert(2, "black")
-# print("[\"red\", \"blue\", \"green\"] after insert(2, black) will be", list9)
-# #使用pop()获取并删除指定位置的元素
-# list10=["red", "blue", "black", "green"]
-# list11=["red", "blue", "black", "green"]
-# str3=list11.pop(2)
-# print(list10, ".pop(2) return <", str3, "> result list will be <", list11, ">")
-# #list4.remove(1)
-# #print("[\"red\", \"blue\", \"black\", \"green\"] after remove(1) will be", list4)
+#list.remove(value) 从前到后搜索，删除列表中第一个具有指定值的元素
+list1 = ["Monday", "ha", "Tuesday", "ha", "Wednesday"]
+list2 = list1.copy()
+list2.remove("ha")
+print(list1, ".remove('ha') will be <", list2, ">")
+
+#list.pop(index) 获取并删除指定位置的元素
+list1 = ["Monday", "ha", "Tuesday", "ha", "Wednesday"]
+list2 = list1.copy()
+str1 = list2.pop(1)
+print(list1, ".pop(1) will be <", list2, "> and return <", str1, ">")
+
+#list.append()  list.pop(0) 可以模拟FIFO
+
+#list.index(value) 从前向后搜索，返回列表中第一个具有指定值的元素的索引，没有指定值的元素会引发异常
+list1 = ["Monday", "ha", "Tuesday", "ha", "Wednesday"]
+print(list1, ".index('ha') is <", list1.index('ha'), ">")
+
+list1 = ["Monday", "ha", "Tuesday", "ha", "Wednesday"]
+print(list1, ".in('ha') is <", list1.in('ha'), "> .in('re') is <", )
