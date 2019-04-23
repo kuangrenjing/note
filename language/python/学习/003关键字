@@ -1,0 +1,297 @@
+内置常量(true false none模块->新增)
+1、true
+　　#布尔类型的值，表示真，与false相反。
+
+2、false
+	#布尔类型的值，表示假，与true对应
+
+3、none
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#None是一个特殊的常量，None和False不同，None不是0。None不是空字符串。None和
+任何其他数据类型比较永远返回False。None有自己的数据类型NoneType。我们可以将None
+复制给任何变量，但是不能创建其他NoneType对象。
+　　　　例如：
+　　　　　　>>> type(None)
+　　　　　　<class 'NoneType'>
+　　　　　　>>> None == 0
+　　　　　　False  
+　　　　　　>>> None == ''
+　　　　　　False  
+　　　　　　>>> None == None
+　　　　　　True
+　　　　　　>>> None == False
+　　　　　　False
+
+逻辑与或非(and or not)
+4、and
+　　#逻辑判断语句，and左右两边都为真，则判断结果为真，否则都是假
+
+5、or
+　　#逻辑判断，or两边有一个为真，判断结果就是真。
+
+6、not
+　　#逻辑判断，取反的意思
+
+判断、循环(if elif else is in for while break continue)
+7、if
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#if语句用来检验一个条件，如果条件为真，我们运行一块语句(称为if…块)，否则我们
+处理另外一块语句（称为else…块）。else从句是可选的。
+
+8、elif
+	#和if配合使用的
+
+9、else
+	#与if配合使用
+
+10、is
+	#Python中的对象包含三个要素：id,type,value
+　　其中：
+　　　　id:用来唯一标示一个对象
+　　　　type：标识对象的类型
+　　　　value：是对象的值
+　　is：就是用来判断a对象是否就是b对象，是通过id来判断的
+　　==：判断的是a对象的值是否和b对象的值相等，是通过value来判断的
+　　　　例如：
+　　　　　　>>> a = 1
+　　　　　　>>> b = 1.0
+　　　　　　>>> a is b
+　　　　　　False
+　　　　　　>>> a == b
+　　　　　　True
+　　　　　　>>> id(a)
+　　　　　　12777000
+　　　　　　>>> id(b)
+　　　　　　14986000
+
+11、in
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#for…in是python的迭代结构，列表、字符串、元组、字典、集合、zip()对象、
+range()对象是python的可迭代对象。在特定条件下文件、自定义对象也可迭代。
+
+	in还可单独用于判断可迭代对象是否包含某个元素。
+
+12、for
+	#for循环可以遍历任何序列的项目，如一个列表或者一个字符串
+　　　　例如：
+　　　　　　for letter in 'Python': # 第一个实例 
+　　　　　　print '当前字母 :', letter 
+
+　　　　　　fruits = ['banana', 'apple', 'mango'] 
+　　　　　　for fruit in fruits: # 第二个实例 
+　　　　　　print '当前水果 :', fruit 
+
+　　　　　　print "Good bye!"
+
+13、while
+	#while语句重复执行一块语句。while是循环语句的一种，while语句有一个可选的else从句。
+
+14、break
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#break语句是用来终止循环语句的，即使哪怕循环条件没有称为false或者序列还没有
+被完全递归，也会停止循环语句。提示，如果break的是for或while循环，任何对应的循环
+else块将不执行。
+
+
+15、continue
+	#continue语句被用来告诉Python跳过当前循环块中的剩余语句，然后继续进行下一轮循环。
+
+函数(def lambda pass return yield)
+16、def
+	#定义函数用的
+　　　　例如：
+　　　　　　def hello()
+　　　　　　　　print('hello,hongten')
+　　　　　　调用：
+　　　　　　hello()
+　　　　　　结果：
+　　　　　　>>>hello,hongten
+
+17、lambda
+　　#匿名函数是个很时髦的概念，提升了代码的简洁程度。
+　　　　例如：
+　　　　　　g = lambda x:x+1
+　　　　运行结果：
+　　　　　　g(1)
+　　　　　　>>>2
+　　　　　　g(2)
+　　　　　　>>>3
+　　　　　　g(7)
+　　　　　　>>>8
+　　　　再例如：
+　　　　　　>>> foo = [2, 18, 9, 22, 17, 24, 8, 12, 27]
+　　　　　　>>>
+　　　　　　>>> print filter(lambda x: x % 3 == 0, foo)
+　　　　　　[18, 9, 24, 12, 27]
+　　　　　　>>>
+　　　　　　>>> print map(lambda x: x * 2 + 10, foo)
+　　　　　　[14, 46, 28, 54, 44, 58, 26, 34, 64]
+　　　　　　>>>
+　　　　　　>>> print reduce(lambda x, y: x + y, foo)
+　　　　网络上有人总结：
+　　　　　　lambda 是为了减少单行函数的定义而存在的。
+
+18、pass
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#pass的意思是什么都不要做，作用是为了弥补语法和空定义上的冲突，它的好处体现
+在代码的编写过程之中，比如你可以先写好软件的整个框架，然后再填好框架内具体函数和
+class的内容，如果没有pass编译器会报一堆的错误，让整个开发很不流畅。
+　　　　例如：
+　　　　　　def f(arg): pass # a function that does nothing (yet)
+　　　　　　class C: pass    # a class with no methods(yet)
+
+19、return
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#python 函数返回值 return，函数中一定要有return返回值才是完整的函数。如果你
+没有python定义函数返回值，那么会得到一个结果是None对象，而None表示没有任何值。
+　　　　例如：
+　　　　　　def fnc1(x,y):
+       　　print x+y
+　　　　　　当函数没有显示return，默认返回none值，以下测试：
+　　　　　　　　>>> result = fnc1(2, 3)
+　　　　　　　　>>> result is None
+　　　　　　　　True
+
+20、yield
+	#yield用起来像return,yield在告诉程序，要求函数返回一个生成器
+　　　　例如：
+　　　　　　def createGenerator():
+　　　　　　mylist = range(3)
+　　　　　　for i in mylist:
+　　　　　　yield i*i
+
+异常处理(try except finally raise assert)
+21、try
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#程序员可以使用try…except语句来处理异常。把通常的语句块放在try块中，而把错
+误处理的语句放在except块中。
+
+22、except
+	#使用try和except语句来捕获异常。
+
+23、finally
+	#异常处理使用的关键字，用它可以指定始终执行的代码，指定代码在finally里面
+　　　　例如：
+　　　　　　class MyException(Exception):pass
+　　　　　　try:
+　　　　　　　　#some code here
+　　　　　　　　raise MyException
+　　　　　　except MyException:
+　　　　　　　　print "MyException encoutered"
+　　　　　　finally:
+　　　　　　　　print "Arrive finally"
+
+24、raise
+	#railse抛出异常。
+　　　　例如：
+　　　　　　class MyException(Exception):pass
+　　　　　　try:
+　　　　　　　　#some code here
+　　　　　　　　raise MyException
+　　　　　　except MyException:
+　　　　　　　　print('MyException encoutered')
+　　　　　　finally:
+　　　　　　　　print('Arrive finally')
+
+25、assert
+	#断言，用来在运行中检查程序的正确性，和其他语言一样的作用。
+　　　　例如：
+　　　　　　assert len(mylist) >= 1
+
+
+导入模块、包(import from)
+26、import
+	#在Python用import或者from…import来导入相应的模块。
+　　　　例如：
+　　　　　　from sys import *
+　　　　　　print（‘path’,path）
+
+27、from
+	#在python用import或者from…import来导入相应的模块。
+
+
+重命名(as)
+28、as
+	#结合with使用。
+
+变量(global nonlocal新增)
+29、global
+	#定义全局标量。
+
+30、nonlocal
+	#nonlocal关键字用来在函数或其他作用域中使用外层（非全局）变量。
+　　　　例如：
+　　　　　　def make_counter():
+　　　　　　　　count = 0
+　　　　　　　　def counter():
+　　　　　　　　　　nonlocal count
+　　　　　　　　　　count += 1
+　　　　　　　　　　return count
+　　　　　　　　return counter
+
+　　　　　　def make_counter_test():
+　　　　　　　　mc = make_counter()
+　　　　　　　　print(mc())
+　　　　　　　　print(mc())
+　　　　　　　　print(mc())
+
+
+
+类(class)
+31、class
+	#定义类的关键字
+
+
+
+删除(del)
+32、del
+	#del用于list列表操作，删除一个或者连续几个元素。
+　　　　例如：
+　　　　　　a = [-1,3,'aa',85] # 定义一个list
+　　　　　　del a[0] # 删除第0个元素
+　　　　　　del a[2:4] # 删除从第2个到第3个元素。
+
+上下文管理(with)
+33、with
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#with是python2.5以后有的，2.6开始称为默认关键字。它实质是一个控制流语句，
+with可以用来简化try…finally语句，它的主要用法是实现一个类_enter_()和_exit_()方法。
+　　　　例如：
+　　　　　　class controlled_execution:
+　　　　　　　　def _enter_(self):
+　　　　　　　　　　set things up
+　　　　　　　　　　return thing
+　　　　　　　　def _exit_(self,type,value,traceback):
+　　　　　　　　　　tear thing down
+　　　　　　with controlled_execution() as thing:
+　　　　　　　　some code
+
+
+34、print
+	已转为内置函数
+
+35、exec
+	已转为内置函数
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

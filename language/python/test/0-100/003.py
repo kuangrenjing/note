@@ -88,5 +88,33 @@ print(list1, ".pop(1) will be <", list2, "> and return <", str1, ">")
 list1 = ["Monday", "ha", "Tuesday", "ha", "Wednesday"]
 print(list1, ".index('ha') is <", list1.index('ha'), ">")
 
+#in是python关键字
 list1 = ["Monday", "ha", "Tuesday", "ha", "Wednesday"]
-print(list1, ".in('ha') is <", list1.in('ha'), "> .in('re') is <", )
+print(list1, "has 'ha': <", 'ha' in list1, ">")
+
+#list.count()统计特定值出现的次数
+list1 = ["Monday", "ha", "Tuesday", "ha", "Wednesday"]
+print("ha appear <", list1.count('ha'), "> times in ", list1)
+
+#list.sort()函数 数字序、字母序、星期序
+list1 = ["Monday", "ha", "Tuesday", "ja", "Wednesday"]
+list2 = list1.copy()
+list2.sort()
+print(list1, ".sort() will be: <", list2, ">")
+
+#sorted内置函数
+list1 = ["Monday", "ha", "Tuesday", "ha", "Wednesday"]
+list2 = sorted(list1)
+print("sorted(", list1, ") will be: <", list2, ">")
+
+
+#list.len()返回元素个数
+list1 = [["Monday", "ha"], "Tuesday", "ha", "Wednesday"]
+print("len(", list1, ") return <", len(list1), ">")
+
+
+#注意= 与list.copy()的区别
+
+
+
+#解包

@@ -30,8 +30,27 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	列表的各个元素的类型可以不相同(这是它与其它语言中数组类型的区别吧)
 	列表的元素可以是列表
 	使用[offset]可以索引列表元素：删、改、查
+	list.sort()可用于元素重排，但不能数字、字符串混合的列表。但字符串中有星期时，
+先排星期。默认是升序，list.sort(reverse=True)可降序。
 
 [列表注1]：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	list()函数可以带0或者1个参数，list()函数还可以把其它类型转化为列表类型(譬如
 字符串、元组)
+
+
+字典：
+	{}符号或dict()内建函数可以创建字典
+	dict(object)可以把其它类型转化为字典类型
+	dict[key]增、改、查元素
+	dict.update(dict)合并字典
+	del dict[key]删元素
+	dict.clear()清除所有元素
+	key in dict判断字典书否存在某个键
+	dict.keys()获取所有键
+	dict.values()获取所有值
+	dict.items()获取所有元素
+	=赋值
+	dict.copy()拷贝
+
+

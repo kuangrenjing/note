@@ -1,3 +1,7 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+
 #迭代
 
 #aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -8,7 +12,13 @@
 
 person_info = {"name":"CFQ","age":30,"height":1.68}
 for info in person_info:
-    print(person_info, "'s info is:", info)
+	print(person_info, "'s info is:", info)
 
 for info_value in person_info.values():
 	print(person_info, "'s info_value is:", info_value)
+
+
+#字符串
+word = 'cat'
+for letter in word:
+	print(word, "'s letter is:", letter)
