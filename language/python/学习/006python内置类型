@@ -39,6 +39,13 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 字符串、元组)
 
 
+元组：
+	()符号或tuple()内建函数可以创建空元组
+	(1)创建的是整形1，(1,)创建的才是包含一个元素1的元组
+	tuple(object)可以把其它类型转化为元组，object需是可迭代的
+
+
+
 字典：
 	{}符号或dict()内建函数可以创建字典
 	dict(object)可以把其它类型转化为字典类型
@@ -52,5 +59,15 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	dict.items()获取所有元素
 	=赋值
 	dict.copy()拷贝
+
+集合：
+
+
+
+列表、元组、字典、集合总结：
+	列表、元组可解包，字典不能解包
+	list()、tuple()、dict()、set()函数的参数至少需要是可迭代的（dict()要求更严格）
+	列表、字符串、元组、字典、集合、zip()对象、range()对象是python的可迭代对象。
+在特定条件下文件、自定义对象也可迭代。
 
 

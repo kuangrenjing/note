@@ -129,7 +129,7 @@ getattr()
 map()
 repr()
 xrange()
-cmp()
+cmp()           3.x移除
 globals()
 max()
 reversed()

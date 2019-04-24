@@ -1,4 +1,4 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#元组的使用
+#命名空间的使用

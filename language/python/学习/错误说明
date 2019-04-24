@@ -3,3 +3,15 @@ TypeError: '<' not supported between instances of 'str' and 'int'
 
 2、
 ValueError: dictionary update sequence element #0 has length 1; 2 is required
+
+3、函数参数顺序错误
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SyntaxError: positional argument follows keyword argument
+	关键字参数必须跟随在位置参数后面! 因为python函数在解析参数时, 是按照顺序来
+的, 位置参数是必须先满足, 才能考虑其他可变参数。
+
+	如果要混用*args **kwargs参数，*args参数需在前
+
+
+4、要你缩进
+	IndentationError: expected an indented block

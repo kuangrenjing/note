@@ -22,6 +22,10 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 　　　　　　>>> None == False
 　　　　　　False
 
+你需要把 None 和不含
+任何值的空数据结构区分开来。0 值的整型 / 浮点型、空字符串（''）、空列表（[]）、
+空元组（(,)）、空字典（{}）、空集合（set()）都等价于 False，但是不等于 None
+
 逻辑与或非(and or not)
 4、and
 　　#逻辑判断语句，and左右两边都为真，则判断结果为真，否则都是假
@@ -272,6 +276,12 @@ with可以用来简化try…finally语句，它的主要用法是实现一个类
 
 35、exec
 	已转为内置函数
+
+36、不是关键字的关键字
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	以两个下划线__开头和结束的名称都是Python的保留用法。因此，在自定义的变量中
+不能使用它们。选择这种命名模式是考虑到开发者一般是不会选择它们作为自己的变量的。
+
 
 
 

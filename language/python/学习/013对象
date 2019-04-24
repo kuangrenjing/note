@@ -1,0 +1,16 @@
+
+python对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Python里的所有数据都是以对象形式存在的，无论是简单的数字类型还是复杂的代码
+模块。然而，Python特殊的语法形式巧妙地将实现对象机制的大量细节隐藏了起来。输入
+num = 7就可以创建一个值为7的整数对象，并且将这个对象赋值给变量num。事实上，在
+Python中，只有当你想要创建属于自己的对象或者需要修改已有对象的行为时，才需要关注
+对象的内部实现细节。
+
+
+类与对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	把对象比作塑料盒子。类（class）则像是制作盒子用的模具。
+
+
+https://www.cnblogs.com/crazyrunning/p/6945183.html

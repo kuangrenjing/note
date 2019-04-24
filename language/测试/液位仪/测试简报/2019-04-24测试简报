@@ -1,0 +1,4 @@
+玻璃管纯净版算法测试(无入侵检测，无自动灯光控制功能)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	经过一天的测试发现，把宽度参数改为自适应宽度后（通过标定），对液位仪与液位
+计相对静止程度非常高，偏差一个像素就有可能导致测量精度变差，这个问题需要引起重视。

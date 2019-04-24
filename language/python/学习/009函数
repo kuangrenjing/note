@@ -1,0 +1,16 @@
+函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	()是函数调用运算符
+	def 函数名(): 定义函数
+	位置参数 跟c/c++语言类似
+	关键字参数 调用时指定参数名(即传入的参数可以与函数定义的参数顺序不相同)
+	使用*收集位置参数
+	函数定义前可以加上装饰器修饰，调用此函数就相当于把函数作为参数调用装饰器[详见测试]
+
+
+闭包
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	内部函数可以看作一个闭包。闭包是一个可以由另一个函数动态生成的函数，并且可以
+改变和存储函数外创建的变量的值
+
+	函数返回函数会形成一个闭包
