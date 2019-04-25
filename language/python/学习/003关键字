@@ -283,25 +283,4 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 不能使用它们。选择这种命名模式是考虑到开发者一般是不会选择它们作为自己的变量的。
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+37、object、type、int这些是什么？？

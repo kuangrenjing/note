@@ -7,4 +7,8 @@ class CPerson():
 	a = 8
 
 person = CPerson()
+
+
+print("CPerson's type is ", type(CPerson))
+print("person's type is ", type(person))
 print("person's a is ", person.a)

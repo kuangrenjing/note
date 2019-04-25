@@ -12,5 +12,34 @@ Python中，只有当你想要创建属于自己的对象或者需要修改已�
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	把对象比作塑料盒子。类（class）则像是制作盒子用的模具。
 
+类型与基类
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+我们谈及对象时，用两种关系来连接各种对象，使得对象之间产生联系：
+	父子关系(the subclass-superclass relationship) 继承具有传递性
+	类型实例关系(the type-instance relationship)   实例没有传递性吧？
+
+两个是互为实例的关系，但不是互为子类的关系，只有type是object的子类，反之则不成立。
+
+在python中，一切皆对象，所以类型也是对象。这些对象又分为两类：类型与非类型。
+
+类型对象都是type对象/类的实例，包括type对象本身，非类型对象是类型类的实例
+
+我们无法直接定义type的实例，只能定义type
+
+
+
+父子关系的鼻祖是object，object对象是所有对象的
+
+	type用于实例化，object用于继承
+	在python中只要两种对象：类型和非类型。
+	对象的类型可以通过type(对象)或对象.__class__来获取。object、type、class、int、string、
+list、tuple、dict、set、class等对象的类型都是<class 'type'>
+	类型对象的基类可以通过对象.__base__获取
+	object的类型是type，type的基类是object
+
+	isinstance()
+
 
 https://www.cnblogs.com/crazyrunning/p/6945183.html
+
+<type 'type'>和<type 'object'>分别是什么
