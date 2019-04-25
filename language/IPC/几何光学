@@ -1,0 +1,36 @@
+1、共轭
+
+
+浙江大学几何光学网站
+http://opt.zju.edu.cn/appopt/redir.php?catalog_id=124466
+
+
+共轭关系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在光学成像中，物方和像方具有一对一映射关系的两点Q和Q'，根据光路可逆原理，如
+果在Q点放置光源，将在Q'点成像，反之亦然。这样互相对应的两点，称为一对共轭点。共
+轭点可组成共轭线，进而有共轭面。
+
+f的共轭点在像方空间无限远处
+f'的共轭点在物方空间无限远处
+H与H'是一对共轭点
+
+
+主面与主点
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	物方主面上的物体在像方主面的垂轴放大率为1。所以过物方主点的光线与过像方主点
+的光线平行。
+
+
+
+用作图法求光学系统的理想像
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://wenku.baidu.com/view/82560902bb68a98271fefab6.html
+
+
+光学系统的基点
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+F F' H H' J J'
+
+
+

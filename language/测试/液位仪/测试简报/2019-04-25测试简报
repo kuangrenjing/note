@@ -1,0 +1,10 @@
+RS-485组网测试
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	修改了单片机程序卡死bug后又运行了两天，昨天晚上客户端不明原因退出5小时，早上
+重新启动测试客户端，目前运行状况良好。
+
+玻璃管纯净版算法测试(无入侵检测，无自动灯光控制功能)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这一版本存在不少问题：容易受光斑影响，稳定性较差。尤其是稳定性，因为横坐标的
+标定只有几个像素的宽度差，很容易受到抖动等因素的影响，运行一段时间算法就会出现跟
+不准的情况，从新使用横坐标标定工具标定一下就好了。

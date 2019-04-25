@@ -10,36 +10,54 @@ Python中，只有当你想要创建属于自己的对象或者需要修改已�
 
 类与对象
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	把对象比作塑料盒子。类（class）则像是制作盒子用的模具。
+	把对象比作塑料盒子。类（class）则像是制作盒子用的模具。事实上，类也是对象。
+	class不是对象，class只是python的一个关键字，通过class可以自定义类型对象，其
+类型是class 'type'，基类是class 'object'
 
-类型与基类
+type与object
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 我们谈及对象时，用两种关系来连接各种对象，使得对象之间产生联系：
 	父子关系(the subclass-superclass relationship) 继承具有传递性
 	类型实例关系(the type-instance relationship)   实例没有传递性吧？
 
-两个是互为实例的关系，但不是互为子类的关系，只有type是object的子类，反之则不成立。
+	父子关系具有传递性，所以继承有个根，object对象就是这个根，python中所有对象都
+是由object派生而来，type也是继承自object。
 
-在python中，一切皆对象，所以类型也是对象。这些对象又分为两类：类型与非类型。
+	类型实例关系虽然没有继承性，但它也有一个根，type对象就是这个根。object的类型
+也是type，type本身的类型也是type。
 
-类型对象都是type对象/类的实例，包括type对象本身，非类型对象是类型类的实例
+	由以上两点，出现了一个容易让人捉摸不透的情况：type继承自object，object的类
+型是type，那object与type谁先定义呢？其实这是python的内层原理，我们可以暂不关心，
+只要其逻辑能够自洽就行。
 
-我们无法直接定义type的实例，只能定义type
+	两个是互为实例的关系，但不是互为子类的关系，只有type是object的子类，反之则
+不成立。
 
+	在python中，一切皆对象，所以类型也是对象。这些对象又分为两类：类型与非类型。
+类型对象都是type类/对象的实例，类型对象的实例是非类型对象
 
+	python提供的类型对象有：type、object、list、tuple、dict、set等等。程序员可以
+通过"class"关键字自定义类型对象。获取对象的类型可以通过对象名.__class__或type(对象名)
+的方法来进行，判断对象的类型可以通过isinstance(对象名, 类型名)来进行。
 
-父子关系的鼻祖是object，object对象是所有对象的
-
-	type用于实例化，object用于继承
-	在python中只要两种对象：类型和非类型。
-	对象的类型可以通过type(对象)或对象.__class__来获取。object、type、class、int、string、
-list、tuple、dict、set、class等对象的类型都是<class 'type'>
-	类型对象的基类可以通过对象.__base__获取
-	object的类型是type，type的基类是object
-
-	isinstance()
-
+	获取类型的基类可以通过类型名.__base__的方法来进行(类型也是对象)。
 
 https://www.cnblogs.com/crazyrunning/p/6945183.html
 
-<type 'type'>和<type 'object'>分别是什么
+实例的方法(method)与函数(function)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	第一个参数总是self，但调用时不用也不能显式传入这个参数。
+
+__init__()函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	__init__的类型是method-wrapper类，这可能是python内部的一个装饰器，网络上信息
+不是很多。如果用户不显示定义的话，是隐式生成还是继承object的__init__()呢？
+
+类型的属性与实例的属性
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+class Dog:
+	kind = 'canine'         # 类型的属性
+
+	def __init__(self, name):
+		self.name = name    # 实例的属性
+
