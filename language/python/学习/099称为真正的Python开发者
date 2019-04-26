@@ -1,0 +1,15 @@
+
+
+寻找python代码
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://docs.python.org/3/library/       标准库
+https://pypi.python.org/pypi            包索引
+https://github.com/trending?l=python
+http://code.activestate.com/recipes/langs/python/ 流行python菜谱
+
+
+12.3　安装包
+有 3 种安装 Python 包的方法：
+• 推荐使用 pip，你可以使用 pip 来安装绝大多数 Python 包；
+• 有时可以使用操作系统自带的包管理工具；
+• 从源代码安装。

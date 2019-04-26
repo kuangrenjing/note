@@ -16,6 +16,8 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 type与object
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/crazyrunning/p/6945183.html
+
 我们谈及对象时，用两种关系来连接各种对象，使得对象之间产生联系：
 	父子关系(the subclass-superclass relationship) 继承具有传递性
 	类型实例关系(the type-instance relationship)   实例没有传递性吧？
@@ -42,11 +44,63 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	获取类型的基类可以通过类型名.__base__的方法来进行(类型也是对象)。
 
-https://www.cnblogs.com/crazyrunning/p/6945183.html
 
-实例的方法(method)与函数(function)
+可调用对象
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	第一个参数总是self，但调用时不用也不能显式传入这个参数。
+除了用户定义的函数，调用运算符（即 ()）还可以应用到其他对象上。如果想判断对象
+能否调用，可以使用内置的 callable() 函数。Python 数据模型文档列出了 7 种可调用对
+象。
+(1)用户定义的函数
+　　使用 def 语句或 lambda 表达式创建。
+
+(2)内置函数
+　　使用 C 语言（CPython）实现的函数，如 len 或 time.strftime。
+
+(3)内置方法
+　　使用 C 语言实现的方法，如 dict.get。
+
+(4)方法
+　　在类的定义体中定义的函数。
+
+(5)类
+　　调用类时会运行类的 __new__ 方法创建一个实例，然后运行 __init__ 方法，初始
+化实例，最后把实例返回给调用方。因为 Python 没有 new 运算符，所以调用类相当于调
+用函数。（通常，调用类会创建那个类的实例，不过覆盖 __new__ 方法的话，也可能出
+现其他行为。）
+
+(6)类的实例
+	如果类定义了 __call__ 方法，那么它的实例可以作为函数调用。
+
+(7)使用 yield 关键字的函数或方法。
+	调用生成器函数返回的是生成器对象。
+
+函数(function)与方法(method)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+先上结论：
+	函数(function)是Python中一个可调用对象(callable), 方法(method)是一种特殊的函数。
+	类内定义的函数分为三种类型：类方法、实例方法、静态方法。
+	一个可调用对象是方法和函数，和这个对象无关，仅和这个对象是否与类或实例绑定有关(bound method)。
+	函数与类绑定称为类方法，函数与实例绑定称为实例方法。
+	类方法未与实例绑定，所以，对实例而言，它是函数
+	实例方法未与类绑定，所以，对类而言，它是函数
+	静态方法没有和任何类或实例绑定，所以静态方法是个函数。
+	装饰器不会改变被装饰函数或方法的类型。
+	类实现__call__方法,其实例也不会变成方法或函数,依旧是类的实例。
+	使用callalble() 只能判断对象是否可调用,不能判断是不是函数或方法。
+	判断对象是函数或方法应该使用type(obj)。
+
+
+动态属性绑定
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+类名/实例名.属性名 = 属性名
+如果绑定的是函数，相当于绑定了一个静态函数
+
+
+动态方法绑定
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+from types import MethodType
+宿主.方法名 = MethodType(函数名, 宿主名)
+
 
 __init__()函数
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -60,4 +114,7 @@ class Dog:
 
 	def __init__(self, name):
 		self.name = name    # 实例的属性
+
+
+__slots__
 
