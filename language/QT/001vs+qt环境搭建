@@ -1,0 +1,42 @@
+VS安装“Qt VS Tools”插件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	“工具”->“扩展与更新”->“联机” 搜索QT，第一条就是“Qt Visual Studio Tools”，点
+击“下载”，下载完毕后关闭VS，安装向导自动启动，一步步安装就是了。
+
+	安装完后启动VS，菜单栏多了一个“Qt VS Tools”菜单。
+
+问题1：
+	点击“Qt VS Tools”，一直是“Qt Visual Studio Tools version 2.3.2:Initializing”。
+这是因为VS版本与工具版本不相符，升级VS即可。
+
+安装QT
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	点击qt-opensource-windows-x86-5.12.0.exe安装，选择组件时，MSVC 2017 32-bit
+和MSVC 2017 64-bit即可。
+
+配置Qt VS Tools
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	VS菜单栏上点击“Qt VS Tools”，点击“QT Options”，选择QT安装目录的msvc2017和
+msvc2017_64两个版本即可。
+
+
+第一个程序-hello world
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	打开VS2017，选择：文件 -> 新建 -> 项目，然后选择：模板 -> Visual C++ -> 测试
+ -> Qt GUI Application,输入项目名称，如：“QtHelloWorld”
+
+	接下来就是Qt向导：
+第一步：选择模块
+	Core是必须的，不可取消，我们新建的是GUI工程，所以GUI模块也是默认的，不可取消，
+我们的“Hello World”功能有这两个模块就足够了。
+第二步：创建文件
+	默认即可。
+
+	打开main.cpp文件，在“QtHelloWorld w;”后加一行“w.setWindowTitle("hello world");”
+	编译、运行、成功。
+
+报错解决：
+1、无法打开源文件 ui_*文件
+	“Qt VS Tools”->“Convert Project to QMake Generated Project”
+
+

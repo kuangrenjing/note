@@ -1,0 +1,6 @@
+RS-485组网测试
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	找到的几个串口工具保存数据到文件时时间戳信息都不是很理想（要么不保存时间戳，
+要么很长时间才保存一个时间戳，对后面的问题定位非常不利）。因为这个原因，自己写了
+一个python串口读程序（经与马彦明、陈栋飞讨论此工具可靠可行）来监督整个RS-485网络
+的数据。当再次遇到“insufficient bytes received”错误时可以核对数据。

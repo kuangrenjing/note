@@ -1,5 +1,8 @@
 1、Connection Setup设置页
 
+使用手册
+https://www.modbustools.com/ModbusPollManual.pdf
+
 1.1、Response Timeout
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	超时时间
@@ -21,3 +24,13 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 小是没有意义的。譬如波特率为9600，读125个寄存器，那传输时间查不到是8+2+250+2(262ms)
 +the gap(>3.5 char time) + min time delay between polls，此时你设置100ms的扫描时间
 可能是不能实现的。
+
+
+
+错误：
+Read Error-Framing error
+
+The response is not the expected length
+
+485错误解决：
+https://blog.csdn.net/SimpleSwing/article/details/71215128

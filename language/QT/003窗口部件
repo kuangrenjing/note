@@ -1,0 +1,71 @@
+窗口部件(widget)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	widget是“window gadget”(窗口配件)这两个词的简写。在QT中，按钮、菜单、滚动条
+和框架都是窗口部件。
+
+	在Qt中，把没有嵌入到其他部件中的部件称为窗口，一般的，窗口都有边框和标题栏。
+窗口又称为顶级部件(top-level widget)；与其相对的是非窗口部件，又称为子部件(child
+widget)。
+
+窗口类继承关系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	所有窗口及窗口控件都是从QWidget直接或间接派生出来的。
+
+	QWidget类是所有用户界面对象的基类，被称为基础窗口部件。QWidget继承自QObject
+类和QPaintDevice类，其中QObject类是所有支持Qt对象模型（Qt Object Model）的Qt对象
+的的基类，QPaintDevice类是所有可以绘制的对象的基类。
+
+QT对象模型(Qt Object Model)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在Qt中创建对象的时候会提供一个Parent对象指针，下面来解释这个parent到底是干什么的。
+
+QObject是以对象树的形式组织起来的
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当你创建一个QObject对象时，会看到QObject的构造函数接收一个QObject指针作为参
+数，这个参数就是 parent，也就是父对象指针。这相当于，在创建QObject对象时，可以提
+供一个其父对象，我们创建的这个QObject对象会自动添加到其父对象的children()列表。
+
+　　当父对象析构的时候，这个列表中的所有对象也会被析构。（注意，这里的父对象并不
+是继承意义上的父类！）这就是为什么Qt动态分配内存会自动清除空间。这种机制在GUI程序
+设计中相当有用。例如，一个按钮有一个QShortcut（快捷键）对象作为其子对象。当我们删
+除按钮的时候，这个快捷键理应被删除。这是合理的。
+
+QWidget是能够在屏幕上显示的一切组件的父类。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/wanghui1234/archive/2018/04/30/8973920.html
+
+
+	QWidget继承自QObject，因此也继承了这种对象树关系。一个孩子自动地成为父组件的
+一个子组件。因此，它会显示在父组件的坐标系统中，被父组件的边界剪裁。例如，当用户
+关闭一个对话框的时候，应用程序将其删除，那么，我们希望属于这个对话框的按钮、图标
+等应该一起被删除。事实就是如此，因为这些都是对话框的子组件。
+
+	当然，我们也可以自己删除子对象，它们会自动从其父对象列表中删除。比如，当我们
+删除了一个工具栏时，其所在的主窗口会自动将该工具栏从其子对象列表中删除，并且自动
+调整屏幕显示。
+
+　　Qt引入对象树的概念，在一定程度上解决了内存问题。当一个QObject对象在堆上创建的
+时候，Qt会同时为其创建一个对象树。不过，对象树中对象的顺序是没有定义的。这意味着，
+销毁这些对象的顺序也是未定义的。
+
+	任何对象树中的QObject对象delete的时候，如果这个对象有parent，则自动将其从parent
+的children()列表中删除；如果有孩子，则自动delete每一个孩子。Qt保证没有QObject会被
+delete两次，这是由析构顺序决定的。
+
+如果QObject在栈上创建，Qt 保持同样的行为。正常情况下，这也不会发生什么问题。来看下下面的代码片段：
+
+ { QWidget window; QPushButton quit("Quit", &window); } 
+
+作为父组件的 window 和作为子组件的 quit 都是QObject的子类（事实上，它们都是QWidget的子类，而QWidget是QObject的子类）。这段代码是正确的，quit 的析构函数不会被调用两次，因为标准 C++要求，局部对象的析构顺序应该按照其创建顺序的相反过程。因此，这段代码在超出作用域时，会先调用 quit 的析构函数，将其从父对象 window 的子对象列表中删除，然后才会再调用 window 的析构函数。
+
+但是，如果我们使用下面的代码：
+
+
+https://doc.qt.io/qt-5/qwidget.html
+
+
+
+窗口类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://doc.qt.io/qt-5/qt.html#WindowType-enum
+enum Qt::WindowType

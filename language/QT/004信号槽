@@ -1,0 +1,52 @@
+1、概述
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	信号槽是 Qt 框架引以为豪的机制之一。所谓信号槽，实际就是观察者模式。当某个
+事件发生之后，比如，按钮检测到自己被点击了一下，它就会发出一个信号（signal）。
+这种发出是没有目的的，类似广播。如果有对象对这个信号感兴趣，它就会使用连接
+（connect）函数，意思是，将想要处理的信号和自己的一个函数（称为槽（slot））
+绑定来处理这个信号。也就是说，当信号发出时，被连接的槽函数会自动被回调。这就类
+似观察者模式：当发生了感兴趣的事件，某一个操作就会被自动触发。（这里提一句，Qt 
+的信号槽使用了额外的处理来实现，并不是 GoF 经典的观察者模式的实现方式。）
+
+　　信号和槽是Qt特有的信息传输机制，是Qt设计程序的重要基础，它可以让互不干扰的
+对象建立一种联系。
+
+　　槽的本质是类的成员函数，其参数可以是任意类型的。和普通C++成员函数几乎没有
+区别，它可以是虚函数；也可以被重载；可以是公有的、保护的、私有的、也可以被其他
+C++成员函数调用。唯一区别的是：槽可以与信号连接在一起，每当和槽连接的信号被发
+射的时候，就会调用这个槽。
+
+2、connect函数在信号与槽之间建立联系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+函数调用格式如下：
+	connect(sender, signal, receiver, slot);
+
+参数：
+	sender：发出信号的对象（指针）
+	signal：发送对象发出的信号
+	receiver：接收信号的对象（指针）
+	slot：接收对象在接收到信号之后所需要调用的函数
+
+	信号槽要求信号和槽的参数一致，所谓一致，是参数类型一致。如果不一致，允许的
+情况是，槽函数的参数可以比信号的少，即便如此，槽函数存在的那些参数的顺序也必须和
+信号的前面几个一致起来。这是因为，你可以在槽函数中选择忽略信号传来的数据（也就是
+槽函数的参数比信号的少），但是不能说信号根本没有这个数据，你就要在槽函数中使用
+（就是槽函数的参数比信号的多，这是不允许的）。
+
+	信号槽机制是在QT根基类QObject中定义的，所以不仅可以用于图形用户界面编程中，
+任何QObject子类都可以使用。
+
+3、connect函数在QT4的定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	譬如connect(button, SIGNAL(clicked()), &a, SLOT(quit()));
+	connect函数的第3、第4个参数是字符串格式(SIGNAL、SLOT宏会把函数名转化为字符
+串形式)，所以一旦出现连接不成功的情况，Qt4是没有编译错误的，要到运行时才会暴露
+问题。
+
+4、connect函数在QT5的新定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	譬如：
+	QApplication a(argc, argv);
+	QPushButton *button = new QPushButton("Quit");
+	connect(button, SIGNAL(clicked()), &a, SLOT(quit()));
+	四个参数都是指针形式，有错误编译时就会发现。

@@ -1,0 +1,16 @@
+RS-485组网测试
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	经过5天运行，有五台机器出现了1~2次错误（总运行30万次），错误有两种类型：
+Read Error-framing error这是串口驱动报的错，出现这个错误的常见原因是串口主从双方
+配置不同，但1/100000的概率显然不是这个问题。
+Insufficient bytes received接受到的消息字节数与预期不符，或多或少。
+
+这两个错误在组网情况下较容易出现，单台测试时没有发现出现这样的问题（最长660000次）。
+
+因modbus-poll出现Insufficient bytes received错误时没有记录数据，先在组网中加入一台
+串口工具记录数据以分析原因。
+
+
+
+0a 04 00 00 00 0a 71 76
+0a 04 14 02 01 00 02 64 5a 3e fb 00 01 03 f5 00 00 42 c8 00 00 00 00 f7 bd
