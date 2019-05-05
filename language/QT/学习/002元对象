@@ -1,0 +1,36 @@
+元对象(meta-object)
+
+
+元对象编译器(meta-object compiler)
+
+https://blog.csdn.net/tju355/article/details/7253133
+
+QObject
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+QScopedPointer<QObjectData> d_ptr;
+static const QMetaObject staticQtMetaObject;
+
+
+QT元对象系统
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	qt的主要成就之一就是使用了一种机制对C++进行了扩展，并且使用这种机制创建了独立的软
+件组件，这些组件可以绑定在一起，但任何一个组件对于它所要连接的组件的情况一无所知，这种
+机制就称为元对象系统，它提供了关键的两个技术，信号和槽，以及内省。
+
+元对象系统是一个基于标准C++的扩展，为Qt提供了1、信号与槽机制2、实时类型信息3、动态属性系统。
+
+	内省功能对于实现信号和槽是必须的，并且容许开发人员在运行时获取有关QObject子类的“元
+信息”，包括一个含有对象的类名以及它所支持的信号和槽的列表，这一机制也支持属性和文本翻译，
+并且为Qtscript模块奠定了基础，标准的C++没有对qt的的元对象系统锁需要的动态元信息提供支持，
+qt是通过一个独立的moc工具解决这个问题，moc解析Q_OBJECT类的定义并且通过c++函数来提供可供
+使用的信息，由于moc使用纯c++来实现所有功能，所以qt的元对象系统可以在任意c++编译器上工作。
+
+这一机制是这样工作的：
+	Q_OBJECT宏声明了每一个QObject子类中必须实现的一些内省函数：metaobject，tr()，
+qt_metacall(),以及一些其它函数。Qt的moc工具生成了用于由Q_OBJECT声明的所有函数和所有信号
+的实现。像connect()和disconnnect()这样的QOBJECT成员函数使用这些内省函数来完成他们的工作
+这些工作都是由qmake，moc和QObject自动处理的，所以很少需要再去考虑这些事情，如果好奇可以参
+考QMetaObject类的文档和由moc生成的c++源代码文件。
+
+https://www.cnblogs.com/hellovenus/p/5582521.html
+https://www.cnblogs.com/tgycoder/p/5524735.html

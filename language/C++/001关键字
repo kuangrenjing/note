@@ -1,0 +1,85 @@
+C++98/03的63个关键字
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+constexpr、decltype、noexpect、nullptr、static_assert、thread_local
+
+
+1、数据类型
+void                bool                char                w_char
+int                 float               double              char16_t(C++11)
+char32_t(C++11)
+
+2、类型定义
+struct              union               enum                class
+typedef
+
+3、常量值
+true                false               nullptr(C++11)
+
+4、类型修饰符
+long                short               singed              unsigned
+
+5、类型限定符
+const               volatile            restrict(否)
+
+6、存储说明符
+auto                register            static              extern
+thread_local(否)        mutable
+
+7、其它修饰符
+inline              asm
+
+8、循环控制
+for                 while               do
+
+9、跳转控制
+break               continue            return              goto
+
+10、分支结构
+if                  else                switch              case
+default
+
+11、内存管理及对齐
+new                 delete              alignas(C++11)      alignof(C++11)
+
+12、运算符
+sizeof
+
+13、访问限定符
+this                friend              virtual             explicit
+
+14、运算符重载
+operator
+
+15、类访问修饰符
+private             protected           public
+
+16、模板
+template            typename
+
+17、命名空间
+namespace           using
+
+18、异常处理
+throw               try                 catch               noexpect(C++11)
+
+19、类型转换
+dynamic_cast        const_cast          static_cast
+
+20、
+reinterpret_cast
+
+21、
+typeid
+
+22、
+export
+
+23、表达式
+constexpr(C++11)    decltype(C++11)
+
+24、静态断言
+static_assert(C++11)
+
+25、线程
+thread_local(C++11)
