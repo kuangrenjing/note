@@ -25,6 +25,42 @@
 
 
 
+The QLayoutItem class provides an abstract item that a QLayout manipulates
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+QLayoutItem抽象基类提供了QT布局操作(manipulates)的一个条目（Item一般是QT内部
+概念，并在内部使用，用户只操作widget、layout就行）
+
+布局用Item来管理widget、layout等等。
+
+QLayoutItem提供了一些函数用于返回layout的信息，如sizeHint() minimumSize() 
+maximumSize()和expanding()等
+
+QLayout是所有布局类的抽象基类
+
+
+
+
+
+QLayoutItem提供了下面这些函数：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+QWidget *QLayoutItem::widget()
+If this item manages a QWidget, returns that widget. Otherwise, nullptr is returned.
+
+QSize QLayoutItem::sizeHint() const
+Implemented in subclasses to return the preferred size of this item.
+
+
+
+QLayout类
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+addWidget内部会调用addItem
+
+QLayout提供下列函数：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+QWidget* parentWidget()const
+返回布局的父窗口，如果布局没有安装到窗口，返回0。如果布局是个子布局，返回父布局的
+父窗口。
+
 
 
 1、QGridLayout

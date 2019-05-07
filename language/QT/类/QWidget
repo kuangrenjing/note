@@ -1,1 +1,27 @@
 Widget Style Sheets(窗口组件样式表)
+
+
+
+QWidget提供的属性
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、QPoint pos
+	这个属性保存widget在父widget中的位置。
+
+	如果widget是窗口，pos是widget在桌面上的位置，包括它的框架(frame)
+
+	当改变位置，widget，如果是可见的，会立即接收到moveEvent事件。如果不可见，可以
+确保在显示(show)之前接收到这个事件。
+
+	默认的，pos以原点为参考点
+
+n、sizePolicy : QSizePolicy(sizePolicy属性)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+QLayoutItem
+
+
+
+This property holds the default layout behavior of the widget
+
+If there is a QLayout that manages this widget's children, the size policy specified by that layout is used. If there is no such QLayout, the result of this function is used.
+
+The default policy is Preferred/Preferred, which means that the widget can be freely resized, but prefers to be the size sizeHint() returns. Button-like widgets set the size policy to specify that they may stretch horizontally, but are fixed vertically. The same applies to lineedit controls (such as QLineEdit, QSpinBox or an editable QComboBox) and other horizontally orientated widgets (such as QProgressBar). QToolButton's are normally square, so they allow growth in both directions. Widgets that support different directions (such as QSlider, QScrollBar or QHeader) specify stretching in the respective direction only. Widgets that can provide scroll bars (usually subclasses of QScrollArea) tend to specify that they can use additional space, and that they can make do with less than sizeHint().

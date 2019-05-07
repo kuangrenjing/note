@@ -1,0 +1,65 @@
+参考文档
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://doc.qt.io/qt-5/application-windows.html#window-geometry
+
+窗口(window、primary windows)、对话框(Dialog Widgets、secondary windows)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	不嵌入到父widget的widget称为窗口window(尽管我们可以使用合适的窗口标志window 
+flags建立一个没有框架、标题栏等这些装饰物decoration的窗口，但通常地，窗口是有框
+架frame和标题栏title bar的)。在QT中QMainWindow和种类繁多的QDialog的派生类是常用的
+窗口类型，而QButton等常作为widget。
+
+	在应用程序中，Windows提供用于构建用户界面的屏幕空间。Windows从视觉上分离应
+用程序，并且提供一些窗口装饰，允许用户根据自己的喜好调整应用程序的大小和位置。
+Windows通常集成到桌面环境中，并在某种程度上由桌面环境提供的窗口管理系统进行管理。
+例如，应用程序的选定窗口(主窗口)在任务栏中表示。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	没有父窗口的QWidget将成为主窗口primary window(通常一个程序只有一个)，在大部
+分平台，它将以缩略图的形式展现在任务栏task bar上。
+
+	有父窗口的QWidget可以设置Qt::window flag从而成为窗口window，称为次生窗口
+secondary windows，次生窗口通常就是弹窗，次生窗口不会出现在任务栏task bar上。
+
+QMainWindow与QDialog
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	QMainWindow有它自己的布局，这个布局可以添加一个菜单栏menu bar、多个工具栏
+tool bar、多个驻停窗口dockable widget、一个状态栏status bar。中心区域可以被任意
+类型的QWidget占领。所以应用的主界面通常派生自QMainWindow类。
+
+	QDialog通常作为对话框类的基类使用，Qt给我们提供若干标准对话框，譬如文件或字体
+选择对话框。
+
+
+窗口几何形状Window Geometry
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	QWidget提供了几个处理窗口部件几何形状的函数。其中一些功能在纯客户机区域（即
+不包括窗口框架的窗口）上运行，其他功能包括窗口框架。
+
+包括窗口框架的操作: x(), y(), frameGeometry(), pos(), and move().
+排除窗口框架的操作: geometry(), width(), height(), rect(), and size().
+
+	这样的区别对顶层窗口部件是有效的(弹出窗口应该也是top-level widgets吧)，对所有
+的子窗口部件，frame geometry=client geometry。
+  A
+   ┌-------------------------------------------------------------┐
+   | B                                                           |
+   |  ┌-----------------------------------------------------┐    |
+   |  |           window title                              |    |
+   |  └-----------------------------------------------------┘    |
+   |  ┌-----------------------------------------------------┐    |
+   |  |                                                     |    |
+   |  |                                                     |    |
+   |  |               client erea                           |    |
+   |  |                                                     |    |
+   |  └-----------------------------------------------------┘    |
+   └-------------------------------------------------------------┘
+「
+」
+
+┌ ┐└ ┘
+
+
+
+
+
+

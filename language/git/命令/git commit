@@ -1,0 +1,48 @@
+Commit message的格式化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+每次提交，Commit message都包括两个核心部分：标题和内容。
+
+1、<类型>(可选): <主题>
+2、// 空一行
+3、<内容>
+
+类型：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+类型 用于说明 commit 的类别，只允许使用下面7个标识。
+	init：项目初始化（用于项目初始化或其他某种行为的开始描述，不影响代码）
+	feat：新功能（feature）
+	fix：修补bug
+	docs：文档（documentation）
+	opt：优化和改善，比如弹窗进行确认提示等相关的，不会改动逻辑和具体功能等
+	style： 格式（不影响代码运行的变动）
+	refactor：重构（即不是新增功能，也不是修改bug的代码变动）
+	test：增加测试
+	save：单纯地保存记录
+	other：用于难以分类的类别（不建议使用，但一些如删除不必要的文件，更新.ignore之类的可以使用）
+
+可选：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+类型后面可以加上括号，括号内填写主要变动的范围，比如按功能模块分，某模块；或按
+项目三层架构模式分，分数据层、控制层之类的。
+
+	#：表示模块
+		#student --> 表示 学生模块 （具体的模块开头字母小写，驼峰命名）
+		#ALL --> 表示 所有模块 （特殊含义如ALL表所有，MOST表大部分，用大写字母表示）
+		#MOST --> 表示 大部分模块
+
+主题:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+主题 是 commit 目的的简短描述，不超过50个字符。
+	以动词开头，使用第一人称现在时，比如change，而不是changed或changes
+	第一个字母小写
+	结尾不加句号（.）
+
+内容
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+随意发挥，简明扼要地介绍下代码修改了什么功能等等。
+
+例子
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+init:init YWY monitor platform source
+
+get this project's source code from chendongfei
