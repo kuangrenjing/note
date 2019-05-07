@@ -1,0 +1,6 @@
+https://blog.csdn.net/cibiren2011/article/details/45479529
+
+1、sizeHint
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+This property holds the recommended size for the widget. If the value of this property is an invalid size, no size is recommended. The default implementation of sizeHint() returns an invalid size if there is no layout for this widget, and returns the layout's preferred size otherwise. ] 
+    这个属性所保存的 QSize 类型的值是一个被推荐给widget的尺寸（并不一定就是widget的尺寸）。当sizeHint的取值是一个无效值的时候（sizeHint().isValid() 返回 false，QSize 中 width 或者 height 有一个为负数就会是无效的），什么作用也没有；当它是一个有效值的时候，它就成了 widget 大小的一个参考。Qt 中对 sizeHint() 的默认实现是这样的：当 widget 没有布局（layout）时，返回无效值；否则返回其 layout 的首选尺寸（preferred size）。

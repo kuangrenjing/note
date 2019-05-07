@@ -1,3 +1,13 @@
+路径
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+窗口部件例子：
+	https://doc.qt.io/qt-5/examples-widgets.html
+
+绘图例子：
+	https://doc.qt.io/qt-5/examples-painting.html
+
+
+
 窗口部件(widget)
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	widget是“window gadget”(窗口配件)这两个词的简写。在QT中，按钮、菜单、滚动条
