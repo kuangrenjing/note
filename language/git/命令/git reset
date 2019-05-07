@@ -1,0 +1,11 @@
+git reset 回退
+git revert 反做
+
+git reset --hard
+git reset --soft
+git reset --mixed(default)
+
+
+git reset与git checkout的区别
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git checkout是检出某个提交，它不会改变分支的指向，但会改变HEAD的指向，造成

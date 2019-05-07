@@ -1,0 +1,60 @@
+	pvMBFrameStartCur = eMBRTUStart;
+	pvMBFrameStopCur = eMBRTUStop;
+	peMBFrameSendCur = eMBRTUSend;
+	peMBFrameReceiveCur = eMBRTUReceive;
+	pvMBFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBPortClose : NULL;
+	pxMBFrameCBByteReceived = xMBRTUReceiveFSM;
+	pxMBFrameCBTransmitterEmpty = xMBRTUTransmitFSM;
+	pxMBPortCBTimerExpired = xMBRTUTimerT35Expired;
+
+
+就是这几个函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当串口中断到来时，驱动回调(pxMBFrameCBByteReceived = xMBRTUReceiveFSM)函数把
+数据接受，每接受到一个字节数据就触发(pxMBPortCBTimerExpired = xMBRTUTimerT35Expired)
+函数工作。根据STATE_RX_INIT(不放)、STATE_RX_ERROR(不放)、STATE_RX_IDLE(放在缓存的
+第一个字节)、STATE_RX_RCV(依次往后放)状态决定是否把这个字节放入到缓存中
+
+	状态机转化：
+STATE_RX_INIT(初始状态) -> STATE_RX_IDLE(t35超时后)
+STATE_RX_ERROR -> STATE_RX_IDLE(t35超时后)
+STATE_RX_IDLE -> STATE_RX_RCV(接受到第一个字节后)
+STATE_RX_RCV  ->  STATE_RX_ERROR(超过缓冲区长度)
+
+	(pxMBPortCBTimerExpired = xMBRTUTimerT35Expired)负责：
+1)把状态转换到STATE_RX_IDLE，只要线路上一定时间内无数据(T35)，那么就进入
+STATE_RX_IDLE状态。
+
+2)通知消息处理线程处理消息。原状态是STATE_RX_INIT时发送EV_READY事件(此事件无效，
+处理线程接受到这个事件后啥也不做)；原状态是STATE_RX_RCV时发送EV_FRAME_RECEIVED事件
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	eMBPoll接受到EV_FRAME_RECEIVED事件后调用(peMBFrameReceiveCur = eMBRTUReceive),
+此函数主要做长度和CRC校验，并把数据从RTU BUFFER中的数据提取出来。调用成功后eMBPoll
+发送EV_EXECUTE事件
+
+	eMBPoll接受到EV_EXECUTE事件后调用一些函数对接受消息进行处理
+
+	处理完成后，eMBPoll调用(peMBFrameSendCur = eMBRTUSend)函数组装SEND BUFFER并调用
+函数(vMBPortSerialEnable( FALSE, TRUE ))驱动发送。
+
+	把串口切换到发送状态后，串口驱动会不停回调(pxMBFrameCBTransmitterEmpty = xMBRTUTransmitFSM)函数，
+每回调一次发送一个字节。发送结束后立即调用vMBPortSerialEnable( TRUE, FALSE )切换到接受状态并发送
+EV_FRAME_SENT事件通知发送完成
+
+
+eRcvState、eSndState与串口方向切换vMBPortSerialEnable(TRUE, FALSE)、vMBPortSerialEnable(FALSE, TRUE)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+eMBRTUStart中
+	eRcvState = STATE_RX_INIT;
+	vMBPortSerialEnable( TRUE, FALSE );
+
+xMBRTUTimerT35Expired( void )中有
+	eRcvState = STATE_RX_IDLE;
+
+xMBRTUReceiveFSM( void )中有
+	eRcvState = STATE_RX_RCV;
+
+
+
+

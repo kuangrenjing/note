@@ -64,16 +64,8 @@ delete两次，这是由析构顺序决定的。
 https://doc.qt.io/qt-5/qwidget.html
 
 
-QT 自定义控件继承QWidget设置样式无效的办法
-https://blog.csdn.net/Holy_Water/article/details/80667350
-
-
 
 窗口类型
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://doc.qt.io/qt-5/qt.html#WindowType-enum
 enum Qt::WindowType
-
-
-
- QPushButton,QLabel… -&gt; QFrame -&gt; QWidget 

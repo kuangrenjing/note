@@ -39,4 +39,10 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 1、无法打开源文件 ui_*文件
 	“Qt VS Tools”->“Convert Project to QMake Generated Project”
 
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、the following error occoured：there is no Qt version assigned to this project 
+for platform Win32 ,please use the 'change Qt version'feature and choose a valid 
+Qt version for this platform.
 
+	以前通过“Change Solution's Qt Version”可解决问题
+	QT visual studio tools version 2.3.2要通过 Qt Project Settings来做这项工作。

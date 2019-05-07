@@ -1,0 +1,6 @@
+RS-485组网测试
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	上午组织了一个会议，向大家介绍了目前的RS-485组网测试遇到的问题和困难，大家给
+出了很多宝贵意见。但大家的意见不是很统一，有人认为是软件问题，有人认为是硬件问题。
+所以今天我形成了一个文档，介绍了我们软件架构和关键代码流程，明天再请大家一起来
+review一下我的软件代码，先排查下软件问题。

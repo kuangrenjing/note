@@ -1,0 +1,42 @@
+1、样式表：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://doc.qt.io/qt-5/stylesheet.html
+
+	除了子类化QStyle，QT样式表也是一个定制窗口部件外观的强大机制。QT样式表的概念、
+术语和语法都是继承自HTML的层叠样式表(CSS)，但又自适应于窗口部件。
+
+	QT样式表是一个文本说明。可以使用QApplication::setStyleSheet()或QWidget::setStyleSheet()
+函数设置样式表到系统使之生效。如果在不同层次上设置了多个样式表，QT会使用所有这些设
+置的样式表生成有效样式表，这就是所谓的层叠(cascading)。
+
+	For this kind of customization, style sheets are much more powerful than 
+QPalette. For example, it might be tempting to set the QPalette::Button role to 
+red for a QPushButton to obtain a red push button. However, this wasn't guaranteed 
+to work for all styles, because style authors are restricted by the different 
+platforms' guidelines and (on Windows and macOS) by the native theme engine.
+
+	Style sheets let you perform all kinds of customizations that are difficult 
+or impossible to perform using QPalette alone. If you want yellow backgrounds 
+for mandatory fields, red text for potentially destructive push buttons, or 
+fancy check boxes, style sheets are the answer.
+
+	Style sheets are applied on top of the current widget style, meaning that 
+your applications will look as native as possible, but any style sheet constraints 
+will be taken into consideration. Unlike palette fiddling, style sheets offer 
+guarantees: If you set the background color of a QPushButton to be red, you can be 
+assured that the button will have a red background in all styles, on all platforms. 
+In addition, Qt Designer provides style sheet integration, making it easy to view 
+the effects of a style sheet in different widget styles.
+
+	In addition, style sheets can be used to provide a distinctive look and feel 
+for your application, without having to subclass QStyle. For example, you can 
+specify arbitrary images for radio buttons and check boxes to make them stand 
+out. Using this technique, you can also achieve minor customizations that would 
+normally require subclassing several style classes, such as specifying a style 
+hint. The Style Sheet example depicted below defines two distinctive style sheets 
+that you can try out and modify at will.
+
+	当样式表生效，QWidget::style()函数返回的QStyle对象是样式表的装饰器，不是平台
+特定的样式。此装饰器转发画图操作到底层的、平台相关的样式（譬如windows平台上的
+QWindowsVistaStyle），所以，最终起作用的其实还是平台相关的QStyle。
+
