@@ -1,0 +1,8 @@
+RS-485组网测试
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	昨晚液位仪16台modbus组网，上电其中8台，串口设置1位停止位，9600波特率，偶校
+验，modbus_poll轮询上电的8台，请求间隔为20ms，测试一晚未报错
+
+	今晨，测试方案改为液位仪16台modbus组网，上电其中8台，串口设置1位停止位，115200
+波特率，偶校验，modbus_poll轮询上电的8台，最小请求间隔为20ms，运行一天，还没有发生
+错误。

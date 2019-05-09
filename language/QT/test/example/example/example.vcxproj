@@ -126,6 +126,9 @@
   <ItemGroup>
     <QtMoc Include="application\application_example\application_example_mainwindow.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="example_zh.ts" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

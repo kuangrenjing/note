@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QTranslator>
 
 #include "application/application_example/application_example_mainwindow.h"
 
@@ -25,6 +26,11 @@ int main(int argc, char *argv[])
 	//parser.addVersionOption();
 	//parser.addPositionalArgument("file", "The file to open.");
 	//parser.process(app);
+
+	//add by mqs
+	QTranslator translator;
+	translator.load("./example_zh");
+	app.installTranslator(&translator);
 
 	MainWindow mainWin;
 	//if(!parser.positionalArguments().isEmpty())

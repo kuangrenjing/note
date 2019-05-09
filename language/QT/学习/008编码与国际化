@@ -1,0 +1,81 @@
+QT4中字符集设置函数三兄弟
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF8"));
+QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF8"));
+QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF8"));
+
+C++中源码字符集和执行字符集
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	注意区分
+
+Qt5强制规定执行字符集为utf-8(由用户保证)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在QT5环境下，只要用户保证了执行字符集为utf-8，像下面这些使用方法都不会出现乱
+码：
+	QString s1 = "汉语";
+	QString s2("漢語");
+	QString s3 = tr("中文")
+	QString s4 = QStringLiteral("中文");//只要字符串不需要翻译，请关注这个 
+	QString s5 = QString::fromWCharArray(L"中文");
+	QString s6 = u8"中文";//C++11
+	QString s7 = tr(u8"中文")
+
+	正因为如此，Qt5取消了QTextCodec::setCodecForTr()和
+QTextCodec::setCodecForCString()这两个函数。
+
+	在MSVS下，确保执行字符集为utf-8的方法是：
+#pragma execution_character_set("utf-8")
+
+编码转换
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当代码中需要做编码转换的时候，也就是要关注“源码字符集”的时候，这时候即使是
+QT5，也要做合适的设置。
+
+所以QT5保留了原来的编码函数三兄弟中的其中一个：
+QTextCodec::setCodecForLocale(QTextCodec::codecForName(“UTF8”))
+
+
+QT语言家(Linguist)、lupdate、lrelease
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Qt Linguist为发布者提供了两款工具-lupdate和lrelease。它们可以处理qmake项目
+文件，或直接在文件系统上运行。
+
+	在VS + Qt VS Tools编程环境下，运行“Create New Translation File”可以创建翻译
+源(ts)文件(针对特定语言)，它会收集项目源码中所有使用tr函数包含的字符串。在解决方
+案目录下双击ts文件，会进入QT语言家编辑界面，“上下文”列表中排列着源码文件，选中一
+个源码文件，在“字符串”列表中显示此源码文件中所有要翻译的字符串，选中一个字符串，然
+后进行翻译。
+
+	翻译完成后，如果源码发生了变化，增删了需要翻译的字符串，可以右击ts文件，选择
+lupdate命令进行更新
+
+	右键ts文件，选择lrelease命令，可以生成qm文件，此文件可由QTranslator类装载使
+用。
+
+
+QTranslator类的使用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+int main(int argc, char *argv[])
+{
+	QApplication a(argc, argv);
+	QTranslator translator;
+	translator.load("./Language_zh_cn");
+	a.installTranslator(&translator);
+	MyTranslator w;
+	w.show();
+	return a.exec();
+}
+
+中英文切换的一个实例
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/lwwl12/article/details/80485123
+
+
+windows系统切换locate
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+VS源代码编码切换
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+【在vs中打开源码文件】=> 【文件】=> 【高级保存选项】=> 【编码：Unicode(utf-8 带签名)】=> 像上述一样再次创建ts文件 

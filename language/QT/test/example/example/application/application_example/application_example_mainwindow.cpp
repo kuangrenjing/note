@@ -2,6 +2,8 @@
 
 #include "application_example_mainwindow.h"
 
+#pragma execution_character_set("utf-8")
+
 MainWindow::MainWindow()
     : textEdit(new QPlainTextEdit)
 {
@@ -23,6 +25,8 @@ MainWindow::MainWindow()
 
     setCurrentFile(QString());
     setUnifiedTitleAndToolBarOnMac(true);
+
+	//QTextCodec::setCodecForLocale(QTextCodec::codecForName("GBK"));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
