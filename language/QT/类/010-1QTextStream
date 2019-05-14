@@ -1,0 +1,11 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://doc.qt.io/qt-5/qtextstream.html#details
+
+QFile的使用
+https://blog.csdn.net/u012654756/article/details/51456341
+
+
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	QTextStream类为文本的读写提供了一个便利的接口
