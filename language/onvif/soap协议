@@ -1,0 +1,42 @@
+soap简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	soap是基于XML的简易协议，可使应用程序再HTTP之上进行信息交换。或者更简单地说：
+soap是用于访问网络服务的协议。
+
+为什么使用soap
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	对于应用程序开发来说，使程序之间进行因特网通信是很重要的。
+
+	目前的应用程序通过使用远程过程调用（RPC）在诸如DCOM与CORBA等对象之间进行通信，
+但是HTTP不是为此设计的。RPC会产生兼容性以及安全问题；防火墙和代理服务器通常会阻止
+此类流量。
+
+	通过HTTP在应用程序间通信是更好的方法，因为HTTP得到了所有的因特网浏览器及服务器
+的支持。SOAP就是被创造出来完成这个任务的。
+
+	SOAP提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的
+应用程序可以互相进行通信。
+
+Microsoft和SOAP
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SOAP是微软.net架构的关键元素，用于未来的因特网应用程序开发。
+
+SOAP1.1被提交到W3C
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在2000年5月，UserLand、Ariba、Commerce One、Compaq、Developmentor、HP、IBM、
+IONA、Lotus、Microsoft以及SAP向W3C提交了SOAP因特网协议，这些公司期望此协议能够通
+过使用因特网标准（HTTP以及XML）把图形用户界面桌面应用程序连接到强大的因特网服务器，
+以此来彻底变革应用程序的开发。
+
+W3C正在发展SOAP1.2
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	首个关于SOAP的公共工作草案由W3C在2001年12月发布。
+
+soap xml元素
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+一条SOAP消息就是一个普通的XML文档，包含下列元素：
+	必需的Envelope元素，可把此XML文档标识为一条SOAP消息
+	可选的Header元素，包含头部信息
+	必需的Body元素，包含所有的调用和响应信息
+	可选的Fault元素，提供有关在处理此消息所发生错误的信息
+所有以上的元素均被声明于针对SOAP封装的默认命名空间中：
