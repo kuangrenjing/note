@@ -1,0 +1,56 @@
+1、ONVIF Profiles是什么？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ONVIF提供很多的profile概要文件，用于规范ONVIF设备端与ONVIF客户端的通信标准。
+目前已发布的profile文件主要包括profile S、G、C、Q、A，不同的profile文件应用于不
+同的领域，不同profile文件可以组合使用。Profile文件的一致性是确保符合ONVIF产品的
+兼容性的唯一方法，因此，只有符合profile文件的注册产品才被认为是兼容ONVIF的。
+
+2、Profile S、G、C、Q、A分别应用于什么领域呢？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Profile S应用于网络视频系统
+	Profile G应用于边缘存储与检索
+	Profile C应用于网络电子门禁系统
+	Profile Q应用于快速安装
+	Profile A应用于更广泛的访问控制配置。
+
+3、Profile S应用于网络视频系统，内容包括：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	1、视频和音频流
+	2、PTZ控制和继电器输出
+	3、视频配置和多播
+
+	Profile S应用于网络视频系统。Profile S的设备(例如：网络摄像机或视频编码器)可
+以将视频数据通过IP网络发送到Profile S的客户端。Profile S的客户端(例如：视频管理软
+件)可以配置、请求和控制从Profile S的设备上的IP网络视频流。
+
+
+4、onvif常见问题
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、日本Genius Vision公司写的Onvif FAQ
+	http://community.geniusvision.net/platform/cprndr/ta/onviffaqzh/
+
+4.2、onvif profile与各wsdl文件有什么关系？
+	可见specifiction
+
+4.3、一个好问题
+	https://stackoverflow.com/questions/45403552/understanding-onvif-specifications-and-versions
+
+4.4、新老版本兼容问题
+	https://blog.csdn.net/efim520/article/details/38123053
+
+
+5、网络接口说明书
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	从onvif官网(https://www.onvif.org)点击"Profiles & Specifications"标签页进入
+找到“Specification History”点击进入，可以看到“网络接口说明书”的历史列表，可以看到
+2016以后，版本是以年份命名的，一般一年更新两次，6月一次，12月一次。
+
+	一定要注意，“网络接口说明书”的版本与“网络接口wsdl”的版本不同步，
+
+
+6、onvif使用的soap版本
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	onvif说明书“5.8 Binding”章节说明onvif遵循(WS-I BP 2.0)。WS-I BP 2.0描述的是
+wsdl、UDDI、soap的关系问题，涉及的是soap-1.2版本。
+
+	使用soapcpp2时要指定版本

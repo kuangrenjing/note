@@ -238,6 +238,10 @@ status changes. This daemon is similar to NetworkManager-dispatcher, but is much
 more limited in the types of events it supports due to the limited nature of 
 systemd-networkd.
 
+一个错误：vmware network adapter vmnet8 没有有效的IP配置
+因为我点的设置时自动获取IP，也就是要使用DHCP服务
+在网上查了一下，发现有一个解释因为没有开启VMware NAT service和VMware DHCP service服务，
+
 NetworkManager
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	nmcli命令
@@ -574,8 +578,6 @@ https://github.com/aklomp/base64
 一次操作4字节，64位机上一次操作8字节。
 
 	更重要的是，这个库使用了SIMD指令，在Intel上就是MMX/SSE/AVX，在ARM上就是NEON。
-
-	www.shlf.net/forum.php
 
 base64_stream_encode_init -> codec_choose
 

@@ -1,0 +1,30 @@
+https://www.cnblogs.com/zhijianliutang/archive/2011/12/22/2297537.html
+https://blog.csdn.net/no_pao_spite/article/details/72819731
+https://blog.csdn.net/weixin_44362642/article/details/86750172
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<Envelope xmlns:tds="http://www.onvif.org/ver10/device/wsdl" 
+          xmlns="http://www.w3.org/2003/05/soap-envelope">
+	<Header>
+		<wsa:MessageID xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing">
+			uuid:0d314c32-eebf-4603-8c1f-001d9a92026e
+		</wsa:MessageID>
+		<wsa:To xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing">
+			urn:schemas-xmlsoap-org:ws:2005:04:discovery
+		</wsa:To>
+		<wsa:Action xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing">
+			http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe
+		</wsa:Action>
+	</Header>
+	<Body>
+		<Probe xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		       xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+		       xmlns="http://schemas.xmlsoap.org/ws/2005/04/discovery">
+			<Types>
+				tds:Device
+			</Types>
+			<Scopes/>
+		</Probe>
+	</Body>
+</Envelope>

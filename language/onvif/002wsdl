@@ -1,0 +1,163 @@
+1、参考文档
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/qq_19714937/article/details/68922185
+http://www.w3school.com.cn/wsdl/index.asp
+https://blog.csdn.net/etttttss/article/details/17412081    关于绑定的解释
+http://blog.sina.com.cn/s/blog_5f53615f0101822f.html
+https://developer.ibm.com/articles/ws-whichwsdl/?mhq=whichwsdl&mhsrc=ibmsearch_a
+
+2、wsdl版本
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	wsdl1
+		2001-03，WSDL1.1被IBM、微软作为一个W3C纪录（W3C note）提交到有关XML协议
+	的W3C XML活动，用于描述网络服务。（W3C纪录仅供讨论。一项W3C纪录的发布并不代
+	表它已被W3C或W3C团队亦或任何W3C成员认可。）在2002年7月，W3C发布了第一个WSDL1.2
+	工作草案。
+
+	wsdl2
+		2003-11-10 w3c发表wsdl2.0草案
+
+3、soap与wsdl的关系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	wsdl2.0协议分为两个部分：
+Web Services Description Language (WSDL) Version 2.0 Part 1: Core Language
+Web Services Description Language (WSDL) Version 2.0 Part 2: Adjuncts
+
+	第二部分就是讲与soap、http的绑定的(binding)
+
+4、wsdl与web services的关系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	wsdl可以使web services更自动化，没有wsdl，web services也能工作。
+
+5、wsdl简单教程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5.0、参考文献
+	http://www.w3school.com.cn/wsdl/index.asp
+
+5.1、简介
+	WSDL是基于XML的用于描述Web Services以及如何访问Web Services的语言。
+
+5.2、wsdl1.2完整语法：
+<wsdl:definitions name="nmtoken"? targetNamespace="uri">
+	<import namespace="uri" location="uri"/> *
+	<wsdl:documentation .... /> ?
+	<wsdl:types> ?
+		<wsdl:documentation .... /> ?
+		<xsd:schema .... /> *
+	</wsdl:types>
+
+	<wsdl:message name="ncname"> *
+		<wsdl:documentation .... /> ?
+		<part name="ncname" element="qname"? type="qname"?/> *
+	</wsdl:message>
+
+	<wsdl:portType name="ncname"> *
+		<wsdl:documentation .... /> ?
+		<wsdl:operation name="ncname"> *
+			<wsdl:documentation .... /> ?
+			<wsdl:input message="qname"> ?
+				<wsdl:documentation .... /> ?
+			</wsdl:input>
+			<wsdl:output message="qname"> ?
+				<wsdl:documentation .... /> ?
+			</wsdl:output>
+			<wsdl:fault name="ncname" message="qname"> *
+				<wsdl:documentation .... /> ?
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:serviceType name="ncname"> *
+		<wsdl:portType name="qname"/> +
+	</wsdl:serviceType>
+
+	<wsdl:binding name="ncname" type="qname"> *
+		<wsdl:documentation .... /> ?
+		<-- binding details --> *
+		<wsdl:operation name="ncname"> *
+			<wsdl:documentation .... /> ?
+			<-- binding details --> *
+			<wsdl:input> ?
+				<wsdl:documentation .... /> ?
+				<-- binding details -->
+			</wsdl:input>
+			<wsdl:output> ?
+				<wsdl:documentation .... /> ?
+				<-- binding details --> *
+			</wsdl:output>
+			<wsdl:fault name="ncname"> *
+				<wsdl:documentation .... /> ?
+				<-- binding details --> *
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="ncname" serviceType="qname"> *
+		<wsdl:documentation .... /> ?
+		<wsdl:port name="ncname" binding="qname"> *
+			<wsdl:documentation .... /> ?
+			<-- address details -->
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>
+
+5.3、wsdl元素
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	types         web service 使用的数据类型。数据类型定义的容器，它使用某种类
+型系统(如XSD)。
+	message       web service 使用的消息。通信数据的抽象类型化定义，它由一个或者
+多个part组成。
+	portType      web service 执行的操作。特定端口类型的具体协议和数据格式规范。
+它由一个或者多个 Operation组成。
+	serviceType
+	binding       web service 使用的通信协议
+	service
+
+
+5.4、binding实例(绑定到soap)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+<wsdl:binding name="DiscoveryLookupBinding" type="dn:DiscoveryLookupPort">
+	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+	<wsdl:operation name="Probe">
+		<soap:operation soapAction="http://www.onvif.org/ver10/network/wsdl/Probe"/>
+		<wsdl:input>
+			<soap:body parts="parameters" use="literal"/>
+		</wsdl:input>
+		<wsdl:output>
+			<soap:body parts="parameters" use="literal"/>
+		</wsdl:output>
+	</wsdl:operation>
+</wsdl:binding>
+
+binding元素有两个属性:name属性和type属性:
+	name属性定义binding的名称，而type属性指向用于binding的端口，在这个例子中是"glossaryTerms"端口。
+
+soap:binding元素有两个属性:style属性和transport属性。
+	style属性可取值"rpc"或"document"。在这个例子中我们使用document。transport属性定义了要使用的SOAP协议。在这个例子中我们使用 HTTP。
+
+operation元素定义了每个端口提供的操作符。
+	对于每个操作，相应的SOAP行为都需要被定义。同时您必须如何对输入和输出进行编码。在这个例子中我们使用了"literal"。
+
+
+5.5、wsdl段中style、use两个属性的使用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	soap:binding元素有style属性，可以有两个值：Document、RPC。这个属性值只会影响
+wsdl到soap的翻译，在soap消息上完全体现不出来。
+
+	soap:body元素有use属性，可以有两个值：Literal、Encoded。这个属性值会影响soap
+消息，Encoded时body中参数需指定编码类型，譬如
+	<soap:envelope>
+		<soap:body>
+			<myMethod>
+				<x xsi:type="xsd:int">5</x>                   //指定了编码类型
+				<y xsi:type="xsd:float">5.0</y>
+			</myMethod>
+		</soap:body>
+	</soap:envelope>
+
+9、soap编码
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+编码格式有两类：对整个消息体（方法）的编码和对方法参数的编码
+	对整个SOAP消息体（Body）中的数据有两种格式设置方式：Document、RPC
+	对Body元素中方法的参数进行格式设置也有两种方式：Literal、Encoded

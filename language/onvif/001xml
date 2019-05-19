@@ -1,0 +1,77 @@
+xml语法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	1.文档声明
+	2.元素
+	3.属性
+	4.注释
+	5.CDATA区
+	6.特殊字符
+	7.处理指令（processing instruction）
+
+xsl
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	XSL是可扩展样式表语言（eXtensible Stylesheet Language）
+
+xml指令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+xml-stylesheet
+
+
+xmlns
+
+
+stylesheet
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+xml schema
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	它的作用是定义一份XML文档的合法组件群，就像文档类型定义（外语缩写：DTD）的
+作用一样,一份XML Schema定义了：
+	可以出现在文档里的元素；
+	可以出现在文档里的属性；
+	哪些元素是子元素；
+	子元素的顺序；
+	子元素的数量；
+	一个元素应是否能包含文本，或应该是空的；
+	元素和属性的数据类型；
+	元素和属性的默认值和固定值。
+
+
+xml schema常用元素
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、schema元素
+实例
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://www.w3school.com.cn"
+xmlns="http://www.w3school.com.cn"
+elementFormDefault="qualified">
+...
+...
+</xs:schema>
+
+代码解释：
+	1)xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	显示schema中用到的元素和数据类型来自命名空间"http://www.w3.org/2001/XMLSchema"。
+同时它还规定了来自命名空间"http://www.w3.org/2001/XMLSchema"的元素和数据类型应该
+使用前缀xs
+
+	2)targetNamespace="http://www.w3school.com.cn" 
+	显示被此schema定义的元素来自命名空间："http://www.w3school.com.cn"。
+
+	3)xmlns="http://www.w3school.com.cn" 
+	指出默认的命名空间是 "http://www.w3school.com.cn"。
+
+	4)elementFormDefault="qualified" 
+	指出任何XML实例文档所使用的且在此schema中声明过的元素必须被命名空间限定。
+
+
+import
+
+namespace
+schemaLocation
+
+
+
+https://blog.csdn.net/inter999/article/details/3282408

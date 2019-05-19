@@ -1,0 +1,31 @@
+https://blog.csdn.net/qq_18854309/article/details/76737948
+
+
+1、gSoap: How to add info to SOAP Header using gSOAP
+https://blog.csdn.net/weiwangchao_/article/details/8719730
+
+
+https://blog.csdn.net/qq_19393857/article/details/81507952
+wsa5.h(279): *WARNING*: Duplicate declaration of 'SOAP_ENV__Fault' (already declared at line 264)
+
+
+wsa5.h(289): **ERROR**: service operation name clash: struct/class 'SOAP_ENV__Fault' already declared at wsa.h:274
+
+
+之所有会出现这个错误，是因为onvif.h头文件中同时：
+
+#import "wsdd10.h" // wsdd10.h中又#import "wsa.h"
+#import "wsa5.h"   // wsa.h和wsa5.h两个文件重复定义了int SOAP_ENV__Fault
+
+解决方法：修改/usr/local/share/gsoap/import/wsa5.h(/usr/local为安装位置)文件，将int SOAP_ENV__Fault修改为int SOAP_ENV__Fault_alex，再次使用soapcpp2工具编译就成功了，命令执行过程如下：
+
+
+
+
+https://blog.csdn.net/weixin_44362642/article/details/86750172
+
+
+
+3、实战
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+结合https://blog.csdn.net/qq_18854309/article/details/76737948与typemap.dat看

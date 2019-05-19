@@ -5,8 +5,26 @@ https://www.genivia.com/dev.html
 
 
 
-gsoap所有者
+2、gsoap所有者
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	gsoap是genivia inc公司的主推产品，gsoap有三种授权方式：标准许可、商业许可、
 GPLv2许可。我们当然使用了GPLv2许可。
+
+3、gsoap版本
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+4、gsoap与boa
+
+
+
+yacc: command not found
+apt-get install byacc
+
+flex: command not found
+apt-get install flex
+
+
+
 
