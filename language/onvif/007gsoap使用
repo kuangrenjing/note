@@ -33,7 +33,7 @@ WS
 4、gsoap中的一些重要文件
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 4.1、import/xsd.h
-  xsd.h定义xsd的类型到c/c++类型的转换。wsdl2h -m会把此文件自动包含到产生的.h文件
+	xsd.h定义xsd的类型到c/c++类型的转换。wsdl2h -m会把此文件自动包含到产生的.h文件
 中。可以在typemap.dat重新定义转换规则。譬如xsd_duration在xsd.h是char *，但如果我
 们在typemap.dat文件中添加一行“xsd__duration = #import "custom/duration.h" | xsd__duration”
 那么xsd_duration将使用custom/duration.c中的定义。
@@ -76,7 +76,8 @@ implement XML Web services.
 	Therefore, the creation of C and C++ applications from one of more WSDLs or 
 XSDs is a two-step process.
 
-
+3.2、wsdl2h工具选项
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 -a           generate indexed struct names for local elements with anonymous types
 -b           generate bi-directional operations to serve one-way response messages (duplex)
 -c           generate C source code
@@ -115,7 +116,7 @@ XSDs is a two-step process.
 -r           host[:port[:uid:pwd]] 	connect via proxy host, port, and proxy credentials uid and pwd
 -r :uid:pwd  connect with authentication credentials uid and pwd
 -S name      use name instead of soap for the soap context included in C++ classes as a member variable or use -S "" to remove it
--s           don't generate STL code (no std::string and no std::vector)
+-s           don't generate STL code (no std::string and no std::vector)      不要使用STL库
 -t file      use type map file instead of the default file typemap.dat
 -U           map Unicode XML names to UTF-8-encoded Unicode C/C++ identifiers
 -u           don't generate unions
@@ -135,9 +136,12 @@ XSDs is a two-step process.
 -_           don't generate _USCORE (replace with Unicode _x005f) 
 
 
+3.3、我使用的wsdl2h命令：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+wsdl2h  -c -o ./onvif.h ./*.wsdl
 
-
-root@mqs-virtual-machine:/mnt/hgfs/share/onvif/wsdl# wsdl2h -c -s -o ./onvif.h ./remotediscovery.wsdl ./devicemgmt.wsdl ./event.wsdl ./media.wsdl 
+3.4、wsdl2h日志
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 Saving ./onvif.h
 
 
@@ -202,32 +206,180 @@ SOAPCP2工具然后从数据绑定接口头文件生成XML数据绑定实现源�
 首先，将WSDL转换为C++，我们使用：
 
 
-3、
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-wsdl2h  -c–s  -t ./typemap.dat  -o  onvif.h http://www.onvif.org/onvif/ver10/network/wsdl/remotediscovery.wsdl
-
-
-
-
 
 4、soapcpp2
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、soapcpp2的选项：
+-0        no SOAP, generate REST source code
+-1        generate SOAP 1.1 source code
+-2        generate SOAP 1.2 source code                   生成soap 1.2代码
+-A        require HTTP SOAPAction headers to invoke server-side operations
+-a        use HTTP SOAPAction headers with WS-Addressing to invoke server-side operations
+-b        serialize byte arrays char[N] as string
+-C        generate client-side source code only
+-c        generate C source code                           生成c代码
+-c++      generate C++ source code (default)
+-c++11    generate C++ source code optimized for C++11 (compile with -std=c++11)
+-d path   use path to save files
+-Ec       generate extra functions for deep copying
+-Ed       generate extra functions for deep deletion
+-Et       generate extra functions for data traversals with callback functions
+-e        generate SOAP RPC encoding style bindings (also use -1 or -2)
+-f N      multiple soapC files, with N serializer definitions per file (N>=10)
+-g        generate XML sample messages in template format for testmsgr
+-h        display help info and exit
+-I path   use path(s) for #import (paths separated with :)
+-i        generate C++ service proxies and objects inherited from soap struct
+-j        generate C++ service proxies and objects that share a soap struct
+-L        don't generate soapClientLib and soapServerLib         不要生成soapClientLib和soapServerLib
+-l        generate linkable modules (experimental)
+-m        generate source code for the Matlab(tm) MEX compiler (deprecated)
+-n        use service name to rename service functions and namespace table
+-p name   save files with new prefix name instead of soap
+-Q name   use name as the C++ namespace, including custom serializers
+-q name   use name as the C++ namespace, excluding custom serializers
+-r        generate soapReadme.md report
+-S        generate server-side source code only                                    仅生成服务端代码
+-s        generate stub and skeleton functions with strict XML validation checks
+-T        generate server auto-test source code
+-t        generate source code for fully xsi:type typed SOAP/XML messages
+-u        uncomment WSDL/schema output by suppressing XML comments
+-V        display the current version and exit
+-v        verbose output
+-w        don't generate WSDL and schema files
+-x        don't generate sample XML message files                       不要生成xml消息文件
+-y        include C/C++ type access information in sample XML messages
+-z1       compatibility: generate old-style C++ service proxies and objects
+-z2       compatibility with 2.7.x: omit XML output for NULL pointers
+-z3       compatibility up to 2.8.30: _param_N indexing and nillable pointers 
 
 
-    projects/myH.h serialization functions, this file should be included in projects.
-    projects/myC.c serialization functions
-    projects/myClient.c client call stub functions
-    projects/myServer.c server request dispatcher
-    projects/myStub.h annotated copy of the source interface header file
-    projects/ns.nsmap namespace table, this file should be included or used in projects.
-    projects/ns.wsdl WSDL with Web service definitions
-    projects/ns.xsd XML schema
+4.2、soapcpp2生成的文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	projects/myH.h serialization functions, this file should be included in projects.
+	projects/myC.c serialization functions
+	projects/myClient.c client call stub functions
+	projects/myServer.c server request dispatcher
+	projects/myStub.h annotated copy of the source interface header file(用户需实现的接口的头文件)
+	projects/ns.nsmap namespace table, this file should be included or used in projects.
+	projects/ns.wsdl WSDL with Web service definitions
+	projects/ns.xsd XML schema
 
 
-    stdsoap2.cpp
-    stdsoap2.h
+	stdsoap2.cpp
+	stdsoap2.h
+
+4.2.1、文件轮转流程：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	接收消息线程->myServer.c(消息处理)->myC.c(序列化)->自己实现(返回消息填充)
+
+4.2.2、*Stub.h文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
+4.3、我所使用的soapcpp2命令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+soapcpp2 -2 -c -L -S -x onvif.h -I /usr/local/share/gsoap
+
+soap12.h(54): *WARNING*: option -1 or -2 overrides SOAP-ENV namespace
+soap12.h(55): *WARNING*: option -1 or -2 overrides SOAP-ENC namespace
+
+如果不加-I选项，因为typemap.dat被定制过，所以会报以下错误：
+Critical error: #import: Cannot open file "custom/duration.h" for reading.
+
+5、gsoap与Hilinux
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+编译onvif服务端程序时报链接错误：
+./onvif/stdsoap2.o: In function `soap_done':
+stdsoap2.c:(.text+0xbf6c): undefined reference to `freelocale'
+./onvif/stdsoap2.o: In function `soap_float2s':
+stdsoap2.c:(.text+0x20ef4): undefined reference to `newlocale'
+stdsoap2.c:(.text+0x20f18): undefined reference to `uselocale'
+stdsoap2.c:(.text+0x20f5c): undefined reference to `uselocale'
+./onvif/stdsoap2.o: In function `soap_s2float':
+stdsoap2.c:(.text+0x21168): undefined reference to `newlocale'
+stdsoap2.c:(.text+0x21198): undefined reference to `strtod_l'
+./onvif/stdsoap2.o: In function `soap_double2s':
+stdsoap2.c:(.text+0x21804): undefined reference to `newlocale'
+stdsoap2.c:(.text+0x21828): undefined reference to `uselocale'
+stdsoap2.c:(.text+0x2185c): undefined reference to `uselocale'
+./onvif/stdsoap2.o: In function `soap_s2double':
+stdsoap2.c:(.text+0x21a74): undefined reference to `newlocale'
+stdsoap2.c:(.text+0x21aa4): undefined reference to `strtod_l'
+collect2: error: ld returned 1 exit status
+makefile:49: recipe for target 'ipc_save_src' failed
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	看上去是Hilinux上没有这些API，那为什么没有避开这些API呢？因为我没有包含
+config.h。但即使包含了也没用，因为我的configure是针对PC环境做的检查，wsdl2h、
+soapcpp2两个工具也是在PC环境下生成的。
+
+	我是这样考虑的：针对PC完成一次流程后，再针对交叉编译链configure一下，但不make。
+只使用configure生成的config.h。
+
+	具体来看：
+5.1、config.h如何生效
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在stdsoap2.h文件中有
+stdsoap2.h文件中有：
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#else
+...
+
+即要使config.h生效，我们需定义“HAVE_CONFIG_H”宏。
+
+5.2、针对交叉链的configure命令格式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+5.3、freelocale的控制宏在交叉链环境中会消失吗？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过查看针对PC-linux环境生成的config.h文件，我们发现控制freelocale函数的宏是：
+/* Define to 1 if you have the `newlocale' function. */
+#define HAVE_NEWLOCALE 1
+
+	我们查看针对交叉链configure日志，发现：
+checking for newlocale... no
+checking for uselocale... no
+checking for freelocale... no
+
+	查看生成的config.h，发现其中HAVE_NEWLOCALE宏的定义被注释掉了。
+
+5.4、在工程中引入config.h
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	把针对交叉链的config.h拷贝到我们的工程中去，并在Makefile中定义HAVE_CONFIG_H宏
+
+5.5、结论
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	结论就是：实践证明，这样做完全没有卵用，还是需要开发者手动参与。原因有两个：
+1）configure认为Hi-linux没有malloc函数，在config.h中不定义HAVE_MALLOC宏且定义
+#define malloc rpl_malloc，但实际Hi-linux是有malloc函数的，而rpl_malloc需要开发者
+自己实现。
+
+2）configure检查了
+checking locale.h usability... yes
+checking locale.h presence... yes
+checking for locale.h... yes
+checking xlocale.h usability... no
+checking xlocale.h presence... no
+checking for xlocale.h... no
+checking for newlocale... no
+checking for uselocale... no
+checking for freelocale... no
+checking for enable xlocale usage in library... no
+checking for disable c locale usage in library... no
+检查的很全面，但遗憾的是stdsoap2.h只使用了HAVE_LOCALE_H宏进行判断。
+
+	综上，针对交叉链生成config.h后应对config.h进行手动修改,添加HAVE_MALLOC的定义，
+注销rpl_malloc的定义（移植内存池后把这两项再改回来），注销HAVE_LOCALE_H的定义:
+
+#define HAVE_MALLOC 1
+//#define malloc rpl_malloc
+
+/*#undef HAVE_LOCALE_H */
+
+6、其它乱七八糟
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://blog.csdn.net/qq_18854309/article/details/76737948
 :./soapcpp2 -s -2 onvif.h -x -I../gsoap-2.8/gsoap -I ../gsoap-2.8/gsop/import/ -I ../gsoap-2.8/gsoap/plugin -I../gsoap-2.8/gsoap/custom
 

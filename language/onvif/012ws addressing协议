@@ -1,0 +1,7 @@
+WS-Addressing 1.0命名空间：http://www.w3.org/2005/08/addressing
+WS-Addressing 1.0命名空间最新schema的URI：http://www.w3.org/2002/ws/addr/ns/ws-addr
+WS-Addressing 1.0命名空间2006-05-09说明书的schema的URI：http://www.w3.org/2006/03/addressing/ws-addr.xsd
+
+
+在之前的命名空间可能叫http://schemas.xmlsoap.org/ws/2004/08/addressing
+probe命令用的是这个命名空间

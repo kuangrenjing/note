@@ -1,0 +1,408 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.onvif.org/profiles/profile-t/
+
+
+
+
+1、Onvif Profile介绍
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	把功能分组就形成了不同的profile，onvif有A、C、G、Q、S、T6个profile。具体分类
+标准及用途如下：
+
+1.1、Onvif Profile G
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	应用于边缘存储与检索，具体来说：
+1）Configure, request and control recording
+2）Receive audio and metadata stream
+
+	Profile G is designed for IP-based video systems. A Profile G device (e.g., 
+an IP network camera or video encoder) is one that can record video data over an 
+IP network or on the device itself. A Profile G client (e.g., a video management 
+software) is one that can configure, request, and control recording of video data 
+over an IP network from a Profile G conformant device. Profile G also includes 
+support for receiving audio and metadata stream if the client supports those features.
+
+	ONVIF Profile G包括板上视频储存，搜索，检索，以及媒体播放功能的技术规格。
+Profile G进一步完善了现场录像和视频储存的互通功能，适用于各种监控设备和系统，包
+括视频摄像机，编码器，和网络视频录像器(NVR)以及视频管理系统，建筑管理系统，和物
+理安全信息管理(PSIM)系统等等。
+
+	从ONVIF Network Interface Specification Set v2.4开始支持（2013）
+
+	海康相机支持Onvif Profile G
+
+1.2、Onvif Profile Q
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+应用于快速安装，具体来说：
+1）Easy setup
+2）Discovery, configuration and control of conformant devices
+
+	Profile Q is for IP-based video systems and its aim is to provide quick 
+discovery and basic configuration of Profile Q conformant products (e.g., 
+network camera, network switch, network monitor) on a network. A Profile Q conformant 
+device is one that can be discovered and configured by a Profile Q client. A Profile 
+Q conformant client is one that can discover, configure and control a Profile Q device 
+over an IP network. Profile Q also covers specifications for TLS (Transport Layer 
+Security) configuration for conformant products that support this feature. TLS is a 
+secure communication protocol that allows ONVIF devices themselves to communicate with 
+clients across a network in a way that protects against tampering and eavesdropping. 
+Special attention should be given to the Factory Default State when deploying an ONVIF 
+Profile Q Device.
+
+	ONVIF Profile Q为系统集成商和终端用户提供创新功能，通过简易安装机制和基础设
+备配置，实现系统与设备的精简安装和连接。Profile Q还支持传输层安全性(TLS)，该安全
+通信协议使ONVIF合标设备能够以不受篡改和窃听威胁的方式在网络上与客户通讯。
+
+1.3、Onvif Profile S
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+应用基本视频流，具体来说：
+1）Video streaming and configuration
+
+	Profile S is designed for IP-based video systems. A Profile S device (e.g., 
+an IP network camera or video encoder) is one that can send video data over an 
+IP network to a Profile S client. A Profile S client (e.g., a video management 
+software) is one that can configure, request, and control video streaming over 
+an IP network from a Profile S device. Profile S also covers ONVIF specifications 
+for PTZ control, audio in, multicasting and relay outputs for conformant devices 
+and clients that support such features.
+
+	ONVIF Profile S描述了ONVIF兼容视频管理系统和装置共享的共用功能，这些系统和
+装置包括通过IP网络发送、配置、请求或控制媒体数据流的IP摄影机或编码器。profile包
+括特定功能，例如摇摄、倾斜、变焦控制、音频流和中继输出。
+
+Onvif Profile S涉及的Network Interface Specifications和相关WSDL
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Onvif Profiles               Specifications                 WSDL
+Onvif Profile S              Onvif Core                     device.wsdl
+                                                            event.wsdl
+                                                            remotediscovery.wsdl
+                                                            onvif.xsd
+                                                            common.xsd
+                              Streaming
+                              Media
+                              PTZ
+
+兼容Onvif Profile S的设备定义的功能
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1、用户认证
+	WS-Usernametoken
+
+2、
+
+3、发现(Discovery)
+	WS-Discovery
+	Discovery configuration
+	scope operations
+
+4、网络配置(Network Configuration)
+	Hostname
+	DNS
+	Network interface
+	Network protocol
+	Network default gateway
+
+5、系统(System)
+	获取设备信息
+	获取/设置设备日期和时间
+	获取出厂默认设置
+	重启
+
+6、用户处理(User Handling)
+	对用户列表进行增、删、改、查
+
+7、事件处理(Event handling)
+	WS-BaseNotification
+	事件和拉取点
+
+8、视频流(Video Streaming)
+	至少一个随时可以用的视频流Media Profile
+	视频流URI和profile操作
+	RTSP视频流
+
+9、MJPEG视频流(Video Streaming – MJPEG)
+	VideoEncoderConfigurationOptions??
+
+10、视频编码配置(Video Encoder Configuration)
+	GetGuaranteedNumberOfVideoEncoderInstances??
+
+11、媒体框架配置(Media Profile Configuration)
+
+12、视频源配置(Video Source Configuration)
+
+13、元数据配置(Metadata Configuration)
+
+兼容Onvif Profile S的设备可选功能
+1、MPEG4视频流(Video Streaming-MPEG4)
+
+2、H264视频流(Video Streaming-H264)
+
+3、云台功能(PTZ)
+
+4、云台绝对位置运动(PTZ-Absolute Positioning)
+
+5、云台相对位置运动(PTZ-Relative Positioning)
+
+6、云台预置点(PTZ-Presets)
+
+7、云台零点(PTZ-Home Position)
+
+8、云台辅助命令(PTZ-Auxiliary Command)
+
+9、音频流(Audio Streaming)
+
+10、G726音频流(Audio Streaming-G726)
+
+11、AAC音频流(Audio Streaming-AAC)
+
+12、多播媒体流(Multicast Streaming)
+
+13、中继输出(Relay Outputs)
+
+14、时间服务器(NTP)
+
+15、动态服务器(DDNS)
+
+16、零配置(Zero Configuration)
+
+17、IP白/黑名单(IP Address Filtering)
+
+
+兼容Onvif Profile S的设备需实现的函数：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Function                               Service             Requirement
+User Authentication
+WS-Usernametoken Authentication        Core                M
+HTTP Digest                            Core                O
+
+Capabilities Function List:
+GetCapabilities                        Device              M
+GetWsdlUrl                             Device              M
+
+Discovery Function List:
+WS-Discovery                           Core                M
+GetDiscoveryMode                       Device              M
+SetDiscoveryMode                       Device              M
+GetScopes                              Device              M
+SetScopes                              Device              M
+AddScopes                              Device              M
+RemoveScopes                           Device              M
+
+Network Configuration Function List
+GetHostname                            Device              M
+SetHostname                            Device              M
+GetDNS                                 Device              M
+SetDNS                                 Device              M
+GetNetworkInterfaces                   Device              M
+SetNetworkInterfaces                   Device              M
+GetNetworkProtocols                    Device              M
+SetNetworkProtocols                    Device              M
+GetNetworkDefaultGateway               Device              M
+SetNetworkDefaultGateway               Device              M
+
+System Function List
+GetDeviceInformation                   Device              M
+GetSystemDateAndTime                   Device              M
+SetSystemDateAndTime                   Device              M
+SetSystemFactoryDefault                Device              M
+Reboot                                 Device              M
+
+User Handling Function List
+GetUsers                               Device              M
+CreateUsers                            Device              M
+DeleteUsers                            Device              M
+SetUser                                Device              M
+
+Event Handling Function List
+Notify                                 Event               M
+Subscribe                              Event               M
+Renew                                  Event               M
+Unsubscribe                            Event               M
+SetSynchronizationPoint                Event               M
+CreatePullPointSubscription            Event               M
+PullMessages                           Event               M
+GetEventProperties                     Event               M
+TopicFilter                            Event               M
+MessageContentFilter                   Event               M
+
+Video Streaming Function List
+GetProfiles                            Media               M
+GetStreamUri                           Media               M
+Media Streaming using RTSP             Streaming           M
+
+Video Streaming – MJPEG Function List
+Media Streaming using RTSP - 
+JPEG RTP header extension              Streaming           C
+
+Video Encoder Configuration Function List
+GetVideoEncoderConfiguration                     Media     M
+GetVideoEncoderConfigurations                    Media     M
+AddVideoEncoderConfiguration                     Media     M
+RemoveVideoEncoderConfiguration                  Media     M
+SetVideoEncoderConfiguration                     Media     M
+GetCompatibleVideoEncoderConfigurations          Media     M
+GetVideoEncoderConfigurationOptions              Media     M
+GetGuaranteedNumberOfVideoEncoderInstances       Media     M
+
+Media Profile Configuration Function List
+GetProfiles                            Media               M
+GetProfile                             Media               M
+CreateProfile                          Media               M
+DeleteProfile                          Media               M
+
+Video Source Configuration Function List
+GetVideoSources                        Media               M
+GetVideoSourceConfiguration            Media               M
+GetVideoSourceConfigurations           Media               M
+AddVideoSourceConfiguration            Media               M
+RemoveVideoSourceConfiguration         Media               M
+SetVideoSourceConfiguration            Media               M
+GetCompatibleVideoSourceConfigurations Media               M
+GetVideoSourceConfigurationOptions     Media               M
+
+Metadata Configuration Function List
+GetMetadataConfiguration               Media               M
+GetMetadataConfigurations              Media               M
+AddMetadataConfiguration               Media               M
+RemoveMetadataConfiguration            Media               M
+SetMetadataConfiguration               Media               M
+GetCompatibleMetadataConfigurations    Media               M
+GetMetadataConfigurationOptions        Media               M
+
+Video Streaming – MPEG4 Function List
+SetSynchronizationPoint                Media               M
+
+Video Streaming – H264 Function List
+SetSynchronizationPoint                Media               M
+
+PTZ Function List
+AddPTZConfiguration                    Media               M
+RemovePTZConfiguration                 Media               M
+GetNodesPTZMGetNode                    PTZ                 M
+GetConfigurations                      PTZ                 M
+GetConfiguration                       PTZ                 M
+GetConfigurationOptions                PTZ                 M
+SetConfiguration                       PTZ                 M
+ContinuousMove                         PTZ                 M
+Stop                                   PTZ                 M
+GetStatus                              PTZ                 M
+
+PTZ – Absolute Positioning Function List
+AbsoluteMove                           PTZ                 M
+
+PTZ – Relative Positioning Function List
+RelativeMove                           PTZ                 M
+
+PTZ – Presets Function List
+SetPresetPTZMGetPresets                PTZ                 M
+GotoPreset                             PTZ                 M
+RemovePreset                           PTZ                 M
+
+PTZ – Home Position Function List
+GotoHomePosition                       PTZ                 M
+SetHomePosition                        PTZ                 C
+
+PTZ – Auxiliary Command Function List
+SendAuxiliaryCommand                   PTZ                 M
+
+Audio Streaming Function List for Devices
+GetAudioSources                        Media               M
+GetAudioSourceConfiguration            Media               M
+GetAudioSourceConfigurations           Media               M
+AddAudioSourceConfiguration            Media               M
+RemoveAudioSourceConfiguration         Media               M
+SetAudioSourceConfiguration            Media               M
+GetCompatibleAudioSourceConfigurations Media               M
+GetAudioSourceConfigurationOptions     Media               M
+GetAudioEncoderConfiguration           Media               M
+GetAudioEncoderConfigurations          Media               M
+AddAudioEncoderConfiguration           Media               M
+RemoveAudioEncoderConfiguration        Media               M
+SetAudioEncoderConfiguration           Media               M
+GetCompatibleAudioEncoderConfigurationsMedia               M
+GetAudioEncoderConfigurationOptions    Media               M
+
+
+Multicast Streaming Function List
+StartMulticastStreaming                Media               M
+StopMulticastStreaming                 Media               M
+
+Relay Outputs Function List
+GetRelayOutputs                        Device              M
+SetRelayOutputSettings                 Device              M
+SetRelayOutputState                    Device              M
+
+NTP Function List
+GetNTP                                 Device              M
+SetNTP                                 Device              M
+
+Dynamic DNS Function List
+GetDynamicDNS                          Device              M
+SetDynamicDNS                          Device              M
+
+Zero Configuration Function List
+GetZeroConfiguration                   Device              M
+SetZeroConfiguration                   Device              M
+
+IP Address Filtering Function List
+GetIPAddressFilter                     Device              M
+SetIPAddressFilter                     Device              M
+AddIPAddressFilter                     Device              M
+RemoveIPAddressFilter                  Device              M
+
+
+1.4、Onvif Profile T
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+应用于高级视频流，具体来说：
+1）H.264 / H.265 video compression
+2）Imaging settings
+3）Motion alarm and tampering events
+4）Metadata streaming
+5）Bi-directional audio
+
+	Profile T is designed for IP-based video systems. Profile T supports video 
+streaming features such as the use of H.264 and H.265 encoding formats, imaging 
+settings, and alarm events such as motion and tampering detection. Mandatory 
+features for devices also include onscreen display and metadata streaming, while 
+mandatory features for clients also include PTZ control. Profile T also covers 
+ONVIF specifications for HTTPS streaming, PTZ configuration, motion region 
+configuration, digital inputs and relay outputs, and bidirectional audio for 
+conformant devices and clients that support such features.
+
+1.5、Onvif Profile C
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+用于门禁控制和事件管理(For door control and event management)，具体来说：
+1）Site information and configuration
+2）Event and alarm management
+3）Door access control
+
+	Profile C is for products used in an electronic access control system. 
+Profile C conformant devices and clients support site information, door access 
+control, and event and alarm management.
+
+	ONVIF Profile C系统整合商、服务供货商和顾问们能够实现客户端和门禁控制系统
+(PACS)设备以及网络视频系统之间的互操作性。新标准提高了门禁控制前端设备和终端之间
+的兼容性，同时也简化了安装程序。由于不再需要用于处理不同PACS设备的多个专监控设备，
+所需的训练时间也能大幅减少。作为网络门禁控制系统的一部分，Profile C 兼容设备能够
+提供系统中门禁和进入点的相关信息。Profile C 兼容的软件客户端能够对门禁和进入点状
+况（如开锁，进门）进行监控和报警及其它类似功能。Profile C 兼容的软件客户端还可提
+供基本的门禁控制功能，如进入以及门的上锁/开锁。
+
+
+1.6、Onvif Profile A
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+用于接入(访问)控制配置(For access control configuration)，具体来说：
+1）Granting/revoking credentials
+2）Creating schedules
+3）Assigning access rules
+
+	Profile A is for products used in an electronic access control system. A 
+Profile A conformant device can retrieve information, status and events, and 
+configure entities such as access rules, credentials and schedules. A Profile 
+A conformant client can provide configurations of access rules, credentials and 
+schedules. The client can also retrieve and receive standardized access 
+control-related events.
+
+	ONVIF Profile A涵盖了常见的例行门禁控制功能，适用于负责授予和撤销员工凭证、
+创建和更新计划表，以及对系统内门禁控制权限进行更改的安保人员、接待员或人力资源专
+员等用户。强化用户端的功能性和系统管理功能，从而实现门禁控制市场的互联互通

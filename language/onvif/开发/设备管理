@@ -1,0 +1,12 @@
+1、Capabilities(能力)
+
+1.1、get wsdl url
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+命令：
+	GetWsdlUrl
+
+返回：
+	海康就返回“http://www.onvif.org”
+
+1.2、能力交换
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

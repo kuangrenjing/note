@@ -492,7 +492,7 @@ ubuntu虚拟机上需要做的工作：
 新版的ubuntu已使用rpcbind代替portmap
 新版的ubuntu也不用initd而是使用systemd
 
-1、安装nfs服务
+21.1、安装nfs服务
 	apt-get install nfs-kernel-server
 	apt-get install portmap
 	apt-get install nfs-common
@@ -503,10 +503,18 @@ journalctl -xe查看错误消息
 Ubuntu 17.10 之后 nfs 默认就只支持协议3和协议4，但是嵌入式板子 uboot 默认启动的是协议2，若想要求主机 nfs 支持协议2，就得：
 #gedit /etc/default/nfs-kernel-server
 
-2、修改配置文件/etc/exports，内容如下：
+21.2、修改配置文件/etc/exports，内容如下：
 /home *(rw,sync,no_root_squash)
 
-22、字体库相关
+21.3、挂载
+mount -t nfs -o nolock 192.168.15.128:/home/mqs/nfs /mnt/nfs
+
+export LD_LIBRARY_PATH=/mnt/nfs/Hi3516A_PQ_V1.0.5.0/Hi3516A_PQ_V1.0.5.0/libs:/mnt/nfs/web/lib:$LD_LIBRARY_PATH
+
+
+21.4、错误分析
+
+22、字体、图形库相关
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 参考文献：
 https://blog.csdn.net/u011011827/article/details/58709139
@@ -525,7 +533,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://download.savannah.gnu.org/releases/freetype/
 
 22.1.1、配置
-./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-isiv300-linux-gcc CXX=arm-hisiv300-linux-g++
 
 22.1.2、编译
 make
@@ -560,6 +568,9 @@ make
 
 22.3.3.安装
 
+22.4、SDL_draw库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
 23、其它库
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 23.1、json
@@ -584,6 +595,15 @@ base64_stream_encode_init -> codec_choose
 https://www.sohu.com/a/105812781_119709
 make lib/libbase64.o CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++ LD=arm-hisiv300-linux-ld OBJCOPY=arm-hisiv300-linux-objcopy NEON32_CFLAGS="-mcpu=cortex-a7 -mfpu=neon"
 
+23.3 libuuid
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+地址：
+https://sourceforge.net/projects/libuuid/
 
+说明：
+计算uuid，把uuid转化为字符形式
+
+编译：
+./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
 
 

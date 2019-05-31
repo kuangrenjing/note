@@ -1,0 +1,8 @@
+1、相关文献：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+onvif-core-specification第7章节
+
+客户端使用“dynamic web services discovery portocol[WS-Discovery]”协议发现设备。
+onvif对[WS-Discovery]进行了若干修改。
+
+ONVIF设备需在<d:Types>元素中引入device management service port类型。

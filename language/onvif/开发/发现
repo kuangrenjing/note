@@ -28,3 +28,22 @@ https://blog.csdn.net/weixin_44362642/article/details/86750172
 		</Probe>
 	</Body>
 </Envelope>
+
+
+1、使用“Onvif Device Test Tool” probe开发板报错：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Unexpected error occurred:XML文档(2,1553)中有错误。
+
+	定位到文档的1553字符处，发现是：
+<SOAP-RPC:result xmlns:SOAP-RPC="http://www.w3.org/2003/05/soap-rpc">
+	-sizeProbeMatch
+</SOAP-RPC:result>
+这东西不是wsdd__ProbeMatchesType的成员。
+查找后发现是soap_out_wsdd__ProbeMatchesType函数引入的：
+soap_element_result(soap, "-sizeProbeMatch");
+把这句注释掉即可。
+
+代码生成时为什么会有这句还需再研究。
+
+
+

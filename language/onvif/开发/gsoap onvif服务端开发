@@ -26,6 +26,39 @@ https://blog.csdn.net/weixin_44362642/article/details/86750172
 
 
 
-3、实战
+2、实战
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 结合https://blog.csdn.net/qq_18854309/article/details/76737948与typemap.dat看
+
+
+3、获取Hi3516A的IP与MAC
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、参考
+https://blog.51cto.com/sining/1946792
+https://blog.csdn.net/u012459903/article/details/81432855
+
+方法1：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	有一种可移植的方法，适用于包括windows、linux等大部分操作系统，这种方法就是
+使用通用API，像gethostname、gethostbyname。
+
+	先获取本机的hostname，然后去本地的相关文件查看本地是否有映射记录(譬如127.0.0.1
+映射为localhost)，如果没有，则去访问DNS服务器，获取返回地址，从而获取到IP。
+
+	这种方法在Linux上使用比较繁琐，需先设置hostname、DNS等。
+
+方法2
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	使用ioctl函数配合SIOCGIFADDR、SIOCGIFHWADDR标志获取IP、MAC，此方法比较好用，
+在我们的onvif服务端开发中使用该方法。
+
+4、生成uuid
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	使用libuuid1.0.3库
+
+参考：
+	https://www.cnblogs.com/oloroso/p/4633744.html
+
+
+
+

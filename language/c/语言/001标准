@@ -1,0 +1,12 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	C语言发展之初，并没有所谓的C标准。1978年，Brian Kernighan和Dennis Ritchie合
+著的《The C Programming Language》第一版是公认的C标准，通常称为K&R C或经典C。此
+书附录中的“C语言参考手册”相当于定义了C语言，但这本书没有定义标准库。实际上，由于
+缺乏官方标准，UNIX实现提供的库已称为了标准库。
+
+	ANSI于1989年发布C89，定义了C语言和C标准库。ISO于1990年发布C90，C89与C90可以
+认为是完全一样的，有时也称为C89/C90。
+
+	1994年，ANSI/ISO联合委员会(C9X委员会)开始修订C标准，最终发布了C99标准。
+
+	标准委员会在2007年陈诺C标准的下一个版本是C1X，2011年终于发布了C11标准。

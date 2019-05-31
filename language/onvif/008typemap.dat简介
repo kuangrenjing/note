@@ -111,3 +111,27 @@ struct tt__ActionEngineEventPayload
 /// Element "RequestInfo" of type SOAP-ENV:Envelope.
     int                                  RequestInfo                    0;	///< Optional element.
 };
+
+
+3、命名空间绑定语法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	譬如：
+	tds     = "http://www.onvif.org/ver10/device/wsdl"
+这样，不管http://www.onvif.org/ver10/device/wsdl命名空间在wsdl文件中使用的是什么
+简写，在wsdl2h工具生成的头文件中http://www.onvif.org/ver10/device/wsdl的类型都是
+使用tds前缀。
+
+
+4、命名空间头文件导入语法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	有些命名空间的头文件gsoap已经为我们准备好，不需要使用wsdl2h工具生成，这时可
+以使用“命名空间头文件导入语法”，譬如：
+	wsdd10  = <http://schemas.xmlsoap.org/ws/2005/04/discovery>
+注意，使用的是尖括号而不是引号。这样，如果在其它wsdl文件中使用了http://schemas.xmlsoap.org/ws/2005/04/discovery
+中的变量，则wsdl2h生成的头文件中会出现：
+	#import "wsdd10.h"
+语句。
+
+
+5、我所定制的typemap.dat文件
+line218：取消注释

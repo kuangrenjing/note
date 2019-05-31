@@ -1,0 +1,13 @@
+上周总结
+	onvif简单服务器（代码）
+	https://jansonn/svn/DFS_03_jianrongxing_uncooled_640/software/V1/trunk/ipc_save_src
+
+	视觉液位仪第一阶段出货限定使用场景测试1（文档 补充上周的文档，本周未进行）
+	https://jansonn/svn/DFS_03_jianrongxing_uncooled_640/software/V1/doc/%E6%AF%8F%E5%91%A8%E4%BB%BB%E5%8A%A1%E8%AE%A1%E5%88%92/%E9%A9%AC%E5%85%A8%E8%83%9C/2019%E7%AC%AC21%E5%91%A8/%E6%B6%B2%E4%BD%8D%E4%BB%AA%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%E5%AE%9A%E7%89%88%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%951.rtf
+
+	RS-485 modbus组网偶发性乱码问题排查（文档待补充）
+
+
+本周计划
+	视觉液位仪第一阶段出货限定使用场景测试2（横坐标标定测试）
+	通用IPC需实现及Onvif实现功能整理（文档）

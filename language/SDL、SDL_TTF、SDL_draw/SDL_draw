@@ -1,0 +1,26 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SDL_draw is a basic primitive drawing library based on SDL (Simple 
+DirectMedia Layer). You have functions to draw basic elements, like points, lines 
+and circles, on SDL surfaces.
+
+	SDL_Draw是一个基于SDL(简单DirectMedia层)的基本原语绘图库。您可以在SDL曲面上
+绘制基本元素，如点、线和圆。
+
+2、SDL_draw编程技巧
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+SDL_draw提供了以下11种绘图原语：
+	Draw_Pixel
+	Draw_Line
+	Draw_Circle
+	Draw_FillCircle
+	Draw_HLine
+	Draw_VLine
+	Draw_Rect
+	Draw_Ellipse
+	Draw_FillEllipse
+	Draw_Round
+	Draw_FillRound
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+这11种原语都定义为函数指针，此函数指针被两次赋值，第一次赋值的函数进行系统像素
+深度检测，然后根据像素深度赋值相应的操作函数(第二次赋值)并调用函数指针。

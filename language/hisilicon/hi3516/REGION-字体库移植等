@@ -12,3 +12,58 @@ http://bbs.ebaina.com/forum.php?mod=viewthread&tid=10385&fromuid=12370  控制�
 http://sdl.beuc.net/sdl.wiki/SDL_ttf
 
 https://blog.csdn.net/qq_26671365/article/details/79007066    颜色问题
+
+1、OSD与REGION
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	OSD(On Screen Display)：在视频上叠加的一些信息，如通道号、时间戳、图形等
+	REGION = OSD + 纯色块
+
+2、Hi3516的REGION类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Overlay：用于OSD
+	Cover：用于纯色块遮挡
+	OverlayEx：当Overlay数目不够用时使用
+	CoverEx：当Cover数目不够时使用
+
+3、一些概念
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、QP
+	量化参数(Quantizer Parameter)，反映了空间细节压缩情况。值越小，量化越精细，
+图像质量越高，产生的码流也越长。如QP小，大部分的细节都会被保留；QP增大，一些细节
+丢失，码率降低，但图像失真加强和质量下降。
+
+
+4、MPP的一些类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、RGN_ATTR_S
+
+
+4.2、RGN_CHN_ATTR_S
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef struct hiRGN_CHN_ATTR_S
+{
+	HI_BOOL bShow;                //是否显示，动态类型
+	RGN_TYPE_E enType;            //四种region中的一种
+	RGN_CHN_ATTR_U unChnAttr;     //四种region组成的union，根据enType配置相应的region
+}RGN_CHN_ATTR_S;
+
+typedef union hiRGN_CHN_ATTR_U
+{
+	OVERLAY_CHN_ATTR_S stOverlayChn;
+	COVER_CHN_ATTR_S stcoverChn;
+	COVEREX_CHN_ATTR_S stcoverExChn;
+	OVERLAYEX_CHN_ATTR_S stOverlayEXChn;
+}RGN_CHN_ATTR_U;
+
+typedef struct hiOVERLAY_CHN_ATTR_S
+{
+	POINT_S stPoint;       //REGION显示的左上角坐标
+	HI_U32 u32FgAlpha;     //前景透明度(0~128)
+	HI_U32 u32BgAlpha;     //后景透明度(0~128)
+	HI_U32 u32Layer;       //显示层级(级别大的叠加在小的上面)
+	OVERLAY_QP_INFO_S stQpInfo;  //量化质量信息
+	OVERLAY_INVERT_COLOR_S stInvertColor;  //颜色反转
+}OVERLAY_CHN_ATTR_S;
+
+
+PIXEL_FORMAT_RGB_1555第一bit位是Alpha位
