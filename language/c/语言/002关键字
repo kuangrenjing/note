@@ -14,3 +14,56 @@ C语言规定
 
 
 https://zh.cppreference.com/w/c/keyword
+
+
+C89/C90关键字（32个）：
+	auto
+	break
+	case
+	char
+	const
+	continue
+	default
+	do
+	double
+	else
+	enum
+	extern
+	float
+	for
+	goto
+	if
+	int
+	long
+	register
+	return
+	short
+	signed
+	sizeof
+	static
+	struct
+	switch
+	typedef
+	union
+	unsigned
+	void
+	volatile
+	while
+
+C99新增关键字（5个）：
+	inline
+	restrict
+	_Bool
+	_Complex
+	_Imaginary
+
+
+
+C11新增关键字（7个）：
+	_Alignas
+	_Alignof
+	_Atomic
+	_Generic
+	_Noreturn
+	_Static_assert
+	_Thread_local
