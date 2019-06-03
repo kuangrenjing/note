@@ -1,0 +1,17 @@
+总的来说 以SSD跑Win10 想顺畅就要完成如下要件
+
+1. NET Runtime Optimization Service 令其加速完成作业
+
+2. Windows Search 关闭
+
+3. Superfetch 关闭
+
+4. SSD 去除 File Indexed 多余没必要
+
+5.计划任务
+Microsoft->Windows->Application Experience->Microsoft Compatibility Appraiser  关闭
+
+6. 跑dfrgui 指令 SSD的Trim修整
+
+
+7. SSD Refresh  下载免费SSD优化工具跑一次

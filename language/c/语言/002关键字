@@ -17,9 +17,9 @@ https://zh.cppreference.com/w/c/keyword
 
 
 C89/C90关键字（32个）：
-	auto
-	break
-	case
+	001、auto
+	002、break
+	003、case
 	char
 	const
 	continue
@@ -67,3 +67,18 @@ C11新增关键字（7个）：
 	_Noreturn
 	_Static_assert
 	_Thread_local
+
+
+001、auto
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+c中的每一个变量和函数都有两个属性:类型(type)和存储类型(storage class).存储类型分别是auto(自动),extern(外部),register(寄存器),static(静态) 
+
+https://blog.csdn.net/hushpe/article/details/45396059
+
+
+002、extern
+
+
+003、static
+
+004、register

@@ -32,3 +32,28 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	SuperFetch是Windows Vista中引入的一项功能。它静静地置于后台，不断分析RAM使用模式，
 并了解您最常运行的应用程序类型。随着时间的推移，SuperFetch将这些应用程序标记为“经常使用”，
 并提前将它们预加载到RAM中。
+
+
+4、Win10家庭版找不到组策略gpedit.msc怎么办
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Win10有很多版本，其中家庭版默认是不提供组策略功能，如果需要给win10的家庭版添加组策
+略的功能，可以参考以下内容
+
+	本身win10家庭版本不提供组策略编辑器功能。这个不提供不是说没有此功能，而是对此功能进
+行了限制，具体可以继续参考下面的开启方法。
+
+	新建一个.bat文件，填入：
+
+@echo off
+pushd "%~dp0"
+echo "haha"
+dir /b C:\Windows\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum > gp.txt
+echo "haha1"
+dir /b C:\Windows\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >> gp.txt
+echo "haha2"
+for /f %%i in ('findstr /i . gp.txt 2^> nul')do dism /online /norestart /add-package:"%systemroot%\servicing"\Packages\%%i"
+pause
+
+以管理员身份打开CMD，运行这个.bat文件即可。
+
+现在运行“gpedit.msc”即可打开策略管理
