@@ -20,53 +20,53 @@ C89/C90关键字（32个）：
 	001、auto
 	002、break
 	003、case
-	char
-	const
-	continue
-	default
-	do
-	double
-	else
-	enum
-	extern
-	float
-	for
-	goto
-	if
-	int
-	long
-	register
-	return
-	short
-	signed
-	sizeof
-	static
-	struct
-	switch
-	typedef
-	union
-	unsigned
-	void
-	volatile
-	while
+	004、char
+	005、const
+	006、continue
+	007、default
+	008、do
+	009、double
+	010、else
+	011、enum
+	012、extern
+	013、float
+	014、for
+	015、goto
+	016、if
+	017、int
+	018、long
+	019、register
+	020、return
+	021、short
+	022、signed
+	023、sizeof
+	024、static
+	025、struct
+	026、switch
+	027、typedef
+	028、union
+	029、unsigned
+	030、void
+	031、volatile
+	032、while
 
 C99新增关键字（5个）：
-	inline
-	restrict
-	_Bool
-	_Complex
-	_Imaginary
+	033、inline
+	034、restrict
+	035、_Bool
+	036、_Complex
+	037、_Imaginary
 
 
 
 C11新增关键字（7个）：
-	_Alignas
-	_Alignof
-	_Atomic
-	_Generic
-	_Noreturn
-	_Static_assert
-	_Thread_local
+	038、_Alignas
+	039、_Alignof
+	040、_Atomic
+	041、_Generic
+	042、_Noreturn
+	043、_Static_assert
+	044、_Thread_local
 
 
 001、auto

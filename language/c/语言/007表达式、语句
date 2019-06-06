@@ -1,0 +1,23 @@
+1、表达式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	表达式(expression)由运算符(operator)和操作数(operand)组成。最简单的表达式
+就是一个单独的操作数，依次为基础可以建立复杂的表达式。
+
+【注1】
+	operand一般翻译为“操作数”，但在《C Primer Plus》一书中翻译为“运算对象”。
+
+	每个表达式都有一个值（这是C语言表达式的一个最重要的特征）。表达式的值要根据
+结合律和优先级确定。
+
+2、语句
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	语句(statement)是C程序的基本构建块。表达式加上分号就是语句，一条语句相当于
+一条完整的计算机指令(很不恰当)。
+
+【注1】
+	根据C标准，声明行不是语句（至少不是表达式语句）。这与C++有所不同。
+
+
+3、类型转换
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	见《数据类型》中相应部分。

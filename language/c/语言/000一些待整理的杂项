@@ -1,0 +1,13 @@
+https://www.cnblogs.com/alantu2018/p/8496689.html
+
+1、C编译器优化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、利用“未定义行为(undefined behavior)”进行代码优化。
+	C编译器总是假设编程者已经考虑了避开“未定义行为”而进行优化。譬如一个判断语句
+在不出现“未定义行为”的情况下恒假，那这个判断块就被编译器优化掉了，假如你写的这个
+判断块就是为了判断是否会出现“未定义行为”，那就跪了。
+
+	有人认为编译器的这项优化准则是个bug，确实有些编译器已经抛弃了这项准则。
+
+
+https://blog.csdn.net/monkey07118124/article/details/50588336

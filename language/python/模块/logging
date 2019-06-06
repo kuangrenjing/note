@@ -1,0 +1,56 @@
+1、logging模块简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	logging模块是Python内置的标准模块，主要用于输出运行日志，可以设置输出日志的
+等级、日志保存路径、日志文件回滚等；相比print，具备如下优点：
+	可以通过设置不同的日志等级，在release版本中只输出重要信息，而不必显示大量的
+调试信息；
+	print将所有信息都输出到标准输出中，严重影响开发者从标准输出中查看其它数据；
+logging则可以由开发者决定将信息输出到什么地方，以及怎么输出；
+
+2、logging基本用法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	配置logging基本的设置，然后在控制台输出日志:
+
+import logging
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+logger.info("Start print log")
+logger.debug("Do something")
+logger.warning("Something maybe fail.")
+logger.info("Finish")
+
+3、将日志写入到文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	设置logging，创建一个FileHandler，并对输出消息的格式进行设置，将其添加到
+logger，然后将日志写入到指定的文件中:
+
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(level = logging.INFO)
+handler = logging.FileHandler("log.txt")
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+logger.info("Start print log")
+logger.debug("Do something")
+logger.warning("Something maybe fail.")
+logger.info("Finish")
+
+
+4、日志文件一天换一个
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+import logging
+from logging.handlers import TimedRotatingFileHandler
+
+log = logging.getLogger()
+file_name = "./test.log"
+logformatter = logging.Formatter('[%(asctime)s-%(levelname)s]%(message)s')
+loghandle = TimedRotatingFileHandler(file_name, 'midnight', 1, 2)
+loghandle.setFormatter(logformatter)
+loghandle.suffix = '%Y%m%d'
+log.addHandler(loghandle)
+log.setLevel(logging.DEBUG)
+log.debug("init successful")

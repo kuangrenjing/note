@@ -1,0 +1,131 @@
+1、变量与常量
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	有些数据在程序使用之前已经预先设定好了，在整个程序的运行过程中没有变化，这些
+称为常量（constant）。其它数据在程序运行期间可能会改变或被赋值，这些称为变量（
+variable）。
+
+2、数据类型关键字
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+最初K&R给出的关键字             C90标准添加的关键字         C99标准添加的关键字
+ int                             signed                      _Bool
+ long                            void                        _Complex
+ short                                                       _Imaginary
+ unsigned
+ char
+ float
+ double
+
+【注1】
+	signed关键字是C90标准加入的，但signed是个可有可无的关键字，新标准加入一个可
+有可无的关键字是什么意图？
+
+【注2】
+	long这个关键字虽然一开始就有，但long long这种用法却是从C99标准才开始有的。
+
+【注3】
+
+
+
+
+3、C语言基本数据类型-整形
+具体类型：
+	[signed] int
+	[signed] short int([signed] short)
+	[signed] long int([signed] long)
+	[signed] long long int([signed] long long C99加入)
+	unsigned int(unsigned)
+	unsigned short int(unsigned short C90加入)
+	unsigned long int(unsigned long C90加入)
+	unsigned long long int(unsigned long long C99加入)
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+规定：
+	C语言只规定了“short占用的存储空间不能多于int，long占用的存储空间不能少于int”。
+
+	C标准只规定：
+		unsigned short和unsigned int的最小取值范围为[0, 65535](16bits)
+		unsigned long的最小取值范围是[0, 4294967295](32bits)
+
+实施：
+	现在，个人PC上最常见的设置如下：
+		long long 64bits
+		long 32bits
+		short 16bits
+		int 16或32bits
+
+
+4、C语言基本数据类型-字符型
+
+
+5、C语言基本数据类型-浮点型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+具体类型：
+	在数学里通常采用“科学计数法”来表示数字，C语言也支持类似的方法，称为浮点数。
+C语言支持的浮点数类型有float、double和long double类型。
+
+规定：
+	C语言规定，float类型必须至少能表示6位有效数字，且取值范围至少是e-37~e37。
+	C语言规定，double类型至少必须能表示10位有效数字，且取值范围至少是e-37~e37。
+	C语言规定，long double类型至少与double类型的精度相同。
+
+字面量/常量表示法
+	基本表示法：有符号的小数，跟着e/E，再跟着有符号整数(三者之间不能有空格)，譬如：
+		-1.56E+12
+		+2.87e-3
+
+	变体：
+		符号如果是正号可以省略；
+		可以没有小数(-1E12)点或指数(-1.56)部分，但不能同时省略两者；
+		可以省略小数部分(2.e-3)或整数部分(.87e-3)，但不能同时省略两者(好像是句屁话，
+	.e-3谁会认为是正确的？)；
+
+	一些正确的表示方法：
+		100.
+		.8E-5
+
+	默认情况下，编译器假定浮点型常量是double类型的精度。在浮点数字面量后面加一些
+后缀可以覆盖默认设置：加上f或F，编译器会将其视为float类型；加上l或L（建议使用L，
+l容易和1混淆），编译器会将其视为long float类型。
+
+	C99标准添加了一种新的浮点型常量格式：0x/0X，跟着有符号16进制小数，再跟着p/P
+(代表幂底为2)，再跟着有符号10进制数(四者之间不能有空格)，譬如0xa.1fp10代表：
+(10 + 1/16 + 15/256)*1024 = 10364.0(并非所有编译器都支持此C99特性)
+
+实施：
+	语言只规定了最低精度和最小表示范围，并没有规定诸如各浮点数类型占多少bits，其中
+多少bits用于表示非指数部分，多少bits用于表示指数部分。为了尽可能地统一实现，电子和
+电气工程师协会(IEEE)为浮点数计算和表示法开发了一套标准，这套标准的最新命名是ISO/IEC
+/IEEE 60559:2011，目前主流的硬件浮点单元都采用该标准，其上的C99和C11编译器应开启支
+持。C99规定，如果浮点数实现符合ISO/IEC/IEEEE 60559，定义__STDC_IEC_559__=1，
+否则__STDC_IEC_559__未定义。
+
+	IEEE 60559采用excess系统表示浮点数，这种系统在进制转换上有优势（10进制->16进制）
+但不适合用来做计算。
+
+	IEEE 60559规定单精度浮点数float有1bit符号位，8bits指数位，23bits尾数位；双精度浮
+点数有1bit符号位，11bits指数位，52bits尾数位；
+
+转换说明/占位符
+printf、scanf等函数的转换说明：
+	%f 代表10进制的float和double类型浮点数；
+	%e 代表指数计数法的浮点数；
+	%a 代表16进制的float和double类型浮点数；
+	%Lf %Le %La代表long double的各类型；
+
+浮点值的上溢和下溢
+
+
+
+
+
+
+7、关于溢出问题的一些疑惑
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+8、整型溢出与编译器优化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
