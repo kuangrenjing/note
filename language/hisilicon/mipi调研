@@ -1,0 +1,13 @@
+https://blog.51cto.com/shugenyin/1856930
+https://blog.csdn.net/cc88ke/article/details/86185678
+
+
+CSI-2 协议中发送端有像素打包，接收端要解包， RAW，RGB ，YUV 解包都是在IC 层级实现的，海思可能简化了，IC 中都只有 RAW8, RAW10 等解包，其他不支持。你看下SDk 的 MIPI  CSI-2的文档
+但LVDS 说的不是很明了
+
+
+https://blog.csdn.net/u010783226/article/details/84565097
+https://blog.csdn.net/anpingbo/article/details/85057615
+https://blog.csdn.net/shanghaiqianlun/article/details/54407401
+https://blog.csdn.net/g_salamander/article/details/9163455
+https://blog.csdn.net/u011652362/article/details/81741134
