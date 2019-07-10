@@ -1,0 +1,35 @@
+https://blog.csdn.net/navydianzi/article/details/17403503
+https://www.cnblogs.com/watson/p/3788257.html   YUV格式
+
+
+ITU-RBT.656视频标准接口
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ITU-RBT.656视频标准接口PAL制式（720*576）每场由四部分组成。
+	有效视频数据，分为奇场和偶场，均由288行组成。每行有1440个字节，其中720个字节
+为Y分量，360个字节为Cb分量，360个字节为Cr分量。Y分量的取值为16~235；Cb和Cr分量的
+取值为16~240。
+	水平消隐，有280个字节。
+	垂直消隐。
+	控制字。
+
+	对于有效数据行，其格式如图1所示。EAV和SAV为嵌入式控制字，分别表示有效视频的
+终点和起点。EAV和SAV均为4个字节构成，前3个字节FF、00、00为固定头，“XY”为控制字。
+“XY”的8个bit含义如下：
+	Bit7（Const），常数。(海思通过BT656_FIXCODE_E设置)
+	Bit6（F），场同步信号，表示该行数据处于奇场还是偶场。(海思通过BT656_FIELD_POLAR_E设置)
+	Bit5（V），垂直同步信号，表示处于场消隐区间还是正程区间（有效数据行）。
+	Bit4（H），水平同步信号，表示是“SAV”还是“EAV”。
+	Bit3-0（P3P2P1P0），纠错位。P3=V(XOR)H；P2=F(XOR)H；P1=F(XOR)V；P0=F(XOR)V(XOR)H。
+
+
+
+两场图像在拍摄时候是有前后的，先偶场，再奇场，如果物体在运动，奇场数据和偶场数据在运动物体上有有较大的差别，如果直接把奇场和偶场的数据合并起来，就会出现你拍摄照片下的问题。这是任何隔行数据到逐行显示都会出现的问题。
+
+
+
+https://e2echina.ti.com/question_answer/dsp_arm/davinci_digital_media_processors/f/39/t/111319
+
+Hi3516A/D不支持去交织 
+
+DEI De-interlace，去隔行。将交错的隔行视频源还原成逐行视频源

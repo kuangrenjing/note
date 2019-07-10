@@ -1,0 +1,146 @@
+0、要点
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	MIPI Rx是否bypass
+	BT656使用的数据线脚编号
+
+1、在hi_common.h中增加一行：
+	#define SENSOR_TYPE  SAMPLE_VI_MODE_BT656_576I
+
+
+2、SAMPLE_VI_MODE_BT656_576I
+	sample_comm.h文件SAMPLE_VI_MODE_E枚举变量增加SAMPLE_VI_MODE_BT656_576I。
+
+3、MIPI_BT656_ATTR
+	sample_comm_vi.c有combo_dev_attr_t类型MIPI_BT1120_ATTR变量，
+input_mode设为INPUT_MODE_BT1120。mipi驱动是海思提供的，那改成BT656的时候是沿用
+INPUT_MODE_BT1120还是使用INPUT_MODE_BYPASS呢，调试的时候注意看。这个量应该是写到
+MIPI Rx的控制寄存器中去的。
+
+	在sample_comm_vi.c文件MIPI_BT1120_ATTR变量后增加MIPI_BT656_ATTR变量，input_mode
+设置为INPUT_MODE_BYPASS。
+
+4、在sample_common_vi.c中增加VI_DEV_ATTR_EX_S DEV_ATTR_EX_BT656_576I_1MUX变量
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+VI_DEV_ATTR_EX_S DEV_ATTR_EX_BT656_576I_1MUX =
+{
+    /* interface mode VI_INPUT_MODE_E*/
+    VI_MODE_BT656,
+    /* multiplex mode VI_WORK_MODE_E*/
+    VI_WORK_MODE_1Multiplex,
+    /*VI_COMBINE_MODE_E */
+    VI_COMBINE_COMPOSITE,
+    /*VI_COMP_MODE_E */
+    VI_COMP_MODE_SINGLE,
+    /*VI_CLK_EDGE_E*/
+    VI_CLK_EDGE_SINGLE_UP,
+    /* r_mask    g_mask    b_mask  au32CompMask[2]*/
+    {0xFF000000,    0x00},
+    /* progessive or interleaving */
+    VI_SCAN_INTERLACED,
+    /*AdChnId s32AdChnId[4]*/
+    { -1, -1, -1, -1},
+    /*enDataSeq, only support yuv*/
+    VI_INPUT_DATA_UVUV,
+    /* synchronization information */
+    {
+        /*port_vsync   port_vsync_neg     port_hsync        port_hsync_neg        */
+        VI_VSYNC_PULSE, VI_VSYNC_NEG_HIGH, VI_HSYNC_VALID_SINGNAL, VI_HSYNC_NEG_HIGH, VI_VSYNC_NORM_PULSE, VI_VSYNC_VALID_NEG_HIGH,
+
+        /*hsync_hfb    hsync_act    hsync_hhb*/
+        {
+            0,            0,        0,
+            /*vsync0_vhb vsync0_act vsync0_hhb*/
+            0,            0,        0,
+            /*vsync1_vhb vsync1_act vsync1_hhb*/
+            0,            0,            0
+        }
+    },
+    /*VI_BT656_SYNC_CFG_S stBT656SynCfg*/
+    {
+        BT656_FIXCODE_1,
+        BT656_FIELD_POLAR_STD,
+    },
+    /* ISP bypass */
+    VI_PATH_BYPASS,
+    /* input data type */
+    VI_DATA_TYPE_YUV,
+    /* bReverse */
+    HI_FALSE,
+    /* DEV CROP */
+    {0, 0, 1920, 1080}
+}
+
+5、改写dfs_mpp.c中gs_enNorm和g_sViConfig变量
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+121、HI_BOOL IsSensorInput(SAMPLE_VI_MODE_E enViMode)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	改写IsSensorInput函数，增加SAMPLE_VI_MODE_BT656_576I情形时输出false。
+
+123、HI_S32 SAMPLE_COMM_VI_StartVi(SAMPLE_VI_CONFIG_S* pstViConfig) 最顶
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+使用IsSensorInput判断输入模式是不是摄像头模式，如不是，调用：
+	SAMPLE_COMM_VI_StartBT656
+如是，调用：
+	SAMPLE_COMM_VI_StartIspAndVi
+
+typedef struct sample_vi_config_s
+{
+    SAMPLE_VI_MODE_E enViMode;
+    VIDEO_NORM_E enNorm;           /*DC: VIDEO_ENCODING_MODE_AUTO */
+    ROTATE_E enRotate;
+    SAMPLE_VI_CHN_SET_E enViChnSet;
+    WDR_MODE_E  enWDRMode;
+} SAMPLE_VI_CONFIG_S;
+
+typedef enum sample_vi_mode_e
+{
+    APTINA_AR0130_DC_720P_30FPS = 0,
+    APTINA_9M034_DC_720P_30FPS,
+    SAMPLE_VI_MODE_1_D1,
+    SAMPLE_VI_MODE_BT1120_1080I,
+    SAMPLE_VI_MODE_BT1120_720P,
+    SAMPLE_VI_MODE_BT1120_1080P,
+    SAMPLE_VI_MODE_BT656_576I,
+    PANASONIC_MN34220_SUBLVDS_1080P_30FPS,
+    PANASONIC_MN34220_SUBLVDS_720P_120FPS,
+    SONY_IMX178_LVDS_1080P_30FPS,
+    SONY_IMX185_MIPI_1080P_30FPS,
+    PANASONIC_MN34220_MIPI_1080P_30FPS,
+    PANASONIC_MN34220_MIPI_720P_120FPS,
+    SONY_IMX178_LVDS_5M_30FPS,
+    SONY_IMX117_LVDS_1080P_30FPS,
+    SONY_IMX117_LVDS_720P_30FPS,
+    SONY_IMX123_LVDS_QXGA_30FPS,
+    APTINA_AR0230_HISPI_1080P_30FPS,
+    APTINA_AR0237_HISPI_1080P_30FPS,
+    APTINA_AR0330_MIPI_1080P_30FPS,
+    APTINA_AR0330_MIPI_1536P_25FPS,
+    APTINA_AR0330_MIPI_1296P_25FPS,
+    OMNIVISION_OV4689_MIPI_4M_30FPS,
+    OMNIVISION_OV4689_MIPI_1080P_30FPS,
+    OMNIVISION_OV5658_MIPI_5M_30FPS,
+	APTINA_MT9P006_DC_1080P_30FPS,
+	SONY_IMX122_DC_1080P_30FPS,
+} SAMPLE_VI_MODE_E;
+
+
+124、HI_S32 SAMPLE_COMM_VI_StartBT656(SAMPLE_VI_CONFIG_S* pstViConfig)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+第一步：设置MIPI Rx驱动
+	HI_S32 SAMPLE_COMM_VI_StartMIPI_BT1120(SAMPLE_VI_MODE_E enViMode);
+		ioctl("/dev/hi_mipi", HI_MIPI_SET_DEV_ATTR, pstcomboDevAttr)
+
+第二步：设置VI设备属性
+	HI_S32 SAMPLE_COMM_VI_StartDev(VI_DEV ViDev, SAMPLE_VI_MODE_E enViMode);
+		HI_MPI_VI_SetDevAttr
+		HI_MPI_ISP_GetWDRMode
+		HI_MPI_VI_SetWDRAttr  摄像头时
+		HI_MPI_VI_EnableDev
+
+第三步：设置VI通道属性
+	HI_S32 SAMPLE_COMM_VI_StartChn(VI_CHN ViChn, RECT_S* pstCapRect, SIZE_S* pstTarSize, SAMPLE_VI_CONFIG_S* pstViConfig);
+		HI_MPI_VI_SetChnAttr
+		HI_MPI_VI_SetRotate
+		HI_MPI_VI_EnableChn

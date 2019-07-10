@@ -1,0 +1,11 @@
+1、注释
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+注释一行
+	<!-- 在此处写注释 -->
+
+注释多行
+	<!--
+		<P></P>
+		<P></P>
+		<P></P>
+	-->

@@ -510,6 +510,7 @@ Ubuntu 17.10 之后 nfs 默认就只支持协议3和协议4，但是嵌入式板
 mount -t nfs -o nolock 192.168.15.128:/home/mqs/nfs /mnt/nfs
 
 export LD_LIBRARY_PATH=/mnt/nfs/Hi3516A_PQ_V1.0.5.0/Hi3516A_PQ_V1.0.5.0/libs:/mnt/nfs/web/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/mnt/nfs/Hi3516A_PQ_V1.0.7.0/libs:/mnt/nfs/web/lib:$LD_LIBRARY_PATH
 
 
 21.4、错误分析

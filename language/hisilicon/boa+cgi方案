@@ -1,0 +1,187 @@
+https://blog.csdn.net/zouwm12/article/details/80613241    init_cgi
+
+https://www.cnblogs.com/jobschu/archive/2013/02/25/2931973.html    html 到 cgi的一个简单实例
+
+
+
+https://blog.csdn.net/yyw794/article/details/73699276            如何让boa网页服务器支持HTTPS
+
+
+http://www.boa.org/已登录不了
+https://github.com/gpg/boa     是boa在github上的路径
+
+
+https://blog.csdn.net/xiaopangzi313/article/details/9156185   修改BOA的CGI策略
+
+
+https://www.cnblogs.com/hnrainll/archive/2011/06/01/2067295.html  CGI和BOA使用期间遇到的问题汇
+
+
+https://www.sojson.com/http/test.html   在线HTTP测试
+
+https://zhidao.baidu.com/question/278591448.html  directory listing
+
+
+https://blog.csdn.net/xygl2009/article/details/22046263   boa测试
+
+
+https://blog.csdn.net/sun_cainiao/article/details/79581567   CGI 1.1规范
+
+
+1、boa各种配置
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、configure
+
+1.2、命令行
+-c
+	设置server_root
+-d
+	设置do_fork变量
+-f
+	设置config_file_name变量
+-r
+-l
+	parse_debug() 设置debug_level 控制14个模块的调试信息输出
+-p(未在usage中说明)
+	设置override_server_port
+-L(未在usage中说明)
+	设置override_server_ip
+
+
+1.3、配置文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/qq_24341965/article/details/79756634
+
+2、boa调试等级
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+3、boa各种路径配置
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、server_root(-c)
+	配置文件不能指定这个参数，只能通过命令行参数-c指定
+
+3.2、DocumentRoot(document_root)
+	HTML文档的根目录
+
+3.3、error_log_name(ErrorLog)
+
+3.4、access_log_name(AccessLog)
+
+3.5、DirectoryMaker()
+
+3.6、DirectoryIndex
+
+
+4、调试信息配置
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	defines.h中debug_level按位控制14个模块的调试信息输出。
+
+	debug_level可以在命令行中通过-l选项改写。boa.conf不能配置debug_level。
+
+5、boa安全性
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/weixin_34000916/article/details/92049288
+	可能boa是通过root用户运行起来的，但在启动之后boa立即把自己更改到配置文件中
+User Group设置的用户和用户组上。
+
+6、/etc/mime.types解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+text/html                                       html htm shtml
+text/iuls                                       uls
+text/mathml                                     mml
+text/markdown                                   md markdown
+text/parityfec
+text/plain                                      asc txt text pot brf srt
+text/prs.lines.tag
+text/rfc822-headers
+text/richtext                                   rtx
+text/rtf
+text/scriptlet                                  sct wsc
+text/t140
+text/texmacs                                    tm
+text/tab-separated-values                       tsv
+text/turtle                                     ttl
+text/uri-list
+text/vcard
+前面是mine类型，后面是文件后缀
+
+
+7、boa轮询
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+boa.c中main函数直接进入select.c中的loop函数
+
+
+8、ready、block、free列表
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+9、使用到的一些系统API解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+9.1、exec
+	在父进程中fork一个子进程，在子进程中调用exec函数启动新的程序。exec函数一共
+有六个，其中execve为内核级系统调用，其他（execl，execle，execlp，execv，execvp）
+都是调用execve的库函数。
+
+9.2、pipe 和 dup2
+	https://www.cnblogs.com/Hxinguan/p/5007393.html
+	pipe(fd[2])后要使用fork才能连接两个进程，父子进程同时拥有fd[0] fd[1]文件描述
+符，fd[0]只能读，fd[1]只能写。
+
+10、使用到的一些系统信号量解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+SIGSEGV     无效的内存引用
+SIGBUS
+SIGTERM     终止信号
+SIGHUP      终端挂起或者控制进程终止
+SIGINT      键盘中断
+SIGPIPE     管道破裂: 写一个没有读端口的管道
+SIGCHLD     子进程结束信号
+SIGALRM     由alarm(2)发出的信号
+SIGUSR1
+SIGUSR2
+
+
+sighup      进程组使用的信号
+sigchld     在一个进程终止或者停止时，将SIGCHLD信号发送给其父进程
+sigalrm     SIGALRM是在定时器终止时发送给进程的信号
+sigterm     SIGTERM是不带参数时kill发送的信号
+
+
+11、request类型解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+global.h中定义了struct request类型。
+
+
+12、cgi
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	BOA支持NPH、CGI两种CGI类型（global.h enum CGI_TYPE）。
+
+	当NPH, gunzip时，不使用管道
+	使用CGI时，才使用管道
+
+	cgi_init函数说明：Called for GET/POST requests that refer to ScriptAlias
+ directories or application/x-httpd-cgi files. Ties stdout to socket,
+ stdin to data if POST, and execs CGI.
+ stderr remains tied to our log file; is this good?
+
+子进程：dup2(pipes[1], STDOUT_FILENO)
+        dup2(req->post_data_fd, STDIN_FILENO)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当是CGI的时候，cgi_init创建管道并fork子进程，父进程中关闭fd[1]，把fd[0]赋值
+给req->data_fd，即父进程只读管道。
+
+void loop(int server_s)
+	void process_requests(int server_sock)
+		int read_from_pipe(request * req)
+	int read_header(request * req)
+		int process_header_end(request * req)
+			int init_cgi(request * req)
+
+13、boa启动命令行
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+./boa -c /home/mqs/boa -l 65535
+
+
+
+cgic库
+https://boutell.com/cgic/#obtain

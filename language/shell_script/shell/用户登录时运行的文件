@@ -1,0 +1,28 @@
+
+
+/etc/profile
+/etc/bashrc
+/etc/bash.bashrc
+~/.profile
+.bashrc
+/usr/share/bash-completion/bash_completion
+
+
+
+login shell 和 no-login shell
+
+
+
+https://www.cnblogs.com/pigwan7/p/9593540.html
+4、登录shell和非登陆shell读取配置文件的区别
+
+    登录shell：/etc/profile -> (~/.bash_profile | ~/.bash_login | ~/.profile) ->（ ~/.bashrc -> /etc/bashrc） -> ~/.bash_logout
+        .profile(由Bourne Shell和Korn Shell使用)和.bash_login(由C Shell使用)两个文件是.bash_profile的同义词，目的是为了兼容其它Shell
+        .bash_profile中一般会执行.bashrc
+    交互式非登陆shell： ~/.bashrc  -> /etc/bashrc
+
+https://bbs.deepin.org/forum.php?mod=viewthread&tid=169585
+
+
+https://blog.csdn.net/yazhouren/article/details/78793367  终端是什么
+
