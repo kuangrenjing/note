@@ -34,5 +34,14 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 		repeat-y：在y方向重复
 		no-repeat：在xy方向都不平铺
 
+5、其它特性：
+5.1、继承
+	根据CSS，子元素从父元素继承属性。
+
+5.2、多重样式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	如果某些属性在不同的样式表中被同样的选择器定义，那么属性值将从更具体的样式
+表（优先级更高）中被继承过来。
+
 
 

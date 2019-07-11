@@ -1,0 +1,28 @@
+1、元素选择器（元素类型选择器）
+	元素标签名
+	譬如
+		p
+
+	应用后，文档中所有指定的标签元素都将使用此属性。
+
+2、派生选择器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过依据元素在其位置的上下文关系来定义样式，你可以使标记更加简洁。在CSS1中，
+通过这种方式来应用规则的选择器被称为上下文选择器(contextual selectors)，在CSS2中，
+它们称为派生选择器。
+
+
+3、类选择器
+	点号 + 类名
+	譬如
+		.important
+
+4、ID选择器
+	# + ID名
+	譬如
+		#intro
+
+5、后代选择器
+
+6、相邻兄弟选择器
+

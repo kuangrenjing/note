@@ -9,3 +9,18 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 		<P></P>
 		<P></P>
 	-->
+
+
+HTML和XHTML语言中，类和ID的值是区分大小写的。
+
+
+2、HTML字符集
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	万维网早期使用的字符集是ASCII；现代浏览器的默认字符集是ISO-8859-1；html5默认
+字符集是UTF-8。
+
+	如果要使用与默认字符集不同的字符集，需在meta标签中指定。
+
+3、HTML语言
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+使用html标签的lang属性。对搜索引擎和浏览器有帮助。
