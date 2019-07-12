@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+		<h1>window定时器使用</h1>
+
+		<p id="window_property"></p>
+
+		<button onclick="window.setTimeout(time_count, 10)">超时一次</button>
+		<button onclick="window.setInterval(time_count, 10)">等间隔超时</button>
+		<button onclick="window.clearTimeout(time_count)">停止计时</button>
+
+
+		<script>
+			var count = 0;
+			function time_count()
+			{
+				var txt = "";
+				count += 0.01;
+
+				txt = count + "s";
+
+				document.getElementById("window_property").innerHTML = txt;
+			}
+		</script>
+
+	</body>
+</html>

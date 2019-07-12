@@ -1,0 +1,157 @@
+1、javascript、DOM、BOM的关系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我们知道javascript是实现动态网页的关键，但javascript发挥威力需要浏览器接口的
+支持。
+
+BOM(Browser Object Model)是指浏览器对象模型，它使JavaScript有能力与浏览器进行“对话”。
+DOM(Document Object Model)是指文档对象模型，通过它，可以访问HTML文档的所有元素。
+
+	甚至可以认为DOM也是BOM的一部分，DOM的顶级对象document是BOM顶级对象window的子
+对象。
+
+
+2、BOM
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	BOM的顶级对象是window，它代表浏览器的窗口。
+
+	所有全局的javascript对象，函数和变量自动成为window对象的成员。全局变量是window
+对象的属性，全局函数是window对象的方法。
+
+	DOM的顶级对象document也是window对象属性。
+
+2.1、窗口(window)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	窗口就是浏览器的客户窗口（去掉各种栏的），可以缩放。窗口的主要属性是窗口宽高
+
+window.innerHeight - 浏览器窗口的内高度（以像素计）
+window.innerWidth - 浏览器窗口的内宽度（以像素计）
+
+其它还有一些函数：
+window.open() - 打开新窗口
+window.close() - 关闭当前窗口
+window.moveTo() -移动当前窗口
+window.resizeTo() -重新调整当前窗口
+
+2.2、屏幕(scream)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	scream是window的子对象，scream是运行浏览器的主机的屏幕的属性，其值都是固定的
+
+screen.width
+screen.height
+screen.availWidth
+screen.availHeight
+screen.colorDepth
+screen.pixelDepth
+
+
+2.3、页面URL(Location)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+通过window.location可以：
+	获取当前页面地址(URL)
+	把浏览器重定向到新页面
+	当前页面的协议(http、https、file)
+	当前页面协议的端口号
+
+一些属性和函数
+	window.location.href     返回当前页面的 href (URL)
+	window.location.hostname 返回 web 主机的域名
+	window.location.pathname 返回当前页面的路径或文件名
+	window.location.protocol 返回使用的 web 协议（http: 或 https:）
+	window.location.assign()   加载新文档
+
+2.4、浏览器(Navigator)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+来自 navigator 对象的信息通常是误导性的，不应该用于检测浏览器版本
+
+2.5、弹出框
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+警告框
+	如果要确保信息传递给用户，通常会使用警告框。当警告框弹出时，用户将需要单击
+“确定”来继续。
+window.alert("sometext");
+
+确认框
+	如果您希望用户验证或接受某个东西，则通常使用“确认”框。当确认框弹出时，用户
+将不得不单击“确定”或“取消”来继续进行。
+	如果用户单击“确定”，该框返回 true。如果用户单击“取消”，该框返回 false。
+window.confirm("sometext");
+
+提示框
+	如果您希望用户在进入页面前输入值，通常会使用提示框。当提示框弹出时，用户将
+不得不输入值后单击“确定”或点击“取消”来继续进行。如果用户单击“确定”，该框返回输入
+值。如果用户单击“取消”，该框返回 NULL。
+window.prompt("sometext","defaultText");
+
+2.6、定时
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+window.setTimeout(超时后执行的函数, 毫秒数);
+window.setInterval(超时后执行的函数, 毫秒数);
+window.clearTimeout(超时后执行的函数)
+
+
+2.7、甜心(cookies)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+3、DOM
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、节点树
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	浏览器解析HTML文件，生成DOM节点树：
+		整个文档是文档节点
+		每个HTML元素是元素节点
+		HTML元素内的文本是文本节点(文本节点的获取和创建与元素节点不同)
+		每个HTML属性是属性节点
+		所有注释是注释节点
+
+3.2、元素节点的相关属性、方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+属性
+
+方法：
+	document.getElementById(id)             通过元素 id 来查找元素
+	document.getElementsByTagName(name)     通过标签名来查找元素
+	document.getElementsByClassName(name)   通过类名来查找元素
+
+	element.appendChild()                   追加新元素作为父的最后一个子
+	element.insertBefore(新节点，已有节点)  新节点放到已有节点之前
+
+	document.createElement(element)
+	document.removeChild(element)
+	document.appendChild(element)
+	document.replaceChild(element)
+	document.write(text)                     谨慎使用
+
+3.3、事件相关属性、方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	事件可以通过元素属性控制，也可以通过DOM方法控制。DOM方法（addEventListener
+可以控制事件是冒泡还是捕获），元素属性则不能。
+
+属性：
+
+方法：
+	element.addEventListener(事件文本, 事件处理函数, useCapture=false) 默认是冒泡(父先响应)IE8及之前IE浏览器不支持此函数
+	element.removeEventListener(事件文本, 事件处理函数)                移除事件处理函数
+
+3.4、文本节点的相关属性、方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+属性：
+	element.innerHTML               - 获取或修改元素节点的文本节点
+
+方法：
+	document.createTextNode(文本);
+	element.appendChild();          - 把文本节点加入到DOM树中去
+
+3.5、属性的相关属性、方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+属性：
+	element.attribute = new value
+
+方法：
+	element.setAttribute(attribute, value)
+
+3.6、CSS的相关属性、方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+属性：
+	element.style.property = new style             改变HTML元素的样式

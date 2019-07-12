@@ -1,0 +1,77 @@
+
+
+1、内边距
+
+2、边框
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CSS3之前的边框属性：
+	border                 简写属性，用于把针对四个边的属性设置在一个声明。
+	border-style           用于设置元素所有边框的样式，或者单独地为各边设置边框样式。
+	border-width           简写属性，用于为元素的所有边框设置宽度，或者单独地为各边边框设置宽度。
+	border-color           简写属性，设置元素的所有边框中可见部分的颜色，或为 4 个边分别设置颜色。
+	border-bottom          简写属性，用于把下边框的所有属性设置到一个声明中。
+	border-bottom-color    设置元素的下边框的颜色。
+	border-bottom-style    设置元素的下边框的样式。
+	border-bottom-width    设置元素的下边框的宽度。
+	border-left            简写属性，用于把左边框的所有属性设置到一个声明中。
+	border-left-color      设置元素的左边框的颜色。
+	border-left-style      设置元素的左边框的样式。
+	border-left-width      设置元素的左边框的宽度。
+	border-right           简写属性，用于把右边框的所有属性设置到一个声明中。
+	border-right-color     设置元素的右边框的颜色。
+	border-right-style     设置元素的右边框的样式。
+	border-right-width     设置元素的右边框的宽度。
+	border-top             简写属性，用于把上边框的所有属性设置到一个声明中。
+	border-top-color       设置元素的上边框的颜色。
+	border-top-style       设置元素的上边框的样式。
+	border-top-width       设置元素的上边框的宽度。
+
+	看起来属性很多，其实只有border-style、border-width、border-color三个属性。
+
+2.1、border-style属性控制框的线形
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	none       定义无边框。
+	hidden     与 "none" 相同。不过应用于表时除外，对于表，hidden 用于解决边框冲突。
+	dotted     定义点状边框。在大多数浏览器中呈现为实线。
+	dashed     定义虚线。在大多数浏览器中呈现为实线。
+	solid      定义实线。
+	double     定义双线。双线的宽度等于 border-width 的值。
+	groove     定义 3D 凹槽边框。其效果取决于 border-color 的值。
+	ridge      定义 3D 垄状边框。其效果取决于 border-color 的值。
+	inset      定义 3D inset 边框。其效果取决于 border-color 的值。
+	outset     定义 3D outset 边框。其效果取决于 border-color 的值。
+	inherit    规定应该从父元素继承边框样式。
+
+2.2、border-width属性控制框的宽度
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	属性值可以是数值，也可以是预定义值：
+
+数值格式
+	10px
+	0.1em
+
+预定义值（具体宽度由代理决定，代理一般就是浏览器）
+	thin    定义细的边框。
+	medium  默认。定义中等的边框。
+	thick   定义粗的边框。
+
+2.3、border-color属性控制线的颜色
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+color_name    规定颜色值为颜色名称的边框颜色（比如 red）。
+hex_number    规定颜色值为十六进制值的边框颜色（比如 #ff0000）。
+rgb_number    规定颜色值为 rgb 代码的边框颜色（比如 rgb(255,0,0)）。
+transparent   默认值。边框颜色为透明。
+inherit       规定应该从父元素继承边框颜色。
+
+	前三个只是列表，不是具体的属性值（属性值是red或者#ff0000之类）
+
+3、外边距
+
+4、布局
+
+20、如何让外框边缘
+CSS3新增属性
+	border-top-left-radius：
+	border-top-right-radius
+	border-bottom-right-radius
+	border-bottom-left-radius
