@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<style>
+			.button {
+				width: 200px;
+				float: left;
+				margin: 20px;
+			}
+
+		</style>
+
+
+	</head>
+	<body>
+		<h1>表格属性测试</h1>
+
+		<table border="1" id = "table1">
+			<tr class = "table_tr">
+				<th>Heading</th>
+				<th>Another Heading</th>
+			</tr>
+			<tr class = "table_tr">
+				<td class = "table_td">row 1, cell 1</td>
+				<td class = "table_td">row 1, cell 2</td>
+			</tr>
+			<tr class = "table_tr">
+				<td class = "table_td">row 2, cell 1</td>
+				<td class = "table_td">row 2, cell 2</td>
+			</tr>
+		</table>
+
+		<div id="button_div">
+			<button class="button" onclick="change_tr_property_fun()">改变tr属性</button>
+		</div>
+
+		<script>
+			function change_tr_property_fun()
+			{
+				alert("here");
+				document.getElementById("table1").style.border = "5px solid blue";
+				document.getElementById("table1").style.padding = "50px";
+
+				//document.getElementById("table1").style.border-radius = "10px 15px 20px 30px / 20px 30px 10px 15px";
+				//document.getElementById("table1").style."border-top-right-radius" = "20px";
+				//document.getElementById("table1").style."border-bottom-left-radius" = "20px";
+				//document.getElementById("table1").style."border-bottom-right-radius" = "20px";
+
+				document.getElementByClassName("table_td").style.border = "5px solid blue";
+				document.getElementByClassName("table_td").style.padding = "50px";
+			}
+
+			//change_tr_property_fun();
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<style>
+			#div_top_nvg {
+				height: 50px;
+				background-color: #cccccc;
+			}
+
+			.li_top_nvg {
+				width: 100px;
+				height: 50px;
+				float: left;
+				background-color: transparent;
+				text-align: center;
+				line-height: 50px;
+				list-style-type : none;
+			}
+
+			#li_top_nvg1 {
+				height: 50px;
+				width: 200px;
+				background-color: transparent;
+			}
+		</style>
+
+
+	</head>
+	<body>
+		<div id = "div_top_nvg">
+			<ul id = "ul_top_nvg">
+				<li class = "li_top_nvg" id = "li_top_nvg1"></li>
+				<li class = "li_top_nvg" id = "li_top_nvg2" onclick = "navigation_click(this.id)">预览</li>
+				<li class = "li_top_nvg" id = "li_top_nvg3" onclick = "navigation_click(this.id)">图片</li>
+				<li class = "li_top_nvg" id = "li_top_nvg4" onclick = "navigation_click(this.id)">配置</li>
+				<li class = "li_top_nvg" id = "li_top_nvg5" onclick = "navigation_click(this.id)">回放</li>
+			<ul>
+		</div>
+
+		<div id = "div_nvg2">
+			<p>
+				this server have no preview now!
+			</p>
+		</div>
+
+		<div id = "div_nvg3">
+			<p>
+				this server have no picture now!
+			</p>
+		</div>
+
+		<div id = "div_nvg4">
+			<div id = "div_nvg41">
+				<p>什么</p>
+			</div>
+			<div id = "div_nvg42">
+				<p>怎么</p>
+			</div>
+			<p>
+				this server have no set now!
+			</p>
+		</div>
+
+		<div id = "div_nvg5">
+			<p>
+				this server have no playback now!
+			</p>
+		</div>
+
+		<script>
+			function change_tr_property_fun()
+			{
+				alert("here");
+				document.getElementById("table1").style.border = "5px solid blue";
+				document.getElementById("table1").style.padding = "50px";
+
+				//document.getElementById("table1").style.border-radius = "10px 15px 20px 30px / 20px 30px 10px 15px";
+				//document.getElementById("table1").style."border-top-right-radius" = "20px";
+				//document.getElementById("table1").style."border-bottom-left-radius" = "20px";
+				//document.getElementById("table1").style."border-bottom-right-radius" = "20px";
+
+				document.getElementByClassName("table_td").style.border = "5px solid blue";
+				document.getElementByClassName("table_td").style.padding = "50px";
+			}
+
+			function navigation_click(id)
+			{
+				if(id == "li_top_nvg2")
+				{
+					document.getElementById("div_nvg2").style.display = "inline";
+					document.getElementById("div_nvg3").style.display = "none";
+					document.getElementById("div_nvg4").style.display = "none";
+					document.getElementById("div_nvg5").style.display = "none";
+
+					document.getElementById("li_top_nvg2").style.backgroundColor = "red";
+					document.getElementById("li_top_nvg3").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg4").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg5").style.backgroundColor = "transparent";
+					//alert("li_top_nvg2 navigation_click");
+				}
+				else if(id == "li_top_nvg3")
+				{
+					document.getElementById("div_nvg2").style.display = "none";
+					document.getElementById("div_nvg3").style.display = "inline";
+					document.getElementById("div_nvg4").style.display = "none";
+					document.getElementById("div_nvg5").style.display = "none";
+
+					document.getElementById("li_top_nvg2").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg3").style.backgroundColor = "red";
+					document.getElementById("li_top_nvg4").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg5").style.backgroundColor = "transparent";
+					//alert("li_top_nvg3 navigation_click");
+				}
+				else if(id == "li_top_nvg4")
+				{
+					document.getElementById("div_nvg2").style.display = "none";
+					document.getElementById("div_nvg3").style.display = "none";
+					document.getElementById("div_nvg4").style.display = "inline";
+					document.getElementById("div_nvg5").style.display = "none";
+
+					document.getElementById("li_top_nvg2").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg3").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg4").style.backgroundColor = "red";
+					document.getElementById("li_top_nvg5").style.backgroundColor = "transparent";
+					//alert("li_top_nvg4 navigation_click");
+				}
+				else if(id == "li_top_nvg5")
+				{
+					document.getElementById("div_nvg2").style.display = "none";
+					document.getElementById("div_nvg3").style.display = "none";
+					document.getElementById("div_nvg4").style.display = "none";
+					document.getElementById("div_nvg5").style.display = "inline";
+
+					document.getElementById("li_top_nvg2").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg3").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg4").style.backgroundColor = "transparent";
+					document.getElementById("li_top_nvg5").style.backgroundColor = "red";
+					//alert("li_top_nvg5 navigation_click");
+				}
+			}
+
+			document.getElementById("li_top_nvg2").click();
+		</script>
+
+	</body>
+</html>
