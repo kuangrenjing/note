@@ -54,6 +54,9 @@ Do you still want to proceed with this legacy installer?[no]
 	挂载成功之后，执行"cp /mnt/cdrom/VMwareTools-10.2.0-7259539.tar.gz /home/mqs"。
 在我的文件夹下展开:"cd /home/mqs"，"tar -xzvf VMwareTools-10.2.0-7259539.tar.gz"。
 
+	如果安装open-vm-tools后共享文件夹还不能进入，可以使用下面的命令尝试下：
+	vmhgfs-fuse .host:/  /mnt/hgfs/
+
 
 5、ubuntu下的vi的使用
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -340,6 +343,13 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	执行source /etc/profile， 安装交叉编译器的脚本配置的环境变量就可以生效了，或者请重
 新登陆也可
 
+	安装目录：
+		可执行程序：
+			/opt/hisi-linux/x86-arm/arm-hisiv300-linux/target/bin
+
+		头文件：
+			/opt/hisi-linux/x86-arm/arm-hisiv300-linux/target/usr/include
+
 17、64bit ubuntu兼容海思32位交叉工具链
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	我在交叉编译oRTP的时候发现，明明工具链存在，但报“No such file or directory”错误，
@@ -482,6 +492,172 @@ av_profile_init函数中去。所以我们要自己要加入，在av_profile_ini
 		库安装在了/opt/crossinstall/lib
 		头文件安装在了/opt/crossinstall/include/ortp
 
+oRTP内存泄漏
+http://nongnu.13855.n7.nabble.com/Memory-leak-in-ortp-td39786.html
+
+
+21、字体、图形库相关
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考文献：
+https://blog.csdn.net/u011011827/article/details/58709139
+
+	为了在海思平台上支持文字OSD，可以选择两种方案：
+官方的HiFB文档方式处理
+第三方函数库：freetype+SDL+SDL_ttf
+大家一般选择后者
+
+
+freetype-2.4.10.tar.gz  SDL-1.2.15.tar.gz  SDL_ttf-2.0.11.tar.gz
+
+21.1、freetype-2.4.10
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+21.1.0、freetype-2.4.10下载
+https://download.savannah.gnu.org/releases/freetype/
+
+21.1.1、配置
+./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-isiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+21.1.2、编译
+make
+
+21.1.3.安装
+make install
+
+21.2、SDL-1.2.15
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+21.2.0、SDL-1.2.15下载
+https://www.libsdl.org/download-1.2.php
+
+21.2.1、配置
+./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+21.2.2、编译
+make
+
+21.2.3.安装
+make install
+
+21.3、SDL_ttf-2.0.11
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+21.3.0、SDL_ttf-2.0.11下载
+https://www.libsdl.org/projects/SDL_ttf/release-1.2.html
+
+21.3.1、配置
+./configure --prefix=/opt/crossinstall --with-freetype-prefix=/opt/crossinstall --with-sdl-prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+21.3.2、编译
+make
+
+21.3.3.安装
+
+21.4、SDL_draw库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	直接静态编译了。
+
+22、cjson库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	https://github.com/DaveGamble/cJSON
+	直接静态编译了
+
+
+23、base64(使用openssl代替)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+地址：
+https://github.com/aklomp/base64
+
+说明：
+这是一个c语言的base64编解码库，作者号称它非常地快，库的名字叫“Fast Base64 stream encoder/decoder”
+
+它为什么快呢，作者是这么解释的：
+	一般base64编解码是以字节为单位操作的，而这个库是以机器字宽为单位的，譬如32位机上就
+一次操作4字节，64位机上一次操作8字节。
+
+	更重要的是，这个库使用了SIMD指令，在Intel上就是MMX/SSE/AVX，在ARM上就是NEON。
+
+base64_stream_encode_init -> codec_choose
+
+https://www.sohu.com/a/105812781_119709
+make lib/libbase64.o CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++ LD=arm-hisiv300-linux-ld OBJCOPY=arm-hisiv300-linux-objcopy NEON32_CFLAGS="-mcpu=cortex-a7 -mfpu=neon"
+
+24、 libuuid
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+地址：
+https://sourceforge.net/projects/libuuid/
+
+说明：
+计算uuid，把uuid转化为字符形式
+
+编译：
+./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+
+25、openssl
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://github.com/openssl/openssl/releases/tag/OpenSSL_1_1_1c
+
+25.1、config命令行
+./config no-asm no-async -shared --prefix=/opt/crossinstall
+
+25.2、修改CROSS_COMPILE
+原来：
+CROSS_COMPILE=
+修改后：
+CROSS_COMPILE=arm-hisiv300-linux-
+
+25.3、删除"-m64"
+共有两处
+
+25.4
+make
+make install
+
+
+25.5
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+./libcrypto.so: warning: gethostbyname is obsolescent, use getnameinfo() instead.
+./libcrypto.so: undefined reference to `getcontext'
+./libcrypto.so: undefined reference to `setcontext'
+./libcrypto.so: undefined reference to `makecontext'
+collect2: error: ld returned 1 exit status
+
+要在config命令行中加入no-async选项，原因不知道
+
+
+25.6安装了
+	libcrypto.so
+	libssl.so
+
+cp -d libcrypto.* libssl.* /home/mqs/nfs/Hi3516A_PQ_V1.0.7.0/libs
+
+
+26、boa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+26.1、下载地址
+	https://github.com/gpg/boa
+
+26.2、编译
+	./configure --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+	make all
+
+26.3、运行
+[-c serverroot] [-d] [-f configfile] [-r chroot] [-l debug_level]
+	/mnt/nfs/bin -d -c /mnt/nfs/etc/boa -f /mnt/nfs/etc/boa/boa.conf -r /mnt/nfs/etc/boa -l 65535
+
+
+27、tinyproxy
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+27.1、下载地址
+	https://github.com/tinyproxy/tinyproxy
+
+27.2、编译
+	./configure --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+	make all
+
+27.3、运行
+	/mnt/nfs/bin/tinyproxy -d -c /mnt/nfs/etc/tinyproxy/tinyproxy.conf 1>/dev/null 2>&1
+
+
+
 21、nfs服务器搭建
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 参考文献
@@ -512,99 +688,9 @@ mount -t nfs -o nolock 192.168.15.128:/home/mqs/nfs /mnt/nfs
 export LD_LIBRARY_PATH=/mnt/nfs/Hi3516A_PQ_V1.0.5.0/Hi3516A_PQ_V1.0.5.0/libs:/mnt/nfs/web/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/mnt/nfs/Hi3516A_PQ_V1.0.7.0/libs:/mnt/nfs/web/lib:$LD_LIBRARY_PATH
 
+export LD_LIBRARY_PATH=/mnt/nfs/lib/Hi3516A_PQ_V1.0.5.0:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/mnt/nfs/lib/Hi3516A_PQ_V1.0.7.0:$LD_LIBRARY_PATH
 
 21.4、错误分析
-
-22、字体、图形库相关
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-参考文献：
-https://blog.csdn.net/u011011827/article/details/58709139
-
-	为了在海思平台上支持文字OSD，可以选择两种方案：
-官方的HiFB文档方式处理
-第三方函数库：freetype+SDL+SDL_ttf
-大家一般选择后者
-
-
-freetype-2.4.10.tar.gz  SDL-1.2.15.tar.gz  SDL_ttf-2.0.11.tar.gz
-
-22.1、freetype-2.4.10
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-22.1.0、freetype-2.4.10下载
-https://download.savannah.gnu.org/releases/freetype/
-
-22.1.1、配置
-./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-isiv300-linux-gcc CXX=arm-hisiv300-linux-g++
-
-22.1.2、编译
-make
-
-22.1.3.安装
-make install
-
-22.2、SDL-1.2.15
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-22.2.0、SDL-1.2.15下载
-https://www.libsdl.org/download-1.2.php
-
-22.2.1、配置
-./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
-
-22.2.2、编译
-make
-
-22.2.3.安装
-make install
-
-22.3、SDL_ttf-2.0.11
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-22.3.0、SDL_ttf-2.0.11下载
-https://www.libsdl.org/projects/SDL_ttf/release-1.2.html
-
-22.3.1、配置
-./configure --prefix=/opt/crossinstall --with-freetype-prefix=/opt/crossinstall --with-sdl-prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
-
-22.3.2、编译
-make
-
-22.3.3.安装
-
-22.4、SDL_draw库
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-23、其它库
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-23.1、json
-https://github.com/DaveGamble/cJSON
-
-23.2、base64
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-地址：
-https://github.com/aklomp/base64
-
-说明：
-这是一个c语言的base64编解码库，作者号称它非常地快，库的名字叫“Fast Base64 stream encoder/decoder”
-
-它为什么快呢，作者是这么解释的：
-	一般base64编解码是以字节为单位操作的，而这个库是以机器字宽为单位的，譬如32位机上就
-一次操作4字节，64位机上一次操作8字节。
-
-	更重要的是，这个库使用了SIMD指令，在Intel上就是MMX/SSE/AVX，在ARM上就是NEON。
-
-base64_stream_encode_init -> codec_choose
-
-https://www.sohu.com/a/105812781_119709
-make lib/libbase64.o CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++ LD=arm-hisiv300-linux-ld OBJCOPY=arm-hisiv300-linux-objcopy NEON32_CFLAGS="-mcpu=cortex-a7 -mfpu=neon"
-
-23.3 libuuid
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-地址：
-https://sourceforge.net/projects/libuuid/
-
-说明：
-计算uuid，把uuid转化为字符形式
-
-编译：
-./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
 
 

@@ -1,0 +1,12 @@
+1、官方安装教程
+https://emscripten.org/docs/getting_started/downloads.html
+
+2、中文版Emscripten系列专栏
+https://segmentfault.com/a/1190000011328496
+
+3、Emsrcipten源代码中src/settings.js路径，编译选项
+https://github.com/emscripten-core/emscripten/blob/master/src/settings.js
+
+
+4、编译
+https://emscripten.org/docs/compiling/index.html

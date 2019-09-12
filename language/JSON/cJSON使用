@@ -1,0 +1,61 @@
+1、JSON介绍：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、json引用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+
+2、cjson内存函数(malloc/free/realloc)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	cjson的内存策略global_hooks默认使用malloc/free/realloc，如果要使用自己的内
+存管理方案，需在使用cjson之前调用cJSON_InitHooks函数配置。
+
+	cJSON_InitHooks函数设置的是内部变量global_hooks，外部程序通过下面两个函数调用
+global_hooks的函数指针：
+	CJSON_PUBLIC(void *) cJSON_malloc(size_t size);
+	CJSON_PUBLIC(void) cJSON_free(void *object);
+
+C++程序员注意与
+	CJSON_PUBLIC(void) cJSON_Delete(cJSON *c);
+相区分。cJSON_Delete删除的是cJSON树，会遍历或递归操作。
+
+
+3、cjson内存管理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+4、cjson拷贝
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse);
+
+	函数返回的对象(拷贝目标)的next、prev指针都是NULL，当recurse为true时，child不
+为NULL；当recurse为false时，child也不拷贝，只拷贝 valuestring、valueint、
+valuedouble、string、type。（所以，但item是个object的时候，非递归拷贝会只有type是
+64，其它参数都是空）。感觉上recurese为false没什么意义。
+
+5、cjson打印
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item);
+CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item);
+CJSON_PUBLIC(char *) cJSON_PrintBuffered(const cJSON *item, int prebuffer, cJSON_bool fmt);
+CJSON_PUBLIC(cJSON_bool) cJSON_PrintPreallocated(cJSON *item, char *buffer, const int length, const cJSON_bool format);
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	cJSON_Print是最简单的打印函数，不考虑realloc开销；加了换行等格式，适合人类
+查看
+	cJSON_PrintUnformatted打印出的json字符串是紧凑的不用换行，适合传输json字符
+串时使用
+	cJSON_PrintBuffered可以指定首次分配缓冲区的大小，如果足够大，则可以节省不断
+重新分配空间的时间；如果指定缓冲区过小，则与cJSON_Print和cJSON_PrintUnformatted
+性能能相同。
+	cJSON_PrintPreallocated可以将json字符串填入给定的缓冲区，并指定缓冲区大小。
+缓冲区大小不够会返回错误。
+
+
+6、cjson获取元素
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CJSON_PUBLIC(cJSON *) cJSON_GetObjectItem(const cJSON * const object, const char * const string);
+CJSON_PUBLIC(cJSON *) cJSON_GetObjectItemCaseSensitive(const cJSON * const object, const char * const string);
+
+	cJSON_GetObjectItem大小写不敏感，cJSON_GetObjectItemCaseSensitive大小写敏感。

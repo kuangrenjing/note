@@ -1,45 +1,32 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://blog.csdn.net/zouwm12/article/details/80613241    init_cgi
-
 https://www.cnblogs.com/jobschu/archive/2013/02/25/2931973.html    html 到 cgi的一个简单实例
-
-
-
 https://blog.csdn.net/yyw794/article/details/73699276            如何让boa网页服务器支持HTTPS
-
-
 http://www.boa.org/已登录不了
 https://github.com/gpg/boa     是boa在github上的路径
-
-
 https://blog.csdn.net/xiaopangzi313/article/details/9156185   修改BOA的CGI策略
-
-
-https://www.cnblogs.com/hnrainll/archive/2011/06/01/2067295.html  CGI和BOA使用期间遇到的问题汇
-
-
+https://www.cnblogs.com/hnrainll/archive/2011/06/01/2067295.html  CGI和BOA使用期间遇到的问题汇总
 https://www.sojson.com/http/test.html   在线HTTP测试
-
 https://zhidao.baidu.com/question/278591448.html  directory listing
-
-
 https://blog.csdn.net/xygl2009/article/details/22046263   boa测试
-
-
 https://blog.csdn.net/sun_cainiao/article/details/79581567   CGI 1.1规范
-
 
 1、boa各种配置
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 1.1、configure
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 1.2、命令行
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 -c
-	设置server_root
+	设置server_root，如果配置文件中使用相对路径，则是相对于此目录的。
 -d
-	设置do_fork变量
+	设置是否以守护进程启动
 -f
 	设置config_file_name变量
 -r
+	chroot的参数
 -l
 	parse_debug() 设置debug_level 控制14个模块的调试信息输出
 -p(未在usage中说明)
@@ -47,10 +34,42 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 -L(未在usage中说明)
 	设置override_server_ip
 
-
 1.3、配置文件
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://blog.csdn.net/qq_24341965/article/details/79756634
+01)ServerRoot
+02)Port
+03)Listen
+04)User Group
+05)ServerAdmin
+06)PidFile
+07)ErrorLog
+08)AccessLog
+09)CGILog
+10)CGIumask
+11)UseLocaltime
+12)VerboseCGILogs
+13)ServerName
+14)VirtualHost
+15)VHostRoot
+16)DefaultVHost
+17)DocumentRoot
+18)UserDir
+19)DirectoryIndex
+20)DirectoryMaker
+21)DircetoryCache
+22)KeepAliveMax
+23)KeepAliveTimeout
+24)MineTypes
+25)DefaultType
+26)LangRewrite
+27)EnableHSTS max-age
+28)CGIPath
+29)SinglePostLimit
+30)AddType
+31)Redirect
+32)Alias
+33)ScriptAlias
 
 2、boa调试等级
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

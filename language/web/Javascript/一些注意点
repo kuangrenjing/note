@@ -1,1 +1,8 @@
 千万不要在文档加载后使用 document.write()。这么做会覆盖文档。
+
+1、NodeJS是什么
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+1、npm是什么
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	NPM是随同NodeJS一起安装的包管理工具，能解决NodeJS代码部署上的很多问题。

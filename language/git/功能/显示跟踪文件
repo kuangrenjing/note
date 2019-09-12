@@ -1,0 +1,14 @@
+0、命令准备
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git ls-tree
+用法：
+	git ls-tree [<options>] <tree-ish> [<path>...]
+
+说明：
+	显示树。
+
+1、显示分支跟踪了哪些文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	那用分支名来取代tree-ish就可以显示分支跟踪了哪些文件
+
+	git ls-tree -r master

@@ -21,6 +21,33 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 字符串函数介绍：
 	https://docs.python.org/3/library/stdtypes.html#string%EF%BF%BEmethods
 
+1.5、bytes、bytearray
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://c.biancheng.net/view/2175.html
+https://www.cnblogs.com/mlgjb/p/7899534.html
+	python3一个重要的新特性就是对字符串和二进制数据流做了明确的区分。Python3不会
+以任意隐式的方式混用str和bytes。
+
+	bytes和str除操作的数据单元不同之外，它们支持的所有方法都基本相同，bytes也是
+不可变序列。
+
+	bytes对象只负责以字节（二进制格式）序列来记录数据，至于这些数据到底表示什么
+内容，完全由程序决定。如果采用合适的字符集，字符串可以转换成字节串；反过来，字节
+串也可以恢复成对应的字符串。
+
+	由于bytes保存的就是原始的字节（二进制格式）数据，因此bytes对象可用于在网络
+上传输数据，也可用于存储各种二进制格式的文件，比如图片、音乐等文件。
+
+如果希望将一个字符串转换成bytes对象，有如下三种方式：
+	如果字符串内容都是ASCII字符，则可以通过直接在字符串之前添加 b 来构建字节串值。
+	调用bytes()函数（其实是 bytes 的构造方法）将字符串按指定字符集转换成字节串，
+如果不指定字符集，默认使用UTF-8字符集。
+	调用字符串本身的encode()方法将字符串按指定字符集转换成字节串，如果不指定字符
+集，默认使用UTF-8字符集。
+
+	str有encode()函数，用于字符向字节串编码
+	bytes有decode()函数，用于bytes向字符解码
+
 2、容器
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	列表、元组、字典、集合

@@ -1,0 +1,88 @@
+1、javascript对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	JavaScript的设计是一个简单的基于对象的范式。一个对象就是一系列属性的集合，
+一个属性包含一个名和一个值。一个属性的值可以是函数，这种情况下属性也被称为方法。
+除了浏览器里面预定义的那些对象之外，你也可以定义你自己的对象。
+
+2、显式原型与隐式原型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+显式原型：prototype
+隐式原型：__proto__
+1. 每个函数function都有一个prototype，即显式原型(属性)
+2. 每个实例对象(包括函数)都有一个__proto__，可称为隐式原型(属性)
+3. 对象的隐式原型的值为其对应构造函数的显式原型的值
+4. 总结:
+  * 函数的prototype属性: 在定义函数时自动添加的, 默认值是一个空Object对象
+  * 对象的__proto__属性: 创建对象时自动添加的, 默认值为构造函数的prototype属性值
+  *Object.prototype的__proto__属性指向null。
+
+3、创建javascript对象的4种方法及各自的原型链
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、使用语法结构创建对象
+1）对象初始化器
+var obj = {
+	property_1:      value_1,   // property_# 可以是一个标识符...
+	2:               value_2,   // 或一个数字...
+	["property" +3]: value_3,   //  或一个可计算的key名... 
+	// ...,
+	"property n":    value_n    // 或一个字符串
+};
+
+var obj = {
+	a1: "a",
+	a2: "b"
+};
+var b = Object.create(obj);
+obj.a3 = "c";
+var c = Object.create(b);
+console.log(c);
+
+
+2）内建对象语法-数组
+
+3）内建对象语法-函数
+f = function(){
+	this.a = 1;
+	this.b = 2;
+};
+console.log(f);
+
+函数的prototype属性不特别设置就是Object对象，__proto__属性是function()
+
+
+
+3.2、使用构造器创建对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+function Graph() {
+	this.vertices = [];
+	this.edges = [];
+}
+
+var g = new Graph();
+
+g的原型是构造器的显式prototype属性，一般就是Object对象。
+
+
+3.3、使用object.create创建对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ECMAScript 5中引入了一个新方法：object.create()。可以调用这个方法来创建一个
+新对象。新对象的原型就是调用create方法时传入的第一个参数。object.create()可以让
+我们不从object继承。
+
+var a = {a: 1};
+原型链：a ---> Object.prototype ---> null
+
+var b = Object.create(a);
+原型链：b ---> a ---> Object.prototype ---> null
+
+var c = Object.create(b);
+原型链：c ---> b ---> a ---> Object.prototype ---> null
+
+var d = Object.create(null);
+原型链：d ---> null
+console.log(d.hasOwnProperty); // undefined, 因为d没有继承Object.prototype
+
+3.4、使用class关键字创建对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ECMAScript6引入了一套新的关键字用来实现class，但只是一个语法糖，JavaScript仍
+然基于原型。这些新的关键字包括class, constructor，static，extends和super。

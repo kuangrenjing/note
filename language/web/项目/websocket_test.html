@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+		<p id = "recv_text">recv: not recved</p>
+		<button onclick="svc_connectPlatform()"> connect</button>
+		<button onclick="svc_send('hello web')"> send</button>
+		<script>
+			var svc_websocket;
+			function svc_connectPlatform()
+			{
+				//alert("");
+				var wsServer = 'ws://192.168.15.28:8080/';
+				try
+				{
+					svc_websocket = new WebSocket(wsServer);
+				}
+				catch(evt)
+				{
+					console.log("new WebSocket error:" + evt.data);
+					svc_websocket = null;
+
+					if(typeof(connCb) != "undefined" && connCb != null)
+						connCb("-1", "connect error!");
+
+					return;
+				}
+					//alert("");
+				svc_websocket.onopen = svc_onOpen;
+				svc_websocket.onclose = svc_onClose;
+				svc_websocket.onmessage = svc_onMessage;
+				svc_websocket.onerror = svc_onError;
+			}
+
+
+			function svc_onOpen(evt)
+			{
+				console.log("Connected to WebSocket server.");
+				//heartCheck.start();
+			}
+
+
+			function svc_onClose(evt)
+			{
+				console.log("Disconnected");
+			}
+
+
+			function svc_onMessage(evt)
+			{
+				console.log('Retrieved data from server: ' + evt.data);
+				svc_websocket.send("123456789");
+			}
+
+
+			function svc_onError(evt)
+			{
+				console.log('Error occured: ' + evt.data);
+			}
+
+
+			function svc_send(msg)
+			{
+				if(svc_websocket.readyState == WebSocket.OPEN)
+				{
+					svc_websocket.send(msg);
+				}
+				else
+				{
+					console.log("send failed. websocket not open. please check.");
+				}
+			}
+
+			var heartCheck = {
+				timeout: 3000,
+				timeoutObj: null,
+				serverTimeoutObj: null,
+				start: function()
+				{
+					console.log('start');
+					var self = this;
+					this.timeoutObj && clearTimeout(this.timeoutObj);
+					//this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj);
+					this.timeoutObj = setTimeout(function()
+					{
+						//这里发送一个心跳，后端收到后，返回一个心跳消息，
+						//console.log('55555');
+						svc_websocket.send("123456789");
+						//self.serverTimeoutObj = setTimeout(function()
+						//{
+						//	console.log(111);
+						//	console.log(ws);
+						//	ws.close();
+						//}, self.timeout);
+					}, this.timeout)
+				}
+			}
+		</script>
+	</body>
+</html>

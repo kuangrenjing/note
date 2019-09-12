@@ -1,0 +1,771 @@
+ReferenceError: ErrorTypes is not defined buffer-controller.js:267:19
+open 0 23499.414326 null 25330.133333 25342.266666 23499.414326  720 true 1 buffer-controller.js:162:16
+onHttpMediaSeeking wfs.js:704:15
+AbortError: The operation was aborted. 
+即使其 MIME 类型（“text/plain”）不是有效的 JavaScript MIME 类型，仍已加载来自“http://192.168.15.128/js/wfs.js”的脚本。 192.168.15.128
+onHttpMediaLoadstart buffer-controller.js:347:12
+onMediaSourceOpen buffer-controller.js:190:12
+Websocket Open! websocket-loader.js:44:12
+仅当用户同意、网站由用户激活或媒体无声时允许自动播放。 buffer-controller.js:232:15
+NotAllowedError: The play method is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.
+onHttpMediaLoadedmetadata buffer-controller.js:342:12
+onHttpMediaLoadeddata buffer-controller.js:337:12
+onHttpMediaCanplay buffer-controller.js:306:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaPlay buffer-controller.js:357:12
+onHttpMediaPlaying buffer-controller.js:362:12
+onHttpMediaCanplaythrough 7 buffer-controller.js:312:12
+载入页面时与 ws://192.168.15.27:8080/play2 的连接中断。 flow-controller.js:33:13
+onHttpMediaCanplaythrough 382 buffer-controller.js:312:12
+open 0 329.297565 null 320.133333 332.266666 329.297565  720 true 1 buffer-controller.js:162:16
+onHttpMediaCanplaythrough 1019 buffer-controller.js:312:12
+open 0 661.51385 null 650.133333 664.533333 661.51385  720 true 1 buffer-controller.js:162:16
+onHttpMediaCanplaythrough 1009 buffer-controller.js:312:12
+open 0 993.828016 null 980.133333 996.733333 993.828016  720 true 1 buffer-controller.js:162:16
+open 0 1326.085071 null 1310.133333 1329 1326.085071  720 true 1 buffer-controller.js:162:16
+open 0 1658.311167 null 1650.133333 1661.2 1658.311167  720 true 1 buffer-controller.js:162:16
+open 0 1990.614395 null 1980.133333 1993.4 1990.614395  720 true 1 buffer-controller.js:162:16
+open 0 2322.875383 null 2310.133333 2325.666666 2322.875383  720 true 1 buffer-controller.js:162:16
+open 0 2655.163249 null 2640.133333 2657.866666 2655.163249  720 true 1 buffer-controller.js:162:16
+open 0 2987.396106 null 2970.133333 2990.133333 2987.396106  720 true 1 buffer-controller.js:162:16
+open 0 3319.654771 null 3310.133333 3322.333333 3319.654771  720 true 1 buffer-controller.js:162:16
+open 0 3651.933189 null 3640.133333 3654.533333 3651.933189  720 true 1 buffer-controller.js:162:16
+open 0 3984.194564 null 3970.133333 3986.8 3984.194564  720 true 1 buffer-controller.js:162:16
+open 0 4316.518112 null 4300.133333 4319 4316.518112  720 true 1 buffer-controller.js:162:16
+open 0 4648.745291 null 4640.133333 4651.2 4648.745291  720 true 1 buffer-controller.js:162:16
+open 0 4980.979211 null 4970.133333 4983.466666 4980.979211  720 true 1 buffer-controller.js:162:16
+open 0 5313.305301 null 5300.133333 5315.666666 5313.305301  720 true 1 buffer-controller.js:162:16
+open 0 5645.548231 null 5630.133333 5647.933333 5645.548231  720 true 1 buffer-controller.js:162:16
+open 0 5977.823386 null 5960.133333 5980.133333 5977.823386  720 true 1 buffer-controller.js:162:16
+open 0 6310.077549 null 6300.133333 6312.333333 6310.077549  720 true 1 buffer-controller.js:162:16
+open 0 6642.3 null 6630.133333 6644.6 6642.3  720 true 1 buffer-controller.js:162:16
+open 0 6974.620237 null 6960.133333 6976.8 6974.620237  720 true 1 buffer-controller.js:162:16
+open 0 7306.850517 null 7290.133333 7309.066666 7306.850517  720 true 1 buffer-controller.js:162:16
+open 0 7639.103204 null 7630.133333 7641.266666 7639.103204  720 true 1 buffer-controller.js:162:16
+open 0 7971.409492 null 7960.133333 7973.466666 7971.409492  720 true 1 buffer-controller.js:162:16
+open 0 8303.619353 null 8290.133333 8305.733333 8303.619353  720 true 1 buffer-controller.js:162:16
+open 0 8635.956012 null 8620.133333 8637.933333 8635.956012  720 true 1 buffer-controller.js:162:16
+open 0 8968.190284 null 8950.133333 8970.2 8968.190284  720 true 1 buffer-controller.js:162:16
+open 0 9300.417564 null 9290.133333 9302.4 9300.417564  720 true 1 buffer-controller.js:162:16
+open 0 9632.730254 null 9620.133333 9634.6 9632.730254  720 true 1 buffer-controller.js:162:16
+open 0 9964.968843 null 9950.133333 9966.866666 9964.968843  720 true 1 buffer-controller.js:162:16
+open 0 10297.270648 null 10280.133333 10299.066666 10297.270648  720 true 1 buffer-controller.js:162:16
+open 0 10629.514555 null 10620.133333 10631.266666 10629.514555  720 true 1 buffer-controller.js:162:16
+open 0 10961.747478 null 10950.133333 10963.533333 10961.747478  720 true 1 buffer-controller.js:162:16
+open 0 11294.085919 null 11280.133333 11295.733333 11294.085919  720 true 1 buffer-controller.js:162:16
+open 0 11626.334887 null 11610.133333 11628 11626.334887  720 true 1 buffer-controller.js:162:16
+open 0 11958.566666 null 11950.133333 11960.2 11958.566666  720 true 1 buffer-controller.js:162:16
+open 0 12290.841334 null 12280.133333 12292.4 12290.841334  720 true 1 buffer-controller.js:162:16
+open 0 12623.117511 null 12610.133333 12624.666666 12623.117511  720 true 1 buffer-controller.js:162:16
+open 0 12955.388409 null 12940.133333 12956.866666 12955.388409  720 true 1 buffer-controller.js:162:16
+open 0 13287.624733 null 13270.133333 13289.133333 13287.624733  720 true 1 buffer-controller.js:162:16
+open 0 13619.875107 null 13610.133333 13621.333333 13619.875107  720 true 1 buffer-controller.js:162:16
+open 0 13952.173483 null 13940.133333 13953.533333 13952.173483  720 true 1 buffer-controller.js:162:16
+open 0 14284.43719 null 14270.133333 14285.8 14284.43719  720 true 1 buffer-controller.js:162:16
+open 0 14616.728551 null 14600.133333 14618 14616.728551  720 true 1 buffer-controller.js:162:16
+open 0 14948.975284 null 14940.133333 14950.2 14948.975284  720 true 1 buffer-controller.js:162:16
+open 0 15281.208642 null 15270.133333 15282.466666 15281.208642  720 true 1 buffer-controller.js:162:16
+open 0 15613.534759 null 15600.133333 15614.666666 15613.534759  720 true 1 buffer-controller.js:162:16
+open 0 15945.754863 null 15930.133333 15946.933333 15945.754863  720 true 1 buffer-controller.js:162:16
+open 0 16278.09287 null 16260.133333 16279.133333 16278.09287  720 true 1 buffer-controller.js:162:16
+open 0 16610.307265 null 16600.133333 16611.333333 16610.307265  720 true 1 buffer-controller.js:162:16
+open 0 16942.539533 null 16930.133333 16943.6 16942.539533  720 true 1 buffer-controller.js:162:16
+open 0 17274.853463 null 17260.133333 17275.8 17274.853463  720 true 1 buffer-controller.js:162:16
+open 0 17607.115239 null 17590.133333 17608.066666 17607.115239  720 true 1 buffer-controller.js:162:16
+open 0 17939.340179 null 17930.133333 17940.266666 17939.340179  720 true 1 buffer-controller.js:162:16
+open 0 18271.640975 null 18260.133333 18272.466666 18271.640975  720 true 1 buffer-controller.js:162:16
+open 0 18603.865863 null 18590.133333 18604.733333 18603.865863  720 true 1 buffer-controller.js:162:16
+open 0 18936.210707 null 18920.133333 18936.933333 18936.210707  720 true 1 buffer-controller.js:162:16
+open 0 19268.42007 null 19250.133333 19269.2 19268.42007  720 true 1 buffer-controller.js:162:16
+open 0 19600.674357 null 19590.133333 19601.4 19600.674357  720 true 1 buffer-controller.js:162:16
+open 0 19933.001394 null 19920.133333 19933.6 19933.001394  720 true 1 buffer-controller.js:162:16
+open 0 20265.232956 null 20250.133333 20265.866666 20265.232956  720 true 1 buffer-controller.js:162:16
+open 0 20597.537791 null 20580.133333 20598.066666 20597.537791  720 true 1 buffer-controller.js:162:16
+open 0 20929.77335 null 20920.133333 20930.266666 20929.77335  720 true 1 buffer-controller.js:162:16
+open 0 21261.98591 null 21250.133333 21262.533333 21261.98591  720 true 1 buffer-controller.js:162:16
+open 0 21594.320477 null 21580.133333 21594.733333 21594.320477  720 true 1 buffer-controller.js:162:16
+open 0 21926.551319 null 21910.133333 21927 21926.551319  720 true 1 buffer-controller.js:162:16
+open 0 22258.855546 null 22240.133333 22259.2 22258.855546  720 true 1 buffer-controller.js:162:16
+open 0 22591.111559 null 22580.133333 22591.4 22591.111559  720 true 1 buffer-controller.js:162:16
+open 0 22923.326169 null 22910.133333 22923.666666 22923.326169  720 true 1 buffer-controller.js:162:16
+open 0 23255.646897 null 23240.133333 23255.866666 23255.646897  720 true 1 buffer-controller.js:162:16
+open 0 23587.876949 null 23570.133333 23588.133333 23587.876949  720 true 1 buffer-controller.js:162:16
+open 0 23920.120932 null 23910.133333 23920.333333 23920.120932  720 true 1 buffer-controller.js:162:16
+open 0 24252.444082 null 24240.133333 24252.533333 24252.444082  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 24584.655137 null 24570.133333 24584.8 24584.655137  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 24916.926604 null 24900.133333 24917 24916.926604  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 25249.128961 null 25230.133333 25249.266666 25249.128961  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 25581.349328 null 25570.133333 25581.466666 25581.349328  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 25913.564942 null 25900.133333 25913.666666 25913.564942  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 26245.789258 null 26230.133333 26245.933333 26245.789258  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 26578.065615 null 26560.133333 26578.133333 26578.065615  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 26910.245704 null 26900.133333 26910.333333 26910.245704  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 27242.474527 null 27230.133333 27242.6 27242.474527  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 27574.739679 null 27560.133333 27574.8 27574.739679  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 27906.904116 null 27890.133333 27907.066666 27906.904116  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 28239.214635 null 28220.133333 28239.266666 28239.214635  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 28571.37751 null 28560.133333 28571.466666 28571.37751  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 28903.591904 null 28890.133333 28903.733333 28903.591904  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 29235.832607 null 29220.133333 29235.933333 29235.832607  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 29568.069482 null 29550.133333 29568.2 29568.069482  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 29900.248489 null 29890.133333 29900.4 29900.248489  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 30232.5 null 30220.133333 30232.6 30232.5  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 30564.733333 null 30550.133333 30564.866666 30564.733333  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 30896.983973 null 30880.133333 30897.066666 30896.983973  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 31229.178084 null 31210.133333 31229.333333 31229.178084  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 31561.380307 null 31550.133333 31561.533333 31561.380307  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 31893.63805 null 31880.133333 31893.733333 31893.63805  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 32225.83694 null 32210.133333 32226 32225.83694  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 32558.138245 null 32540.133333 32558.2 32558.138245  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 32890.325686 null 32880.133333 32890.4 32890.325686  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 33222.51336 null 33210.133333 33222.666666 33222.51336  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 33554.793975 null 33540.133333 33554.866666 33554.793975  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 33886.960049 null 33870.133333 33887.133333 33886.960049  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 34219.235231 null 34200.133333 34219.333333 34219.235231  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 34551.415022 null 34540.133333 34551.533333 34551.415022  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 34883.635765 null 34870.133333 34883.8 34883.635765  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 35215.920017 null 35200.133333 35216 35215.920017  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 35548.105408 null 35530.133333 35548.266666 35548.105408  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 35880.285258 null 35870.133333 35880.466666 35880.285258  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 36212.566666 null 36200.133333 36212.666666 36212.566666  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 36544.760936 null 36530.133333 36544.933333 36544.760936  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 36877.061503 null 36860.133333 36877.133333 36877.061503  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 37209.229052 null 37190.133333 37209.4 37209.229052  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 37541.4 null 37530.133333 37541.6 37541.4  720 true 1 buffer-controller.js:162:16
+open 0 37873.69395 null 37860.133333 37873.8 37873.69395  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 38205.796968 null 38190.133333 38206.066666 38205.796968  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 38537.9946 null 38520.133333 38538.266666 38537.9946  720 true 1 buffer-controller.js:162:16
+open 0 38870.271473 null 38860.133333 38870.466666 38870.271473  720 true 1 buffer-controller.js:162:16
+open 0 39202.513215 null 39190.133333 39202.733333 39202.513215  720 true 1 buffer-controller.js:162:16
+open 0 39534.80373 null 39520.133333 39534.933333 39534.80373  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 39866.981249 null 39850.133333 39867.2 39866.981249  720 true 1 buffer-controller.js:162:16
+open 0 40199.298987 null 40180.133333 40199.4 40199.298987  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 40531.451299 null 40520.133333 40531.6 40531.451299  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 40863.590501 null 40850.133333 40863.866666 40863.590501  720 true 1 buffer-controller.js:162:16
+open 0 41195.878502 null 41180.133333 41196.066666 41195.878502  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 41528.02392 null 41510.133333 41528.333333 41528.02392  720 true 1 buffer-controller.js:162:16
+open 0 41860.237975 null 41850.133333 41860.533333 41860.237975  720 true 1 buffer-controller.js:162:16
+open 0 42192.55508 null 42180.133333 42192.733333 42192.55508  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 42524.721264 null 42510.133333 42525 42524.721264  720 true 1 buffer-controller.js:162:16
+open 0 42857.036332 null 42840.133333 42857.2 42857.036332  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 43189.179847 null 43170.133333 43189.466666 43189.179847  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 43521.363125 null 43510.133333 43521.666666 43521.363125  720 true 1 buffer-controller.js:162:16
+open 0 43853.66465 null 43840.133333 43853.866666 43853.66465  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 44185.824717 null 44170.133333 44186.133333 44185.824717  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 44517.872784 null 44500.133333 44518.333333 44517.872784  720 true 1 buffer-controller.js:162:16
+internal error happened while processing wfsBufferAppending:ErrorTypes is not defined 2 event-handler.js:64:14
+open 0 44850.093139 null 44840.133333 44850.533333 44850.093139  720 true 1 buffer-controller.js:162:16
+open 0 45182.330498 null 45170.133333 45182.8 45182.330498  720 true 1 buffer-controller.js:162:16
+open 0 45514.646259 null 45500.133333 45515 45514.646259  720 true 1 buffer-controller.js:162:16
+open 0 45846.883694 null 45830.133333 45847.266666 45846.883694  720 true 1 buffer-controller.js:162:16
+open 0 46179.211985 null 46160.133333 46179.466666 46179.211985  720 true 1 buffer-controller.js:162:16
+open 0 46511.421651 null 46500.133333 46511.666666 46511.421651  720 true 1 buffer-controller.js:162:16
+open 0 46843.688568 null 46830.133333 46843.933333 46843.688568  720 true 1 buffer-controller.js:162:16
+open 0 47175.978188 null 47160.133333 47176.133333 47175.978188  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+onHttpMediaCanplay buffer-controller.js:306:12
+onHttpMediaPlaying buffer-controller.js:362:12
+TypeError: this.media is undefined buffer-controller.js:307:4
+open 0 47508.17346 null 47490.133333 47508.4 47508.17346  720 true 1 buffer-controller.js:162:16
+onHttpMediaWaiting buffer-controller.js:407:12
+open 0 47721.845682 null 101.607822 118.807822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 431.607822 451.007822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 771.607822 783.207822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 1101.607822 1115.474488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 1431.607822 1447.674488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 1761.607822 1779.941155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 2101.607822 2112.141155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 2431.607822 2444.341155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 2761.607822 2776.607822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 3091.607822 3108.807822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 3421.607822 3441.074488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 3761.607822 3773.274488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 4091.607822 4105.474488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 4421.607822 4437.741155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 4751.607822 4769.941155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 5091.607822 5102.141155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 5421.607822 5434.407822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 5751.607822 5766.607822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 6081.607822 6098.874488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 6411.607822 6431.074488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 6751.607822 6763.274488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 7081.607822 7095.541155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 7411.607822 7427.741155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 7741.607822 7760.007822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 8081.607822 8092.207822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 8411.607822 8424.407822 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 8741.607822 8756.674488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 9071.607822 9088.874488 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 9401.607822 9421.141155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 9741.607822 9753.341155 47721.845682  720 true 1 buffer-controller.js:162:16
+open 0 47721.845682 null 10071.607822 10085.541155 47721.845682  720 true 1 buffer-controller.js:162:16
+ReferenceError: ErrorTypes is not defined buffer-controller.js:268:23
+open 0 47721.845682 null 10401.607822 10417.807822 47721.845682  720 true 1 buffer-controller.js:162:16

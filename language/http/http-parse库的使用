@@ -125,3 +125,7 @@ parser->state初始化为：
 譬如解析请求，其状态改变如下：
                                                      s_req_path
 s_start_req  s_req_method  s_req_spaces_before_url
+
+
+
+5、

@@ -1,0 +1,45 @@
+https://baijiahao.baidu.com/s?id=1629789913774545149&wfr=spider&for=pc
+
+使用.gitignore文件
+
+优先级：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在.gitingore文件中，每一行指定一个忽略规则，Git检查忽略规则的时候有多个来源，
+它的优先级如下（由高到低）：
+	从命令行中读取可用的忽略规则
+	当前目录定义的规则
+	父级目录定义的规则，依次递推
+	$GIT_DIR/info/exclude 文件中定义的规则
+	core.excludesfile中定义的全局规则
+
+匹配符的解释：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#		用于注释，可用'\'转义
+*		匹配除'\'之外的多个所有字符（譬如*.txt匹配所有的txt文件）
+/开头	匹配目录和文件（譬如/test匹配test目录和test文件）
+/结尾	匹配目录，但不匹配文件（譬如/test/只匹配test目录，不匹配test文件）
+!		代表取反
+?		匹配除'\'之外的一个所有字符（譬如test?.txt 可以匹配到 testa.txt、testk.txt等文件）
+[]		匹配数组中指定指定的字符（譬如test[k,l].txt 可以匹配到 testk.txt、testl.txt）
+**		用于匹配多层目录（譬如root/**/test 可以匹配到 root/a/b/c/test 、root/fd/gg/test等目录）
+
+
+.gitignore规则不生效
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	.gitignore只能忽略那些原来没有被track的文件，如果某些文件已经被纳入了版本管
+理中，则修改.gitignore是无效的。
+
+解决方法就是先把本地缓存删除（改变成未track状态），然后再提交:
+	git rm -r --cached .
+	git add .
+	git commit -m 'update .gitignore'
+
+检查文件是否能够被规则覆盖
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git check-ignore -v 文件名
+
+譬如：
+输入：git check-ignore -v hi_sdk_50/lib/lib_iniparser.a
+输出：.gitignore:4:**/*.a	hi_sdk_50/lib/lib_iniparser.a
+
+说明文件第4行的规则能覆盖这个文件，如果无输出，说明规则书写错误。

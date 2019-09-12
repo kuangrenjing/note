@@ -28,7 +28,9 @@ Type bindings语句用于控制XML schema types向C/C++类型的转换，语句�
 prefix__type = declaration | use | ptr-use
 
 四个部分的含义：
-	prefix__type：这是schema type的C/C++类型名（使用 gSOAP的类型命名规则）
+	prefix__type：这是schema type的C/C++变量名（使用gSOAP的类型命名规则，譬如xml
+中xsd:string对应的C/C++变量名就是xsd__string；soapenv:Envelope对应SOAP_ENV__Envelope，
+注意xml前缀与名称之间的:被替换为两个小横线）
 	declaration:  类型在wsdl2h生成的头文件中定义，可以为空
 	use:          但此类型用作其它类型的成员或函数参数时，在wsdl2h生成的头文件中怎么替换
 	ptr-use:      以指针方式做其它类型的成员或函数参数时如何替换（譬如wsdl2h翻译
@@ -50,7 +52,10 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 类型是soapenv:Envelope。
 
 	soapenv:Envelope引用http://www.w3.org/2003/05/soap-envelope中的Envelope类型，
-根据gSOAP的类型命名规则（不了解这个规则），它的C/C++名字叫SOAP_ENV__Header(即prefix__type)
+根据gSOAP的类型命名规则（不了解这个规则），它的C/C++名字叫SOAP_ENV__Envelope(即prefix__type)
+
+【注】
+	minOccurs、maxOccurs取值会影响xml->c/c++时是使用对象还是指针。
 
 	情况1：我们把RequestInfo的minOccurs设置为1，maxOccurs也设置为1，
 typemap.dat中这样定义：
@@ -124,14 +129,67 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 4、命名空间头文件导入语法
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	有些命名空间的头文件gsoap已经为我们准备好，不需要使用wsdl2h工具生成，这时可
-以使用“命名空间头文件导入语法”，譬如：
+	有些命名空间的头文件(在import文件夹下)gsoap已经为我们准备好，不需要使用
+wsdl2h工具生成，这时可以使用“命名空间头文件导入语法”，譬如：
 	wsdd10  = <http://schemas.xmlsoap.org/ws/2005/04/discovery>
 注意，使用的是尖括号而不是引号。这样，如果在其它wsdl文件中使用了http://schemas.xmlsoap.org/ws/2005/04/discovery
 中的变量，则wsdl2h生成的头文件中会出现：
 	#import "wsdd10.h"
-语句。
+语句。如果没有使用到，则不会出现了onvif.h中。
 
+	有些头文件还有相应的c/c++文件，我们需要把这些c/c++文件引入到我们的工程中去，
+譬如duration.c。
 
-5、我所定制的typemap.dat文件
-line218：取消注释
+4.1、命名空间头文件导入的一个实例
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在gsoap给出的typemap.dat中已经给出了若干“命名空间头文件导入”行，其中容易让人
+迷糊的是wsa和wsdd的导入，它们各有好多行，尤其是wsdd5和wsdd10对应的URL完全相同，那
+为什么需要对同一命名空间定义两个头文件呢(wsdd5.h、wsdd10.h)？
+
+	对于这个问题，gsoap官网是这么解释的：
+https://www.genivia.com/doc/wsdd/html/wsdd_0.html
+	wsdd.h 支持 WS-Discovery1.1 with WS-Addressing 2005/08
+	wsdd10.h 支持 WS-Discovery1.0 with WS-Addressing 2004/08
+	wsdd5.h  支持 WS-Discovery1.0 with WS-Addressing 2005/08
+
+	这样我们就清晰了：wsdd5.h wsdd10.h只是因为配合的WS-Addressing的版本不同而已。
+
+	WS-Discovery1.0命名空间：
+		http://schemas.xmlsoap.org/ws/2005/04/discovery
+	WS-Discovery1.1命名空间：
+		http://docs.oasis-open.org/ws-dd/ns/discovery/2009/01
+	WS-Addressing 2004/08：
+		http://schemas.xmlsoap.org/ws/2004/08/addressing
+	WS-Addressing 2005/08：
+		http://www.w3.org/2005/08/addressing
+
+	那onvif是怎么使用的呢，通过抓包海康相机，我们发现：它WS-Addressing 2004/08和
+WS-Addressing 2005/08都使用了，但只使用了WS-Discovery1.0。看上去wsdd10.h和wsdd5.h
+都用的上。wsdd.h则不需要。
+
+5、顶层标签与属性的特殊处理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.genivia.com/doc/databinding/html/index.html     最下面
+	在typemap.dat中有些前缀替换前有小横线，这是怎么回事？譬如：
+ser     = <http://schemas.microsoft.com/2003/10/Serialization/>
+#       .NET WCF DataContract Serialization Schema root element remappings
+_ser__anyURI            == xsd__anyURI
+_ser__boolean           == xsd__boolean
+_ser__base64Binary      == xsd__base64Binary
+_ser__byte              == xsd__byte
+_ser__dateTime          == xsd__dateTime
+_ser__decimal           == xsd__decimal
+_ser__double            == xsd__double
+_ser__float             == xsd__float
+_ser__int               == xsd__int
+_ser__long              == xsd__long
+_ser__QName             == xsd__QName
+_ser__short             == xsd__short
+_ser__string            == xsd__string
+_ser__unsignedByte      == xsd__unsignedByte
+_ser__unsignedInt       == xsd__unsignedInt
+_ser__unsignedLong      == xsd__unsignedLong
+_ser__unsignedShort     == xsd__unsignedShort
+
+	其实，注释中已经很明确地说了，对“root element重映射”，但需要wsdl2h -g选项才
+会给顶层元素加小横线。

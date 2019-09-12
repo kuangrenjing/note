@@ -1,0 +1,36 @@
+1、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://www.360doc.com/content/14/0921/19/7377734_411295332.shtml
+
+
+2、终端驱动框架
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	linux终端驱动由tty_core、line_discipline、tty_driver三部分组成，tty_core一般
+就与shell连接，当然也可以是用户应用，tty_driver是各终端的硬驱动（本地终端、串口中
+断、伪中断）。
+
+3、终端分类
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	首先，显示器/键盘配对后才是一个终端，一般地，称为本地终端，对应设备目录下的
+/dev/ttyN，tty_driver就是显示器驱动、键盘驱动？
+	串口终端，对应设备目录下的/dev/ttySN，tty_driver就是串口驱动？
+	伪终端，对应设备目录下的/dev/pts。伪终端一般是通过网络连接的。tty_driver不是
+网口驱动，而是PTY驱动？
+
+4、伪终端详解
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	对于伪终端而言，tty_driver不是网口驱动，而与远端通信是通过网口进行的，这就需
+要有个中转的手段。具体实现是这样的：诸如sshd/telnetd这些网络连接服务在应用层模拟
+了一个伪终端物理主设备(/dev/pts/ptmx)连接到TTY_core上（似乎不能称为伪终端物理设备，
+但它确实在/dev/pts目录下），然后sshd/telnetd fork出进程，一般就是shell，这些shell
+连接到伪终端物理从设备上(/dev/pts/N)
+	具体参见下面这个帖子：
+	https://blog.csdn.net/dog250/article/details/78766716
+
+5、查看当前终端对应的终端设备
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+tty命令
+
+6、终端相关常见命令/应用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+getty(get teletypewriter)

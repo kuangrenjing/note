@@ -1,0 +1,22 @@
+https://www.xuebuyuan.com/2121214.html
+
+https://blog.csdn.net/NCTU_to_prove_safety/article/details/80607213
+
+1、获取请求方法、请求头
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+2、获取表单数据
+
+
+3、返回响应状态、响应头
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+一般地，cgi可以输出一个状态、两个头，其它头由boa添加。
+Content_type   (内容类型)   设定随后输出数据所用的MIME类型
+Location    (地址)          设定输出为另外一个文档（URL）
+Status      (状态)          指定HTTP状态码
+
+例子：
+	snprintf(strTest, 1024, "Status:404");
+	write(STDOUT_FILENO, strTest, strlen(strTest));
+	404后面不能有\r\n，不然会被作为响应头

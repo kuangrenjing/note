@@ -1,0 +1,96 @@
+give root password for maintenance
+
+you are in emergency mode. After logging in, type "journalctl -xb" to
+view system logs
+
+
+sda Assuming drive cache:write through
+open pipe file /run/rpc_pipefs/nfs/blocklayout failed: No such file or directory
+failed to mount /mnt/hgfs
+error opeing ATTR{/sys/devices/pci0000:00/0000:00:10.0/host32/target32:0:0/32:0:0:0/block/sda/timeout} for writing: Permission denied
+nfsdcltrack failed to init database:-13
+
+
+What does the message: asking for cache data failed, assuming drive cache: write through mean?
+The Linux block layer makes some assumptions about when writes are actually committed to disk. LSI RAID controller logical drives pretend to be SCSI disks, but the firmware and driver doesn't report whether the controller is in "write-through" mode or "write-back" mode. Without this information, the block layer assumes "write-through". This is safe, because the controller has a battery-backed cache.
+LSI's engineers know that their driver should handle this better so you don't see this message. But it's not an error, and it doesn't affect the system.
+
+
+4、进入单用户模式、但不知如何进入rescue模式，好像没有这个模式，有grub rescue??
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/noway5456/article/details/72993866
+https://www.cnblogs.com/Jtianlin/p/4245533.html
+https://linux.cn/article-10409-1.html?pr    ubuntu 18.04
+4.1、进入单用户模式后，查看是什么原因导致不能正常启动
+
+开机按ESC
+
+
+
+fsck -nf /dev/sda1
+skipping journal recovery because doing a read-only filesystem check
+
+系统没有正常关机，导致虚拟磁盘出现文件系统错误
+https://www.7down.com/article/236764.html
+
+
+recovery journal
+clean
+
+
+
+5、linux rescue模式fsck修复根文件系统
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5.1、wmware workstation player进入BIOS
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+vmx文件中加入一行：
+	bios.forceSetupOnce = "TRUE"
+注意，启动后，这一行会被vmware player删除，所以它只一次有效，下次需要还得手动加上。
+
+	启动虚拟机，进入BIOS，选到Boot标签页，把CD/DVD升到最上面，注意：直接通过上下
+键是升不上去的，要通过ctrl +才能把CD/DVD升到最上面。
+
+	ubuntu试用时用户名为：ubuntu；密码为：空。在此用户下无权读写文件，所以无法使用
+fsck命令。
+
+5.1、ubuntu虚拟机如何进入rescue模式
+
+
+
+6、runlevel->systemd
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.ostechnix.com/check-runlevel-linux/
+systemd下进入rescue模式的方式不一样？
+
+确定系统的init系统是哪一个：
+cat /proc/1/exe
+
+
+7、Sysv/UpStart/Systemd的区分
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Linux初始化init系统：
+
+
+8、ubuntu18.04光盘进入救援模式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://c.biancheng.net/view/1042.html    光盘修复实例
+
+当系统连单用户模式都无法进入时或出现GRUB命令行也不能解决的引导问题，我们就需要使用Linux救援模式来进行故障排除了。步骤如下：
+　　1、将Linux安装光盘（如果使用CD光盘，则放入第一张引导光盘）放入光驱，设置固件CMOS/BIOS为光盘引导，当Linux安装画面出现后，在“boot:”提示符后输入“linux rescue”回车进入救援模式。（想了解救援模式详细信息，还可以按F5键查看）
+　　2、系统会检测硬件，引导光盘上的Linux环境，依次提示你选择救援模式下使用的语言（建议选择默认的英文即可，根据笔者测试，部分Linux系统选择中文会出现乱码）；键盘设置用默认的“us”就好；网络设置可以根据需要，大部分故障修复不需要网络连接，可不进行此项设置，选择“No”。
+　　3、接下来系统将试图查找根分区。
+　　默认在救援模式，硬盘的根分区将挂载到光盘Linux环境的/mnt/sysimage目录下，默认选项“continue”表示挂载权限为读写；“Read-only”为只读，如果出现检测失败可以选择“skip”跳过。此处，因为要对系统进行修复，所以需要有读写权限，一般选择默认选项“continue”。进入下一步后，系统提示执行“chroot /mnt/sysimage”命令，可以将根目录挂载到我们硬盘系统的根目录中去。
+
+
+9、ubuntu18.04 journal日志查看
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+systemd下的日志系统是journal，需使用journalctl查看
+
+
+
+
+
+11、完整过程展示：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+vmx文件中加入一行：
+	bios.forceSetupOnce = "TRUE"

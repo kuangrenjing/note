@@ -1,0 +1,9 @@
+1、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.npmjs.cn/     npm中文网
+
+
+2、如何安装npm并管理npm版本
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	npm是Node.js的一个工具，依赖于Node.js。安装Node.js时会自动安装npm，但npm版本
+比Node.js版本更新频繁。

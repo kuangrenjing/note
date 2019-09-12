@@ -1,0 +1,12 @@
+mpp(Media Memory Zone)日记：
+/dev/logmpp
+
+mmz.ko参数
+insmod mmz.ko mmz=anonymous,0,$mmz_start,$mmz_size anony=1 || report_error
+在使用insmod加载mmz.ko时可以给DDR命名。然后HI_MPI_SYS_SetMemConf函数就可以使用这个名字了。
+
+均分内存
+
+VB
+demo程序占用内存会平均布局到2个DDR，如果你只有2个256M内存，那么DDR0已经被OS占用完了
+这时你要改demo程序，将编解码内存全部设置到DDR1

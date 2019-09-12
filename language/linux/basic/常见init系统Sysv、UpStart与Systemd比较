@@ -1,0 +1,49 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.jianshu.com/p/43933d125075
+
+sysv介绍：
+https://www.ibm.com/developerworks/cn/linux/1407_liuming_init1/index.html
+
+upstart介绍：
+https://www.ibm.com/developerworks/cn/linux/1407_liuming_init2/index.html
+
+systemd介绍：
+https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html
+
+1、init系统简介：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Linux操作系统的启动首先从BIOS开始，接下来进入boot loader，由bootloader载入
+内核，进行内核初始化。内核初始化的最后一步就是启动pid为1的init进程。这个进程是系
+统的第一个进程。它负责产生其他所有用户进程。
+
+	init以守护进程方式存在，是所有其他进程的祖先。init进程非常独特，能够完成其他
+进程无法完成的任务。
+
+	Init系统能够定义、管理和控制init进程的行为。它负责组织和运行许多独立的或相关
+的始化工作(因此被称为init系统)，从而让计算机系统进入某种用户预订的运行模式。
+
+	仅仅将内核运行起来是毫无实际用途的，必须由init系统将系统代入可操作状态。比
+如启动外壳shell后，便有了人机交互，这样就可以让计算机执行一些预订程序完成有实际
+意义的任务。或者启动 X 图形系统以便提供更佳的人机界面，更加高效的完成任务。这里，
+字符界面的shell或者X系统都是一种预设的运行模式。
+
+	大多数Linux发行版的init系统是和System V相兼容的，被称为sysvinit。这是人们最
+熟悉的init系统。一些发行版如Slackware采用的是BSD风格Init系统，这种风格使用较少，
+本文不再涉及。其他的发行版如Gentoo是自己定制的。Ubuntu和RHEL采用upstart替代了传
+统的sysvinit。而Fedora从版本15开始使用了一个被称为systemd的新init系统。
+
+	可以看到不同的发行版采用了不同的init实现，常见的有三个主种：sysvinit，UpStart
+和systemd。了解它们各自的设计特点，并简要介绍它们的使用。
+
+	在Linux主要应用于服务器和PC机的时代，SysVinit运行非常良好，概念简单清晰。它
+主要依赖于Shell脚本，这就决定了它的最大弱点：启动太慢。在很少重新启动的Server上，
+这个缺点并不重要。而当Linux被应用到移动终端设备的时候，启动慢就成了一个大问题。
+为了更快地启动，人们开始改进sysvinit，先后出现了upstart和systemd这两个主要的新一
+代init系统。Upstart已经开发了8年多，在不少系统中已经替换sysvinit。Systemd出现较
+晚，但发展更快，大有取代upstart的趋势。
+
+2、常见init系统
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、sysvinit
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

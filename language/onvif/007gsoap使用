@@ -190,23 +190,6 @@ To finalize code generation, execute:
 
 
 
-
-
-
-
-WSDL2H工具也可以在没有WSDL的情况下将XML模式（XSDS）转换成C/C++来实现C和C++中的XML数据绑定。WSDL2H工具生成XML数据绑定接口头文件，其中C/C++数据类型等价于XML模式类型和组件。
-
-
-SOAPCP2工具然后从数据绑定接口头文件生成XML数据绑定实现源代码，这意味着序列化源代码在XML中序列化C/C++数据和客户端存根函数来调用远程服务操作和服务器端骨架函数来实现XMLWeb服务。
-
-
-因此，从多个WSDL或XSDS之一创建C和C++应用程序是两个步骤。
-
-
-首先，将WSDL转换为C++，我们使用：
-
-
-
 4、soapcpp2
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 4.1、soapcpp2的选项：
@@ -386,3 +369,67 @@ https://blog.csdn.net/qq_18854309/article/details/76737948
 
 import也很重要，诸如xsd_duration的定义就是通过import引入的。
 https://bbs.csdn.net/topics/390117550
+
+
+99、WS-Discovery Setup
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.genivia.com/doc/wsdd/html/wsdd_0.html
+	如果需要使用gsoap的WSDD库，需引入wsddapi.c wsaapi.c
+
+100、使用gsoap生成onvif框架总结：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+100.1、gsoap安装：
+	参照1、2、3
+
+100.2、定制typemap.dat
+	把xsd__duration = #import "custom/duration.h" | xsd__duration的注释去掉
+
+100.3、下载onvif的wsdl文件
+	从https://www.onvif.org/profiles/specifications/上下载下列文件：
+	devicemgmt.wsdl
+	event.wsdl
+	onvif.xsd
+	common.xsd
+	remotediscovery.wsdl (页面上没有，因为这不是onvif的原创内容)
+	media.wsdl
+	imaging.wsdl
+	ptz.wsdl
+
+100.4、使用wsdl2h生成onvif.h
+	wsdl2h  -c -o ./onvif.h ./*.wsdl
+
+100.5、使用soapcpp2生成onvif框架
+	soapcpp2 -2 -c -L -S -x onvif.h -I /usr/local/share/gsoap
+
+100.6、生成、修改config.h并将它加入到交叉编译环境中去
+	使用./configure --prefix=/opt/crossinstall --host=arm-hisiv300-linux 
+CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++针对交叉链生成config.h
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	config.h文件中定义了一些宏，可以更好的控制onvif程序的工作。config.h是通过
+configure检查系统配置产生的。我们是在交叉编译机器上编译gsoap的，所以configure检查
+的是我们的编译机器，而不是嵌入式机器，所以需要略微修改后才能使用。即使我们针对交叉
+编译链做configure检查，生成的config.h也不能直接使用。
+
+主要修改：
+1) 系统函数（malloc函数是有的，不知为什么没检测到）
+	#define HAVE_MALLOC 0 -> #define HAVE_MALLOC 1
+	#define malloc rpl_malloc -> //#define malloc rpl_malloc
+
+1) 若干移植库
+	openssl已移植，zlib还未移植，所以取消HAVE_OPENSSL_SSL_H的注释
+
+2) 要使用内存池(是否能生效)，在config.h中增加两行：
+#define malloc nedmalloc
+#define free   nedfree
+
+config.h加入到工程中去：
+	Debug\onvif\subdir.mk中加入一行"DEFS += -DHAVE_CONFIG_H"，好像没什么用，
+直接在stdsoap2.h第226行加入“#define HAVE_CONFIG_H 1”
+
+
+100.7、把wsdd.nsmap拷贝到工程中去，并include它
+
+
+
+

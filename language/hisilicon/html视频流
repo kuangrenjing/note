@@ -1,1 +1,213 @@
 https://my.oschina.net/chengpengvb/blog/1832469?tdsourcetag=s_pctim_aiomsg
+
+使用vlc搭建http ts流服务器
+https://blog.csdn.net/yuanbinquan/article/details/68945685
+使用这个方案时firefox遇到下面问题：
+不支持 HTTP "Content-Type" 设为 "application/octet-stream"。媒体资源 http://localhost:8111/live 载入失败。
+无法播放媒体。没有相应格式的解码器：application/octet-stream
+
+firefox没有发现支持的视频格式和mime类型
+https://bbs.csdn.net/topics/390711847
+
+https://blog.csdn.net/qq_29099209/article/details/80842490
+
+
+https://stackoverflow.com/questions/11294836/streaming-mp4-with-vlc-to-html-browser
+
+
+
+
+
+html5 video label support raw h264 video?
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	mp4 is for IE and Safari, webM for Chrome and Firefox.Free webM video converter 
+lets you convert into both formats. Also from mpeg4(h.264)
+
+
+插件方案：
+NPAPI  PPAPI
+
+web无插件解码播放H264/H265(js解码HTML5播放)
+https://blog.csdn.net/Jacob_job/article/details/78122447
+
+
+mp4v2库的使用
+https://blog.csdn.net/aaa794708075/article/details/79295877
+
+现在如果要在页面中使用video标签，需要考虑三种情况，支持Ogg Theora或者VP8（如果这玩意儿没出事的话）的（Opera、Mozilla、Chrome），支持H.264的（Safari、IE 9、Chrome），都不支持的（IE6、7、8）。好吧，现在让我们从技术层面来认识HTML 5的视频，包括video标签的使用，视频对象可以用到的媒介属性和方法，以及媒介事件。
+
+https://support.mozilla.org/zh-CN/kb/Firefox%20%E7%9A%84%20HTML5%20%E9%9F%B3%E8%A7%86%E9%A2%91
+
+
+
+MSE(wfs.js)方案
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/jacke121/article/details/88067078
+https://blog.csdn.net/jacke121/article/details/88806646
+https://github.com/ChihChengYang/wfs.js
+
+https://bugzilla.mozilla.org/show_bug.cgi?id=1334827
+
+	使用MSE(Media Source Extension, 具体参考W3C标准)扩展实现 HTML5 video tag的流
+式直播。
+
+	方案描述：使用websocket 从服务端传输h264编码数据到浏览器，在浏览器端使用JS解
+析h264数据 ，封装成fMP4 fragment, 喂给media source 中的sourceBuffer，浏览器video 
+tag自动获取sourceBuffer中的数据进行解码渲染。 
+
+	网友最后实现的demo体验效果良好，延时能达到100ms以内，使用笔记本软解、硬解，
+chrome book软解表现都很完美，唯独chrome book 硬解会缓冲一帧数据，是一个瑕疵，不过
+这个缺点可以在服务器端多发一帧数据解决。（见后文）
+
+MSE(Media Source Extension) low delay mode
+
+低延时
+edge:
+	https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/17410767/
+	edge的开发团队说了，它们暂时不准备改。
+
+MSE API
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://developer.mozilla.org/en-US/docs/Web/API
+https://www.w3school.com.cn/tags/html_ref_audio_video_dom.asp   video标签的属性和方法
+https://developer.mozilla.org/zh-CN/docs/Building_Firefox_with_Debug_Symbols   调试firefox
+	MediaSource是Media Source Extensions API表示媒体资源HTMLMediaElement对象的
+接口。MediaSource对象可以附着在HTMLMediaElement在客户端进行播放。
+
+wfs项目分析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+media source相关
+
+buffer-controller.js:127
+
+createSourceBuffers(tracks)
+{
+	...
+	let sb = sourceBuffer['video'] = mediaSource.addSourceBuffer(mimeType);
+	...
+}
+
+buffer-controller.js
+onMediaAttaching(data)
+{
+	if (media)
+	{
+		...
+		var ms = this.mediaSource = new MediaSource();
+		...
+	}
+}
+
+wfs.js文件的
+attachMedia(media, channelName='chX',mediaType='H264Raw', websocketName='play2')
+{
+	// 'H264Raw' 'FMp4'
+	this.mediaType = mediaType; 
+	this.media = media;
+	this.trigger(Event.MEDIA_ATTACHING, {media:media, channelName:channelName, mediaType:mediaType, websocketName:websocketName });
+}
+函数会触发MEDIA_ATTACHING事件
+
+
+onBufferAppending(data)
+{
+    //console.log("onBufferAppending\n");
+    if (!this.segments) {
+      this.segments = [ data ];
+    } else {
+      this.segments.push(data); 
+    }
+    this.doAppending();
+
+    ->sourceBuffer[segment.type].appendBuffer(segment.data);
+}
+
+
+收到websocket发来的数据包后的流程
+
+onWebsocketAttaching函数是在MSE的mediasource创建后被触发的
+websocket-loader.js:onWebsocketAttaching(data)
+{
+	this.mediaType = data.mediaType;
+	this.channelName = data.channelName;
+	if( data.websocket instanceof WebSocket )
+	{
+		this.client = data.websocket;
+		this.client.onopen = this.initSocketClient.bind(this);
+		this.client.onclose = function(e) {
+			console.log('Websocket Disconnected!');
+		};
+	}
+}
+
+initSocketClient函数是websocket client的onopen回调
+websocket-loader.js:initSocketClient(client)
+{
+	this.client.binaryType = 'arraybuffer';
+	this.client.onmessage = this.receiveSocketMessage.bind(this);
+	this.wfs.trigger(Event.WEBSOCKET_MESSAGE_SENDING, {commandType: "open", channelName:this.channelName, commandValue:"NA" });
+	console.log('Websocket Open!'); 
+}
+
+receiveSocketMessage函数是websocket client的onmessage回调
+websocket-loader.js:receiveSocketMessage( event )
+{
+	this.buf = new Uint8Array(event.data);
+	var copy = new Uint8Array(this.buf);
+
+	if (this.mediaType ==='FMp4'){
+		this.wfs.trigger(Event.WEBSOCKET_ATTACHED, {payload: copy });
+	}
+	if (this.mediaType === 'H264Raw'){
+		this.wfs.trigger(Event.H264_DATA_PARSING, {data: copy });
+	}
+}
+
+onH264DataParsing函数解析h264 nalu结构
+h264-nal-slicesreader.js:onH264DataParsing(event)
+{
+	this._read(event.data);
+	var $this = this;
+	this.nals.forEach(function(nal) {
+		$this.wfs.trigger(Event.H264_DATA_PARSED, {
+			data: nal
+		});
+	});
+}
+
+h264-demuxer.js:onH264DataParsed(event)
+{
+	this._parseAVCTrack( event.data);
+	if (this.browserType === 1 || this._avcTrack.samples.length >= 20){ // Firefox  mqs  
+		this.remuxer.pushVideo(0, this.sn, this._avcTrack, this.timeOffset, this.contiguous);
+		this.sn += 1;
+	}
+}
+
+mp4-remuxer.js:pushVideo(level, sn, videoTrack, timeOffset, contiguous)
+{
+	this.level = level;
+	this.sn = sn;
+	let videoData;
+	// generate Init Segment if needed
+	if (!this.ISGenerated)
+	{
+		this.generateVideoIS(videoTrack,timeOffset);
+	}
+	if (this.ISGenerated)
+	{
+		if (videoTrack.samples.length)
+		{
+			this.remuxVideo_2(videoTrack,timeOffset,contiguous);
+		}
+	}
+}
+
+
+
+
+录像(MediaStream Recording)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+摄像：mediaDevices（获取设备）+ getUserMedia（获取流） + MediaRecorder（存储）
+录屏：getDisplayMedia（获取流） + MediaRecorder（存储）
+

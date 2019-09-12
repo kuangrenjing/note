@@ -4,9 +4,30 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 		<style>
+			#body {
+				margin: 0px;
+				padding: 0px;
+			}
+
+			#div_body {
+				height: 100%;
+				width: 100%;
+				margin: 0px;
+				padding: 0px;
+
+			}
+
 			#div_top_nvg {
 				height: 50px;
-				background-color: #cccccc;
+				background-color: black;
+				color: white;
+				margin: 0px;
+				padding: 0px;
+			}
+
+			#ul_top_nvg {
+				margin: 0px;
+				padding: 0px;
 			}
 
 			.li_top_nvg {
@@ -17,56 +38,110 @@
 				text-align: center;
 				line-height: 50px;
 				list-style-type : none;
+				margin: 0px;
+				padding: 0px;
 			}
 
 			#li_top_nvg1 {
-				height: 50px;
-				width: 200px;
+				width: 160px;
 				background-color: transparent;
+			}
+
+			#div_nvg4{
+				background-color: #dddddd;
+				top: 50px;
+				bottom: 0px;
+			}
+
+			#div_nvg41 {
+				background-color: #dddddd;
+				width: 200px;
+				/*float: left;*/
+				position: absolute;
+				margin: 0px;
+				padding: 0px;
+				top: 50px;
+				bottom: 0px;
+			}
+
+			#ul_nvg41 {
+				margin: 0px;
+				padding: 0px;
+			}
+
+			.li_nvg41 {
+				height: 0px;
+				list-style-type: none;
+				margin: 0px;
+				padding: 20px;
+				line-height: 0px;
+			}
+
+			#div_nvg2 {
+				
+			}
+
+			#canvas{
+				width: 720px;
+				height: 576px;
+				background-color: #ccc;
 			}
 		</style>
 
 
 	</head>
-	<body>
-		<div id = "div_top_nvg">
-			<ul id = "ul_top_nvg">
-				<li class = "li_top_nvg" id = "li_top_nvg1"></li>
-				<li class = "li_top_nvg" id = "li_top_nvg2" onclick = "navigation_click(this.id)">预览</li>
-				<li class = "li_top_nvg" id = "li_top_nvg3" onclick = "navigation_click(this.id)">图片</li>
-				<li class = "li_top_nvg" id = "li_top_nvg4" onclick = "navigation_click(this.id)">配置</li>
-				<li class = "li_top_nvg" id = "li_top_nvg5" onclick = "navigation_click(this.id)">回放</li>
-			<ul>
-		</div>
-
-		<div id = "div_nvg2">
-			<p>
-				this server have no preview now!
-			</p>
-		</div>
-
-		<div id = "div_nvg3">
-			<p>
-				this server have no picture now!
-			</p>
-		</div>
-
-		<div id = "div_nvg4">
-			<div id = "div_nvg41">
-				<p>什么</p>
+	<body id = "body">
+		<div id = "div_body">
+			
+			<div id = "div_top_nvg">
+				<ul id = "ul_top_nvg">
+					<li class = "li_top_nvg" id = "li_top_nvg1"></li>
+					<li class = "li_top_nvg" id = "li_top_nvg2" onclick = "navigation_click(this.id)">预览</li>
+					<li class = "li_top_nvg" id = "li_top_nvg3" onclick = "navigation_click(this.id)">图片</li>
+					<li class = "li_top_nvg" id = "li_top_nvg4" onclick = "navigation_click(this.id)">配置</li>
+					<li class = "li_top_nvg" id = "li_top_nvg5" onclick = "navigation_click(this.id)">回放</li>
+				<ul>
 			</div>
-			<div id = "div_nvg42">
-				<p>怎么</p>
-			</div>
-			<p>
-				this server have no set now!
-			</p>
-		</div>
 
-		<div id = "div_nvg5">
-			<p>
-				this server have no playback now!
-			</p>
+			<div id = "div_nvg2">
+				<canvas id="canvas"></canvas>
+			</div>
+
+			<div id = "div_nvg3">
+				<p>
+					this server have no picture now!
+				</p>
+			</div>
+
+			<div id = "div_nvg4">
+				<div id = "div_nvg41">
+					<ul id = "ul_nvg41">
+						<li class = "li_nvg41" id = "li_nvg4101" onclick = "sidebar_click(this.id)">本地</li>
+
+						<li class = "li_nvg41" id = "li_nvg4102" onclick = "sidebar_click(this.id)">系统</li>
+						<li class = "li_nvg41" id = "li_nvg4103" onclick = "sidebar_click(this.id)">系统设置</li>
+						<li class = "li_nvg41" id = "li_nvg4104" onclick = "sidebar_click(this.id)">系统维护</li>
+						<li class = "li_nvg41" id = "li_nvg4105" onclick = "sidebar_click(this.id)">安全管理</li>
+						<li class = "li_nvg41" id = "li_nvg4106" onclick = "sidebar_click(this.id)">用户管理</li>
+
+						<li class = "li_nvg41" id = "li_nvg4107" onclick = "sidebar_click(this.id)">网络</li>
+						<li class = "li_nvg41" id = "li_nvg4108" onclick = "sidebar_click(this.id)">基本配置</li>
+						<li class = "li_nvg41" id = "li_nvg4109" onclick = "sidebar_click(this.id)">高级配置</li>
+					</ul>
+				</div>
+				<div id = "div_nvg42">
+					<p>怎么</p>
+				</div>
+				<p>
+					this server have no set now!
+				</p>
+			</div>
+
+			<div id = "div_nvg5">
+				<p>
+					this server have no playback now!
+				</p>
+			</div>
 		</div>
 
 		<script>
@@ -99,6 +174,25 @@
 					document.getElementById("li_top_nvg4").style.backgroundColor = "transparent";
 					document.getElementById("li_top_nvg5").style.backgroundColor = "transparent";
 					//alert("li_top_nvg2 navigation_click");
+
+					//canvas
+					var canvas = document.getElementById("canvas");
+					var width = canvas.width = canvas.clientWidth;
+					var height = canvas.height = canvas.clientHeight;
+					var ctx = canvas.getContext("2d");
+					ctx.strokeStyle = "blue";
+					ctx.fillStyle = "transparent";
+					var xPos = 150;
+					var yPos = 150;
+					var radius =50;
+
+					ctx.clearRect(0, 0, width, height);
+					//绘制圆形
+					ctx.beginPath();
+					ctx.arc(xPos, yPos, 140, 0, 2*Math.PI, true);
+					ctx.stroke();
+					ctx.closePath();
+					ctx.fill();
 				}
 				else if(id == "li_top_nvg3")
 				{
@@ -125,6 +219,8 @@
 					document.getElementById("li_top_nvg4").style.backgroundColor = "red";
 					document.getElementById("li_top_nvg5").style.backgroundColor = "transparent";
 					//alert("li_top_nvg4 navigation_click");
+
+					document.getElementById("li_nvg4101").click();
 				}
 				else if(id == "li_top_nvg5")
 				{
@@ -139,6 +235,63 @@
 					document.getElementById("li_top_nvg5").style.backgroundColor = "red";
 					//alert("li_top_nvg5 navigation_click");
 				}
+			}
+
+			function sidebar_click(id)
+			{
+				if(id == "li_nvg4101")
+				{
+					document.getElementById("li_nvg4101").style.backgroundColor = "white";
+					document.getElementById("li_nvg4102").style.backgroundColor = "transparent";
+					document.getElementById("li_nvg4107").style.backgroundColor = "transparent";
+
+					document.getElementById("li_nvg4103").style.display = "none";
+					document.getElementById("li_nvg4104").style.display = "none";
+					document.getElementById("li_nvg4105").style.display = "none";
+					document.getElementById("li_nvg4106").style.display = "none";
+					document.getElementById("li_nvg4108").style.display = "none";
+					document.getElementById("li_nvg4109").style.display = "none";
+				}
+				else if(id == "li_nvg4102")
+				{
+					document.getElementById("li_nvg4101").style.backgroundColor = "transparent";
+					document.getElementById("li_nvg4102").style.backgroundColor = "transparent";
+					document.getElementById("li_nvg4107").style.backgroundColor = "transparent";
+
+					document.getElementById("li_nvg4103").style.backgroundColor = "white";
+					document.getElementById("li_nvg4103").style.display = "block";
+					document.getElementById("li_nvg4104").style.display = "block";
+					document.getElementById("li_nvg4105").style.display = "block";
+					document.getElementById("li_nvg4106").style.display = "block";
+
+					document.getElementById("li_nvg4103").style.paddingLeft = "50px";
+					document.getElementById("li_nvg4104").style.paddingLeft = "50px";
+					document.getElementById("li_nvg4105").style.paddingLeft = "50px";
+					document.getElementById("li_nvg4106").style.paddingLeft = "50px";
+
+					document.getElementById("li_nvg4108").style.display = "none";
+					document.getElementById("li_nvg4109").style.display = "none";
+
+				}
+				else if(id == "li_nvg4107")
+				{
+					document.getElementById("li_nvg4101").style.backgroundColor = "transparent";
+					document.getElementById("li_nvg4102").style.backgroundColor = "transparent";
+					document.getElementById("li_nvg4107").style.backgroundColor = "transparent";
+
+					document.getElementById("li_nvg4103").style.display = "none";
+					document.getElementById("li_nvg4104").style.display = "none";
+					document.getElementById("li_nvg4105").style.display = "none";
+					document.getElementById("li_nvg4106").style.display = "none";
+
+					document.getElementById("li_nvg4108").style.backgroundColor = "white";
+					document.getElementById("li_nvg4108").style.display = "block";
+					document.getElementById("li_nvg4109").style.display = "block";
+
+					document.getElementById("li_nvg4108").style.paddingLeft = "50px";
+					document.getElementById("li_nvg4109").style.paddingLeft = "50px";
+				}
+
 			}
 
 			document.getElementById("li_top_nvg2").click();

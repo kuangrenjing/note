@@ -1,0 +1,74 @@
+1、相关API
+HI_MPI_SYS_SetConf：          配置系统控制参数。
+HI_MPI_SYS_GetConf：          获取系统控制参数。
+HI_MPI_SYS_Init：             初始化 MPP系统。
+HI_MPI_SYS_Exit：             去初始化 MPP系统。
+HI_MPI_SYS_Bind：             数据源到数据接收者绑定。
+HI_MPI_SYS_UnBind：           数据源到数据接收者解绑定。
+HI_MPI_SYS_GetBindbyDest：    获取绑定的源。
+HI_MPI_SYS_GetVersion：       获取 MPP的版本号。
+HI_MPI_SYS_GetCurPts：        获取当前时间戳。
+HI_MPI_SYS_InitPtsBase：      初始化 MPP时间戳。
+HI_MPI_SYS_SyncPts：          同步 MPP时间戳。
+HI_MPI_SYS_Mmap：             存储映射接口。
+HI_MPI_SYS_MmapCache：        存储带 Cache 映射接口。
+HI_MPI_SYS_Munmap：           存储反映射接口。
+HI_MPI_SYS_MflushCache：      刷新 cache 里的内容到内存并且使 cache 里的内容无 效。
+HI_MPI_SYS_SetReg：           设置寄存器的值。
+HI_MPI_SYS_GetReg：           获取寄存器的值。
+HI_MPI_SYS_MmzAlloc：         在用户态分配MMZ内存。
+HI_MPI_SYS_MmzAlloc_Cached：  在用户态分配MMZ 内存，该内存支持 cache 缓 存。
+HI_MPI_SYS_MmzFlushCache：    刷新 cache 里的内容到内存并且使 cache 里的内容 无效。
+HI_MPI_SYS_MmzFree：          在用户态释放MMZ内存。
+HI_MPI_SYS_SetMemConf：       设置模块设备通道使用内存的DDR名。
+HI_MPI_SYS_GetMemConf：       获取模块设备通道使用内存的DDR名。
+HI_MPI_SYS_CloseFd：          关闭所有 SYS 打开的日志、系统、内存 Fd。
+HI_MPI_VB_SetConf：           设置 MPP视频缓存池属性。
+HI_MPI_VB_GetConf：           获取 MPP视频缓存池属性。
+HI_MPI_VB_Init：              初始化MPP 视频缓存池。
+HI_MPI_VB_Exit：              去初始化 MPP视频缓存池。
+HI_MPI_VB_CreatePool：        创建一个视频缓存池。
+HI_MPI_VB_DestroyPool：       销毁一个视频缓存池。
+HI_MPI_VB_GetBlock：          获取一个缓存块。
+HI_MPI_VB_ReleaseBlock：      释放一个已经获取的缓存块。
+HI_MPI_VB_Handle2PhysAddr：   获取一个缓存块的物理地址。
+HI_MPI_VB_Handle2PoolId：     获取一个缓存块所在缓存池的 ID。
+HI_MPI_VB_MmapPool：          为一个视频缓存池映射用户态虚拟地址。
+HI_MPI_VB_MunmapPool：        为一个视频缓存池解除用户态映射。
+HI_MPI_VB_GetBlkVirAddr：     获取一个视频缓存池中的缓存块的用户态虚拟地 址。
+HI_MPI_VB_InitModCommPool：   初始化模块公共视频缓冲池。
+HI_MPI_VB_ExitModCommPool：   注销模块公共视频缓冲池。
+HI_MPI_VB_SetModPoolConf：    设置模块公共视频缓冲池属性。
+HI_MPI_VB_GetModPoolConf：    获取模块公共视频缓冲池属性。
+HI_MPI_SYS_SetProfile：       设置功耗场景。
+HI_MPI_SYS_GetViVpssMode：    获取 ViVpss 离/在线模式。
+HI_MPI_SYS_GetVirMemInfo：    根据虚拟地址获取对应的内存信息。
+HI_MPI_VB_GetSupplementAddr： 获取VB Block 内存的辅助信息。
+HI_MPI_VB_SetSupplementConf： 设置VB内存的辅助控制信息。
+HI_MPI_VB_GetSupplementConf： 获取VB内存的辅助控制信息。
+HI_MPI_SYS_SetScaleCoefLevel：设置 VPSS 模块和VGS 模块的缩放系数等级。
+HI_MPI_SYS_GetScaleCoefLevel：获取 VPSS 和VGS 缩放系数等级。
+HI_MPI_SYS_SetTimeZone：      设置时区信息。
+HI_MPI_SYS_GetTimeZone：      获取时区信息。
+
+
+1、mpp时间戳(设置和微调系统时间戳)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+HI_MPI_SYS_GetCurPts：        获取当前时间戳。
+HI_MPI_SYS_InitPtsBase：      初始化 MPP时间戳。
+HI_MPI_SYS_SyncPts：          同步 MPP时间戳。
+
+DTS（解码时间戳）和PTS（显示时间戳）
+
+http://bbs.ebaina.com/thread-13220-1-1.html
+请教各位大神，如果是多个输出端需要进行同步显示，如何实现网络时钟的同步呢？仅使用sdk中的api  HI_mpi_sys_syncpts()就可行？那系统时钟同步咋办？
+
+2、时区
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+3、公共视频缓存池
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+4、自定义视频缓存池
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

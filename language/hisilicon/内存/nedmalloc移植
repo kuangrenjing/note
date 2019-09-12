@@ -1,0 +1,30 @@
+1、malloc_usable_size未定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	移植nedmalloc到嵌入式系统可能会遇到undefined reference to `malloc_usable_size'
+错误。
+
+https://stackoverflow.com/questions/23382001/ndk-replacement-of-deprecated-malloc-usable-size
+	此链接描述了这个问题，但并未给出解决方案。
+
+这个给出我自己的解决方案：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过网络我们可以知道，dlmalloc、nedmalloc都是知名的内存池方案。dlmalloc可以
+替代系统malloc/free/realloc函数使用。nedmalloc基于dlmalloc，但用户也可以选择使用
+系统malloc/free/realloc。
+
+	我们选择使用dlmalloc（默认）的时候，系统的malloc/free/realloc并未被预编译宏
+全部关闭，由于google公司的某些人删除了linux api中的malloc_usable_size的定义，导致
+链接错误。
+
+	虽然系统malloc/free/realloc并未被预编译宏关闭，但并不会被执行，所以我们用
+dlmalloc_usable_size替代malloc/free/realloc那部分的malloc_usable_size应该不会引起
+错误，而又可以避开链接错误。
+
+	具体修改源码的行：
+	nedmalloc.h L248
+	nedmalloc.c L90 L310
+
+
+2、DEBUG
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+取消DEBUG定义，运行会更快

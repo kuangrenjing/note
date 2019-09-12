@@ -20,8 +20,31 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 bufferevent提供了bufferevent_socket_connect函数，且bufferevent_socket_new具有延后绑定
 套接字的功能。
 
+2、系统函数listen详解
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#include <sys/types.h>
+#include <sys/socket.h>
+int listen(int sockfd, int backlog);
 
-2、创建或释放一个evconnlistener
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	本函数在一个socket的句柄上监听连接。
+参数详解：
+	sockfd参数：是一个引用SOCK_STREAM或者是SOCK_SEQPACKET类型的句柄。
+	backlog参数：此参数指定了sockfd句柄上pending的连接的队列可以达到的最大的长度。
+
+	backlog参数比/proc/sys/net/core/somaxconn大时，截断为somaxconn。
+	从Linux2.2以来，backlog指定的是已经连接但等待accept(未决状态)的队列的最大值。
+
+	如果当此半连接队列已经满了，此时一个连接请求到达服务端，此时客户端会收到一个
+ECONNREFUSED的错误码，或者如果此协议支持重传，那么服务端直接忽略掉这个连接请求以
+使得重传到直到连接成功。
+
+返回值：
+	成功的时候返回0；出错的时候返回-1，并且设置errno.
+
+
+
+3、创建或释放一个evconnlistener
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 struct evconnlistener* evconnlistener_new(struct event_base * base,
 			evconnlistener_cb cb, 
@@ -59,7 +82,7 @@ evconnlistener_new_bind()，传输要绑定到的地址和地址长度。
 
 	要释放连接监听器，应调用evconnlistener_free()。
 
-3、evconnlistener_new函数flags参数(标志)
+4、evconnlistener_new函数flags参数(标志)
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 LEV_OPT_LEAVE_SOCKETS_BLOCKING:
 	默认情况下，连接监听器接收新套接字后，会将其设置为非阻塞的，以便将其用于libevent。
@@ -83,7 +106,7 @@ LEV_OPT_REUSEABLE:
 LEV_OPT_THREADSAFE:
 	为监听器分配锁，这样就可以在多个线程中安全地使用了。这是2.0.8-rc的新功能。
 
-4、连接监听器的回调
+5、连接监听器的回调
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 typedef void (*evconnlistener_cb)(struct evconnlistener *listener, 
 			evutil_socket_t sock, 
@@ -97,7 +120,7 @@ typedef void (*evconnlistener_cb)(struct evconnlistener *listener,
 		addr和len分别是接受的连接地址和地址的长度；
 		ptr是传到evconnlistener_new()的用户提供的指针。
 
-5、检查错误回调函数
+6、检查错误回调函数
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 typedef void(*evconnlistener_errorcb)(struct evconnlistener* lis, void * ptr);
 void evconnlistener_set_error_cb(struct evconnlistener* lev,
@@ -109,12 +132,12 @@ void evconnlistener_set_error_cb(struct evconnlistener* lev,
 
 	函数首次出现在LibEvent2.0.8-rc版本中.
 
-6、暂时启用和禁用evconnlistener
+7、暂时启用和禁用evconnlistener
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 int evconnlistener_disable(struct evconnlistener* lev);
 int evconnlistener_enable(struct evconnlistener* lev);
 
-7、调整evconnlistener的回调函数
+8、调整evconnlistener的回调函数
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 void evconnlistener_set_cb(struct evconnlistener* lev,
 		evconnlistener_cb cb, 
@@ -123,7 +146,7 @@ void evconnlistener_set_cb(struct evconnlistener* lev,
 	该函数调整已有evconnlistener的回调函数和回调函数参数。该函数出现在LibEvent2.0.9-rc
 版本中。
 
-8、检查evconnlistener
+9、检查evconnlistener
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 evutil_socket_t evconnlistener_get_fd(struct evconnlistener* lev);
 struct event_base* evconnlistener_get_base(struct evconnlistener * lev);
@@ -131,7 +154,7 @@ struct event_base* evconnlistener_get_base(struct evconnlistener * lev);
 	这些函数分别返回了监听器关联的socket和event_base。
 	evconnlistener_get_fd()函数出现在LibEvent2.0.3-alpha版本中。
 
-9、evconnlistener的使用范例
+10、evconnlistener的使用范例
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 #include <event2/listener.h>
 #include <event2/bufferevent.h>

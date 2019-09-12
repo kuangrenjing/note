@@ -1,0 +1,30 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	tinyproxy是一个轻量级的开源的HTTP(s)代理守护进程，与它同类型的开源软件还有：
+Squid
+Privoxy
+Varnish Cache
+Polipo
+tinyproxy与这些同类产品的显著区别是它的低开销：使用glibc时内存开销只有2MB，CPU负载
+按并发连接数线性增长(取决于网络连接速度)。
+
+	tinyproxy1.6.3只支持正向代理，tinyproxy1.8.3是支持反向代理的，这正是我们需
+要的功能。
+
+
+2、配置文件解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+3、执行
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+./tinyproxy -d -c ./tinyproxy.conf &
+
+
+
+3、交叉编译
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://www.aiuxian.com/article/p-1513118.html
+
+
+3、systemctl命令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

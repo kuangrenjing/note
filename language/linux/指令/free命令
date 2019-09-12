@@ -1,0 +1,43 @@
+1、free -h输出
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+              total        used        free      shared  buff/cache   available
+Mem:           1.9G        395M        1.0G        3.1M        456M        1.3G
+Swap:          1.9G          0B        1.9G
+
+2、各字段解释
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、buff/cache
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Buffer cache
+Page cache
+
+buff/cache的解释：
+https://www.cnblogs.com/ultranms/p/9254160.html
+https://blog.csdn.net/lqglqglqg/article/details/82313966
+
+	buff/cache是buffer cache和page cache的简写，两者都是用作磁盘文件缓存用的，在
+内存空间紧张时可回存到磁盘以收回内存。
+
+2.2、available
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+available = free + buff/cache
+
+
+
+
+
+
+下面先解释一下输出的内容：
+Mem 行(第二行)是内存的使用情况。
+Swap 行(第三行)是交换空间的使用情况。
+total 列显示系统总的可用物理内存和交换空间大小。
+used 列显示已经被使用的物理内存和交换空间。
+free 列显示还有多少物理内存和交换空间可用使用。
+shared 列显示被共享使用的物理内存大小。
+buff/cache 列显示被 buffer 和 cache 使用的物理内存大小。
+available 列显示还可以被应用程序使用的物理内存大小。
+
+我想只有在理解了一些基本概念之后，上面的输出才能帮助我们了解系统的内存状况。
+
+
+Buffer cache。这里的 cache 指 Linux 内存中的：Page cache

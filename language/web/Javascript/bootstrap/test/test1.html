@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bootstrap 实例 - 基本的按钮下拉菜单</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="buttonText">默认</span>
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="#" onclick="shows($(this).text())">功能</a></li>
+        <li><a href="#" onclick="shows($(this).text())">另一个功能</a></li>
+        <li><a href="#" onclick="shows($(this).text())">其他</a></li>
+        <li><a href="#" onclick="shows($(this).text())">分离的链接</a></li>
+    </ul>
+</div>
+</body>
+<script>
+    function shows(a) {
+        $('.buttonText').text(a)
+    }
+</script>
+</html>

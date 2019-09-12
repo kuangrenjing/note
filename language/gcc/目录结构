@@ -1,0 +1,10 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.v2ex.com/t/195607
+
+
+bits是实作，bits目录不应该直接包含
+
+
+bits/uClibc_config.h
+

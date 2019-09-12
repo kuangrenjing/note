@@ -1,0 +1,8 @@
+
+http://www.ecma-international.org/ecma-262/6.0/#sec-object-internal-methods-and-internal-slots
+
+双方括号代表这是JavaScript引擎内部使用的属性/方法，可以帮助debug（点一下[[FunctionLocation]]就能跳到定义，点一下[[Scopes]]就能查看闭包），但是正常JavaScript代码是取不到这些属性的。
+引擎看心情决定要显示哪些内部属性，显示的格式也没有规定，但在控制台里大家一般都约定俗成用双方括号，保持和规范的格式一致。
+
+
+firefox似乎用的是<>
