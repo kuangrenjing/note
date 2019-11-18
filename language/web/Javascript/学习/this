@@ -1,0 +1,16 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.w3school.com.cn/js/js_this.asp
+
+1、this 是什么？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+JavaScript this关键词指的是它所属的对象。
+
+它拥有不同的值，具体取决于它的使用位置：
+	在方法中，this指的是所有者对象。
+	单独的情况下，this指的是全局对象(浏览器中是window对象)。
+	在函数中，this指的是全局对象(浏览器中是window对象)。
+	在函数中，严格模式下，this是undefined。
+	在事件中，this指的是接收事件的元素。
+
+像call()和apply()这样的JS预定义方法可以将this引用到任何对象。

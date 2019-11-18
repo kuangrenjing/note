@@ -1,0 +1,36 @@
+1、/etc/init.d/rcS(海图) /etc/init.d/S80network(翔飞)定制
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+nfs目录挂载
+ld路径配置
+boa开机自启动
+
+具体是(海图)：
+
+#mount nfs directory                                
+mount -t nfs -o nolock 192.168.15.128:/home/mqs/nfs /mnt/nfs
+export LD_LIBRARY_PATH=/mnt/nfs/lib/Hi3516A_PQ_V1.0.5.0:$LD_LIBRARY_PATH
+                                                                        
+#boa                                                                    
+/mnt/nfs/bin/boa  -c /mnt/nfs/web -f /mnt/nfs/etc/boa.conf 1>/dev/null 2>&1
+                                                                           
+#tinyproxy                                                                 
+/mnt/nfs/bin/tinyproxy -d -c /mnt/nfs/etc/tinyproxy.conf 1>/dev/null 2>&1
+
+
+翔飞
+#要等等等等呀，不然报No route to host.
+sleep 20s
+#mount nfs directory                                
+mount -t nfs -o nolock 192.168.15.128:/home/mqs/nfs /mnt/nfs
+export LD_LIBRARY_PATH=/mnt/nfs/Hi3516A_PQ_V1.0.7.0/libs/:$LD_LIBRARY_PATH
+                                                                        
+#boa                                                                    
+/mnt/nfs/bin/boa  -c /mnt/nfs/web -f /mnt/nfs/etc/boa.conf 1>/dev/null 2>&1
+                                                                           
+#tinyproxy                                                                 
+/mnt/nfs/bin/tinyproxy -c /mnt/nfs/etc/tinyproxy.conf 1>/dev/null 2>&1
+
+
+
+
+

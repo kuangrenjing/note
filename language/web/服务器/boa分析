@@ -6,7 +6,7 @@ https://blog.csdn.net/yyw794/article/details/73699276            如何让boa网
 http://www.boa.org/已登录不了
 https://github.com/gpg/boa     是boa在github上的路径
 https://blog.csdn.net/xiaopangzi313/article/details/9156185   修改BOA的CGI策略
-https://www.cnblogs.com/hnrainll/archive/2011/06/01/2067295.html  CGI和BOA使用期间遇到的问题汇总
+https://www.cnblogs.com/hnrainll/archive/2011/06/01/2067295.html  CGI和BOA使用期间遇到的问题汇总 mkstemp
 https://www.sojson.com/http/test.html   在线HTTP测试
 https://zhidao.baidu.com/question/278591448.html  directory listing
 https://blog.csdn.net/xygl2009/article/details/22046263   boa测试
@@ -22,7 +22,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 -c
 	设置server_root，如果配置文件中使用相对路径，则是相对于此目录的。
 -d
-	设置是否以守护进程启动
+	设置是否以守护进程启动，使用-d时非守护进程
 -f
 	设置config_file_name变量
 -r
@@ -37,39 +37,60 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 1.3、配置文件
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://blog.csdn.net/qq_24341965/article/details/79756634
-01)ServerRoot
-02)Port
-03)Listen
-04)User Group
-05)ServerAdmin
-06)PidFile
-07)ErrorLog
-08)AccessLog
-09)CGILog
-10)CGIumask
-11)UseLocaltime
-12)VerboseCGILogs
-13)ServerName
-14)VirtualHost
+名称与值之间只能有一个空格：
+01)ServerRoot        在命令行中设置
+02)Port              监听端口
+03)Listen            监听IP，默认是INADDR_ANY
+04)User Group        权限
+05)ServerAdmin       邮件地址
+06)PidFile           守护进程惯例
+07)ErrorLog          错误日志路径
+08)AccessLog         访问日志路径
+09)CGILog            CGI程序写道stderr的日志路径？
+10)CGIumask          CGI访问权限
+11)UseLocaltime      使用本地时间
+12)VerboseCGILogs    一个逻辑开关，用于指示是否在错误日志中记录CGI起止时间
+13)ServerName        不是HTTP响应中的Server头，gethostname + gethostbyname不能正确工作时，使用这个，什么用途呢？
+14)VirtualHost       一个逻辑开关，开启后的一个例子：DocumentRoot设置为/var/www
+                     请求http://localhost/->访问/var/www/127.0.0.1
 15)VHostRoot
 16)DefaultVHost
-17)DocumentRoot
-18)UserDir
-19)DirectoryIndex
-20)DirectoryMaker
-21)DircetoryCache
+17)DocumentRoot       HTML文档的根目录
+18)UserDir            用于~user请求，这是个什么请求？
+19)DirectoryIndex     预生成的HTML主页，相对于DocumentRoot，绝对路径好像会报403
+20)DirectoryMaker     没有DirectoryIndex，可指定DirectoryMaker生成主页
+21)DircetoryCache     DirectoryIndex、DirectoryMaker都不可用时使用
 22)KeepAliveMax
 23)KeepAliveTimeout
-24)MineTypes
-25)DefaultType
-26)LangRewrite
-27)EnableHSTS max-age
-28)CGIPath
-29)SinglePostLimit
-30)AddType
-31)Redirect
-32)Alias
-33)ScriptAlias
+24)MineTypes          MineTypes文件，建议使用AddType指令代替
+25)DefaultType        如果文件扩展在MineTypes文件中未定义，使用此MineType，必须设置
+26)LangRewrite        完整路径找不到，缩减一个再找？
+27)EnableHSTS max-age  Strict-Transport-Security头
+28)CGIPath             CGI程序的目录链，以冒号分割
+29)SinglePostLimit    当个POST请求中可以携带的负载的字节数，默认是1MB
+30)AddType            建议的替代MineTypes的方法。例子：AddType application/x-httpd-cgi cgi。另外，实测一行只能有一
+                      个值，说明文档说一行可以放多个值是不对的。
+31)Redirect           反射
+32)Alias              别名
+33)ScriptAlias        脚本目录别名？？注意目录和可执行文件的权限问题，不然可能会报403错误。
+
+1.4、移植过程中遇到的问题
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://blog.csdn.net/xdw1985829/article/details/6672742
+
+1.4.1、gethostbyname:: No such file or directory
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	说明gethostname + gethostbyname不能正确工作，我们应打开boa.conf配置文件中的
+ServerName设置。
+
+1.5、启动
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+放在/etc/init.d/rcS最后
+
+/mnt/nfs/bin/boa -c /mnt/nfs/web -f /mnt/nfs/etc/boa.conf -l 65535 1>/dev/null 2>&1
+
+开元金融
 
 2、boa调试等级
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -204,3 +225,25 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 cgic库
 https://boutell.com/cgic/#obtain
+
+
+
+
+14、boa各种错误及解决方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://blog.chinaunix.net/uid-27023695-id-3452487.html
+
+14.1、malformed request         501
+
+与请求采用的OPTIONS有关？
+bootstrap-table定义了“method: 'GET',”，发出的仍是OPTIONS。
+
+浏览器预检请求，只有发出CORS请求时，才会预检
+
+添加对OPTIONS方法的支持：
+
+修正：
+在源码中带有以下注释的段都是为了修正这个问题而修改的
+@mqs add[OPTIONS]
+@mqs delete[OPTIONS]
+globals.h

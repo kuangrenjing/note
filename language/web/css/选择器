@@ -1,30 +1,106 @@
-1、元素选择器（元素类型选择器）
-	元素标签名
-	譬如
-		p
 
-	应用后，文档中所有指定的标签元素都将使用此属性。
 
-2、派生选择器
+0、语法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	CSS规则由两个主要部分组成：选择器，声明列表：
+selector {declaration1; declaration2;...declarationN}
+
+	选择器指定需改变样式的HTML元素
+	声明列表位于选择器后面的大括号'{}'中，声明之前使用分号';'分隔
+
+
+1、选择器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、选择器分钟
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	如果一条规则适合多个选择器，可使用选择器分组规则：
+selector1, selector2,...selectorN {declaration1; declaration2;...declarationN}
+
+	选择器之间使用逗号','分隔。
+
+1.2、元素选择器（元素类型选择器）
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	使用“元素标签名”作为选择器
+
+实例：
+	p {color: #ff0000}
+	应用后，文档所有段落都将变成红色。
+
+1.3、派生选择器
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	通过依据元素在其位置的上下文关系来定义样式，你可以使标记更加简洁。在CSS1中，
 通过这种方式来应用规则的选择器被称为上下文选择器(contextual selectors)，在CSS2中，
 它们称为派生选择器。
 
+有点像后代选择器
 
-3、类选择器
-	点号 + 类名
-	譬如
-		.important
+1.4、类选择器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+形式
+	.类名
 
-4、ID选择器
-	# + ID名
-	譬如
-		#intro
+语法1-词列表：
+	HTML文档中，class可以组合使用，譬如<p class="important warning">表明此p输入
+两个类。从另一方面说，类名只能是一个单词。
 
-5、后代选择器
+	所以，important和warning可以单个使用，也可以组合使用（类选择器之间不能有空格）。
+至于对特定情况哪一条规则生效，可见css权重篇。
+	.important {font-weight:bold;}
+	.warning {font-style:italic;}
+	.important.warning {background:silver;}
 
-6、相邻兄弟选择器
+语法2-组合元素使用：
+	html文档中可以给多个元素赋值相同的class，如果class规则要对特定的元素生效，可
+使用“组合元素使用”规则。
+	p.warning {font-style:italic;}
+
+1.5、ID选择器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+形式
+	#id号
+
+	HTML文档中，id只能使用一次，且一个元素不能有多个id，所以class的那些特定语法
+对ID选择器都无效。
+
+
+1.6、属性选择器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	使用属性选择器可以为指定属性的HTML元素设置样式，而不仅限于class和id属性。
+
+实例1：
+	[title] {color:red}
+	把带有title属性的所有元素都设置为红色字体
+
+实例2：
+	[title=w3school] {color:red}
+	把title属性值为w3school的元素设置为红色字体
+
+属性值规则表：
+[attribute]         用于选取带有指定属性的元素。
+[attribute=value]   用于选取带有指定属性和值的元素。
+[attribute~=value]  用于选取属性值中包含指定词汇的元素。
+[attribute|=value]  用于选取带有以指定值开头的属性值的元素，该值必须是整个单词。
+[attribute^=value]  匹配属性值以指定值开头的每个元素。
+[attribute$=value]  匹配属性值以指定值结尾的每个元素。
+[attribute*=value]  匹配属性值中包含指定值的每个元素。
+
+1.7、后代选择器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+1.8、子元素选择器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+1.9、相邻兄弟选择器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+2、声明
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	每条声明由一个属性和一个值组成。属性与值之间使用冒号':'分隔。
+	一条规则多个声明之间使用分号';'分隔
+	CSS对大小写不敏感，但class和id名称对大小写是敏感的，因为class和id是HTML的内容。
+
+	值如果是字符串，需使用双引号。
 
 
 

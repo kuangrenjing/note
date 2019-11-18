@@ -1,0 +1,7 @@
+上周总结：
+	web实时视频流延时与稳定性调优（firefox已基本稳定，edge有3~5秒延时，chrome还未测试）
+	https://jansonn/svn/DFS_03_jianrongxing_uncooled_640/software/V1/trunk/wfs.js-master
+
+
+本周计划：
+	osd功能调优

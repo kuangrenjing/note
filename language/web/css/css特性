@@ -1,0 +1,8 @@
+1、继承性
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaqa
+参考
+	0：https://blog.csdn.net/qq_41803637/article/details/80023720
+	1：https://www.w3cschool.cn/cssref/pr-class-float.html
+
+	并不是所有CSS属性都具有继承性，很多CSS属性不可继承。《参考0》中对继承性做了
+分类。《参考1》的属性大全中每一条属性也都标示了继承性。

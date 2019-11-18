@@ -1,0 +1,11 @@
+https://www.w3cschool.cn/cssref/css3-pr-mediaquery.html
+
+
+1、!important
+
+2、css权重
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	人们期望的效果没有能够通过css规则在元素上生效，很有可能是因为对css权重概念
+没有理解透。
+
+	!important

@@ -1,0 +1,27 @@
+
+001
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	测试position取不同值时页面的表现。positon有四种可能的取值：static、relative、
+absolute、fixed。static就是正常的文档流，相当于未定位；relative是相对定位；absolute
+是绝对定位；fixed类似于absolute，只是其定位参考不同而已。
+
+	absolute定位元素的包含块为最近的position为非static的祖辈元素，若祖辈元素中
+没有定位元素，则包含块为初始包含块，在浏览器中为浏览器视口。
+	fixed定位是absolute定位的一种特殊表现。fixed定位元素的包含块为初始包含块，即
+视口。
+	两者包含块都为视口时，但有什么不同之处呢？
+	fixed定位元素相对于视口偏移，不随着body主体内容的滚动而滚动。而absolute定位
+元素相对视口偏移时，仅指的是相对于滚动条处于顶端（document.body.scrollTop=0）时
+的视口的偏移。在滚动过程中，absolute元素会随之滚动。
+
+	001.html主要测试position为static、relative、absolute(父包含块为static)、
+absolute(父包含块为非static)时的情况：
+	1、div11、div12、div13为static块，可以看出，它们就是正常的文档流，对它们设置top、
+buttom等属性不起作用。
+	2、div21、div22、div23为relative块，可以看出，div22设置的偏移40像素是相对于正常
+文档流中的div22位置的；div23同样如此。
+	3、div31、dev32、dev33为absolute块，其父块为static块。前面说到，absolute定位
+元素的包含块为最近的position为非static的祖辈元素，但这里有个奇怪的现象：把块设置
+为absolute，但未使用top、buttom等定位设置，其还是在其static父块中。
+	4、div41、div42、div43为absolute块，其父块为relative块，设置的top都是块的上外边
+距相对于父块上边界的偏移。

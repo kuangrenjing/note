@@ -1,0 +1,65 @@
+263行
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+font-face定义使用Glyphicons Halflings字体库。
+
+Glyphicons Halflings编码库中的200个图标：
+https://www.runoob.com/bootstrap/bootstrap-glyphicons.html
+
+bootstrap.css中定义了200个class来应用这些图标。
+
+container与container-fluid
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	container只能显示几个固定大小
+	container-fluid是按窗口尺寸显示
+
+
+
+
+nav
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+0、参考
+https://www.cnblogs.com/zhangw1994/archive/2017/07/06/7124252.html
+
+1、解释
+navbar-toggle
+为了在小屏幕上折叠
+
+.navbar-toggle .icon-bar的高度只有两个像素，表现的就像一根线。三个icon-bar就表现
+为三根线。
+
+
+.nav与.navbar的区别
+
+
+
+导航条距离
+
+collapse
+
+
+
+texteara
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+100、bootstrap-table
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+100.0、参考
+https://bootstrap-table.com/docs/getting-started/usage/
+https://www.jianshu.com/p/8c4ff8eca14f     实例
+https://www.cnblogs.com/laowangc/p/8875526.html    实例学习
+
+bootstrap-table与服务器通信
+
+bootstrap-table大小控制
+https://blog.csdn.net/jqc874789596/article/details/82877544
+https://blog.csdn.net/qq_14962311/article/details/85065324
+https://www.php.cn/div-tutorial-385242.html
+
+
+
+101、jquery图形插件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/DemonQSX/article/details/65442683
+https://blog.csdn.net/qiphon3650/article/details/75504118
+https://blog.csdn.net/luanlouis/article/details/38490589    jpainter
+应使用canvas功能，jquery提供jCanvas插件，还有jpainter项目

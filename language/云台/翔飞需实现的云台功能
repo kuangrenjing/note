@@ -1,0 +1,39 @@
+1、onvif部分
+需支持下列函数
+	GetNodes
+	GetNode
+	GetConfigurations
+	GetConfiguration
+	GetConfigurationOptions
+	SetConfiguration
+	GetCompatibleConfigurations
+	GetServiceCapabilities
+	Absolutemove
+	RelativeMove
+	ContinuousMove
+	GeoMove
+	Stop
+	GetStatus
+	SetPreset
+	GetPreset
+	GotoPreset
+	RemovePreset
+	GotoHomePositon
+	SetHomePosition
+	SendAuxiliaryCommand
+	GeoMove
+	CreatePresetTour
+	ModifyPresetTour
+	OperatePresetTour
+	RemovePresetTour
+	GetPresetTours
+	GetPresetTour
+	GetPresetTourOptions
+
+需支持的功能
+	支持所有预定义的space
+	运动时支持选择space
+
+
+2、pelco-d、pelco-p协议部分
+我们目前手上有一台云台，调用zoom功能前需先发送全0指令，使用pelco-d表达就是“FF 01 00 00 00 00 01”

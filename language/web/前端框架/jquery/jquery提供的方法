@@ -1,0 +1,21 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+1、函数与方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	JS把不属于对象的API称为函数，把属于对象的API称为方法。
+
+2、jquery遍历方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、each()方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://codeplayer.vip/p/j7snc
+
+each()函数将根据匹配到的每一个元素循环调用函数callback。每次调用函数callback时，each()函数都会将callback函数内部的this引用指向当前正在迭代的元素，并为其传入两个参数。第一个参数是当前迭代元素在匹配到的元素中的索引值(从0开始计数)，第二个参数是当前迭代元素(与this的引用相同)。
+
+each()函数还会根据每次调用函数callback的返回值来决定后续动作。如果返回值为false，则停止循环(相当于普通循环中的break)；如果返回其他任何值，均表示继续执行下一个循环。
+
+
+
+each()方法的返回值为jQuery类型，返回当前jQuery对象本身。

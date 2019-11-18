@@ -1,0 +1,32 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/huang_yx/article/details/79684886
+
+1、JS对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	JS对象可分为：JS内置对象、JS外部对象、自定义对象。JS内置对象是JS自身所持有的
+对象，不需要创建，可直接使用；JS外部对象是由浏览器提供的，可直接访问。
+
+JS常见内置对象有：
+	String Number Boolean Array Math Date RegExp Function
+
+JS外部对象就是DOM和BOM
+
+自定义对象有两种方法：
+	直接创建对象
+	通过构造器创建对象(构造器又有多种方式)
+
+2、使用JQuery方法能得到的对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.jQuery对象：
+	通常jQuery选择器选中的目标一定是jQuery对象；
+	一般jQuery方法若返回节点(DOM或BOM树节点)则是jQuery对象；
+	一般jQuery赋值的方法返回的是jQuery对象；
+
+2.DOM对象：
+	从jQuery中获取一个DOM对象：$obj[i]/$obj.get(i)(jQuery方法)；
+	jQuery转换为一DOM对象的方法：jQuery加一个下标转换；
+
+3.内置对象（尤其是字符串）
+	一般jQuery返回具体的值则是String
+	注：万能方法：输出对象观察

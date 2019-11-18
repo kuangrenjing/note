@@ -1,0 +1,6 @@
+带有软连接文件的文件夹的打包与解压
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+tar  -zcvpf oradata_zcvpf.tar.gz oradata
+tar  -ztvf oradata_zcvpf.tar.gz
+
+打包带p，解压带t

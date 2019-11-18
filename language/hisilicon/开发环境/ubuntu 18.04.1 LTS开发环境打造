@@ -656,6 +656,13 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 27.3、运行
 	/mnt/nfs/bin/tinyproxy -d -c /mnt/nfs/etc/tinyproxy/tinyproxy.conf 1>/dev/null 2>&1
 
+28、cJSON
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+28.2、编译
+	make INSTALL_INCLUDE_PATH=/opt/crossinstall/include/cJSON INSTALL_LIBRARY_PATH=/opt/crossinstall/lib CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
+	make install INSTALL_INCLUDE_PATH=/opt/crossinstall/include/cJSON INSTALL_LIBRARY_PATH=/opt/crossinstall/lib CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
+
 
 
 21、nfs服务器搭建
@@ -675,9 +682,10 @@ ubuntu虚拟机上需要做的工作：
 	
 journalctl -xe查看错误消息
 
-
-Ubuntu 17.10 之后 nfs 默认就只支持协议3和协议4，但是嵌入式板子 uboot 默认启动的是协议2，若想要求主机 nfs 支持协议2，就得：
-#gedit /etc/default/nfs-kernel-server
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Ubuntu 17.10之后nfs默认就只支持协议3和协议4，但是嵌入式板子 uboot 默认启动
+的是协议2，若想要求主机 nfs 支持协议2，就需要在/etc/default/nfs-kernel-server末
+尾加一句：RPCNFSDOPTS="--nfs-version 2,3,4 --debug --syslog"
 
 21.2、修改配置文件/etc/exports，内容如下：
 /home *(rw,sync,no_root_squash)

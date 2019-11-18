@@ -1,0 +1,44 @@
+1、字体
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+@font-face 规则
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、参考
+	https://www.w3cschool.cn/cssref/css3-pr-font-face-rule.html
+
+1.2、说明
+	使用@font-face规则 可以引入非浏览器默认支持的字体库，引入开发者自己的字体库可以
+消除对用户电脑字体的依赖。
+
+1.3、用法
+@font-face
+{
+	属性
+}
+
+1.4、属性列表
+font-family     name              必需的。定义字体的名称。
+src             URL                必需的。定义该字体下载的网址（S）
+font-stretch    normal             可选。定义该字体应该如何被拉长。默认值是"正常"
+                condensed
+                ultra-condensed
+                extra-condensed
+                semi-condensed
+                expanded
+                semi-expanded
+                extra-expanded
+                ultra-expanded
+font-style      normal            可选。定义该字体应该是怎样样式。默认值是"正常"
+                italic
+                oblique
+font-weight     normal            可选。定义字体的粗细。默认值是"正常"
+                bold
+                100
+                200
+                300
+                400
+                500
+                600
+                700
+                800
+                900
+unicode-range   unicode-range       可选。定义该字体支持Unicode字符的范围。默认值是"ü+0-10 FFFF"

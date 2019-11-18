@@ -1,0 +1,37 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/MingLLu/article/details/49450285
+
+https://blog.csdn.net/sunjing_/article/details/80228466   中心服务器
+https://www.cnblogs.com/lidabo/p/4774425.html             uboot + kernel +rootfs
+
+格式化分区 拷贝分区
+
+/tmp内存文件系统
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在/etc/fstab中加入一行：
+
+none /tmp tmpfs default 0 0
+
+或者在/etc/rc.local中加入
+
+mount tmpfs /tmp -t tmpfs -o size=128m
+
+注：size=128m 表示/tmp最大能用128m
+
+不管哪种方式，只要linux重启，/tmp下的文件全部消失
+
+
+
+cp 跨文件系统
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+如何确定系统有几块flash以及flash是nor还是nand的
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+nand
+nor
+Memory Technology Device即内存技术设备，在Linux内核中，引入MTD层为NOR FLASH和NAND FLASH设备提供统一接口
+/proc/mtd
+
+

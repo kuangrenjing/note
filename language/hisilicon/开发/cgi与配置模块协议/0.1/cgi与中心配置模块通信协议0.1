@@ -1,0 +1,219 @@
+1、通信载体
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	cgi与中心配置模块之间的通信主要通过“共享内存”、“消息队列”、“POSIX信号量”三
+种linux进程间通信机制(IPC)进行通信。
+
+使用“ipcs -l”可以查看HiLinux关于三种IPC的系统限制：
+	共享内存段限制：最大段大小32768KBytes，最小段大小1Byte，最大段数：4096
+		max number of segments = 4096               [系统最多共享内存段数目]
+		max seg size (kbytes) = 32768               [一个段的最大尺寸]
+		max total shared memory (kbytes) = 8388608  [共享内存总大小最大尺寸]
+		min seg size (bytes) = 1                    [一个段的最小尺寸]
+
+	消息队列限制：
+		max queues system wide = 131               [系统最多的消息队列数量（最多支持同时131个消息队列）]
+		max size of message (bytes) = 8192         [单个消息的最大字节数]
+		default max size of queue (bytes) = 16384  [默认的单个队列的大小16384]
+	信号量：我们不适用信号量，而是使用POSIX信号量，所以此限制对我们无效。
+
+目前我们选用的尺寸：
+	共享内存：
+		seg size: 64kBytes
+
+	消息队列
+		size of message: 1024Bytes(最大尺寸)
+
+2、消息队列定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.0.1、消息队列定义
+/*
+ * @消息类型，目前有四种。
+ */
+typedef enum{
+	eCMTIRUSBConfig = 1,           //机芯配置改变(不可从零开始)
+	eCMTIRUSBSnuc,                 //机芯单点校正
+	eCMTYuntaiSerial,              //云台串口配置改变
+	eCMTYuntaiConfig,              //云台配置改变
+	eCMTYuntaiPTZ                  //云台运动、预置点、辅助功能
+}EConfigMsgType;
+
+/*
+ * @mtype使用“消息类型”赋值
+ * @mtext根据消息类型的不同拷贝不同的结构体
+ */
+struct mymesg {
+	long mtype;
+	char mtext[1024];
+};
+
+2.0.2、消息队列创建
+1)、消息队列路径定义：
+#define msg_path "/tmp/msg_dfsipc"
+
+2)、中心配置模块
+msg_key = ftok(msg_path, 500);
+g_iMsg = msgget(msg_key, IPC_CREAT);
+if(g_iMsg < 0)
+{
+	printf("msgget failed\n");
+	return -1;
+}
+
+3)、cgi端
+msg_key = ftok(msg_dir, 500);
+iMsg = msgget(msg_key, 0);
+if(iMsg < 0)
+{
+	printf("msgget failed\n");
+	return -1;
+}
+
+2.0.3、消息队列使用
+/*
+ * @cgi程序使用msgsnd向主程序发送消息；
+ * @msgsnd的第三个变量应为sizeof(要发送的结构体)，不包括mtype的长度，根据设计，
+ *	“要发送的结构体”肯定会小于1024字节。
+ */
+int     iRet = msgsnd(iMsg, &onemsg, sizeof(要发送的结构体), 0);
+
+/*
+ * @主程序使用msgrcv函数结构来自cgi程序的消息；
+ * @msgrecv的第三个变量固定为1024，iRet返回值为sizeof(要发送的结构体)
+ */
+ssize_t iRet = msgrcv(iMsg, &onemsg, 1024, 0, 0);
+
+2.3、云台串口配置改变
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	云台串口配置改变，cgi需更改“配置共享内存”并发送eCMTYuntaiSerial消息通知中心
+配置模块
+	此消息无需填充mtext字段，所以msgsnd第三个字段为0。
+
+2.4、云台配置改变
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	云台配置改变，cgi需更改“配置共享内存”并发送eCMTYuntai消息通知中心配置模块
+	此消息无需填充mtext字段，所以msgsnd第三个字段为0。
+
+2.5、云台运动、预置点、辅助功能
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	如需驱动云台运动；设置、清除、调用预置点；调用、停止调用辅助功能，cgi需发送
+eCMTYuntaiPTZ消息通知中心配置模块
+	此消息需使用SPTZ结构体填充mtext字段，SPTZ结构体构成如下：
+typedef struct {
+	ECMDType eCMDType;
+	union {
+		SMovement   Movement;
+		SPreset     Preset;
+		SAuxiliary  Auxiliary;
+	}CMDPara;
+}SPTZ;
+各字段的具体定义在有关头文件中定义，这里不再累述。
+
+
+3、用于配置共享内存同步的POSIX信号量定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、POSIX信号量创建：
+1)、POSIX信号量路径定义
+#define sem_path  "sem_dfsipc"   有更改
+
+2)、中心配置模块：
+g_pSem = sem_open(sem_path, O_CREAT, 777, 1);
+if(g_pSem == SEM_FAILED)
+{
+	return -1;
+}
+
+3)、cgi端：
+pSem = sem_open(sem_path, 0);
+if(pSem == SEM_FAILED)
+{
+	return -1;
+}
+
+
+4、配置共享内存定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.0.1、共享内存定义：
+typedef struct {
+	SIRUSB_Config         IRUSBConfig;   //机芯配置       32字节
+	SRS485Config          RS485Config;   //云台RS485配置  12字节
+	SYuntaiConfig         YuntaiConfig;  //云台配置       5124字节
+}SDFSCameraConfig;
+
+4.0.2、共享内存创建
+1)、共享内存路径定义：
+#define shm_path "/tmp/shm_dfsipc"    有更改
+
+2)、中心配置模块
+char *g_pShm = NULL;
+
+shm_key = ftok(shm_path, 400);
+if((shmid = shmget(shm_key, 64*1024, 777))<0)
+{
+	return -1;
+}
+if((g_pShm = shmat(shmid, 0, 0)) == (void*)-1)
+{
+	return -1;
+}
+
+3)、cgi端
+char *pShm = NULL;
+
+shm_key = ftok(shm_dir, 400);
+if((shmid = shmget(shm_key, 64*1024, 777))<0)
+{
+	write(STDERR_FILENO, "shmgt failed\n", strlen("shmgt failed\n"));
+	return -1;
+}
+if((pShm = shmat(shmid, 0, 0)) == (void*)-1)
+{
+	write(STDERR_FILENO, "shmat failed\n", strlen("shmat failed\n"));
+	return -1;
+}
+
+以后就可以使用pShm指针进行共享内存的读写
+
+4.0.3、共享内存访问
+共享内存读写前，不管是中心配置模块，还是cgi都需要使用POSIX信号量进行同步
+
+sem_wait(pSem);
+读写共享内存
+sem_post(pSem);
+
+4.1、机芯配置定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef struct {
+	HI_U16    iLumConsist;
+	HI_U16    iImgContrast;
+	HI_U16    iImagBrightness;
+	HI_U16    iDdeCoe;
+	HI_DOUBLE fVideoZoomCoe;
+	HI_U16    iFilterSigma;
+	HI_U16    iVideoPolarHot;
+	HI_U16    iVideoColor;
+	HI_U16    iShutterMode;
+	HI_U16    iShutterStatus;
+	HI_U16    iShutterTime;
+	HI_U16    iShutterDeltaTemp;
+}SIRUSB_Config;
+
+4.2、云台RS485配置定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef struct{
+	uint              iSerialBaud;       //波特率
+	unsigned char     iSerialDataBits;   //数据位
+	char              cSerialParity;     //奇偶校验
+	unsigned char     iSerialStopBits;   //停止位
+	unsigned char     iAddr;             //云台485地址
+	EYuntaiPTLType    eProtocolType;     //云台协议
+}SRS485Config;
+
+4.3、云台配置定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef struct {
+	SPresetInfo          PresetInfo[256];  //预置点信息
+	STourPresetConfig    Tour[4][32];     //巡航线路，共4条，每条最多32个预置点
+	int                  iWhichTourRun;    //运行哪条巡航线路，-1代表不运行巡航线路
+}SYuntaiConfig;
+
+

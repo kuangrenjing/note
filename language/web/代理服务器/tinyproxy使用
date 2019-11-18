@@ -14,10 +14,51 @@ tinyproxy与这些同类产品的显著区别是它的低开销：使用glibc时
 
 2、配置文件解析
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+User Group
+Port                 绑定的端口号，低于1024，要使用root运行
+Listen               (Listen、Bind、BindSame应该是多网卡时才需要配置)在哪个IP上
+                     接受外部连接
+Bind                 向外请求时使用哪个IP
+BindSame             不懂啥意思，可以不配
+Timeout              超时时间
+ErrorFile            发生HTTP错误时，发送的文件，一个错误码对应一个
+DefaultErrorFile     错误码没有对应的ErrorFile配置时使用的文件
+StateHost            当客户请求这个域名时，返回统计界面，暂不配置。
+StateFile            统计界面文件，暂不配置。
+LogFile              Log文件路径
+Syslog               使用Syslog还是自己的log。我不配置，使用自己的log
+LogLevel             Critical Error Warning Notice Connect Info
+PidFile              守护进程惯例
+XTinyproxy           值为Yes，是否包含X-Tinyproxy头，其为客户端的IP
+Upstream             不会用，不设置
+MaxClients           最大客户连接数
+MinSpareServers      最小闲置服务
+MaxSpareServers      最大闲置服务
+StartServers         开始阶段启动多少个服务
+MaxRequestsPerChild  一个子线程处理多少请求后被杀死，一般设为0，如果有内存泄漏，
+                     可以设置。
+Allow                允许哪些客户IP段使用代理（多条Allow是有顺序的），不设置。
+BasicAuth            HTTP "Basic Authentication"，访问代理需认证，过时技术。
+AddHeader            转发请求时添加的头
+ViaProxyName         控制Via头部
+DisableViaHeader     控制Via头部
+Filter               以下五个为过滤机制，我们暂时不用
+FilterURLs
+FilterExtended
+FilterCaseSensitive
+FilterDefaultDeny    
+Anonymous            匿名代理、透明代理：
+ConnectPort          Connect方法使用，要禁用Connect方法，设置为0
+ReversePath          配置反向代理(可多个)，
+ReverseOnly          值为Yes，如果仅使用反向代理，建议配置。
+ReverseMagic
+ReverseBaseURL
 
 3、执行
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ./tinyproxy -d -c ./tinyproxy.conf &
+
+/mnt/nfs/bin/tinyproxy -d -c /mnt/nfs/etc/tinyproxy.conf
 
 
 

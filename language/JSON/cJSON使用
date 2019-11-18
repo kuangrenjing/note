@@ -23,6 +23,10 @@ C++程序员注意与
 
 3、cjson内存管理
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	cJSON的内存管理策略是：由调用者负责释放内存：
+
+	cJSON_Parse返回的cJSON对象通过cJSON_Delete（会删除所有子元素）释放；
+	cJSON_Print返回的字符串通过cJSON_Free释放；
 
 
 4、cjson拷贝
@@ -34,7 +38,65 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 valuedouble、string、type。（所以，但item是个object的时候，非递归拷贝会只有type是
 64，其它参数都是空）。感觉上recurese为false没什么意义。
 
-5、cjson打印
+5、元素类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#define cJSON_False  (1 << 0)                           false
+#define cJSON_True   (1 << 1)                           true
+#define cJSON_NULL   (1 << 2)                           null
+#define cJSON_Number (1 << 3)                           数值
+#define cJSON_String (1 << 4)                           字符串
+#define cJSON_Array  (1 << 5)                           数组
+#define cJSON_Object (1 << 6)                           对象
+#define cJSON_Raw    (1 << 7) /* raw json */            原始
+
+每一个类型都是一个cJSON对象，cJSON对象的netx、prev指向同级元素，child字段指向
+孩子元素，object或array可能是没有名字的，即string字段为空。
+
+raw类型就像是个字符串类型，但字符串是json形式的, 譬如valuestring = [{"Name":"mqs",
+"Age":34},{"Name":"cfq","Age":32}]。
+
+6、新建cJSON对象
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CJSON_PUBLIC(cJSON *) cJSON_CreateNull(void);
+CJSON_PUBLIC(cJSON *) cJSON_CreateTrue(void);
+CJSON_PUBLIC(cJSON *) cJSON_CreateFalse(void);
+CJSON_PUBLIC(cJSON *) cJSON_CreateBool(cJSON_bool boolean);
+CJSON_PUBLIC(cJSON *) cJSON_CreateNumber(double num);
+CJSON_PUBLIC(cJSON *) cJSON_CreateString(const char *string);
+CJSON_PUBLIC(cJSON *) cJSON_CreateRaw(const char *raw);
+CJSON_PUBLIC(cJSON *) cJSON_CreateArray(void);
+CJSON_PUBLIC(cJSON *) cJSON_CreateObject(void);
+
+6、cjson解析(字符流 -> cJSON对象)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+7、cjson add(struct -> cJSON对象)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+/* Helper functions for creating and adding items to an object at the same time.
+ * They return the added item or NULL on failure. */
+CJSON_PUBLIC(cJSON*) cJSON_AddNullToObject(cJSON * const object, const char * const name);
+CJSON_PUBLIC(cJSON*) cJSON_AddTrueToObject(cJSON * const object, const char * const name);
+CJSON_PUBLIC(cJSON*) cJSON_AddFalseToObject(cJSON * const object, const char * const name);
+CJSON_PUBLIC(cJSON*) cJSON_AddBoolToObject(cJSON * const object, const char * const name, const cJSON_bool boolean);
+CJSON_PUBLIC(cJSON*) cJSON_AddNumberToObject(cJSON * const object, const char * const name, const double number);
+CJSON_PUBLIC(cJSON*) cJSON_AddStringToObject(cJSON * const object, const char * const name, const char * const string);
+CJSON_PUBLIC(cJSON*) cJSON_AddRawToObject(cJSON * const object, const char * const name, const char * const raw);
+CJSON_PUBLIC(cJSON*) cJSON_AddObjectToObject(cJSON * const object, const char * const name);      加入一个空对象
+CJSON_PUBLIC(cJSON*) cJSON_AddArrayToObject(cJSON * const object, const char * const name);       加入一个空数组
+
+
+/* Append item to the specified array/object. */
+CJSON_PUBLIC(void) cJSON_AddItemToArray(cJSON *array, cJSON *item);
+CJSON_PUBLIC(void) cJSON_AddItemToObject(cJSON *object, const char *string, cJSON *item);
+/* Use this when string is definitely const (i.e. a literal, or as good as), and will definitely survive the cJSON object.
+ * WARNING: When this function was used, make sure to always check that (item->type & cJSON_StringIsConst) is zero before
+ * writing to `item->string` */
+CJSON_PUBLIC(void) cJSON_AddItemToObjectCS(cJSON *object, const char *string, cJSON *item);
+/* Append reference to item to the specified array/object. Use this when you want to add an existing cJSON to a new cJSON, but don't want to corrupt your existing cJSON. */
+CJSON_PUBLIC(void) cJSON_AddItemReferenceToArray(cJSON *array, cJSON *item);
+CJSON_PUBLIC(void) cJSON_AddItemReferenceToObject(cJSON *object, const char *string, cJSON *item);
+
+8、cjson打印(cJSON对象 -> 字符流)
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item);
 CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item);
@@ -53,9 +115,14 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 缓冲区大小不够会返回错误。
 
 
-6、cjson获取元素
+9、cjson获取元素
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 CJSON_PUBLIC(cJSON *) cJSON_GetObjectItem(const cJSON * const object, const char * const string);
 CJSON_PUBLIC(cJSON *) cJSON_GetObjectItemCaseSensitive(const cJSON * const object, const char * const string);
 
 	cJSON_GetObjectItem大小写不敏感，cJSON_GetObjectItemCaseSensitive大小写敏感。
+
+10、两个cJSON对象比较
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+

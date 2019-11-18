@@ -1,0 +1,15 @@
+Analytics是做什么的
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+GetRules
+GetSupportedRules
+GetSupprotedAnalyticsModules
+GetAnalyticsModules
+
+
+譬如某台海康机器支持Modules:
+	CellMotion
+	LineDetector
+	FieldDetector
+	TamperDetec            遮挡报警？？
+
+移动 区域 线等等

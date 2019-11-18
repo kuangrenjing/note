@@ -1,0 +1,94 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+文档：
+	https://www.onvif.org/specs/srv/ptz/ONVIF-PTZ-Service-Spec.pdf
+
+1、PTZ Node
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在onvif的PTZ Service中，一个具有PTZ功能的设备可能具有多个PTZ node。每个PTZ 
+node代表一个云台驱动器。在PTZ控制API中，PTZ node是最小实体。PTZ node有唯一的引用
+标识，也有一个安装者提供的名字。
+
+	需为每个PTZ node提供以下属性：
+Token – A unique identifier used to reference PTZ nodes.
+
+Name – A name given by the installer.
+
+SupportedPTZSpaces –  A  list  of  coordinate systems  available  for  the  PTZ  node.  For  each  Coordinate System, the PTZ node shall specify its allowed range.
+
+MaximumNumberOfPresets –  All  preset  operations  shall  be  available  for  this  PTZ  node  if  one preset is supported.
+
+HomeSupported – A boolean operator specifying the availability of a home position. If set to true, the Home Position operations shall be available for this PTZ node.
+
+AuxiliaryCommands –  A  list  of  supported  Auxiliary  commands.  If  the  list  is  not  empty,  the  Auxiliary  Operations  shall  be  available  for  this  PTZ  node.  A  device  may  use  auxiliary  commands that are described in Core Specification.
+
+MaximumNumberOfPresetTours –  Indicates  number  of  preset  tours  that  can  be  created.  Required  preset  tour  operations  shall be available for this PTZ node  if  one  or  more  preset  tours are supported
+
+
+space
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+onvif预定义了以下space：
+	absolute position spaces
+		generic pan/tilt position space
+		spherical pan/tilt position space in degrees
+		generic zoom position space
+		zoom position space in millimeters
+		normalized digital zoom position space
+	relative translation spaces
+		generic pan/tilt translation space
+		generic zoom translation space
+	continues velocity spaces
+		generic pan/tilt velocity space
+		pan/tilt velocity space in degrees per second
+		generic zoom velocity space
+	speed spaces
+		generic pan/tilt speed space
+		pan/tilt speed space in degrees per second
+		generic zoom speed space
+		zoom speed space in millimeter per second
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	space就像规定了一种方法：这种方法规定了如何来让云台运动：譬如规定运动的终点、
+运动的速度等，这些参数又可以使用不同的坐标系来表达。
+
+	space可以指定坐标系，也可以不指定坐标系。不指定坐标系时，使用相对比例来
+（-1~+1）表示运动范围，运动终点等。所以在向执行机构转发指令时（譬如pelco-d指令）
+需进行转换。
+
+	譬如：预定义的generic pan/tilt position space不关联坐标系统，PTZ unit的X Y范
+围都设定为-1~+1，generic pan/tilt position space指定的Xrange和Yrange就是在-1~+1
+之间截取一段。
+
+	PTZ::GetConfigurationOptions可以获取PTZ Node支持的所有space，PTZ::GetConfiguration(s)
+或media::GetProfiles可以获取PTZ Node默认的space，ContinuousMove、RelativeMove、
+AbsoluteMove中如果指定了space就按指定的space进行，如果没有指定space，则按默认space
+进行。
+
+limit
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+coordinate system
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+spherical  coordinate system
+笛卡尔坐标系？？
+好像也没指定其它坐标系。
+
+PTZ Configuration
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	见文档5.2.1，此结构可通过PTZ的GetConfigurations、GetConfiguration获取，但一般
+是通过media的getprofiles函数获取。
+
+PTZ Configuration options
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+home position(守望?)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	应该是零点、原点，但不是守望。
+
+GEO 地球的osg
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+lat,lon表示模型在地球的纬度和经度,elevation是海拔
+
+原点
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+

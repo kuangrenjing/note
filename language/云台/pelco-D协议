@@ -1,0 +1,203 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+关键参考：
+http://umnyjdomik.ru/wp-content/uploads/PELCO-D-Version-2-Revision-1-2003.pdf (pelco-d v2.1)
+
+一般参考：
+https://baike.baidu.com/item/Pelco-D/373255
+https://max.book118.com/html/2017/0822/129402992.shtm
+https://www.commfront.com/pages/pelco-d-protocol-tutorial
+
+
+1、术语
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、PTZ
+	PTZ中P代表Pan，T代表Tilt，Z代表Zoom。意思是PTZ有水平、俯仰、变倍的控制，但有
+些云台协议中（譬如pelco-D）还有光圈(Iris)、聚焦(Focus)、雨刷、字符屏幕（屏幕上会
+显示经纬度(azimuth)，经纬度就是把云台想象成一个地球仪？）等的控制。
+
+1.2、Pan
+	水平运动
+
+1.3、Tilt
+	俯仰运动
+
+1.4、zoom
+	变倍
+
+1.5、Focus
+	聚焦
+
+1.6、space(步进)
+	pelco-d没有此概念？onvif有
+
+1.7、Auxiliary
+	pelco-d允许云台自定义8个辅助功能，譬如雨刷，去雾，IR CUT等。
+
+1.8、preset tour
+	预制点巡航
+
+1.7、球机与筒机
+
+1.6、守望(home position？?应该不是这个英文)
+https://jz.docin.com/p-338036968.html
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当云台被监控员调整到别的监控位置后，在监控员放弃操作后的规定时间内自动启动
+某种功能，如：调用预置位、自动巡航、自动扫描、模式路径等功能。
+
+2、PELCO-D
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://umnyjdomik.ru/wp-content/uploads/PELCO-D-Version-2-Revision-1-2003.pdf
+
+
+2.1、指令格式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    字节1     字节2    字节3    字节4    字节5    字节6    字节7
+   同步字节   地址码   指令码1  指令码2  数据码1  数据码2  校验码
+
+该协议中所有数值都为十六进制数，各字段解释如下：
+1.同步字节始终为0XFF
+2.地址码为摄像机的逻辑地址号，地址范围：0X00H~0XFF　
+3.指令码表示不同的动作
+5.数据码1、2分别表示水平、垂直方向速度（0X00~0X3F）,0XFF表示“turbo”速度
+7.校验码 = MOD[（字节2 + 字节3 + 字节4 + 字节5 + 字节6）/0X100]
+
+字节1：同步字节，始终为0xff
+字节2：地址码字段，范围为：PELCO-D协议没有限制地址范围，所以范围为0x00~0xff？
+字节3：指令码1
+字节4：指令码2
+字节5：数据码1
+字节6：数据码2
+字节7：校验码
+
+2.2、速度
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当指令为云台PT运动时，字节5表示Pan运动速度，字节6表示Tilt速度。
+
+	字节5、字节6范围：0x00(low speed)~0x3f(high speed) 0x40(turbo speed)。这其中
+有两点需要注意：
+1、0x00表示很慢的速度，不表示停止。要停止运动，需把指令码中相应的位置0。
+2、涡轮速度是云台能达到的最快速度，低速到高速之间可以平滑切换，但正常速度范围到
+涡轮速度是不能平滑切换的，所以没有把涡轮速度放在放在速度区间内，而是单独放在一边。
+
+	PELCO-D无法控制zoom速度，PELCO-P可以控制zoom速度？很不幸，它也不能。
+
+2.3、运动命令(字节4 bit0 == 0)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+         Bit7    Bit6    Bit5     Bit4     Bit3     Bit2     Bit1     Bit0
+字节3    Sense   保留    保留 Auto/Manual Camera    Iris     Iris     Focus
+                                 Scan     on/off    Close    Open      near
+字节4    Focus   Zoom    Zoom     Tilt      Tilt     Pan      Pan      0(for normal)
+          far    wide    tele     down       up      left     right    1(extended)
+
+【说明】
+sense位 == 1
+	Auto/Manual Scan == 1 自动扫描 Auto/Manual Scan == 0 啥也不是
+	Camera on/off == 1    相机开   Camera on/off == 0    啥也不是
+
+sense位 == 0
+	Auto/Manual Scan == 1 手动扫描 Auto/Manual Scan == 0 啥也不是
+	Camera on/off == 1    相机关   Camera on/off == 0    啥也不是
+
+字节4 bit0 == 0是普通命令（运动）
+字节4 bit0 == 1是扩展命令
+
+2.4、扩展命令(字节4 bit0 == 1)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/u011430225/article/details/91126146
+
+2.4.2、Set Zero Position(0x49)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	调用此指令时的当前位置会被设置为0位置，此位置是屏幕上经纬度的参考0点。
+
+2.4.3、Set Pan Position(0x4B)、Query Pan Position(0x51)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	pelco-D规定：水平角度范围是0°~360°。指令中字节5、字节6组成一个短整类型（可
+表示0~65535，实际使用0~35999，1bit表示0.01°）用来水平位置。此位置是绝对位置，
+不是相对于0点的位置。
+
+2.4.4、Set Tilt Position(0x4D)、Query Tilt Position(0x53)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	pelco-D规定：俯仰角度范围是-90°~90°。指令中字节5、字节6组成一个短整类型（可
+表示0~65535，实际使用0~35999，1bit表示0.01°。事实上36000并没有用满，pelco-D规定
+水平位置以下：[-0°(0)~-90度(9000)]，水平位置以上：(0°(36000)~90°(27000)]）用来
+表示俯仰位置。此位置是绝对位置，不是相对于0点的位置。
+
+2.4.5、Set Zoom Position(0x47)、Set Magnification(0x5F)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	0x47指令设置设备的zoom位置，字节5、字节6组成的短整类型代表设置值。
+设置值 = (期望放大倍数/放大极限)*65535。
+
+实例：
+	放大极限是X184，期望放大倍数是X5，则：
+设置值 = (5/184)*65535 = 1781
+
+	0x5F指令则提供了另一种设置zoom位置的方法，字节5、字节6组成的短整类型代表设置值。
+设置值 = 放大倍数*100
+
+实例：
+	放大倍数为X5，则
+设置值 = 500
+
+
+5、区域(zone)、样式(pattern)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+zone不知道是啥，反正用不上
+
+6、样式(pattern)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+FF 01 00 1F 00 00 20   Set Pattern Start
+FF 01 00 07 00 01 09
+FF 01 00 07 00 02 0A
+FF 01 00 21 00 00 22    Set Pattern Stop
+FF 01 00 23 00 01 25    Run Pattern
+
+不知道是不是这么用，试了hbyt的云台是不行的。
+
+7、预置点
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+实例：
+	hbyt的一款云台，支持16个位置、zoom预置点。从第17预置点开始，不能设置位置，能
+设置zoom，一键守望用的是第32号预置点，所以守望的是zoom，不能守望位置，能不能守望
+其它的还有待测试。
+
+8、PELCO-P（出现应该比PELCO-D早，功能不完善）
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+8.1、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://pelcosales.schneider-electric.com/Content/LegacyKBFiles/19511/pelco-p.pdf
+http://ishare.iask.sina.com.cn/f/31jlJudkRPa.html
+
+8.2、字节格式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    字节1     字节2    字节3    字节4    字节5    字节6    字节7    字节8
+   同步字节   地址码   指令码1  指令码2  数据码1  数据码2   ETX     校验码
+
+字节1： STX(Start of Text)，始终为0xA0
+字节2： 云台逻辑地址号，地址范围0x00~0x1F(地址1是0x00)
+字节3： 指令码1
+字节4： 指令码2
+字节5： 数据码1
+字节6： 数据码2
+字节7： ETX(End of Text)，当前固定为0xAF
+字节8： 校验码
+
+8.3、运动命令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+         Bit7    Bit6    Bit5     Bit4     Bit3     Bit2     Bit1     Bit0
+字节3    Sense   保留    保留 Auto/Manual Camera    Iris     Iris     Focus
+                                 Scan     on/off    Close    Open      near
+字节4    Focus   Zoom    Zoom     Tilt      Tilt     Pan      Pan      0(for normal)
+          far    wide    tele     down       up      left     right    1(extended)
+
+
+Data 1 	Fixed to 0 	Camera On 	Auto Scan On 	Camera On/Off 	Iris Close 	Iris Open 	Focus Near 	Focus Far
+Data 2 	Fixed to 0 	Zoom Wide 	Zoom Tele 	Tilt Down 	Tilt Up 	Pan Left 	Pan Right 	0 (for pan / tilt)
+Data 3 	Pan speed 00 (stop) to 3F (high speed) and 40 for Turbo
+Data 4 	Tilt speed 00 (stop) to 3F (high speed)
+
+
+FF 01 00 02 00 80 83
+FF 01 00 00 00 00 01 

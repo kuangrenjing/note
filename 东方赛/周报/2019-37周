@@ -1,0 +1,11 @@
+上周总结：
+	视觉液位仪结项准备
+
+	osd调优调试
+	https://jansonn/svn/DFS_03_jianrongxing_uncooled_640/software/V1/trunk/ipc_save_src
+
+
+
+本周计划：
+	视觉液位仪结项
+	东方赛IPC onvif与boa共同监听80端口（反向代理方案）

@@ -1,0 +1,11 @@
+上周总结：
+	arm端软件配置子系统初步实现（代码）
+	https://jansonn/svn/DFS_03_jianrongxing_uncooled_640/software/V1/trunk/ipc_save_src
+
+
+	东方赛IRIPC下位机软件框架和方案（文档）
+	https://jansonn/svn/DFS_03_jianrongxing_uncooled_640/software/V1/doc/%E6%AF%8F%E5%91%A8%E4%BB%BB%E5%8A%A1%E8%AE%A1%E5%88%92/%E9%A9%AC%E5%85%A8%E8%83%9C/2019%E7%AC%AC30%E5%91%A8/%E4%B8%9C%E6%96%B9%E8%B5%9BIPC%E4%B8%8B%E4%BD%8D%E6%9C%BA%E8%BD%AF%E4%BB%B6%E6%A1%86%E6%9E%B6.ppt
+
+
+本周计划：
+	onvif客户端控制红外机芯（代码）
