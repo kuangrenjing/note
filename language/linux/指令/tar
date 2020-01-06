@@ -1,6 +1,10 @@
 带有软连接文件的文件夹的打包与解压
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-tar  -zcvpf oradata_zcvpf.tar.gz oradata
-tar  -ztvf oradata_zcvpf.tar.gz
+tar  -zcvpf oradata_zcvpf.tar.gz oradata --exclude=/mnt/nfs --exclude=proc --exclude=sys --exclude=/dev/fd
+tar  -zxvhf oradata_zcvpf.tar.gz
 
 打包带p，解压带t
+
+【注】
+	重要！重要！重要！vvmware linux虚拟机在windows宿主机上建立的共享文件夹不支
+持符号链接。

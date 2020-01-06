@@ -1,0 +1,6 @@
+1、strace
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	手册页是这样解释strace命令的：“trace system calls and signals”，即跟踪系统
+调用和信号。
+	
+	具体查看手册页

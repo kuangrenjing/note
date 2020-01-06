@@ -48,3 +48,14 @@ himm不是linux命令，应该是“海思memory工具”的意思。实际上�
 xxx/osdrv/tools/board_tools/reg-tools-1.0.0/source/tools/下提供了himm的读写工具源码
 我们可以用这个源码来写GPIO的驱动，相关细节详见博客：
 https://blog.csdn.net/faihung/article/details/60469288
+
+
+
+
+程序出错：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+[event_cb]Got an error 104 (Connection reset by peer)
+Shutting down.
+[event_cb]BEV_EVENT_EOF
+[err] bufferevent.c:692: Assertion bufev_private->refcnt > 0 failed in bufferevent_decref_and_unlock_
+Aborted

@@ -1,0 +1,90 @@
+协处理器接口
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/wxh0000mm/article/details/89518499
+
+
+MMU
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一个“处理单元”芯片如果没有MMU(内存管理单元)则只能称为MPU(微处理器)，而如果
+带了MMU，则可以称为CPU(中央处理器)。
+
+TCM(Tightly Coupled Memory)紧耦合内存
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+I-TCM(Instruction TCM)
+D-TCM(Data TCM)
+
+	TCM与cache是不一样的，放到TCM的指令和数据是在编译的时候指定的。而cache是cpu
+执行过程中不断加载和替换的。
+
+cache
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	cache也分为icache和dcache，
+
+double-bandwidth memory
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+应该就是DDR接口，DDR差不多从1997年前后开始出现，ARMv4架构的ARM8开始支持DDR接口。
+
+
+Memory Protection Unit (MPU)
+
+
+VFP(vector float-point 向量矢量浮点指令)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://blog.csdn.net/jtli_embeddedcv/article/details/9351527
+
+	VFP除了提供浮点数基本运算(加、减、乘、除、开方、比较、取反)提供支持之外，最
+有特点是它的向量(vectors)功能。它同时支持最多8组单精度4组双精度浮点数的运算。
+
+SIMD(Single Instruction Multiple Data)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+SIMD
+Adv SIMD
+
+NEON
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://stackoverflow.com/questions/4097034/arm-cortex-a8-whats-the-difference-between-vfp-and-neon
+
+jazelle
+
+Thumb
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Thumb
+Thumb-2
+ThumbEE
+
+ARM指令集：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	编代码全部是32bits的，每条指令能承载更多的信息，因此使用最少的指令完成功能，
+所以在相同频率下运行速度也是最快的，但也因为每条指令是32bits 的而占用了最多的程
+序空间。
+
+Thumb指令集：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	编代码全部是16bits的，每条指令所能承载的信息少，因此它需要使用更多的指令才
+能完成功能，因此运行速度慢，但它也占用了最少的程序空间。
+
+	首颗具备Thumb技术的处理器是ARM7TDMI。所有ARM9和后来的家族，包括XScale，都纳
+入了Thumb技术。
+
+Thumb-2指令集：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在前面两者之间取了一个平衡，兼有二者的优势，当一个操作可以使用一条32bits指令
+完成时就使用32bits的指令，加快运行速度，而当一次操作只需要一条16bits指令完成时就
+使用16bits的指令，节约存储空间。
+
+ThumbEE(Thumb Execution Environment)指令集：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ThumbEE，也就是所谓的Thumb-2EE，业界称为Jazelle RCT技术，于2005年发表，首见
+于“Cortex-A8”处理器。ThumbEE提供从Thumb-2而来的一些扩充性，在所处的运行环境下，
+使得指令集能特别适用于运行阶段的编码产生(例如实时编译)。Thumb-2EE是专为一些语言
+如Limbo、Java、C#、Perl和Python，并能让实时编译器能够输出更小的编译码却不会影响
+到性能。
+
+	ThumbEE所提供的新功能，包括在每次访问指令时自动检查是否有无效指针，以及一种可
+以运行数组范围检查的指令，并能够分支到分类器，其包含一小部份经常调用的编码，通常
+用于高级语言功能的实现，例如对一个新对象做存储器配置。
+
+static branch prediction
+
+trustzone

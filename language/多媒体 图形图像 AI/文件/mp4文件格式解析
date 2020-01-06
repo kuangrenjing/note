@@ -1,0 +1,8 @@
+https://www.jianshu.com/p/529c3729f357
+https://blog.csdn.net/DONGHONGBAI/article/details/84401397
+http://download.tsi.telecom-paristech.fr/gpac/mp4box.js/filereader.html
+https://blog.csdn.net/yu_yuan_1314/article/details/9078287
+
+MP4文件是一个
+
+　看吧，要获取到mp4文件的帧列表，还挺不容易的，需要一层层解析，然后综合stts stsc stsz stss stco等这几个box的信息，才能还原出帧列表，每一帧的时戳和偏移量。而且，你要照顾可能出现或者可能不出现的那些box。。。可以看的出来，mp4把帧sample进行了分组，也就是chunk，需要间接的通过chunk来描述帧，这样做的理由是可以压缩存储空间，缩小媒体信息所占用的文件大小。这里面，stsc box的解析相对来说比较复杂，它用了一种巧妙的方式来说明sample和chunk的映射关系，特别介绍一下。

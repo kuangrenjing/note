@@ -247,3 +247,10 @@ bootstrap-table定义了“method: 'GET',”，发出的仍是OPTIONS。
 @mqs add[OPTIONS]
 @mqs delete[OPTIONS]
 globals.h
+
+此问题可以回避，所以没有改
+
+14.2、boa上传大小限制
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+在/boa/defines.h里配置上传文件大小限制
+#define SINGLE_POST_LIMIT_DEFAULT               1024 * 1024 *16/* 1 MB */

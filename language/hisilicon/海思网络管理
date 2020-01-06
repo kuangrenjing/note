@@ -1,0 +1,245 @@
+1、所以可以配置的参数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+1.1、Onvif界面上
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+DHCP
+IP
+Netmask
+Gateway
+
+Hostname
+DNS
+NTPServer
+
+HTTP ports
+HTTPs ports
+RTSP ports
+
+zero config
+onvif discovery mode
+
+1.2、海康威视web界面上
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	IPv4地址
+	IPv4子网掩码
+	IPv4默认网关
+	IPv6模式
+	IPv6地址
+	IPv6子网掩码
+	IPv6默认网关
+	物理地址
+	MTU
+	多播地址
+
+DNS服务器配置
+	首选DNS服务器
+	备用DNS服务器
+
+端口
+	HTTP端口
+	RTSP端口
+	HTTPS端口
+	服务端口
+
+
+
+1.3、自研设计
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef struct{
+	HI_BOOL bDHCP;    //是否支持DHCP，只读，当前不支持
+	HI_BOOL bIPv6;    //是否支持IPv6，只读，当前不支持
+	HI_CHAR strIPv4[16];
+	HI_CHAR strMask[16];
+	HI_CHAR strGateway[16];
+	HI_CHAR iMac[6];
+	HI_U32  iMTU;
+	HI_U32  iDNSNum;
+	HI_CHAR strDNS1[16];
+	HI_CHAR strDNS2[16];
+	HI_U32  iHTTPPort;
+	HI_U32  iRTSPPort;
+}SNetwork;
+
+
+2、DHCP
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、参考
+
+2.2、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	DHCP(Dynamic Host Configuration Protocol，动态主机配置协议)通常被应用在大型
+的局域网络环境中，主要作用是集中的管理、分配IP地址，使网络环境中的主机动态的获
+得IP地址、Gateway地址、DNS服务器地址等信息，并能够提升地址的使用率。DHCP协议采
+用客户端/服务器模型，主机地址的动态分配任务由网络主机驱动。当DHCP服务器接收到来
+自网络主机申请地址的信息时，才会向网络主机发送相关的地址配置等信息，以实现网络
+主机地址信息的动态配置。
+
+2.3、工作原理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	DHCP协议采用UDP作为传输协议，主机发送请求消息到DHCP服务器的67号端口，DHCP服
+务器回应应答消息给主机的68号端口。详细的交互过程如下:
+
+发现阶段：即DHCP客户端寻找DHCP服务器的阶段。DHCP客户端首先以广播方式发送DHCP 
+DISCOVER发现信息来寻找DHCP服务器(因为DHCP服务器的IP地址对于客户端来说是未知的),
+即客户端向地址255.255.255.255发送特定的广播信息。请求信息主要包含客户端的网卡MAC
+地址还有客户端的计算机名称。网络上每一台安装了TCP/IP协议的主机都会接收到这种广
+播信息,但只有DHCP服务器才会做出响应。
+
+提供阶段：即DHCP服务器提供IP地址的阶段。在网络中接收到DHCP DISCOVER发现信息的
+DHCP服务器都会做出响应,它从尚未出租的IP地址中挑选一个分配给DHCP客户端,向DHCP客户
+端发送一个包含出租的IP地址和其他设置的DHCP OFFER提供信息。
+
+选择阶段：即DHCP客户端选择某台DHCP服务器提供的IP地址的阶段。如果网络中有多台
+DHCP服务器向DHCP客户端发来的DHCP OFFER提供信息,则DHCP客户端只接受第一个收到的
+DHCP OFFER提供信息。在客户端收到DHCP OFFER提供信息后,会以广播方式回答一个DHCP 
+REQUEST请求信息,所有的DHCP服务器都会收到这个信息,该信息中包含它所选定的DHCP服务
+器和服务器提供的IP地址。之所以要以广播方式回答,是为了通知所有的DHCP服务器,他将选
+择某台DHCP服务器所提供的IP地址,其他没有被选择的DHCP服务器则会收回发出的IP地址。
+
+确认阶段：即DHCP服务器确认所提供的IP地址的阶段。当DHCP服务器收到DHCP客户端回答的
+DHCP REQUEST请求信息之后,它便向DHCP客户端发送一个包含它所提供的IP地址和其他设置
+的DHCP ACK确认信息,告诉DHCP客户端可以使用它所提供的IP地址。至此DHCP客户端可以使
+用DHCP服务器所提供的IP地址与网卡绑定。
+
+重新登录阶段。以后DHCP客户端每次重新登录网络时,就不需要再发送DHCP DISCOVER发现
+信息了,而是直接发送包含前一次所分配的IP地址的DHCP REQUEST请求信息。当DHCP服务器
+收到这一信息后,它会尝试让DHCP客户端继续使用原来的IP地址,并回答一个DHCP ACK确认信
+息。如果此IP地址已无法再分配给原来的DHCP客户端使用时(比如此IP地址已分配给其它
+DHCP客户端使用),则DHCP服务器给DHCP客户端回答一个DHCP NACK否认信息。当原来的DHCP
+客户端收到此DHCP NACK否认信息后,它就必须重新发送DHCP DISCOVER发现信息来请求新的
+IP地址。 更新租约阶段。DHCP服务器所提供的IP地址一般都是有期限的,我们把这个期限称
+为租期,租期的长短通过DHCP服务器来设置。设置这个期限是为了让那些过了租期又不活动
+的IP能空出来,由DHCP服务器重新分配给DHCP客户端,这样就会有效减少IP地址的浪费现象。
+期满后DHCP服务器便会收回出租的IP地址。如果DHCP客户端要延长其IP租约,则必须更新其
+IP租约。DHCP客户端启动时和IP租约期限过一半时,DHCP客户端都会自动向DHCP服务器发送
+更新其IP租约的信息。
+
+如果DHCP客户端一直开启,客户端会在租约过去50%的时候向原DHCP服务器提出DHCP REQUEST
+请求信息,信息中包含一个客户端正使用的IP地址,并请求服务机延长对此地址的租用。
+如果原服务器同意会发出DHCP ACK确认信息。这样,续租成功,客户端获得新的租约。如果
+这个请求信息没有得到回复,因为租约尚未结束,DHCP客户端会继续使用原来的IP,并且每隔
+大约2分钟向原DHCP服务器再次发送DHCP REQUEST请求信息申请续租。如果到了租约期限的
+87.5%,DHCP客户端依然没有收到原DHCP服务器的DHCP ACK确认信息,则客户端转为重新绑定
+状态。在重新绑定状态下,DHCP客户端会以广播的方式向网络中的所有服务器发送DHCP 
+REQUEST请求信息,如果有DHCP服务器响应,并发回DHCP ACK确认信息则DHCP客户端从新的
+DHCP服务器获得新的IP地址还有新的租约。如果直到租约结束也没有收到任何DHCP服务器的
+DHCP ACK确认信息,则DHCP客户端会停用租来的IP地址,然后返回初始化状态。
+
+2.4、dhcpcd
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	dhcpcd是dhcp客户端守护进程程序。
+
+	在我们的自研IPC嵌入式系统应用中，网络配置变化后需要重启IPC，那dhcpcd修改了IP
+后，如何通知重启呢？（应用轮询？）
+
+2.5、自研策略
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	暂不支持DHCP功能
+
+3、DNS
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	https://linux.cn/article-9943-1.html
+
+3.1、配置方法
+	DNS需配置/etc/resolv.conf
+
+3.2、libresolv库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	libresolv.so中的函数并不在glibc的函数和宏列表(
+http://www.gnu.org/software/libc/manual/pdf/libc.pdf)中。但libresolv确实是glibc库
+的组成部分，手册中说了，这部分是直接从BIND9源码中搬过来的了（譬如CERT CA-2002-31
+安全漏洞就存在于BIND9和libresolv中）。
+
+	通过“strace -e trace=openat ping baidu.com”命令可以知道，ping命令使用了
+libresolv库。
+
+3.3、/etc/nsswitch.conf
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+3.4、/etc/host.conf
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过strace指令可以发现，ping命令在打开/etc/hosts和/etc/resolv.conf文件之前
+先尝试打开/etc/host.conf文件。
+
+	功能：指定主机名查找方法，通常指先查找文件/etc/hosts,找不到时再向DNS服务器请求。
+对于大多数用户不用改动此文件内容。
+
+	文件格式：
+order      //是解析顺序的参数，order hosts,bind,nis //说明先查询解析/etc/hosts文件，然后DNS，再是NIS
+multi      //表示是否运行/etc/hosts文件允许主机指定多个多个地址 ，on表示运行
+nospoof    //是否允许服务器对ip地址进行其欺骗，这里的on表示不允许
+rccorder   //如果被设置为on，那么所有查询将被重新排序。
+
+经测试，order设置对“ping”命令似乎无效。
+
+【注】NIS
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+网络信息服务(Network Information Service, NIS)
+
+3.6、/etc/resolv.conf
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	/etc/resolv.conf是DNS客户机配置文件，用于设置DNS服务器的IP地址及DNS域名，还
+包含了主机的域名搜索顺序。该文件是由域名解析器（resolver，一个根据主机名解析IP地
+址的库）使用的配置文件。它的格式很简单，每行以一个关键字开头，后接一个或多个由空
+格隔开的参数。
+
+	resolv.conf的关键字主要有四个，分别是：
+nameserver     //定义DNS服务器的IP地址
+domain         //定义本地域名
+search         //定义域名的搜索列表
+sortlist       //对返回的域名进行排序
+
+【示例】
+domain     51osos.com
+search     www.51osos.com  51osos.com
+nameserver 202.102.192.68
+nameserver 202.102.192.69
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这些配置中最主要是nameserver关键字，如果没指定nameserver就找不到DNS服务器，
+其它关键字是可选的。
+
+	nameserver表示解析域名时使用该地址指定的主机为域名服务器。其中域名服务器是按
+照文件中出现的顺序来查询的,且只有当第一个nameserver没有反应时才查询下面的nameserver。
+
+	domain声明主机的域名。很多程序用到它，如邮件系统；当为没有域名的主机进行DNS
+查询时，也要用到。如果没有域名，主机名将被使用，删除所有在第一个点( .)前面的内容。
+
+	search它的多个参数指明域名查询顺序。当要查询没有域名的主机，主机将在由search
+声明的域中分别查找。
+	domain和search不能共存；如果同时存在，后面出现的将会被使用。
+	在海思系统上尝试search字段好像不能生效。
+
+	sortlist允许将得到域名结果进行特定的排序。它的参数为网络/掩码对，允许任意的
+排列顺序。
+
+	通过“strace -e trace=openat ping baidu.com”命令可以知道，ping命令使用了
+/etc/resolv.conf配置文件。
+
+3.5、/etc/hosts文件与hostname命令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	按照大家的说法，hostname参数其实没什么用，只是给机器起一个容易记的名字。
+
+	hostname命令可以设置“主机名”
+	hostname命令可以查询主机名、IP等（实际就是查询/etc/hosts文件）
+
+4、IPV4 IPV6
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、网卡可以同时支持IPV4和IPV6吗？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+4.2、自研策略
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	暂不支持IPV6
+
+5、MTU
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+（Maximum Transmission Unit，MTU）
+
+	以太网和802.3对数据帧的长度都有一个限制，其最大值分别是1500字节和1492字节。
+链路层的这个特性称为MTU，即最大传输单元。不同类型网络的数帧长度大多数都有一个上
+限。如果IP层有一个数据报要传，而且数据帧的长度比链路层的MTU还大，那么IP层就需要
+进行分片(fragmentation)，即把数据报分成干片，这样每一片就都小于MTU。

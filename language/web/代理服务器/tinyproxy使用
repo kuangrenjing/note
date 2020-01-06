@@ -60,6 +60,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 /mnt/nfs/bin/tinyproxy -d -c /mnt/nfs/etc/tinyproxy.conf
 
+tinyproxy需要/tmp目录挂载在内存(ramfs或tmpfs类型，推荐使用tmpfs类型)
+mount -t tmpfs -o size=10M tmpfs /tmp
+
 
 
 3、交叉编译

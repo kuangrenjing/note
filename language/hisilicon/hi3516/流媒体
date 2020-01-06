@@ -3,6 +3,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://www.jianshu.com/p/9522c4a7818d
 https://www.cnblogs.com/cy568searchx/p/6125031.html
 
+https://blog.csdn.net/qq_31186123/article/details/81587351
+https://blog.csdn.net/sphone89/article/details/17492433
+
 1、术语
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 1)、NAL(Network Abstract Layer)
@@ -32,6 +35,13 @@ H264采用的核心算法是帧内压缩和帧间压缩，帧内压缩是生成I
 I、B、P各帧是根据压缩算法的需要，是人为定义的,它们都是实实在在的物理帧。一般来说，I帧的压缩率
 是7（跟JPG差不多），P帧是20，B帧可以达到50。可见使用B帧能节省大量空间，节省出来的空间可以用
 来保存多一些I帧，这样在相同码率下，可以提供更好的画质。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ISO/IEC 14496是MPEG专家组制定的MPEG-4标准，其中第2部分就是我们常说的MPEG4
+编码，第10部分就是我们常说的H264编码。
+	gov概念是MPEG4的，H264没有这个概念。
+
+
+
 
 2、H264 profile、level
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

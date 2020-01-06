@@ -1,8 +1,68 @@
+1、ARM公司历史
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	http://www.ruanyifeng.com/blog/2011/01/brief_history_of_arm.html
+
+	ARM最开始是Acorn RISC Machine的简称，后来是Advanced RISC Machine的简称。
+
+	1978年12月5日，物理学家赫尔曼·豪泽(Hermann Hauser)和工程师Chris Curry在英国
+剑桥创办了CPU公司(Cambridge Processing Unit)，主要业务是为当地市场供应电子设备。
+1979年，CPU公司改名为Acorn计算机公司。
+
+	起初，Acorn公司打算使用摩托罗拉公司的16位芯片，但是发现这种芯片太慢也太贵。
+"一台售价500英镑的机器，不可能使用价格100英镑的CPU！"他们转而向Intel公司索要
+80286芯片的设计资料，但是遭到拒绝，于是被迫自行研发。
+
+	1985年，Roger Wilson和Steve Furber设计了他们自己的第一代32位、6MHz的处理器，
+用它做出了一台RISC指令集的计算机，简称ARM(Acorn RISC Machine)。这就是ARM这个名字
+的由来。
+
+	RISC的全称是"精简指令集计算机"(reduced instruction set computer)，它支持的
+指令比较简单，所以功耗小、价格便宜，特别合适移动设备。早期使用ARM芯片的典型设备，
+就是苹果公司的牛顿PDA(微型掌上电脑)。
+
+	1990年11月27日，Acorn公司正式改组为ARM计算机公司。苹果公司出资150万英镑，芯
+片厂商VLSI出资25万英镑，Acorn本身则以150万英镑的知识产权和12名工程师入股。公司
+的办公地点非常简陋，就是一个谷仓。
+
+	公司成立后，业务一度很不景气，工程师们人心惶惶，担心将要失业。由于缺乏资金，
+ARM做出了一个意义深远的决定：自己不制造芯片，只将芯片的设计方案授权(licensing)
+给其他公司，由它们来生产。正是这个模式，最终使得ARM芯片遍地开花，将封闭设计的
+Intel公司置于"人民战争"的汪洋大海。
+
+	20世纪90年代，ARM公司的业绩平平，处理器的出货量徘徊不前。但是进入21世纪之后，
+由于手机的快速发展，出货量呈现爆炸式增长，ARM处理器占领了全球手机市场。2006年，
+全球ARM芯片出货量为20亿片，2010年预计将达到45亿片。
+
+2、
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
 1、ARM体系结构版本
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 arm支持32位RISC(精简指令集)和16位Thumb(拇指指令集)。
 
 随着体系结构的更新，指令集也在不停地增加，所以体系结构版本基本就等同于指令集版本。
+
+2、ARM架构版本发展
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.subset.architecture.reference/index.html
+https://en.wikipedia.org/wiki/List_of_ARM_microarchitectures
+https://blog.csdn.net/zhouge000/article/details/83054819
+https://zhidao.baidu.com/question/570972948.html
+2.1、ARMv4架构
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+典型产品：ARM7 没有MMU
+http://www.systemc-cpu-models.org/arm_models/armv4/
+2.2、ARMv5架构
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+典型产品：ARM9
+2.3、ARMv6架构
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+典型产品：Cortex-M0 Cortex-M1
+2.4、ARMv7架构
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+典型产品：Cortex-M3 Cortex-M4
+2.5、ARMv8架构
 
 2、ARM处理器系列
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

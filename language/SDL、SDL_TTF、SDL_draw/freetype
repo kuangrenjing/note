@@ -1,1 +1,68 @@
 https://www.freetype.org/
+
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+FreeType 2 教程 一
+https://blog.csdn.net/xiaohaizi77881314/article/details/13022425
+
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+2、简单流程及介绍
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、包含头文件
+	#include <ft2build.h>
+	#include FT_FREETYPE_H
+
+2.2、初始化库
+	简单地创建一个FT_Library类型的变量，然后调用函数FT_Init_FreeType。
+
+2.3、装载一个字体face
+	应用程序通过调用FT_New_Face创建一个新的face对象。一个face对象描述了一个特定
+的字样和风格。
+
+2.4、访问face内容
+	一个face对象包含该face的全部全局描述信息。常见的字段有
+
+Num_glyphs
+	这个值给出了该字体face中可用的字形(glyphs)数目。简单来说，一个字形就是一个字
+符图像。但一个字形不一定和字符代码一一对应。
+
+Flags
+	一个32位整数，包含一些用来描述face特性的位标记。例如，标记FT_FACE_FLAG_SCALABLE
+用来指示该face的字体格式是可伸缩并 且该字形图像可以渲染到任何字符象素尺寸。要了解
+face标记的更多信息，请阅读“FreeType 2 API 参考”。
+
+Units_per_EM
+	这个字段只对可伸缩字体格式有效，在其他格式它将会置为0。它指示了EM所覆盖的字
+体单位的个数。
+
+Num_fixed_size
+	这个字段给出了当前face中嵌入的位图的个数。简单来说，一个strike就是某一特定
+字符象素尺寸下的一系列字形图像。例如，一个字体face可以包含象素尺寸为10、12和14
+的strike。要注意的是即使是可伸缩的字体格式野可以包含嵌入的位图！
+
+Fixed_sizes
+	一个指向FT_Bitmap_Size成员组成的数组的指针。每一个FT_Bitmap_Size指示face中的
+每一个strike的水平和垂直字符象 素尺寸。
+
+
+
+3、utf-8转unicode
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+
+
+4、bitmap
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://freetype.org/freetype2/docs/reference/ft2-bitmap_handling.html
+freetype2.10开始有调色板的概念
+
+FT_Glyph_To_Bitmap
+
+
+

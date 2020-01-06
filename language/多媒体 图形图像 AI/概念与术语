@@ -1,0 +1,53 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/real_myth/article/details/54707001
+
+1、大术语
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、媒体
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	媒体是指传播信息的媒介。它是指人借助用来传递信息与获取信息的工具、渠道、
+载体、中介物或技术手段。也可以把媒体看作为实现信息从信息源传递到受信者的一切技
+术手段。媒体有两层含义，一是承载信息的物体，二是指储存、呈现、处理、传递信息的
+实体。
+
+	国际电话电报咨询委员会CCITT（Consultative Committee on International 
+Telephone and Telegraph，国际电信联盟ITU的一个分会）把媒体分成5类：
+(1)感觉媒体(Perception Medium)：
+	指直接作用于人的感觉器官，使人产生直接感觉的媒体。如引起听觉反应的声音，引
+起视觉反应的图像等。其它的还有人类的各种语言、音乐、自然界的各种声音、图形、图
+像，计算机系统中的文字、数据和文件等都属于感觉媒体。
+(2)表示媒体(representation Medium)：
+	指传输感觉媒体的中介媒体，即用于数据交换的编码。如图像编码(JPEG、MPEG等)、
+文本编码(ASCII码、GB2312等)和声音编码等。
+(3)表现媒体(Presentation Medium)：
+	指进行信息输入和输出的媒体。如键盘、鼠标、扫描仪、话筒、摄像机等为输入媒体；
+显示器、打印机、喇叭等为输出媒体。
+(4)存储媒体(Storage Medium)：
+	指用于存储表示媒体的物理介质。如硬盘、软盘、磁盘、光盘、ROM及RAM等。
+(5)传输媒体(Transmission Medium)：
+	指传输表示媒体的物理介质。如电缆、光缆等。
+
+	我们通常所说的“媒体”(Media)包括其中的两点含义。一是指信息的物理载体(即存储
+和传递信息的实体)，如书本、挂图、磁盘、光盘、磁带以及相关的播放设备等；另一层含
+义是指信息的表现形式(或者说传播形式)，如文字、声音、图像、动画等。多媒体计算机中
+所说的媒体，是指后者而言，即计算机不仅能处理文字、数值之类的信息，而且还能处理声
+音、图形、电视图像等各种不同形式的信息。
+
+1.2、多媒体(multimedia)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	多媒体是多种媒体的综合，一般包括文本，声音和图像等多种媒体形式。在计算机系
+统中，多媒体指组合两种或两种以上媒体的一种人机交互式信息交流和传播媒体。使用的
+媒体包括文字、图片、照片、声音 、动画和影片，以及程式所提供的互动功能。
+
+	多媒体技术包括但不限于以下子技术：
+1、视频点播技术
+2、视频压缩技术
+3、多媒体数据库的技术
+4、虚拟现实技术
+5、流传媒技术
+
+
+
+2、分类术语
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

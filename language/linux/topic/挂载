@@ -1,12 +1,12 @@
 1、交换分区
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	Linux内核为了提高读写效率与速度，会将文件在内存中进行缓存，这部分内存就是Cache 
-Memory(缓存内存)。即使你的程序运行结束后，Cache Memory也不会自动释放。这就会导致你在
-Linux系统中程序频繁读写文件后，你会发现可用物理内存变少。当系统的物理内存不够用的时候，
-就需要将物理内存中的一部分空间释放出来，以供当前运行的程序使用。那些被释放的空间可能来自
-一些很长时间没有什么操作的程序，这些被释放的空间被临时保存到Swap空间中，等到那些程序要运
-行时，再从Swap分区中恢复保存的数据到内存中。这样，系统总是在物理内存不够时，才进行Swap交
-换。
+	Linux内核为了提高读写效率与速度，会将文件在内存中进行缓存，这部分内存就是
+Cache Memory(缓存内存)。即使你的程序运行结束后，Cache Memory也不会自动释放。这就
+会导致你在Linux系统中程序频繁读写文件后，你会发现可用物理内存变少。当系统的物理
+内存不够用的时候，就需要将物理内存中的一部分空间释放出来，以供当前运行的程序使
+用。那些被释放的空间可能来自一些很长时间没有什么操作的程序，这些被释放的空间被
+临时保存到Swap空间中，等到那些程序要运行时，再从Swap分区中恢复保存的数据到内存中。
+这样，系统总是在物理内存不够时，才进行Swap交换。
 
 
 1、/etc/fstab、/etc/mtab和/proc/mounts
@@ -23,9 +23,6 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	也基本已废弃，由/proc/self/mountinfo接替它的工作
 
 The first column specifies the device that is mounted, the second column reveals the mount point, and the third column tells the file system type, and the fourth column tells you if it is mounted read-only (ro) or read-write (rw). The fifth and sixth columns are dummy values designed to match the format used in /etc/mtab. 
-
-
-exec start --no-wait mountall
 
 
 3、通过"cat /proc/mounts"命令可以看到/上挂载了两个设备
@@ -120,3 +117,46 @@ mount的过程就是把设备的文件系统加入到 vfs 框架中
 
 
 vfs、根目录、挂载点
+
+
+100、ramfs与tmpfs的区别
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+100.1、ramfs
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ramfs是Linux下一种基于RAM做存储的文件系统。在使用过程中你就可以把ramfs理解
+为在普通的HDD(机械硬盘)上建立了一个文件系统，而现在HDD被替换成了RAM，因为是RAM做
+存储所以会有很高的存储效率。由于ramfs的实现就相当于把RAM作为最后一层的存储，所
+以在ramfs中不会使用swap。你什么时候听过会把HDD上的文件swap到哪里去吗？平常说的
+swap都是针对内存来说的，而ramfs底层的存储是RAM，虽然不是HDD，但是在Linux看来它
+就跟HDD一样。但是ramfs有一个很大的缺陷就是它会吃光系统所有的内存，即使你mount的
+时候指定了大小，同时它也只能被root用户访问。测试方法很简单：
+
+sudo mount -t ramfs -o size=10M ramfs ./ramfs/
+sudo dd if=/dev/zero of=./ramfs/test.file bs=1M count=20
+【注】
+	dd命令用于按指定大小拷贝文件。
+
+	测试时你会发现上面这个操作是能成功的，或者你再自己虚拟机上干脆做狠点，直接
+写一个比内存更大的文件，你会发现瞬间系统就卡主了。另外在dd命令如果不以root用户
+执行就会权限不够：(dd: opening `./ramfs/test.file': Permission denied)
+
+100.2、tmpfs
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	tmpfs也是Linux下的一个文件系统，它将所有的文件都保存在虚拟内存中，umount 
+tmpfs后所有的数据也会丢失，tmpfs就是ramfs的衍生品。tmpfs使用了虚拟内存的机制，
+它会进行swap，但是它有一个相比ramfs的好处：mount时指定的size参数是起作用的，
+这样就能保证系统的安全，而不是像ramfs那样，一不留心因为写入数据太大吃光系统所有
+内存导致系统被hang住。在我文章最开始的那个例子中就是mount了一个10M大小的tmpfs，
+然后执行sql 命令(它需要创建的临时表大于10M)，因为tmpfs限制了大小，因此也就报错。
+那么tmpfs适用的场景有哪些呢？在官方文档上主要有如下几点：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	kernel内部需要用到它，而我们是无法看到的glibc 2.2以上的版本，必须有一个tmpfs
+被mount在/dev/shm用做POSIX shared memory。
+
+总结来说ramfs与tmpfs有如下几点异同：
+	ramfs会因为数据的写入自动增长空间，所以可能导致最后系统所有的内存耗完。tmpfs
+可以再mount时限定大小，不会自动增长
+
+	ramfs不会用swap，tmpfs会使用swap
+
+两者都是用来提升效率，但是tmpfs比ramfs的性能更好（结果是对的，原理有待进一步探究）

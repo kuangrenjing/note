@@ -1,0 +1,222 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+linux/嵌入式/嵌入式Linux固件升级
+https://www.cnblogs.com/lidabo/p/4774425.html         mtd-utils工具的使用
+
+1、术语
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+TFTP(Trivial File Transfer Protocol,简单文件传输协议)
+	是TCP/IP协议族中的一个用来在客户机与服务器之间进行简单文件传输的协议，提供不
+复杂、开销不大的文件传输服务。端口号为69。
+
+fastboot
+	就是uboot
+
+根文件系统
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Linux的目录结构的最顶层是一个被称为“/”的根目录。系统加载Linux内核之后，就会
+挂载一个设备到根目录上。存在于这个设备中的文件系统被称为根文件系统。所有的系统
+命令、系统配置以及其他文件系统的挂载点都位于这个根文件系统中。根文件系统通常存
+放于内存、Flash或是基于网络的文件系统中。
+
+	这里有一个问题，Linux内核如何知道根文件系统放在哪个设备上(FLASH、内存或是网
+络设备)？
+
+	答案是uboot启动linux内核时指定，具体是通过uboot的“bootargs环境变量”指定。可
+参考“https://blog.csdn.net/weiluckystrike/article/details/89244818”博文。
+
+	那根文件系统又是怎么指定的呢？
+	答案是，启动运行linux时指定了命令行cat /proc/cmdline
+	mem=72M console=ttyAMA0,115200 root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=hi_sfc:1M(boot),3M(kernel),3M(rootfs),1536K(lib),7M(user),512K(param)
+
+
+2、海思Hi35系列与FLASH烧写相关的硬件支持
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、两根引脚
+BOOTROM_SEL    BOOT_SEL     启动模式
+1              X            从BOOTROM启动
+0              0            从片外SPI Flash启动
+0              1            从片外NAND Flash启动
+
+2.2、BOOTROM
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这是芯片内部的一块“只读存储器”，当BOOTROM_SEL置高时，将会启动串口通信机制，
+通过串口与PC端相应的软件建立通信，PC通过串口向bootrom传送uboot镜像，输送到5%(主
+要是DDR参数)时，开始初始化DDR，然后把uboot传输到DDR中，下载100%时从DDR中启动uboot，
+uboot启动完成后，工具与uboot进行交互，发送烧写命令，将DDR中的uboot烧写到Flash对
+应地址中。
+
+
+3、与FLASH烧写相关的软件组件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、PC端软件
+HiTool->HiBurn
+Fastboot
+	这两套软件功能是类似的，都是海思提供的烧写工具，但我们基本不用或只在开发阶
+段使用。
+
+web客户端
+onvif客户端
+	在这两个客户端上我们给客户提供了系统升级的入口，只要IPC上系统和应用程序能正常
+运行，就可以通过这两个入口进行系统升级。
+
+telnet客户端
+	如果IPC上应用程序不能正常运行，但linux系统能正常运行，可通过telnet客户端登录
+到IPC直接使用mtd-utils进行升级。如果Linux系统也不能正常运行，那只能拆机通过串口烧写，
+这还要看BOOTROM_SEL引脚是否引出并可控，比较麻烦。
+
+
+3.2、嵌入式端组件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+MTD-Utils
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在嵌入式系统中，系统和程序一般是放在FLASH中的，可以是NOR FLASH或NAND FLASH，
+MTD(memory technology device内存技术设备)在硬件和文件系统层之间的提供了一个抽象
+的接口，MTD是用来访问存储设备(如：ROM、flash)的中间层，它将存储设备的共有特性抽
+取出来，从而使增加新的内存设备驱动程序变得更简单。对我们而言，MTD就是NOR FLASH、
+NAND FLASH与文件系统之间的中间层，除此之外，它还提供了一套工具供用户烧写、擦除
+FLASH，这个工具叫做MTD-Utils。
+
+	MTD-Utils提供四个指令，它们是：
+flash_erase         用于擦除MTD分区的某个部分
+flash_eraseall      擦除整个MTD分区
+nanddump            用于查看当前某个mtd分区的数据(nand的话,也支持显示oob数据)
+nandwrite           用于将某个文件系统文件写入到某个mtd分区的某个位置
+
+
+4、Flash烧写策略
+4.1、flash空空如也怎么烧
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	把BOOTROM_SEL引脚拉高，通过HiTool->HiBurn或Fastboot工具烧写uboot并启动uboot。
+此后就可以按照uboot启动后的方式烧写剩下的部分(kernel、rootfs、user、param)。
+
+	使用烧片器烧写。
+
+4.2、flash上只有uboot怎么烧
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	uboot启动后，可以使用uboot指令进行FLASH烧写。上位机可以先通过串口与uboot进行
+通信，但串口速度较慢，可以设置uboot的IP并启动netconsole命令（类似于telnet），这样
+上位机就可以通过网络与uboot进行文件传输，并通过uboot指令烧写FLASH。
+
+
+4.3、板子上linux正常运行，文件系统也正常
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	可通过telnet连接，并使用MTD-Utils指令进行烧写
+
+5、web客户端进行网络摄像机固件升级
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5.1、HTTP post文件上传机制
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/wangkaiming123456/article/details/48999915
+https://blog.csdn.net/shallnet/article/details/50897052
+https://blog.csdn.net/aflyeaglenku/article/details/51644863   谈了multipart/form-data，可略参考
+https://blog.csdn.net/guoke312/article/details/88998734
+
+	在最初的http协议中，没有上传文件方面的功能。rfc1867(
+http://www.ietf.org/rfc/rfc1867.txt)为http协议添加了这个功能。RFC1867协议主要是
+在HTTP协议的基础上为INPUT标签增加了file属性，同时限定了Form的method必须为POST，
+ENCTYPE必须为multipart/form-data。
+
+	在一般的基于Web的程序中，我们往往使用<input type=”file”>标签，该标签在被浏览
+器解析后会产生一个文本框和一个浏览按钮，单击浏览按钮会出现系统的文件选择框。
+
+	在我们的boa+cgi web服务架构中，由cgi程序负责上传文件的消息的解析并把文件写到
+磁盘。这其中主要是需要了解“multipart/form-data”消息的格式。
+
+6、onvif客户端进行网络摄像机固件升级
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+6.0、参考：
+https://github.com/jimxl/onvif-core-specification-cn(onvif-core-specification-cn)
+
+MTOM
+
+https://blog.csdn.net/oneusername/article/details/93158625
+
+6.1、MtoM(Message Transmission Optimization Mechanism)简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	MtoM是W3C消息传输优化机制，是一种有效地向Web服务发送二进制数据的方法。避免使
+用base64编码。
+
+6.2、实施方法：
+	onvif-core-specification-cn->2.5.3 系统->升级固件
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+一个设备可提供两种升级固件的机制，第一种在MTOM模式下使用UpgradeSystemFirmware命令发送新的固件镜像。
+第二种分为两个阶段，首先客户端发送StartFirmwareUpgrade命令让设备准备开始升级，然后使用HTTP POST发送固件镜像。
+
+第二种机制被设计用在资源有限的设备上，通常这样的设备在正常工作的情况下无法接收和处理新的固件镜像。
+
+
+7、友商的FLASH分区与挂载
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+7.1、翔飞
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+翔飞FLASH共分6个分区：
+	/dev/mtdblock0  1M         uboot
+	/dev/mtdblock1  3M         内核
+	/dev/mtdblock2  3M         根文件系统，拷贝到内存，挂载内存
+	/dev/mtdblock3  1M
+	/dev/mtdblock4  7M
+	/dev/mtdblock5  0.5M
+
+
+mount -t jffs2 /dev/mtdblock4  /opt/user
+mount -t jffs2 /dev/mtdblock5  /opt/param
+
+
+8、FLASH信息查看
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+/proc/mtd
+
+dev:    size   erasesize  name
+mtd0: 00100000 00010000 "boot"
+mtd1: 00300000 00010000 "kernel"
+mtd2: 00300000 00010000 "rootfs"
+mtd3: 00180000 00010000 "lib"
+mtd4: 00700000 00010000 "user"
+mtd5: 00080000 00010000 "param"
+
+
+9、busybox编译和使用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+9.1、busybox编译
+9.1.1、make menuconfig有时会遇到这个错误 Linux Error: ncurses.h: No such file or directory
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这是因为缺少相应的依赖库 解决方法：
+	CentOS ：yum install ncurses-devel ncurses
+	Ubuntu： sudo apt-get install libncurses5-dev libncursesw5-dev
+
+
+	cp config_v300_softfp_neon .config (使用硬浮点（但通过CPU寄存器传参）？使用neon指令)
+
+9.2、jffs2文件系统烧写实验
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	拷贝翔飞/opt/param文件夹下的文件到任意文件夹，执行下列指令生成param.img：
+mkfs.jffs2 –d ./ -l –e 0x10000 -o param.img
+
+10、实施策略
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+10.1、资源规划
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+至少需要64M FLASH
+
+uboot  1M
+kernel 3M
+rootfs 3M
+user   54M
+param  3M
+
+/dev/mtd0  uboot
+/dev/mtd1  linux kernel
+/dev/mtd2  linux根文件系统 + telnet + 海思库
+/dev/mtd3  应用程序 + 各种移植库 + CGI + boa + tinyproxy
+/dev/mtd4  配置
+/dev/mtd5  升级程序
+
+10.2、升级包构成
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+10.3、策略
+
+
+10.4、补救措施
