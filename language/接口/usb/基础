@@ -1,0 +1,32 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/faihung/article/details/78839551       很好的资料
+https://blog.csdn.net/go_str/article/details/80802452        USB具体通讯过程
+https://blog.csdn.net/qq_16777851/article/list/3?t=1         重要的系列文章
+https://blog.csdn.net/h490516509/article/details/88395911    枚举过程
+
+
+
+1、概念
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、端点
+    一个具体的端点只能工作在一种传输模式下。通常我们把工作在什么模式下的端点，叫做什么端点。如控制端点、批量端点、同步端点、中断端点。
+    端点0是设备的默认控制端点，在设备上电后就存在并可以使用，在Set Config之前所有的传输都是通过端点0传输的。
+    端点描述符中规定了端点所能支持的最大包长。
+        控制传输：高速模式的最大包长固定为64个字节；全速模式可在8、16、32、64字节中选择；低速模式的最大包长固定为8个字节。
+        批量传输：高速模式固定为512个字节；全速模式最大包长可在8、16、32、64字节中选择；低速模式不支持批量传输。
+        同步传输：高速模式的最大包长上限为1024个字节；全速模式的最大包长上限为1023个字节；低速模式不支持同步传输。
+        中断传输：告诉模式的最大包长上限为1024个字节；全速模式最大包长上限为64个字节；低速模式最大最大包长上限为8个字节。
+
+ 
+
+
+
+
+
+
+
+
+
+传输模式、传输类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

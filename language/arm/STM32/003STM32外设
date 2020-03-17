@@ -27,3 +27,11 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	CRC        校验模块
 	ETH        网卡
 	FLASH      FLASH存储器
+
+
+2、RTC
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	RTC应该有一个寄存器可以配置它的控制时钟？因为有时它的时钟是32.768khz，有时又是40khz。
+
+	“http://blog.chinaunix.net/uid-27106528-id-4288509.html”这位网友遇到的问题涉及
+“后备供电区域”和“备份寄存器”的问题。

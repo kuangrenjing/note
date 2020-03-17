@@ -12,8 +12,43 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 windows:
 	tracert
 
+接口标签
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在机柜式路由器和交换机中，提供了一种名为线卡(line card)的接口卡。在线卡内部可以插入
+多个接口模块，这时的接口标签一般采用“线卡号/模块号/接口号”的形式。
+
+
+GE 0/0/1
+
 
 linux:
 	traceroute 
 
 	星号：有时我们traceroute 一台主机时，会看到有一些行是以星号表示的。出现这样的情况，可能是防火墙封掉了ICMP的返回信息，所以我们得不到什么相关的数据包返回数据。
+
+
+槽位就是交换机主板上的插槽位置；
+
+模块化交换机中，主机就是机箱加主板；电源、CPU板、通信端口板等，都是插到主板的插槽上的。
+
+插槽由于不是一个，一般从0开始编号,称槽位；
+
+插槽也是有类型之分的。电源插槽只能插电源模块；控制槽只能插引擎板（CPU运算控制单元）；交换机的主要插槽是通信接口插槽，方便扩充接口数量；
+
+主控插槽和业务插槽 
+
+
+
+GE模块
+
+
+
+
+路由表
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+
+以太网协议握手 查询网卡正在使用的以太网协议
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

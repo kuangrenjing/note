@@ -1,0 +1,436 @@
+http://rsj.sh.gov.cn/sbsjb/wzb/226.jsp#
+如东 84533366
+
+
+1、复位
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.0、参考
+1) 《Cortex-M3核心指南中文版》第三章 复位序列
+2) https://blog.csdn.net/ybhuangfugui/article/details/73354918
+
+在离开复位状态后，CM3做的第一件事就是读取下列两个32位整数的值：
+	从地址0x0000 0000处取出MSP的初始值。
+	从地址0x0000 0004处取出PC的初始值——这个值是复位向量，LSB必须是1。然后从这个值所对
+应的地址处取指。
+
+	因为CM3使用的是向下生长的满栈，所以MSP的初始值必须是堆栈内存的末地址加1。举例来说，
+如果你的堆栈区域在0x20007C00‐0x20007FFF之间，那么MSP 的初始值就必须是0x20008000。
+
+	中断向量表的第一个元素是留给MSP的，所以对NVIC来说，中断向量表的第一个元素是无效的，
+即没有0号中断。
+
+	前面说到，复位后，CM3总是从0X0000 0000处取MSP和复位向量的值，而STM32实现的CM3芯
+片可以通过BOOT0、BOOT1两个引脚选择从不同的位置启动，这是怎么做到的呢？其实是这样的，STM32
+保留了ARM7的存储器“二次映射”技术，选择从哪个位置启动，就把那一块地址“二次映射”到0X0000 
+0000上(可参见《Cortex-M3核心指南中文版》第18章介绍)。
+
+	复位，从范围上区分，可以分为内核复位和系统复位。内核复位：它会使Cortex-M3进行复位，
+而不会影响其外设，如GPIO、TIM、USART、SPI等这些寄存器的复位。系统复位：这个复位会使整个芯
+片的所有电路都进行复位，我们查看寄存器手册时，会发现某某某寄存器复位值等于多少。
+
+2、中断向量表
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+VTOR寄存器
+
+向量表偏移寄存器读/写0xE000ED08 0x00000000
+
+NVIC_SetVectorTable(NVIC_VectTab_RAM,0);
+
+
+3、ARM汇编与GNU ARM汇编
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这两种汇编的写法有明显区别：
+GNU汇编基本用小写，ARM汇编指令、伪指令、寄存器都用大写
+GNU汇编的伪指令以'.'开头，ARM汇编在写法上不区分指令与伪指令
+
+4、汇编器(assembler)与连接器()的一般行为
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ARM的编译工具链中有两个工具可以编译汇编代码，分别是armasm、armcc，armcc智能编译嵌
+入在c语言中的汇编代码，不支持伪指令等特性。
+
+	ARM公司提供的完整工具链包括：
+armasm
+armcc
+armlink
+armar
+
+
+5、汇编程序的一般知识
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5.1、符号命名规则(symbol naming rules)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在汇编源代码中可以定义符号来表示变量、地址和常量，在定义符号时必须遵循一些规则：
+1)符号在它的作用域内必须唯一，不可与指令助记符(instruction mnemonic)和伪指令(directive)相同
+2)符号定义可以使用：大写字符、小写字符、数字字符、下划线；符号是大小写敏感的；
+3)如果要扩大符号定义的符号范围或顺序，需使用单竖线分割符号，譬如|.text|、|1_DataArea|，
+竖线不是符号的一部分，且扩充的符号范围不可包括：竖线、分号、newlines符号
+4)符号开头不可使用数字，数字型局部标号除外
+5)如果确实需要与指令助记符或伪指令同名，需使用双竖线分割符号，譬如||ASSERT||，竖线不是
+符号的一部分
+
+
+6、伪指令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	CM3一般在keil环境下进行编译，keil已经被ARM公司收购，采用的显然是ARM汇编，所以这里
+我们主要了解ARM汇编下的伪指令。
+
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/tabactivity/article/details/90054443
+https://blog.csdn.net/uunubt/article/details/97398586
+http://www.keil.com/support/man/docs/armasm/armasm_dom1361290005584.htm
+http://www.keil.com/support/man/docs/armasm/armasm_dom1361290021901.htm
+
+
+伪操作符可以分为以下几类：
+1)数据定义伪操作符
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	数据定义伪操作符主要包括LTORG、MAP、DCB、FIELD、SPACE、DCQ、DCW等，主要用于数据表定
+义、文字池定义、数据空间分配等。常用的有DCB/DCQ/DCW分配一段字节/双字/字内存单元，并且将
+它们初始化。
+
+1.1)、DCB
+语法格式：
+	{label} DCB expr{,expr}...
+
+说明：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	DCB伪指令用于分配一片连续的字节存储单元并用伪指令中指定的表达式初始化。
+
+	expr可以为-128～255之间的数值表达式或用""括起来的字符串。
+
+	DCB也可用"="代替。
+
+使用示例：
+	C_Srting DCB "This is a test！", 0    ；定义一个C类型字符串。
+
+1.2)、DCW(DCWU)
+语法格式：
+	{label} DCW{U} expr{,expr}...
+
+说明：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	DCW(DCWU)伪指令用于分配一片连续的半字存储单元并用伪指令中指定的表达式初始化。
+
+	expr是结果在–32768~65535之间的数值表达式。
+
+	用DCW分配的字存储单元是半字对齐的，而用DCWU分配的字存储单元不要求半字对齐。
+
+使用示例：
+	DataTest DCW 1, 2, 3    ;分配一片连续的半字存储单元并初始化。
+
+1.3)、DCD(DCDU)
+语法格式：
+	{label} DCD{U} expr{,expr}...
+
+说明：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	DCD(DCDU)伪指令用于分配一片连续的字存储单元并用伪指令中指定的表达式初始化。
+
+	expr是数值表达式或PC寄存器相关的表达式(不要轻易尝试)。
+
+	DCD也可用"&"代替。
+
+	用DCD分配的字存储单元是字对齐的，而用DCDU分配的字存储单元并不严格字对齐。
+
+使用示例：
+	DataTest DCD 4, 5, 6   ;分配一片连续的字存储单元并初始化。
+
+1.4)DCFD(DCFDU)
+语法格式：
+	{label} DCFD{U} fpliteral{,fpliteral}...
+
+说明：
+	DCFD(DCFDU)伪指令用于为双精度的浮点数分配一片连续的字存储单元并初始化。
+
+	fpliteral是双精度浮点数字面量
+
+	每个双精度的浮点数占据两个字单元
+
+	用DCFD分配的字存储单元是字对齐的，而用DCFDU分配的字存储单元不要求字对齐。
+
+	The word order used when converting fpliteral to internal form is controlled 
+by the floating-point architecture selected. You cannot use DCFD or DCFDU if you 
+select the --fpu none option.
+
+使用示例：
+	FDataTest DCFD 2E115, -5E7 ;分配一片连续的字存储单元并初始化为指定的双精度数。
+
+1.5、DCFS(DCFSU)
+语法格式：
+	{label} DCFS{U} fpliteral{,fpliteral}...
+
+说明：
+	DCFS(DCFSU)伪指令用于为单精度的浮点数分配一片连续的字存储单元并用初始化。
+
+	每个单精度的浮点数占据一个字单元。
+
+	用DCFS分配的字存储单元是字对齐的，而用DCFSU分配的字存储单元并不严格字对齐。
+
+使用示例：
+	FDataTest DCFS 2E5, -5E-7  ;分配一片连续的字存储单元并初始化为指定的单精度数。
+
+1.6、DCQ(DCQU)
+语法格式：
+	{label} DCQ{U} {-}literal{,{-}literal…} 
+
+说明：
+	DCQ(DCQU)伪指令用于分配一片以8个字节为单位的连续存储区域并用初始化。
+
+	literal是64位长整型字面量，当前面没有'-'时范围是0~2E64–1，前面有'-'时范围是–2E63~–1
+
+	用DCQ分配的存储单元是字对齐的，而用DCQU分配的存储单元并不严格字对齐。
+
+使用示例：
+	DataTest DCQ 100 ；分配一片连续的存储单元并初始化为指定的值。
+
+1.6、DCDO、DCI
+
+    SPACE
+
+　　　　语法格式：
+
+　　　　标号 SPACE 表达式 - K7 ]' L4 `) T4 @8 H
+
+　　　　SPACE 伪指令用于分配一片连续的存储区域并初始化为 0 。其中，表达式为要分配的字节数。
+
+　　　　SPACE 也可用"％"代替。
+
+　　　　使用示例：
+
+　　　　DataSpace SPACE 100；分配连续 100 字节的存储单元并初始化为 0 。
+
+    MAP
+
+　　　　语法格式：
+
+　　　　MAP 表达式 { ，基址寄存器 }
+
+　　　　MAP 伪指令用于定义一个结构化的内存表的首地址。 MAP 也可用 " ＾ " 代替。
+
+　　　　表达式可以为程序中的标号或数学表达式，基址寄存器为可选项。
+
+　　　　当基址寄存器选项不存在时，表达式的值即为内存表的首地址，当该选项存在时，内存表的首地址为表达式的值与基址寄存器的和。
+
+　　　　MAP 伪指令通常与 FIELD 伪指令配合使用来定义结构化的内存表。
+
+　　　　使用示例：
+
+　　　　MAP 0x100 ， R0 ；定义结构化内存表首地址的值为 0x100 ＋ R0 。
+
+    FILED
+
+　　　　语法格式：
+
+　　　　标号 FIELD 表达式
+
+　　　　FIELD 伪指令用于定义一个结构化内存表中的数据域。 FILED 也可用 " # " 代替。
+
+　　　　表达式的值为当前数据域在内存表中所占的字节数。
+
+　　　　FIELD 伪指令常与 MAP 伪指令配合使用来定义结构化的内存表。
+
+　　　　MAP 伪指令定义内存表的首地址，FIELD 伪指令定义内存表中的各个数据域，并可以为每个数据域指定一个标号供其他的指令引用。
+
+　　　　注意 MAP 和 FIELD 伪指令仅用于定义数据结构，并不实际分配存储单元。
+
+　　　　使用示例：
+
+　　　　MAP 0x100 ；定义结构化内存表首地址的值为 0x100 。
+
+　　　　A FIELD 16 ；定义 A 的长度为 16 字节，位置为 0x100
+
+　　　　B FIELD 32 ；定义 B 的长度为 32 字节，位置为 0x110
+
+　　　　S FIELD 256 ；定义 S 的长度为 256 字节，位置为 0x130
+
+2)、符号定义伪操作符
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	符号定义伪操作符包括GBLA、GBLL、GBLS、LCLA、CN、CP、DN、FN、RLIST、SETA等，用于定义
+ARM汇编程序的变量，对变量进行赋值，以及定义寄存器名称等。其中用于全局变量声明的GBLA、
+GBLL、GBLS和局部变量声明的LCAL、LCLL、LCLS伪指令较为常用。
+
+2.1)、{LCLA、LCLL、LCLS}{GBLA、GBLL、GBLS}{SETA、SETL、SETS}
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	LCLA、LCLL、LCLS三个指令用于定义并初始化局部变量，一般用在宏定义中，其作用域只在宏
+的一个实例中有效，即宏的多个实例互不干扰。
+
+	GBLA、GBLL、GBLS三个指令用于定义并初始化全局变量，如果变量已定义，则重初始化变量。
+全局变量的有效范围是源文件。
+
+	SETA、SETL、SETS三个指令用于设置LCLA、LCLL、LCLS或GBLA、GBLL、GBLS定义的变量的值
+
+	三套指令各有A、L、S三种后缀，分别代表“算术”、“逻辑”、“字符串”变量。
+
+2.2)、CN(基本用不上，因为预定义的C0~C15就很好)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+语法：
+	name CN expr
+
+说明：
+	CN指令用于给协处理器寄存器取别名
+
+	name是要给协处理器寄存器取的名字，不能与任何已经定义的名字重名
+
+	expr等于协处理器寄存器号码(0~15)
+
+	应避免给同一个寄存器取多个不同的名字，从而引起使用冲突
+
+	名字c0~c15已经预定义好，也就是说其实已经有一套协处理器寄存器别名了
+
+	似乎是这样的：ARM有16个协处理器，每个协处理器最多有16个寄存器
+
+示例：
+	power CN 6  ;某个协处理器的6号寄存器定义为power名字
+
+2.3)、CP(基本用不上，因为预定义的P0~P15就很好)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	与CN指令类似，用于给协处理器取别名
+
+2.4)、DN、SN(基本用不上)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	用于定义浮点计算协处理器寄存器的别名
+
+2.5)、RN、RLIST
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+语法：
+	name RLIST {list-of-registers}
+	name RN expr
+
+说明：
+	RN用于给寄存器取别名
+	RLIST给通用寄存器的一个集合取名
+
+	RLIST取的名字主要给LDM或者STM指令用
+
+示例：
+	regname     RN  11  ;defines regname for register 11
+	sqr4        RN  r6  ;defines sqr4 for register 6
+	Context     RLIST   {r0-r6,r8,r10-r12,pc}
+
+
+
+
+
+
+3)、报告伪操作符
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	报告伪操作符包括ASSERT、INFO、OPT等，主要用于汇编报告等。其中比较常用的有ASSERT，表
+示断言错误。
+
+4)、条件汇编伪操作符
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	条件汇编伪操作符包括IF、ELSE、ENDIF、WHIL、WEND、MACRO、MEND等，主要用于条件汇编、宏
+定义、重复汇编控制等操作。
+
+5)、杂项伪操作符
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	杂项伪操作符包括AREA、ALIGN、ENTRY、EQU、EXPORT、GLOBAL、IMPORT、CODE16、CODE32等。
+这些伪指令在汇编程序设计中较为常用，如段定义、入口点设置等伪指令。常用的伪指令主要有以下
+几条:
+	AREA：用来定义段；
+	ALIGN：用来设定边界对齐；
+	CODE16/CODE32：用来指定指令集；
+	ENTRY：指定程序入口；
+	END：汇编结束。
+
+5.1)、AREA
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+语法：
+	AREA sectionname{,attr}{,attr}...
+
+说明：
+	AREA伪指令要求汇编器组装一个新的代码或数据段；
+
+	段是连接器处理的最小单元。
+
+	段名有什么作用呢？一般情况下，段名只起彼此区分的作用，armlinker会把同名段合并起来，
+把同类型的段连接到一起，最后把不同类型的大段再连接起来组成ELF文件。应当注意的是，有些段
+名是约定俗成的，譬如armcc生成的代码段名叫|.text|，在汇编代码中可以给这个段加些内容，
+armlinker会负责把两者合并；另外，uVision中必须要有一个叫做RESET的段，我个人猜测这是
+uVision的要求(uVision内部生成armlinker命令行指令时把RESET段放在第一的位置)，而不是
+armlinker的要求，armlinker应该只需要你把中断向量表放在最前面进行连接(至少arm-linux-ld
+是这样)，以保证中断向量表位于或可以被正确映射到0地址位置。
+
+	AREA指令的属性非常丰富，具体如下：
+
+ALIGN=expression
+	默认情况下，ELF的段是4子节对其的。ALIGN的范围是0~31，这是2的指数幂，所以ALIGN=10时
+相当于指定1KB对齐。
+
+	需注意：对于代码段，THUMB、THUMB-2指令集时至少要2字节对齐，ARM指令集时至少要4字节
+对齐，此时指定错误的ALIGN会导致严重的问题。
+
+	注意不要与ALIGN伪指令相混淆，这是AREA的属性。
+
+ASSOC=section
+    section specifies an associated ELF section. sectionname must be included in any link that includes section
+CODE
+    Contains machine instructions. READONLY is the default.
+CODEALIGN
+    Causes armasm to insert NOP instructions when the ALIGN directive is used after ARM or Thumb instructions within the section, unless the ALIGN directive specifies a different padding. CODEALIGN is the default for execute-only sections.
+COMDEF
+    Is a common section definition. This ELF section can contain code or data. It must be identical to any other section of the same name in other source files.
+    Identical ELF sections with the same name are overlaid in the same section of memory by the linker. If any are different, the linker generates a warning and does not overlay the sections.
+COMGROUP=symbol_name
+    Is the signature that makes the AREA part of the named ELF section group. See the GROUP=symbol_name for more information. The COMGROUP attribute marks the ELF section group with the GRP_COMDAT flag.
+COMMON
+    Is a common data section. You must not define any code or data in it. It is initialized to zeros by the linker. All common sections with the same name are overlaid in the same section of memory by the linker. They do not all have to be the same size. The linker allocates as much space as is required by the largest common section of each name.
+DATA
+    Contains data, not instructions. READWRITE is the default.
+EXECONLY
+    Indicates that the section is execute-only. Execute-only sections must also have the CODE attribute, and must not have any of the following attributes:
+
+        READONLY.
+        READWRITE.
+        DATA.
+        ZEROALIGN.
+
+    armasm faults if any of the following occur in an execute-only section:
+
+        Explicit data definitions, for example DCD and DCB.
+        Implicit data definitions, for example LDR r0, =0xaabbccdd.
+        Literal pool directives, for example LTORG, if there is literal data to be emitted.
+        INCBIN or SPACE directives.
+        ALIGN directives, if the required alignment cannot be accomplished by padding with NOP instructions. armasm implicitly applies the CODEALIGN attribute to sections with the EXECONLY attribute.
+
+FINI_ARRAY
+    Sets the ELF type of the current area to SHT_FINI_ARRAY.
+GROUP=symbol_name
+    Is the signature that makes the AREA part of the named ELF section group. It must be defined by the source file, or a file included by the source file. All AREAS with the same symbol_name signature are part of the same group. Sections within a group are kept or discarded together.
+INIT_ARRAY
+    Sets the ELF type of the current area to SHT_INIT_ARRAY.
+LINKORDER=section
+    Specifies a relative location for the current section in the image. It ensures that the order of all the sections with the LINKORDER attribute, with respect to each other, is the same as the order of the corresponding named sections in the image.
+MERGE=n
+    Indicates that the linker can merge the current section with other sections with the MERGE=n attribute. n is the size of the elements in the section, for example n is 1 for characters. You must not assume that the section is merged, because the attribute does not force the linker to merge the sections.
+NOALLOC
+    Indicates that no memory on the target system is allocated to this area.
+NOINIT
+    Indicates that the data section is uninitialized, or initialized to zero. It contains only space reservation directives SPACE or DCB, DCD, DCDU, DCQ, DCQU, DCW, or DCWU with initialized values of zero. You can decide at link time whether an area is uninitialized or zero-initialized.
+
+5.2)、ALIGN
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+语法：
+	ALIGN {expr{,offset{,pad{,padsize}}}} 
+
+说明：
+	ALIGN指定当前位置(数据、指令)2^n边界对齐
+
+	expr为2^n(n=0~31)
+
+	offset可为任意值，但其实一般在0~expr之间，具体使用不太好解释，详见示例
+
+	pad指因对齐而空出的位置要插入的值，如不指定可以为0或NOP，pad的位宽由padsize指定
+
+	padsize指定pad是几字节的，可以是1、2、4
+
+示例1：
+
+	AREA    cacheable, CODE, ALIGN=3
+rout1   ; code         ; cacheable段指定8字节对齐
+        ; code
+        MOV     pc,lr  ; 假设上面是3条ARM指令，则三条指令占据12字节，
+                       ; 那如果不使用ALIGN伪指令，则下一条指令是4字节对齐的
+        ALIGN   8      ; 使用了这条伪指令后，插入了4字节的pad，下一次指令重新8字节对齐了
+rout2   ; code

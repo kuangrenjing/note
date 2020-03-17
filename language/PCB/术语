@@ -1,1 +1,10 @@
 PHONEJACK STEREO
+
+1、一层板、二层板、多层板
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一层板没什么好说的，电源线、地线都铺在同一层上；二层板，尽量把地层安排在一层，信号线、
+电源线安排在另外一层；多层板，一般都有单独的地层和电源层。
+
+2、覆铜
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	就是把PCB板上的空闲面积填上铜，然后与地线相连，减小底线阻抗，提高抗干扰能力。
