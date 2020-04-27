@@ -1,0 +1,61 @@
+mpp在哪里
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+rp-hi3516dv300-busybox/smp/a7_linux/mpp
+
+
+
+drwxr-x---    3 root     root          4096 Feb 25  2020 .
+drwxr-xr-x   24 root     root          4096 Jan  1 00:00 ..
+lrwxrwxrwx    1 root     root             6 Nov  9  2018 a7_softfp_neon-vfpv4 -> ../lib
+drwxrwxr-x    4 root     root          4096 Feb 25  2020 dhcpcd
+-rwxr-x---    1 root     root        158160 Dec  6  2019 ld-2.24.so
+lrwxrwxrwx    1 root     root            10 Nov  9  2018 ld-linux-armhf.so.3 -> ld-2.24.so
+lrwxrwxrwx    1 root     root            10 Nov  9  2018 ld-linux.so.3 -> ld-2.24.so
+-rwxr-x---    1 root     root          7476 Dec  6  2019 libBrokenLocale-2.24.so
+lrwxrwxrwx    1 root     root            23 Nov  9  2018 libBrokenLocale.so.1 -> libBrokenLocale-2.24.so
+-rwxr-x---    1 root     root         12464 Dec  6  2019 libSegFault.so
+-rwxr-x---    1 root     root         14356 Dec  6  2019 libanl-2.24.so
+lrwxrwxrwx    1 root     root            14 Nov  9  2018 libanl.so.1 -> libanl-2.24.so
+-rwxr-x---    1 root     root       1502900 Dec  6  2019 libc-2.24.so
+lrwxrwxrwx    1 root     root            12 Nov  9  2018 libc.so.6 -> libc-2.24.so
+-rwxr-x---    1 root     root        187452 Dec  6  2019 libcidn-2.24.so
+lrwxrwxrwx    1 root     root            15 Nov  9  2018 libcidn.so.1 -> libcidn-2.24.so
+-rwxr-x---    1 root     root         36048 Dec  6  2019 libcrypt-2.24.so
+lrwxrwxrwx    1 root     root            16 Nov  9  2018 libcrypt.so.1 -> libcrypt-2.24.so
+-rwxr-x---    1 root     root         14060 Dec  6  2019 libdl-2.24.so
+lrwxrwxrwx    1 root     root            13 Nov  9  2018 libdl.so.2 -> libdl-2.24.so
+-rwxr-x---    1 root     root           132 Nov  9  2018 libgcc_s.so
+-rwxr-x---    1 root     root        185516 Dec  6  2019 libgcc_s.so.1
+-rwxr-x---    1 root     root        513640 Dec  6  2019 libm-2.24.so
+lrwxrwxrwx    1 root     root            12 Nov  9  2018 libm.so.6 -> libm-2.24.so
+-rwxr-x---    1 root     root         22124 Dec  6  2019 libmemusage.so
+-rwxr-x---    1 root     root         94272 Dec  6  2019 libnsl-2.24.so
+lrwxrwxrwx    1 root     root            14 Nov  9  2018 libnsl.so.1 -> libnsl-2.24.so
+-rwxr-x---    1 root     root         37556 Dec  6  2019 libnss_compat-2.24.so
+lrwxrwxrwx    1 root     root            21 Nov  9  2018 libnss_compat.so.2 -> libnss_compat-2.24.so
+-rwxr-x---    1 root     root         33124 Dec  6  2019 libnss_db-2.24.so
+lrwxrwxrwx    1 root     root            17 Nov  9  2018 libnss_db.so.2 -> libnss_db-2.24.so
+-rwxr-x---    1 root     root         21808 Dec  6  2019 libnss_dns-2.24.so
+lrwxrwxrwx    1 root     root            18 Nov  9  2018 libnss_dns.so.2 -> libnss_dns-2.24.so
+-rwxr-x---    1 root     root         48320 Dec  6  2019 libnss_files-2.24.so
+lrwxrwxrwx    1 root     root            20 Nov  9  2018 libnss_files.so.2 -> libnss_files-2.24.so
+-rwxr-x---    1 root     root         18508 Dec  6  2019 libnss_hesiod-2.24.so
+lrwxrwxrwx    1 root     root            21 Nov  9  2018 libnss_hesiod.so.2 -> libnss_hesiod-2.24.so
+-rwxr-x---    1 root     root         52352 Dec  6  2019 libnss_nis-2.24.so
+lrwxrwxrwx    1 root     root            18 Nov  9  2018 libnss_nis.so.2 -> libnss_nis-2.24.so
+-rwxr-x---    1 root     root         61844 Dec  6  2019 libnss_nisplus-2.24.so
+lrwxrwxrwx    1 root     root            22 Nov  9  2018 libnss_nisplus.so.2 -> libnss_nisplus-2.24.so
+-rwxr-x---    1 root     root          7780 Dec  6  2019 libpcprofile.so
+-rwxr-x---    1 root     root        130280 Dec  6  2019 libpthread-2.24.so
+lrwxrwxrwx    1 root     root            18 Nov  9  2018 libpthread.so.0 -> libpthread-2.24.so
+-rwxr-x---    1 root     root         79912 Dec  6  2019 libresolv-2.24.so
+lrwxrwxrwx    1 root     root            17 Nov  9  2018 libresolv.so.2 -> libresolv-2.24.so
+-rwxr-x---    1 root     root         37016 Dec  6  2019 librt-2.24.so
+lrwxrwxrwx    1 root     root            13 Nov  9  2018 librt.so.1 -> librt-2.24.so
+lrwxrwxrwx    1 root     root            19 Nov  9  2018 libstdc++.so -> libstdc++.so.6.0.23
+lrwxrwxrwx    1 root     root            19 Nov  9  2018 libstdc++.so.6 -> libstdc++.so.6.0.23
+-rwxr-x---    1 root     root       1871288 Dec  6  2019 libstdc++.so.6.0.23
+-rwxr-x---    1 root     root         32740 Dec  6  2019 libthread_db-1.0.so
+lrwxrwxrwx    1 root     root            19 Nov  9  2018 libthread_db.so.1 -> libthread_db-1.0.so
+-rwxr-x---    1 root     root         13168 Dec  6  2019 libutil-2.24.so
+lrwxrwxrwx    1 root     root            15 Nov  9  2018 libutil.so.1 -> libutil-2.24.so

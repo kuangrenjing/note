@@ -1,15 +1,61 @@
-元对象(meta-object)
-
-
-元对象编译器(meta-object compiler)
-
-https://blog.csdn.net/tju355/article/details/7253133
-
-QObject
+参考
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-QScopedPointer<QObjectData> d_ptr;
-static const QMetaObject staticQtMetaObject;
+https://www.cnblogs.com/hellovenus/p/5582521.html
+https://www.cnblogs.com/tgycoder/p/5524735.html
+https://www.cnblogs.com/findumars/p/9179537.html          信号槽实现原理
+https://www.cnblogs.com/tgycoder/p/5384676.html           信号槽查找实例
 
+相关缩略语
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+元对象(Meta Object)
+元对象系统MOS(Meta Object System)
+元对象编译器MOC(Meta Object Compiler)
+
+QObject与QMetaObject
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	QObject和QMetaObject就像是一对孪生姐妹，应该一起使用，也就是说如果基于QObject
+派生一个类，就应在类中使用Q_OBJECT宏(负责引入QMetaObject)。如果不这样做会引入潜
+在风险。
+
+	如果一个类定义中使用了Q_OBJECT宏，MOC就会将该类定义所在文件编译成C++源文件，
+并在文件名前加上moc_前缀。
+
+	QMetaObject结构体中除了定义了各种方法外，还提供了一个私有数据子结构体，定义
+如下：
+struct { // private data
+	const QMetaObject *superdata;
+	const QByteArrayData *stringdata;
+	const uint *data;
+	typedef void (*StaticMetacallFunction)(QObject *, QMetaObject::Call, int, void **);
+	StaticMetacallFunction static_metacall;
+	const QMetaObject * const *relatedMetaObjects;
+	void *extradata; //reserved for future use
+}d;
+这个结构体就是QT技术的核心基础部分，它基于标准C++的扩展，为QT提供了：
+	1、信号与槽机制
+	2、实时类型信息
+	3、动态属性系统。
+
+信号与槽
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://www.cnblogs.com/findumars/p/9179537.html
+	https://www.cnblogs.com/tgycoder/p/5384676.html    这篇文章很好
+
+	Qt的信号和槽机制是Qt的一大特点，实际上这是和MFC中的消息映射机制相似的东西，
+要完成的事情也差不多，就是发送一个消息然后让其它窗口响应，当然，这里的消息是广义
+的说法，简单点说就是如何在一个类的一个函数中触发另一个类的另一个函数调用，而且还
+要把相关的参数传递过去。好像这和回调函数也有点关系，但是消息机制可比回调函数有用
+多了，也复杂多了。
+
+	MFC中的消息机制没有采用C++中的虚函数机制，原因是消息太多，虚函数开销太大。在
+Qt中也没有采用C++中的虚函数机制，原因与此相同。其实这里还有更深层次上的原因。大体
+说来，多态的底层实现机制只有两种，一种是按照名称查表，一种是按照位置查表，两种方式
+各有利弊，而C++的虚函数机制无条件的采用了后者，导致的问题就是在子类很少重载基类实
+现的时候开销太大，再加上象界面编程这样子类众多的情况，基本上C++的虚函数机制就废掉
+了，于是各家库的编写者就只好自谋生路了，说到底，这确实是C++语言本身的缺陷。
+
+https://www.cnblogs.com/tgycoder/p/5384676.html
 
 QT元对象系统
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -32,15 +78,100 @@ qt_metacall(),以及一些其它函数。Qt的moc工具生成了用于由Q_OBJEC
 这些工作都是由qmake，moc和QObject自动处理的，所以很少需要再去考虑这些事情，如果好奇可以参
 考QMetaObject类的文档和由moc生成的c++源代码文件。
 
-https://www.cnblogs.com/hellovenus/p/5582521.html
-https://www.cnblogs.com/tgycoder/p/5524735.html
 
+QObject
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考
+	https://blog.csdn.net/newthinker_wei/article/details/22789885 非常好
 
-
-
-
-
+	QObject是Qt类体系的唯一基类，sizeof(QObject)返回8(staticMetaObject是静态变量，
+不占用类空间)，说明QObject的大小是8，除了虚函数表指针需要的4个字节以外,另外的4
+个字节是:
+	QScopedPointer<QObjectData> d_ptr;(相当于QObjectData *d_ptr)
+QObject中的数据被封装在QObjectData类中了，为什么要封装数据呢？原因是Qt中有一个很
+重要的设计模式就是句柄实体模式，也就是以QObject为基类的类一般都是句柄类，一般只有
+一个指针指向一个实体类，在实体类中保存全部的数据而且一般情况下这个指针还是私有的，
+方便以后修改句柄类的实现细节(说反？)。因此，也可以说和句柄类继承关系平行的也有一
+套实体类派生体系，因此，准确的说，Qt的基类其实有两个，一个是QObject，这是句柄类的
+唯一基类，另一个是QObjectData，这是实体类的基类。
 
 
 
 tr函数
+
+动态方法调用 属性访问
+
+信号函数都需要调用activate函数吗？
+
+
+信号函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.51cto.com/9291927/2070398
+
+	信号函数是moc帮我们实现的，主要是调用了QMetaObject::activate函数。我们可以在
+其中添加内容吗，应该是添加不进去？
+
+使用emit发射信号时，实际调用MOC实现的信号函数，信号函数内部调用了QMetaObject::activate()函数。
+
+
+QT信号调用步骤
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/imxiangzi/article/details/50424427
+QMetaObject::activate
+qt_metacall
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+QObject::connect()
+
+bool QObject::connect(const QObject *sender, const char *signal,
+						const QObject *receiver, const char *method,
+						Qt::ConnectionType type)
+
+这段代码的做的事情就是将signal在sender的meta system中的signal索引找出，以及接受者方法（signal或slot）在receiver的meta system中的索引找出来。在委托QMetaObjectPrivate::connect()执行连接。
+
+
+
+
+QObject的若干重要函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+qt_metacall
+
+
+qt_static_metacall函数解析
+
+
+QT中的D指针和Q指针
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/MakeView660/p/11096195.html
+
+
+信号与槽原理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	QObject有个QObjectPrivate类型变量(Q_DECLARE_PRIVATE(QObject)?)，这个类型有
+个struct Connection类型变量。
+
+	每一个QObject对象都有一个连接链表容器QObjectConnectionListVector *connectionLists：
+将每一个信号与一个QObjectPrivate::Connection的链表关联起来。
+
+
+信号与槽实例
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+class MyButton : public QWidget
+{
+	Q_OBJECT
+public:
+	explicit MyButton(QWidget *parent = nullptr);
+
+signals:
+	void sigClicked();
+	void sigClicked(bool check);
+};
+
+class xx{
+	MyButton m_pBtn;
+
+	onClicked();
+}
+
+class xx中有实现代码：
+connect(m_pBtn, SIGNAL(sigClicked()), this, SLOT(onClicked()));

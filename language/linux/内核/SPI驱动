@@ -1,0 +1,33 @@
+1、涉及的文件
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+spi.c
+spidev.c
+spi_pl022.c
+
+
+https://blog.csdn.net/zhoutaopower/article/details/100040318
+https://blog.csdn.net/zhoutaopower/article/details/99866773     重要
+https://blog.csdn.net/zhoutaopower/article/details/100040318    重要
+
+
+
+
+DMA不可以自动帮忙发送时钟信号，但是如果让spi发送数据并且使用DMA方式，spi可以帮忙自动发送时钟信号。基于这样的理论，试了一上午，成功了，很高兴。这是在网友的帮助下完成的，现在写下来分享给大家，将温暖传递下去。
+硬件：stm32+cc1101无线模块（两者之前通过spi通信）
+配置：stm32的spi工作在master模式，当cc1101有数据时，将会给stm32一个外部中断。
+实现方法：配置DMA的两个通道，分别用于spi发送和spi接收，配置的时候先把其它参数都配置好不要使能DMA,也就是说先不要写这两句话：
+DMA_Cmd(DMA1_Channel4, ENABLE);
+DMA_Cmd(DMA1_Channel5, ENABLE);
+在表示cc1101数据来临的外部中断的中断处理函数中将DMA打开，这个时候，spi就会向cc1101发送数据（也就是stm32的spi接收来自cc1101数据所需要的时钟），发送数据的同时，cc1101数据就会不断的从cc1101的寄存器里面跑到SPI_DR里面。由于已经配置好了接收SPI的DMA,所以数据到来了SPI_DR里面以后，DMA会自动将数据帮你拷贝到缓存数组里去，你只e799bee5baa6e997aee7ad94e78988e69d8331333363373734需要在用于接收的DMA中断处理函数里面将缓存数组里的数据拷出来即可。拷完以后最好把DMA关掉，否则spi会不断向外发送数据，可能会让你接回来一些没用的数据。 
+
+
+
+
+spidev_ioctl->
+	spidev_get_ioc_message
+	spidev_message
+
+
+pl022驱动
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+pl022_setup根据设备树的com设置决定是否设置SPIDMACR寄存器

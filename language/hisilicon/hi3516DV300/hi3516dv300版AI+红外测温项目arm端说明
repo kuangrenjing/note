@@ -1,0 +1,11 @@
+1、大立红外模块
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	大立红外模块支持高速串口和SPI口两种传输模式，目前调通的是高速串口模式。
+
+高速串口传输说明：
+	高速串口传输需采用usb转串口方式，hi3516dv300内核默认未开启usb serial驱动，需
+手动启用。方法是：
+进入/home/mqs/rp-hi3516dv300-busybox/osdrv/opensource/kernel/linux-4.9.y-smp/
+执行make ARCH=arm CROSS_COMPILE=arm-himix200-linux- menuconfig
+选择Device Drivers -> USB support -> USB Serial Converter support
+并选择->USB FTDI Single Port Serial Driver

@@ -1,0 +1,2 @@
+cma_alloc
+	<-dma_alloc_from_contiguous

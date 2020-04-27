@@ -23,10 +23,76 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
 
+usb device viewer
 
 
-
-
-
-传输模式、传输类型
+USB数据包
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	USB总线上传输的基本单位是包。
+
+	不同的事务类型支持不同的包？
+
+	包由PID标识？
+
+
+USB的端点、管道、接口、配置、设备
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一个USB设备(在最底层，有一个struct device与之对应)，可以有一个或多个配置。不
+同的配置是接口的不同组合。每个接口都需要实现响应的驱动程序。
+
+	我们可以看看linux的实现，在include/linux/usb.h文件中有struct usb_driver结构
+体的定义，我们可以看到其中的回调函数都是以struct usb_interface为参数。
+
+所以我们可以这样笼统地说：
+	一个usb设备由可以有一个或多个配置
+	一个配置通常可以有一个或多个接口
+	一个接口通常可以有一个或多个端点
+通常所说的usb设备驱动是指接口驱动，即一个接口对应一个驱动。我认为这样说其实不正确，
+只是说usb驱动的回调都是以接口为单位的，有多少个接口就要回调多少次而已。
+
+	usb接口在注册driver时将for_devices设置为0，for_devices =1，表示设备驱动，
+for_devices = 0，表示接口(hub?)驱动
+
+
+
+USB事务
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+https://blog.csdn.net/qq_16777851/article/details/85463744
+
+	USB协议规定：需按照一定的关系吧不同的包组织成事务才能传输数据。USB是主从模式
+的传输总线，只有当主机提出请求时，设备才可以进行数据传输。事务体现了这种主从关系。
+
+	事务通常由两个包（令牌包、握手包）或三个包（令牌包、数据包、握手包）组成。
+各种包在事务中担任的职责分别是：
+	1）令牌包用来启动一个事务，总是由主机发送。
+	2）数据包传送数据，可以从主机到设备，也可以从设备到主机，方向由令牌包决定。
+	3）握手包的发送者通常为数据接收者，当数据接收正确后，发送握手包。设备也可以用
+NAK握手来决定数据还未准备好
+
+	USB协议规定了4种传输类型：批量传输、等时传输、中断传输和控制传输。其中批量
+传输、等时传输和中断传输每传输一次数据都是一个事务；控制传输包括三个过程，建立
+过程和状态过程分别是一个事务，数据过程则可能包含多个事务。
+
+	https://blog.csdn.net/qq_16777851/article/details/85463744
+
+	控制传输分为三个过程：
+	1）第一个过程是建立过程
+	2）第二个过程是可选的数据过程
+	3）第三个过程是状态过程
+
+	建立过程使用建立事务，建立事务与批量输出事务类似，但有几处不同：
+	1）首先是令牌包不一样，建立过程使用SETUP令牌包。
+	2）其次是数据包类型，SETUP只能使用DATA0包。
+	3）最后是握手，设备只能采用ACK来应答（错了的情况不应答），不能使用NAK或者
+STALL来应答，即设备必须要接受建立事务的数据。
+
+	数据过程是可选的，即一个控制传输可能没有数据过程。如果有，一个数据过程可以
+包含一个或多个数据事务。数据事务必须都以IN或都是OUT令牌包开始，并始终使用DATA1
+数据包。
+
+	状态事务的令牌包与数据事务的令牌包相反，数据使用使用IN令牌，则状态事务使用
+OUT令牌
+
+	USB的标准请求都是使用控制传输方式发出的。
+

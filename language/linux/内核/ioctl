@@ -1,0 +1,69 @@
+
+
+ioctl
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考
+	https://blog.csdn.net/qq_19923217/article/details/82698787
+
+用户态：
+	#include <sys/ioctl.h> 
+	int ioctl(int fd, int cmd, ...);
+
+	参数：
+		fd：文件描述符
+		cmd：命令
+		...：可变参数arg，依赖cmd指定长度及类型
+
+内核态：
+	long (*unlocked_ioctl) (struct file *filp, unsigned int cmd, unsigned long arg);
+	long (*compat_ioctl) (struct file *filp, unsigned int cmd, unsigned long arg);
+
+	说明：
+		unlocked_ioctl，顾名思义，应该在无大内核锁(BKL)的情况下调用；compat_ioctl，
+compat全称compatible(兼容的)，主要目的是为64位系统提供32位ioctl的兼容方法，也是
+在无大内核锁的情况下调用。
+
+		在字符设备驱动开发中，一般情况下只要实现unlocked_ioctl函数即可，因为在vfs
+层的代码是直接调用unlocked_ioctl函数。
+
+cmd：
+	用户空间ioctl和内核空间的ioctl的第二个参数都是cmd，这个参数就相当于两者的通
+信协议。这个参数理论上可以是任意int型数据(譬如0、1、2、3...)，但是为了确保该“协
+议”的唯一性，cmd应该使用更科学严谨的方法赋值。在linux中，人们规定了cmd的统一格式，
+把cmd(32bits int)划分为四个部分，分别是：
+
+	dir(2bits)：ioctl命令访问模式(数据传输方向)，可以为_IOC_NONE、_IOC_READ、
+_IOC_WRITE、_IOC_READ|_IOC_WRITE，分别指示了四种访问模式：无数据、读数据、写数据、
+读写数据；
+	size(14bits)：涉及到ioctl函数第三个参数arg，占据13bit或者14bit(体系相关，arm
+架构一般为14位)，指定了arg的长度，这个字段很多时候用不上；
+	type(8bits)：设备类型，在一些文献中翻译为“幻数”或者“魔数”，可以为任意char型字
+符，例如‘a’、’b’、’c’ 等等，其主要作用是使 ioctl 命令有唯一的设备标识；
+	nr(8bits)：命令编号/序数，可以为任意unsigned char型数据，取值范围0~255，如果定
+义了多个ioctl命令，通常从0开始编号递增，也就说一个设备最多支持256个命令？
+
+_IO() _IOR() _IOW() _IOWR()
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在ioctl章节我们说到：linux为ioctl的cmd规定了统一格式。为了生成这个统一格式的
+cmd，linux特别定义了几个宏：_IO()、_IOR()、_IOW()、_IOWR()。
+
+	根据cmd格式定义，我们很容易明白：这四个宏的区别只是数据方向的不同。所以只需
+了解其中一个就可以了。
+
+	//include/uapi/asm-generic/ioctl.h：
+#define _IO(type,nr)        _IOC(_IOC_NONE,(type),(nr),0)
+#define _IOR(type,nr,size)  _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(size)))
+#define _IOW(type,nr,size)  _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(size)))
+#define _IOWR(type,nr,size) _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(size)))
+
+#define _IOC(dir,type,nr,size) \
+	(((dir)  << _IOC_DIRSHIFT) | \
+	((type) << _IOC_TYPESHIFT) | \
+	((nr)   << _IOC_NRSHIFT) | \
+	((size) << _IOC_SIZESHIFT))
+
+	_IOC其实就是根据cmd定义的四个字段的长度进行移位。
+
+	根据定义，实际上我们一般只能指定一个可变参数，譬如这样：
+#define VIDIOC_PREPARE_BUF	_IOWR('V', 93, struct v4l2_buffer)
+_IOC_TYPECHECK宏就是sizeof操作符，它计算出struct v4l2_buffer占据的字节数。

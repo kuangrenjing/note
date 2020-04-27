@@ -1,0 +1,46 @@
+#! /bin/sh
+
+/bin/mount -a
+
+echo "
+            _ _ _ _ _ _ _ _ _ _ _ _
+            \  _  _   _  _ _ ___
+            / /__/ \ |_/
+           / __   /  -  _ ___
+          / /  / /  / /
+  _ _ _ _/ /  /  \_/  \_ ______
+___________\___\__________________
+"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/
+
+for initscript in /etc/init.d/S[0-9][0-9]*
+do
+        if [ -x $initscript ] ;
+        then
+                echo "[RCS]: $initscript"
+                if [ X$initscript == X/etc/init.d/S50sshd ]; then
+                        $initscript start&
+                else
+                        $initscript start
+                fi
+        fi
+done
+
+#sh /usr/script/sample.sh
+
+ifconfig eth0 192.168.15.22 netmask 255.255.255.0 up
+/usr/sbin/dropbear
+
+cd /usr/ko
+./load3516dv300 -i -sensor0 imx307
+
+#SPI1
+himm 0x112F0020  1    #SPI1_SCLK
+himm 0x112F0024  1    #SPI1_SDO
+himm 0x112F0028  1    #SPI1_CSNO
+himm 0x112F002C  1    #SPI1_SD1
+
+
+#gpio6_0
+himm 0x112F0008  0    #GPIO6_0
+himm 0x120D6400  0    #GPI06_0_INPUT

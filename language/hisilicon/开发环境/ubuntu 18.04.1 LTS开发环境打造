@@ -6,6 +6,33 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	本次下载的是ubuntu-18.04.1-desktop-amd64.iso，即桌面版版本。
 
+	安装完之后第一时间应更新软件源，国外的源实在是太慢了，更新源之前应先安装
+vm-tools。更新源的教材参见：
+https://blog.csdn.net/baidu_36602427/article/details/86551862
+
+ftp服务搭建：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	宿主虚拟机上启用ftpd，安装的是vsftpd
+https://blog.csdn.net/hanyuyang19940104/article/details/80421632
+
+创建uftp用户的主目录
+mkdir /home/uftp
+
+添加uftp用户
+useradd -d /home/uftp -s /bin/bash uftp
+
+设置uftp用户的密码
+passwd uftp
+
+把/home/uftp的所属者和所属组都改成uftp
+chown uftp:uftp /home/uftp
+
+/etc/vsftpd.user_list添加uftp
+
+/etc/vsftpd.conf打开一些注释
+
+把/home/uftp/test弄到板子的/tmp目录下
+ftpget -u uftp -p 111 192.168.100.110 /tmp/test test 
 
 2、ubuntu 18.04.1终端选择
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -380,6 +407,7 @@ https://blog.csdn.net/qq_29350001/article/details/52447485
 19、libevent的交叉编译
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 19.1、配置
+./autogen.sh -ivf
 ./configure --prefix=/opt/crossinstall/libevent --host=arm-hisiv300-linux 
 CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
 
@@ -671,6 +699,31 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	make install INSTALL_INCLUDE_PATH=/opt/crossinstall/include/cJSON INSTALL_LIBRARY_PATH=/opt/crossinstall/lib CC=arm-hisiv300-linux-gcc CXX=arm-hisiv300-linux-g++
 
+29、dropbear
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	busybox只提供telnetd，我们移植dropbear监听22端口
+
+	https://www.cnblogs.com/liangwode/archive/2016/08/25/5807900.html
+
+	./configure --prefix=/opt/himix_200_install --disable-zlib CC=arm-himix200-linux-gcc --host=arm-himix200-linux
+
+	属主虚拟机安装ftp服务，板子通过ftpget命令获取到dropbear的四个可执行文件到板子/usr/sbin和/usr/bin目录下，然后
+
+	dropbear          ->   /usr/sbin
+	dropbearconvert   ->   /usr/bin
+	dropbearkey       ->   /usr/bin
+	dbclient          ->   /usr/bin
+
+	mkdir /etc/dropbear
+	cd /etc/dropbear
+	dropbearkey -t rsa -f dropbear_rsa_host_key
+	dropbearkey -t dss -f dropbear_dss_host_key
+
+
+	/etc/init.d/rcS
+中添加
+	/usr/sbin/dropbear
+
 
 
 21、nfs服务器搭建
@@ -707,6 +760,16 @@ export LD_LIBRARY_PATH=/mnt/nfs/Hi3516A_PQ_V1.0.7.0/libs:/mnt/nfs/web/lib:$LD_LI
 export LD_LIBRARY_PATH=/mnt/nfs/lib/Hi3516A_PQ_V1.0.5.0:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/mnt/nfs/lib/Hi3516A_PQ_V1.0.7.0:$LD_LIBRARY_PATH
 
+
+export LD_LIBRARY_PATH=/mnt/nfs/lib/hi3516dv300_20200113:$LD_LIBRARY_PATH
+
+
+
+
+
 21.4、错误分析
+
+
+
 
 

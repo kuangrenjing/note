@@ -1,0 +1,5 @@
+EXPORT_SYMBOL()
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	EXPORT_SYMBOL标签内定义的函数或者符号对全部内核代码公开，不用修改内核代码就
+可以在您的内核模块中直接调用，即使用EXPORT_SYMBOL可以将一个函数以符号的方式导出
+给其他模块使用。

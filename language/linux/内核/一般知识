@@ -1,0 +1,21 @@
+1、开启内核消息 内核调试等级  内核打印调试
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+一、日志告警级别
+
+0 EMERG （紧急）：会导致主机系统不可用的情况
+1 ALERT  （警告）：必须马上采取措施解决的问题
+2 CRIT    （严重）：比较严重的情况
+3 ERR     （错误）：运行出现错误
+4 WARNING（提醒）：可能会影响系统功能的事件
+5 NOTICE  （注意）：不会影响系统但值得注意
+6 INFO    （信息）：一般信息
+7 DEBUG   （调试）：程序或系统调试信息等
+
+
+2、module_param(param, int, 0644)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一般用户态给程序传递参数是通过main函数，但在kernel态，无法通过这种方式传递
+参数，一般使用module_param的方式。我们可以通过多种方式给使用module_param定义的参
+数赋值。
+1）加载内核模块时指定参数值(inmod module_name.ko param=xxx)
+2）通过sysfs进行(echo xxx > /sys/module/module_name/param)

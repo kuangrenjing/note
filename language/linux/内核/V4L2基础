@@ -1,0 +1,44 @@
+
+
+struct v4l2_device; 用来描述一个v4l2设备实例
+struct v4l2_subdev, 用来描述一个v4l2的子设备实例
+struct video_device; 用来创建设备节点/dev/videoX
+struct v4l2_fh; 用来跟踪文件句柄实例
+
+要注册一个v4l2设备实例，需使用
+v4l2_device_register(struct device*dev, struct v4l2_device *v4l2_dev);
+
+该函数将会初始化v4l2_device结构，如果dev->driver_data为空，那么将把v4l2_dev赋值给这个driver_data。
+
+如果驱动要集成媒体设备框架，就需要手动设置dev->driver_data来指向一个嵌入了v4l2_device结构的媒体设备结构,这个结构可以是指定驱动的状态描述。在注册函数之前调用dev_set_drvdata来完成，这些都要在调用register函数之前就要设置好，同样，如果有媒体设备的话，必须也要在此之前就要初始化好，并且设置v4l2_device的mdev域来指向一个已经初始化过的媒体设备实例。
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://blog.csdn.net/Guet_Kite/article/details/78570059
+	https://www.cnblogs.com/tuotuteng/p/4648387.html
+
+	设备节点/dev/videoX是在v4l2-dev.c的__video_register_device函数中定义的，节点
+对应的struct file_operations是v4l2_fops，其中重要的函数是v4l2_ioctl和v4l2_poll。
+
+	以UVC为例，我们来看看struct video_device是怎么被注册的。
+uvc_probe->
+	v4l2_device_register
+	uvc_register_chains->
+		uvc_register_terms->
+			uvc_register_video->
+				__video_register_device->
+					cdev_add
+
+int uvc_probe(struct usb_interface *intf, const struct usb_device_id *id)
+int uvc_register_chains(struct uvc_device *dev)
+int uvc_register_terms(struct uvc_device *dev, struct uvc_video_chain *chain)
+int uvc_register_video(struct uvc_device *dev, struct uvc_streaming *stream)
+			video_register_device(struct video_device *vdev, int type, int nr)
+int __video_register_device(struct video_device *vdev, int type, int nr,
+			int warn_if_nr_in_use, struct module *owner)
+int v4l2_device_register(struct device *dev, struct v4l2_device *v4l2_dev)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我们可以看到uvc_probe函数中即注册了v4l2设备实例，又注册了/dev/videoX设备节点。
+
+
+

@@ -1,0 +1,50 @@
+linux kernel dmaengine框架
+
+DMA传输类型
+enum dma_transaction_type {
+	DMA_MEMCPY,
+	DMA_XOR,
+	DMA_PQ,
+	DMA_XOR_VAL,
+	DMA_PQ_VAL,
+	DMA_MEMSET,
+	DMA_MEMSET_SG,
+	DMA_INTERRUPT,
+	DMA_SG,
+	DMA_PRIVATE,
+	DMA_ASYNC_TX,
+	DMA_SLAVE,
+	DMA_CYCLIC,
+	DMA_INTERLEAVE,
+/* last transaction type for creation of the capabilities mask */
+	DMA_TX_TYPE_END,
+};
+
+
+研究到了hiedmacv310.c   get_of_probe中的时钟寄存器
+
+
+1、hiedmacv310.c  get_of_probe函数解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	platform_get_resource()
+
+of_platform_default_populate_init
+of_platform_device_create
+of_platform_device_create_pdata
+of_device_alloc
+of_amba_device_create
+	of_device_make_bus_id
+
+
+
+2、dmaengine架构分析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考
+	https://blog.csdn.net/zhaoyi2/article/details/87800839
+
+总体
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+hiedmacv310_phy_chan
+virt-dma.h
+
+struct virt_dma_chan

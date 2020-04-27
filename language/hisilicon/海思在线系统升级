@@ -163,6 +163,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 mount -t jffs2 /dev/mtdblock4  /opt/user
 mount -t jffs2 /dev/mtdblock5  /opt/param
 
+emmc分区？？
+https://blog.csdn.net/lqijlyy/article/details/83867807
+
 
 8、FLASH信息查看
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

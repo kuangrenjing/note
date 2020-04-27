@@ -1,0 +1,38 @@
+/usr/script/sample.sh
+	release版本调用/usr/script/hi3516dv300.sh
+		挂载/dev/mmcblk0p4到/userdata目录上
+		运行. /userdata/user.conf
+		配置eth0
+		启动telnetd
+		运行/userdata/user-script.sh(啥也没有)
+		把/dev/mmcblk0p5挂载到/user目录上去
+		运行命令/usr/ko/load3516dv300 -i -sensor0 $SNS0 -sensor1 $SNS1
+			/user.conf中定义了一些变量：
+				SNS_INTF=mipi
+				SNS0=imx307_2l
+				SNS1=imx307_2l
+				SNS0_TYPE=4
+				SNS1_TYPE=4
+				DISPLAY=10
+				LCD=0
+				SATURATION=2
+				SNS0_SATURAT=0
+				SNS1_SATURAT=0
+				SNS0_ROTATE=0
+				SNS1_ROTATE=0
+				RUN_TELNETD=yes
+				TOUCHSCREEN=goodix_gt9xx.ko # insmod goodix_gt9xx.ko
+				ETH0_CFG=yes
+			/usr/ko/load3516dv300要使用的变量
+		运行命令insmod /usr/ko/hi_mipi_tx.ko
+		运行命令insmod /usr/ko/$TOUCHSCREEN
+		运行命令sh /usr/script/audio-gpio.sh
+		运行命令sh /usr/script/camera-gpio.sh 1
+		运行命令sh /usr/script/lcd-gpio.sh 1
+		运行命令sh /usr/script/lcd-pwm.sh 1 
+	debug版本调用/usr/script/hi3516dv300-debug.sh
+
+
+
+mkfs.ext4 /dev/mmcblk0p5
+mount /dev/mmcblk0p5 /user

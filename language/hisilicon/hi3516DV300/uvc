@@ -1,0 +1,131 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://bbs.csdn.net/topics/392298681?page=1
+http://blog.chinaunix.net/uid-25002135-id-3044514.html
+https://blog.csdn.net/zhenglie110/article/details/89360312  海思3559上适配UVC摄像头(一) 驱动添加
+https://www.jianshu.com/p/cec915c124c8                      UVC介绍，有1.5的链接
+https://blog.csdn.net/mingchong2005/article/details/78654940   描述符
+https://blog.csdn.net/weixin_42314225/article/details/83904308   UVC枚举过程分析
+https://blog.csdn.net/go_str/article/details/80844175            UVC协议学习1--初步了解标准协议规范(UVC1.5为例)
+https://www.cnblogs.com/Lxk0825/p/10326740.html                  UVC 驱动调用过程与驱动框架的简单分析
+https://blog.csdn.net/qq_33475105/article/details/80139984       在虚拟机上xawtv报v4l2：oops：select timeout
+https://blog.csdn.net/yijiejinlan/article/details/43417367       罗技c270
+
+https://blog.csdn.net/u013904227/article/details/80718831
+https://blog.csdn.net/lizuobin2/article/details/53000720
+
+
+
+
+1、UVC抓包分析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/tanjiaqi2554/article/details/78943902
+https://blog.csdn.net/go_str/article/details/80844175
+
+
+
+
+2、usb通信过程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.SetupDiGetClassDevs，返回设备信息结构的句柄
+2.SetupDiEnumDeviceInterfaces，枚举设备。
+3.获得设备路径：SetupDiGetDeviceInterfaceDetail，设备路径大小信息
+4.SetupDiGetDeviceInterfaceDetail，设备路径详细信息
+5.CreateFile创建读写句柄
+6.writeFile。对设备进行读写操作
+
+
+struct file
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在V4L2中，open(/dev/video0)打开的其实是struct video_device类型变量，此结构
+体类型在include/media/v4l2-dev.h文件中定义
+
+
+	对UVC而言，它可能要注册多个设备(usb设备、uvc设备、v4l2设备)，我们来分析
+uvc_probe函数(drivers/media/usb/uvc/uvc_driver.c)。
+
+uvc_probe->
+	uvc_register_chains->
+		uvc_register_terms->
+			uvc_register_video->
+				video_register_device->
+					__video_register_device(drivers\media\v4l2-core\v4l2-dev.c)->
+						device_register(注册到sysfs，udev再注册到/dev)
+
+media_device_register()//Register the media device node
+
+uvc请求
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/lizuobin2/article/details/53341340?utm_source=blogxgwz2
+
+H->D
+	SET_CUR
+
+D->H
+	GET_CUR
+	GET_MIN
+	GET_MAX
+	GET_RES
+	GET_DEF
+	GET_LEN
+	GET_INFO
+
+
+4、uvc_queue
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+5、struct uvc_streaming
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/lizuobin2/article/details/53341340?utm_source=blogxgwz2
+
+
+
+
+6、struct 
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+struct uvc_video_chain
+struct uvc_streaming
+struct uvc_fh
+
+
+
+7、uvc驱动注册
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+usb_register(struct usb_driver*);
+
+struct usb_driver中有指针变量：
+	const struct usb_device_id *id_table;
+这个变量中存储的就是要被匹配的设备id。
+
+在uvc_driver.c中有定义：
+struct uvc_driver uvc_driver = {
+	.driver = {
+		.name		= "uvcvideo",
+		.probe		= uvc_probe,
+		.disconnect	= uvc_disconnect,
+		.suspend	= uvc_suspend,
+		.resume		= uvc_resume,
+		.reset_resume	= uvc_reset_resume,
+		.id_table	= uvc_ids,
+		.supports_autosuspend = 1,
+	},
+};
+.driver就是struct usb_driver类型的。
+
+
+8、struct uvc_device
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+9、发送usb请求
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+uvc_query_ctrl->
+	__uvc_query_ctrl->
+		usb_control_msg
+
+
+
+
+
+
+内核文档的生成  make htmldocs

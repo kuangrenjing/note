@@ -48,18 +48,92 @@ spi_core.c提供的函数有：
 
 2、SPI介绍
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/firefly_cjd/article/details/51935079#t0
+
 	SPI连接有三线、四线两种方式。四线连接方式使用的四个接口分别是：输入、输出、
 时钟、使能(片选)。
 
 	一般而言，单片机芯片都有多个硬件SPI控制器，每个SPI控制器连接一条SPI总线，其上
 可挂载多个SPI设备，SPI控制器通过片选信号区分这些设备。
 
-2、RT-Thread操控SPI总线的流程：
+	四根引脚分别如下：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+SCK(Serial Clock)                                 主要的作用是Master设备往Slave
+设备传输时钟信号,控制数据交换的时机以及速率
+SS/CS(Slave Select/Chip Select)                   用于Master设备片选Slave设备,使
+被选中的Slave设备能够被Master设备所访问
+SDO/MOSI(Serial Data Output/Master Out Slave In)  在Master上面也被称为Tx-Channel,
+作为数据的出口,主要用于SPI设备发送数据
+SDI/MISO(Serial Data Input/Master In Slave Out)   在Master上面也被称为Rx-Channel,
+作为数据的入口,主要用于SPI设备接收数据
+
+2.1、SPI的CPOL(Clock Polarity)和CPHA(Clock Phase)
+	总线空闲时SCK是低电平，则CPOL是0，反之，是1
+	一个时钟周期中第一个边沿采样，则CPHA是0，反之，是1
+
+	CPOL和CPHA针对的是主和从的采样时刻，时钟中的另一个边沿就是发送时刻。
+
+
+3、RT-Thread操控SPI总线的流程：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	定义SPI设备对象
 	调用rt_spi_bus_attach_device()挂载SPI设备到SPI总线。
 	调用rt_spi_configure()配置SPI总线模式(数据位宽、时钟极性和相位、最大带宽，
 主从两端设置要一样)。
 	使用rt_spi_send()等相关数据传输接口传输数据。
+
+
+
+海思设备树在哪里
+/home/mqs/rp-hi3516dv300-busybox/osdrv/opensource/kernel/linux-4.9.y-smp/arch/arm/boot/dts
+
+海思SPI驱动分析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+drivers/spi/modules.builtin
+kernel/drivers/spi/spidev.ko
+kernel/drivers/spi/spi-pl022.ko
+
+
+8、spi-pl022.c文件分析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+8.1、主要函数
+pl022_probe->struct spi_master::setup->pl022_setup -> calculate_effective_freq
+pl022_probe->devm_spi_register_master
+
+8.2、寄存器配置
+struct pl022结构体里有
+	void __iomem *virtbase;
+看名字就知道是寄存器的基地址，但我们知道一般芯片有多个SPI口，即有多个寄存器组，谁
+传给它是那个SPI接口的呢？当然是在匹配函数里做的啦，pl022_probe函数中有：
+	pl022->phybase = adev->res.start;
+	pl022->virtbase = devm_ioremap(dev, adev->res.start, resource_size(&adev->res));
+但在spidev.c中没有resource定义呀，其实是放在了设备树里了，设备树把驱动与配置相分离，
+换设备时就不用改驱动了。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	好了，现在我们可以看看这些寄存器都是怎么修改的了，当前我比较关心的是SPI时钟
+的配置策略。SPI时钟配置涉及两个寄存器，分别是SPICR0[15:8]、SPICPSR[7:0]
+
+pl022_transfer_one_message -> restore_state
+load_ssp_default_config
+pl022_setup
+
+
+
+_IOW
+_IOR
+
+
+
+
+http://bbs.ebaina.com/thread-75208-1-4.html
+
+
+
+
+SPI开启DMA
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/u012142460/article/details/80868493
+
+http://www.voidcn.com/article/p-ppljgzgk-to.html
 
 

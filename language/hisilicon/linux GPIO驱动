@@ -1,0 +1,46 @@
+在一个嵌入式系统中使用最多的莫过于 通用输入输出 GPIO口。看到经常有朋友问海思为什么没有提供GPIO驱动。其实不然。
+在海思SDK  xxx/osdrv/tools/board_tools/reg-tools-1.0.0/source/tools/下 提供了himm的读写工具源码。你也可以根据himm的源码来写一个文件设备操作的驱动。毕竟轮子已经有了，我们就没必要再去造轮子了。这个工具是用来 配置海思寄存器的，当然可以稍加改造或者在应用直接使用来控制通用寄存器。
+
+
+GPIO中断实例：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/cskywit/article/details/6266106
+
+关键是GPIO外部中断号：在arch/arm/mach-at91/include/mach/gpio.h中定义？
+
+
+/sys/bus目录特别重要
+
+platform_driver
+
+https://www.cnblogs.com/lifexy/p/7569371.html
+
+
+file_operations 中poll接口可以阻塞读？
+
+linux驱动编写之poll机制(应用层poll epoll select)
+https://www.cnblogs.com/amanlikethis/p/6915485.html
+
+https://www.cnblogs.com/tolimit/p/4109416.html
+https://www.cnblogs.com/lifexy/p/7569371.html
+
+
+struct platform_driver解析
+
+
+request_irq函数解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+linux下对/sys/class/gpio中的gpio的控制
+
+
+
+海思GPIO分组
+http://www.ebaina.com/blog/show.php?itemid=65
+
+
+
+
+对于海思的GPIO分组深恶痛绝，而且根据我的实际测试GPIO_RIS寄存器说明还写反了。测试代码用的是边沿触发，电平触发测试了始终有
+对于海思的GPIO分组深恶痛绝，而且根据我的实际测试GPIO_RIS寄存器说明还写反了。测试代码用的是边沿触发，电平触发测试了始终有问题，在保持某电平(高或低)中断会一直触发很头疼清除了中断寄存器GPIO_IC也不行！！！！ 约定GPIO号，对其分组形式做了一层处理以下是公式: **gpio = base*8+offset** base：组号 ，offset：偏移 例如：GPIO15_2得到的GPIO号就是15*8+2=122 测试代码如下: ```c #include #include #include #include #include #include #include #include #include #include #include #include #include #include #define DEBUG #ifdef DEBUG # define PRINTK(fmt, arg...) printk(fmt, ##arg) #else # define PRINTK(fmt, arg...) do {} while(0) #endif #define GPIO_15_BASE 0x20240000 //for GPIO15 #define GPIO_DATA(o) IO_ADDRESS(GPIO_15_BASE + (1<<(o+2))) #define GPIO_DIR IO_ADDRESS(GPIO_15_BASE + 0x400) #define GPIO_IS IO_ADDRESS(GPIO_15_BASE + 0x404) #define GPIO_IBE IO_ADDRESS(GPIO_15_BASE + 0x408) #define GPIO_IEV IO_ADDRESS(GPIO_15_BASE + 0x40C) #define GPIO_IE IO_ADDRESS(GPIO_15_BASE + 0x410) #define GPIO_RIS IO_ADDRESS(GPIO_15_BASE + 0x414) #define GPIO_MIS IO_ADDRESS(GPIO_15_BASE + 0x418) #define GPIO_IC IO_ADDRESS(GPIO_15_BASE + 0x41C) #define GPIO_AFSEL IO_ADDRESS(GPIO_15_BASE + 0x420) #define GPIO_15_2 122 #define GPIO_15_3 123 #define GPIO_IRQ 116 struct gpc_dev { spinlock_t lock; struct miscdevice *misc_dev; }; struct miscdevice this_misc = { .minor = MISC_DYNAMIC_MINOR, .name = "higpio", .nodename = "higpio" }; struct gpc_dev dev = { .misc_dev = &this_misc, }; static int gpio_offset(int gpio, int *offset) { if(offset) *offset = gpio%8; return 0; } static int get_value(int gpio) { int offset; if(gpio_offset(gpio, &offset) !=0) return -1; return readl(GPIO_DATA(offset)) & (1<>1; } } PRINTK(KERN_NOTICE "gpio：gpio=%d\n",gpio); regs_clean_gpio_irq(gpio); return IRQ_HANDLED; } static int this_enable_irq(void) { int err = 0; gpio_input(GPIO_15_2); //设置GPIO_15_2为输入 gpio_input(GPIO_15_3); regs_set_gpio_irq_type(GPIO_15_2, IRQ_TYPE_EDGE_FALLING|IRQF_TRIGGER_RISING); //设置为单边沿的下降沿出发 regs_set_gpio_irq_type(GPIO_15_3, IRQ_TYPE_EDGE_FALLING|IRQF_TRIGGER_RISING); //设置为单边沿的下降沿出发 regs_enable_gpio_irq(GPIO_15_2); //使能GPIO中断 regs_enable_gpio_irq(GPIO_15_3); //使能GPIO中断 err = request_irq(GPIO_IRQ, this_irq_handler, 0, "higpio", NULL); if (err != 0) { PRINTK(KERN_ERR "gpc: failed to request irq, err: %d\n", err); err = -EBUSY; } return err; } static void this_disable_irq(void) { regs_disable_gpio_irq(GPIO_15_2); regs_disable_gpio_irq(GPIO_15_3); free_irq(GPIO_IRQ, NULL); } static int __init gpio_init(void) { int err; if(this_enable_irq() !=0) return -EBUSY; spin_lock_init(&dev.lock); err = misc_register(dev.misc_dev); return err; } static void __exit gpio_exit(void) { this_disable_irq(); misc_deregister(dev.misc_dev); } module_init(gpio_init); module_exit(gpio_exit); MODULE_AUTHOR("GoodMan<2757364047@qq.com>"); MODULE_LICENSE("Dual BSD/GPL"); MODULE_VERSION("V1.00"); ```

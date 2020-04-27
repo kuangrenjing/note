@@ -1,0 +1,59 @@
+1、探索字符设备原理过程中可能的疑问
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	字符设备与inode(代表文件系统)如何关联
+
+2、字符设备注册到系统
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考
+	https://blog.csdn.net/yueqian_scut/article/details/50935554
+
+	linux中有一个全局变量cdev_map用来保存字符设备，cdev_map字面意思就是“字符设
+备表”，我们在设备设备驱动中调用的cdev_add就是把需创建的字符设备加入到了cdev_map
+中去了。cdev_map中的每一个字符设备都有一个唯一的设备号，这个设备号非常重要。
+
+	在字符设备驱动中仅仅把字符设备加入到cdev_map中去是没有意义的，因为应用层需
+通过文件系统访问字符设备，所以我们还需要创建设备节点。
+
+	在字符设备驱动中创建设备节点是通过device_create函数完成的，device_create添加
+设备到sysfs后，udev会自动在/dev创建设备节点，使用的是mknod，其
+调用过程是这样的：
+mknod
+	sys_mknod
+		shmem_mknod(经过vfs的一顿搜索，发现dev挂在tmpfs上，所以调用这个函数)
+			init_special_inode(创建inode)
+
+	创建的这个inode就是以后操作这个字符设备的直接中介，这个inode中保存了设备号
+信息，利用设备号在cdev_map中就能找到想要打开的这个字符设备了。
+
+	必须注意的是inode保存的信息都是直接针对cdev的，而不是具体的字符设备，需通过
+cdev_open中转后struct file中才会存储具体字符设备的操作函数集，即f_op字段。
+
+3、字符设备的发现、操作过程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://blog.csdn.net/qwaszx523/article/details/60867692
+
+sys_open
+	do_sys_open
+		do_filp_open
+			nameidata_to_filp
+				__dentry_open
+					chrdev_open
+	fd_install
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://www.cnblogs.com/codestub/archive/2011/08/22/filesystem.html
+
+

@@ -1,0 +1,199 @@
+
+v4l2读图像的三种方式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1）read
+	不要想，V4L2的read实现是空。实际上即使实现了也不应考虑，因为涉及多次内存拷
+贝，开销太大。
+
+2）USERPTR
+	顾名思义是用户空间指针的意思，应用层负责分配需要的内存空间，然后以指针的形
+式传递给V4L2驱动层，V4L2驱动会把capture的内容保存到指针所指的空间。一般来说，应
+用层需要确保这个内存空间物理上是连续的(IPU处理单元的需求)。
+
+3）MMAP方式
+	内存映射模式，应用调用VIDIOC_REQBUFS ioctl分配设备buffers，参数标识需要的数
+目和类型。这个ioctl也可以用来改变buffers的数据以及释放分配的内存，当然这个内存
+空间一般也是连续的。在应用空间能够访问这些物理地址之前，必须调用mmap函数把这些
+物理空间映射为用户虚拟地址空间。虚拟地址空间是通过munmap函数释放的；而物理内存的
+释放是通过VIDIOC_REQBUFS来实现的(设置参数buf count为(0))。
+
+	不管哪种方式，内存都遵循谁申请，谁释放原则。
+
+v4l2注册
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://blog.csdn.net/armwind/article/details/88781335
+v4l2_device_register
+
+V4L2框架之ioctl
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+V4L2的ioctl调用流程基本是这样的：
+ioctl->
+	...->
+		File_operations->unlocked_ioctl->v4l2_file_operations->video_ioctl2->__video_do_ioctl->
+			check v4l2_ioctls[]->
+				INFO_FL_STD->
+					Video_device->v4l2_ioctl_ops
+				INFO_FL_FUNC
+					V4L2_ioctls[].u.func(关注第一个参数)->  Video_device->v4l2_ioctl_ops
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	从这个调用关系上我们可以看到：ioctl的流向有些调用的是设备驱动的ops，有些是
+调用的v4l2驱动的函数，但通过阅读v4l2驱动相关函数，我们发现其实它们还是调用了设备
+的ops。
+
+与v4l2 ioctl相关的结构体定义：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	1）include/uapi/linux/videodev2.h中定义了(ioctl codes for video devices)，
+共有84(其实只有83个，有一个是保留字段)个ioctl codes。
+
+	2）include/media/v4l2-ioctl.h中定义了struct v4l2_ioctl_ops类型，这个类型对
+84个ioctl codes中的68个定义了操作函数，6个没有定义操作函数的ioctl codes分别是：
+VIDIOC_DQEVENT
+VIDIOC_S_PRIORITY
+VIDIOC_G_PRIORITY
+VIDIOC_ENUMOUTPUT
+VIDIOC_ENUMINPUT
+VIDIOC_STD
+另外，对有些ioctl codes，提供了不止一个的操作函数。
+
+	struct v4l2_ioctl_ops类型中的函数指针都是设备驱动可能要实现的，但不一定需要
+都实现。
+
+	3)在v4l2-ioctl.c文件中定义了一个struct v4l2_ioctl_info类型的结构体数组v4l2_ioctls[]
+这个数组对所有include/uapi/linux/videodev2.h中定义的ioctl codes都绑定了一个函数，
+包括struct v4l2_ioctl_ops类型中没有的那6个ioctl codes。同时使用IOCTL_INFO_STD和
+IOCTL_INFO_FNC两个宏来区分哪些函数是由v4l2框架实现的，哪些是由驱动开发者实现的。
+在v4l2-ioctl.c文件中实现了的函数是IOCTL_INFO_FNC，没有实现的是IOCTL_INFO_STD。
+
+
+VIDEOC_S_FRM
+
+v4l2的videobuf2
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+drivers/media/v4l2-core/videobuf2-v4l2.c
+
+
+v4l2图像流(以UVC为例)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+VIDIOC_STREAMON触动了v4l2什么
+
+VIDIOC_STREAMON ->
+	v4l_streamon ->
+		ops->vidioc_streamon == uvc_ioctl_streamon ->
+			uvc_queue_streamon ->
+				vb2_streamon(drivers\media\v4l2-core\videobuf2-v4l2.c)
+
+VIDIOC_DQBUF ->
+	v4l_dqbuf ->
+		ops->vidioc_dqbuf == uvc_dequeue_buffer ->
+
+
+
+probe流程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+uvc_v4l2_set_streamparm
+uvc_v4l2_set_streamparm
+	uvc_probe_video
+
+
+
+
+
+
+
+
+
+
+
+
+
+v4l2应用层编程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/unreal/articles/1820295.html
+https://blog.csdn.net/wuye110/article/details/8442422
+
+
+
+
+
+v4l2支持的命令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://www.cnblogs.com/unreal/articles/1820295.html
+
+01.VIDIOC_REQBUFS：  分配内存                                         MMAP、USERPTR
+02.VIDIOC_QUERYBUF： 把VIDIOC_REQBUFS中分配的数据缓存转换成物理地址
+03.VIDIOC_QUERYCAP： 查询驱动功能
+04.VIDIOC_ENUM_FMT： 获取当前驱动支持的视频格式
+05.VIDIOC_S_FMT：    设置当前驱动的频捕获格式      V4L2_BUF_TYPE_VIDEO_CAPTURE
+06.VIDIOC_G_FMT：    读取当前驱动的频捕获格式
+07.VIDIOC_TRY_FMT：  验证当前驱动的显示格式
+08.VIDIOC_CROPCAP：  查询驱动的修剪能力
+09.VIDIOC_S_CROP：   设置视频信号的边框
+10.VIDIOC_G_CROP：   读取视频信号的边框
+11.VIDIOC_QBUF：     把数据从缓存中读取出来                             读、通过驱动已读过
+12.VIDIOC_DQBUF：    把数据放回缓存队列                                 通知驱动放数据到buffer
+13.VIDIOC_STREAMON： 开始视频显示函数                                   开始
+14.VIDIOC_STREAMOFF：结束视频显示函数                                   结束
+15.VIDIOC_QUERYSTD： 检查当前视频设备支持的标准，例如PAL或NTSC
+
+	我们来读驱动，理解VIDIOC_DQBUF的行为。
+
+
+
+v4l2驱动解读
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+INFO_FL_STD
+INFO_FL_FUNC
+
+
+内存申请流程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+	https://blog.csdn.net/weixin_41944449/article/details/84716141
+
+
+
+逻辑c310 usb摄像头
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过VIDIOC_ENUM_FMT可以看到C310提供非常多的分辨率，同时提供了两种像素格式，
+分别是YUYV(0x56595559 == VYUY非压缩格式)、MJPG(0x47504a4d == GPJM压缩格式)
+1size: 640x480 pixelformat:56595559
+1size: 160x120 pixelformat:56595559
+1size: 176x144 pixelformat:56595559
+1size: 320x176 pixelformat:56595559
+1size: 320x240 pixelformat:56595559
+1size: 352x288 pixelformat:56595559
+1size: 432x240 pixelformat:56595559
+1size: 544x288 pixelformat:56595559
+1size: 640x360 pixelformat:56595559
+1size: 752x416 pixelformat:56595559
+1size: 800x448 pixelformat:56595559
+1size: 800x600 pixelformat:56595559
+1size: 864x480 pixelformat:56595559
+1size: 960x544 pixelformat:56595559
+1size: 960x720 pixelformat:56595559
+1size: 1024x576 pixelformat:56595559
+1size: 1184x656 pixelformat:56595559
+1size: 1280x720 pixelformat:56595559
+1size: 1280x960 pixelformat:56595559
+1size: 640x480 pixelformat:47504a4d
+1size: 160x120 pixelformat:47504a4d
+1size: 176x144 pixelformat:47504a4d
+1size: 320x176 pixelformat:47504a4d
+1size: 320x240 pixelformat:47504a4d
+1size: 352x288 pixelformat:47504a4d
+1size: 432x240 pixelformat:47504a4d
+1size: 544x288 pixelformat:47504a4d
+1size: 640x360 pixelformat:47504a4d
+1size: 752x416 pixelformat:47504a4d
+1size: 800x448 pixelformat:47504a4d
+1size: 800x600 pixelformat:47504a4d
+1size: 864x480 pixelformat:47504a4d
+1size: 960x544 pixelformat:47504a4d
+1size: 960x720 pixelformat:47504a4d
+1size: 1024x576 pixelformat:47504a4d
+1size: 1184x656 pixelformat:47504a4d
+1size: 1280x720 pixelformat:47504a4d
+1size: 1280x960 pixelformat:47504a4d

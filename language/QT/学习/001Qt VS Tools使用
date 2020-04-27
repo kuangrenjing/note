@@ -21,8 +21,3 @@ error MSB6006: “cmd.exe”已退出，代码为 3。
 此问题解决方法：
 
 找到facebeatuty.qrc文件，右键选择属性->自定义生成工具->常规->将命令行和附加依赖项的rcc.exe的路径改成qt目录的绝对路径，如：C:\Qt\Qt5.5.0\5.5\msvc2010\bin\rcc.exe
---------------------- 
-作者：军神关云长 
-来源：CSDN 
-原文：https://blog.csdn.net/qqwangfan/article/details/54342718 
-版权声明：本文为博主原创文章，转载请附上博文链接！

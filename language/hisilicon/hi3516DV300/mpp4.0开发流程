@@ -1,0 +1,129 @@
+这是一个双sensor的例子：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	函数名叫SAMPLE_VENC_H265_H264，一个通道H264编码，分辨率720P，一个通道H265编
+码，分辨率根据探测器而定。
+
+
+
+
+第一层次 sample_comm_vi.c:L514
+SAMPLE_COMM_SYS_GetPicSize
+SAMPLE_COMM_VI_GetSensorInfo
+SAMPLE_VENC_CheckSensor
+SAMPLE_VENC_ModifyResolution
+SAMPLE_VENC_VI_Init
+SAMPLE_VENC_VPSS_Init
+SAMPLE_COMM_VI_Bind_VPSS
+SAMPLE_VENC_GetRcMode
+SAMPLE_VENC_GetGopMode
+SAMPLE_COMM_VENC_GetGopAttr
+SAMPLE_COMM_VENC_Start
+SAMPLE_COMM_VPSS_Bind_VENC
+SAMPLE_COMM_VENC_Start
+SAMPLE_COMM_VPSS_Bind_VENC
+SAMPLE_COMM_VENC_StartGetStream
+
+
+第二层次
+SAMPLE_COMM_SYS_GetPicSize
+	根据设置的图像分辨率类型返回具体分辨率
+SAMPLE_COMM_VI_GetSensorInfo
+	给两个VI设置探测器类型
+SAMPLE_VENC_CheckSensor
+	探测器类型转化为图像分辨率类型，再获取探测器具体分辨率并与用户设置的
+图像分辨率比较，如探测器分辨率小于设置的图像分辨率，返回错误。
+SAMPLE_VENC_ModifyResolution
+	如果SAMPLE_VENC_CheckSensor返回真，把设置的图像分辨率改成sensor分辨率，
+也就是说只能往大了改。
+SAMPLE_VENC_VI_Init
+	SAMPLE_COMM_VI_GetComboDevBySensor
+		第1个摄像头接0ComboDev 第2个摄像头接2ComboDev?
+	SAMPLE_VENC_SYS_Init
+		SAMPLE_COMM_SYS_Init
+			HI_MPI_VB_SetConfig
+			HI_MPI_VB_Init
+			HI_MPI_SYS_Init
+	SAMPLE_COMM_VI_SetParam
+		HI_MPI_SYS_GetVIVPSSMode
+		SAMPLE_COMM_VI_UpdateVIVPSSMode
+		HI_MPI_SYS_SetVIVPSSMode
+	SAMPLE_COMM_VI_GetFrameRateBySensor
+	HI_MPI_ISP_GetCtrlParam
+	HI_MPI_ISP_SetCtrlParam
+	SAMPLE_COMM_VI_StartVi
+		SAMPLE_COMM_VI_StartMIPI
+			SAMPLE_COMM_VI_GetMipiLaneDivideMode
+			SAMPLE_COMM_VI_SetMipiHsMode
+			SAMPLE_COMM_VI_EnableMipiClock
+			SAMPLE_COMM_VI_ResetMipi
+			SAMPLE_COMM_VI_EnableSensorClock
+			SAMPLE_COMM_VI_ResetSensor
+			SAMPLE_COMM_VI_SetMipiAttr
+			SAMPLE_COMM_VI_UnresetMipi
+			SAMPLE_COMM_VI_UnresetSensor
+		SAMPLE_COMM_VI_SetParam
+			HI_MPI_SYS_GetVIVPSSMode
+			SAMPLE_COMM_VI_UpdateVIVPSSMode
+			HI_MPI_SYS_SetVIVPSSMode
+				设置的是在/离线模式，而不是绑定关系
+		SAMPLE_COMM_VI_CreateVi
+			SAMPLE_COMM_VI_CreateSingleVi
+				SAMPLE_COMM_VI_StartDev
+					HI_MPI_VI_SetDevAttr
+					HI_MPI_VI_EnableDev
+				SAMPLE_COMM_VI_BindPipeDev
+					HI_MPI_VI_SetDevBindPipe
+				SAMPLE_COMM_VI_StartViPipe
+					HI_MPI_VI_CreatePipe(可不使用HI_MPI_VI_SetPipeAttr)
+					HI_MPI_VI_SetPipeVCNumber 用于从mipi数据包中提取信息？
+					HI_MPI_VI_StartPipe
+				SAMPLE_COMM_VI_StartViChn
+					HI_MPI_VI_SetChnAttr
+					HI_MPI_VI_EnableChn
+		SAMPLE_COMM_VI_CreateIsp
+			SAMPLE_COMM_VI_StartIsp
+				SAMPLE_COMM_ISP_Sensor_Regiter_callback
+					SAMPLE_COMM_ISP_GetSnsObj(根据sensor类型选择sensor对象，其实就是sensor库，如果再加载自动曝光、自动白平衡库，这两个库是
+					通过名字查找的)
+						pstSnsObj->pfnRegisterCallback
+				SAMPLE_COMM_ISP_BindSns
+					pstSnsObj->pfnSetBusInfo(IspDev, uSnsBusInfo);(是IIC还是SSP)
+				SAMPLE_COMM_ISP_Aelib_Callback
+					HI_MPI_AE_Register
+				SAMPLE_COMM_ISP_Awblib_Callback
+					HI_MPI_AWB_Register
+				HI_MPI_ISP_MemInit
+				HI_MPI_ISP_SetPubAttr
+				HI_MPI_ISP_Init
+				SAMPLE_COMM_ISP_Run
+					SAMPLE_COMM_ISP_Thread
+SAMPLE_VENC_VPSS_Init
+	SAMPLE_COMM_VPSS_Start
+		HI_MPI_VPSS_CreateGrp
+		HI_MPI_VPSS_SetChnAttr
+		HI_MPI_VPSS_EnableChn
+		HI_MPI_VPSS_StartGrp
+SAMPLE_COMM_VI_Bind_VPSS
+	HI_MPI_SYS_Bind
+SAMPLE_VENC_GetRcMode
+SAMPLE_VENC_GetGopMode
+SAMPLE_COMM_VENC_GetGopAttr
+SAMPLE_COMM_VENC_Start
+	SAMPLE_COMM_VENC_Creat
+	HI_MPI_VENC_StartRecvFrame
+SAMPLE_COMM_VPSS_Bind_VENC
+	HI_MPI_SYS_Bind
+SAMPLE_COMM_VENC_StartGetStream
+	线程
+	...
+	HI_MPI_VENC_GetStream
+	...
+
+
+读线程
+	HI_MPI_VENC_GetChnAttr  获取264还是265？
+	HI_MPI_VENC_GetFd
+	HI_MPI_VENC_GetStreamBufInfo
+	HI_MPI_VENC_QueryStatus
+	HI_MPI_VENC_GetStream
+	HI_MPI_VENC_ReleaseStream

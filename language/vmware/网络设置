@@ -3,8 +3,11 @@ https://www.linuxidc.com/Linux/2016-09/135521.htm
 
 NAT模式对局域网的其他电脑是不可见的。
 
+1、Bridged(桥接模式)、NAT(网络地址转换模式)、Host-Only(仅主机模式)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	vmware给我们提供了三个网络：VMnet0(桥接网络)、VMnet1(仅主机网络)、VMnet8(Na)
 
-1、仅主机模式使用
+2、仅主机模式使用
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 Host-Only模式其实就是NAT模式去除了虚拟NAT设备，然后使用VMware Network Adapter VMnet1
 虚拟网卡连接VMnet1虚拟交换机来与虚拟机通信的，Host-Only模式将虚拟机与外网隔开，使得虚拟

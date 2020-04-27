@@ -1,0 +1,11 @@
+https://blog.csdn.net/qq_41133610/article/details/80936361
+
+
+printenv
+
+boot_emmc环境变量
+
+
+bootargs=mem=512M console=ttyAMA0,115200 root=/dev/mmcblk0p3 rootfstype=ext4 rw rootwait blkdevparts=mmcblk0:5M(boot),10M(kernel),200M(rootfs),200M(userdata),-(user)
+
+bootcmd=mmc read 0 0x80000000 0x2800 0x4000;bootm 0x80000000

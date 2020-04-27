@@ -1,0 +1,21 @@
+
+
+dts -> dtb -> device_node -> platform_device
+
+
+
+    哪些设备树节点可以转换为platform_device。
+
+答：
+1、 该节点必须含有compatible属性
+2、 根节点的子节点(节点必须含有compatible属性)
+3、 含有特殊compatible属性的节点的子节点(子节点必须含有compatible属性):
+      这些特殊的compatilbe属性为: "simple-bus","simple-mfd","isa","arm,amba-bus "
+      根节点是例外的，生成platfrom_device时，即使有compatible属性也不会处理。
+
+/sys/firmware/devicetree也可查看设备树
+
+https://www.cnblogs.com/hellokitty2/p/10992949.html
+http://www.eepw.com.cn/article/201911/406597.htm
+https://blog.csdn.net/pwl999/article/details/79631434     非常不错的中文贴
+https://blog.csdn.net/Guet_Kite/article/details/87943165   这篇文章很好，讲述device tree->platform device的过程

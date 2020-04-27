@@ -1,0 +1,147 @@
+
+1、error 5 Input/output error调试记录
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当罗技c310 uvc摄像头插入hi3516dv300开发板时，调试串口会打印：
+usb 1-1.1: new high-speed USB device number 5 using xhci-hcd
+uvcvideo: Found UVC 1.00 device <unnamed> (046d:081b)
+input: UVC Camera (046d:081b) as /devices/platform/soc/100e0000.xhci_0/usb1/1-1/1-1.1/1-1.1:1.0/input/input3
+看上去，设备都加载成功了。关键设备节点生成了(/dev/video0)，而且v4l2应用程序也基
+本能成功工作，能通过VIDIOC_ENUM_FMT获取到很多分辨率，但VIDIOC_STREAMON时会返回
+错误：error 5(Input/output error)。甚至，在小分辨率capture时，VIDIOC_STREAMON
+也能正常工作。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	打开L4V2内核调试后发现是videobuf2-core.c中vb2_start_streaming函数报driver 
+refused to start streaming错误，仔细分析后发现是vb2_ops的start_streaming指针未
+能有值，而这个指针只有在buffer可读时才能有值，所以很有可能是未能取到uvc数据。
+
+echo 1 >> /sys/module/uvcvideo/parameters/timeout后再插入c310调试串口会打印：
+usb 1-1.1: new high-speed USB device number 9 using xhci-hcd
+uvcvideo: Found UVC 1.00 device <unnamed> (046d:081b)
+uvcvideo: Forcing device quirks to 0x1 by module parameter for testing purpose.
+uvcvideo: Please report required quirks to the linux-uvc-devel mailing list.
+uvcvideo: UVC non compliance - GET_DEF(PROBE) not supported. Enabling workaround.
+uvcvideo: Failed to query (129) UVC probe control : -110 (exp. 26).
+uvcvideo: Failed to initialize the device (-5).
+从中可以看出设备与驱动没有匹配成功(probe函数调用失败)。没有成功的原因也很简单,
+因为(046d:081b)不在uvc的支持列表中，需修改uvc驱动。
+
+	从这个调试过程中我们需要知道，有很多的ioctl，即使没有uvc，L4V2也能正常返回。
+但再回看前面的问题，真的还是有很多未解之谜，为什么uvc未能正常加载时小分辨率
+capture可以成功呢？
+
+
+2、修改UVC驱动以支持罗技c310
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考：
+
+
+3、No fast enough alt setting for requested bandwidth
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+先做这样的修改，这样才能出调试信息(使用dmesg命令查看调试消息)
+	echo 0xffff > /sys/module/uvcvideo/parameters/trace
+
+
+在嵌入式中，如果出现这样的问题，如果是uvc camera本身是支持高分辨率的，一般都是嵌入式的usb驱动没有做好导致的。
+建议检查usb驱动，是不是标准的hci驱动，同时，有没有调试过相应驱动的同步传输。
+
+
+
+  HOSTCC  scripts/kconfig/conf.o
+  HOSTLD  scripts/kconfig/conf
+scripts/kconfig/conf  --silentoldconfig Kconfig
+  CHK     include/config/kernel.release
+  CHK     include/generated/uapi/linux/version.h
+  CHK     include/generated/utsrelease.h
+  CHK     include/generated/bounds.h
+  CHK     include/generated/timeconst.h
+  CHK     include/generated/asm-offsets.h
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  LD      init/built-in.o
+  CC      drivers/media/platform/soc_camera/soc_camera.o
+  CC      drivers/media/platform/soc_camera/soc_mediabus.o
+  CC      drivers/media/platform/soc_camera/soc_camera_platform.o
+  LD      drivers/media/platform/soc_camera/built-in.o
+  LD      drivers/media/platform/built-in.o
+  CC [M]  drivers/media/usb/gspca/gspca.o
+  CC [M]  drivers/media/usb/gspca/autogain_functions.o
+  LD [M]  drivers/media/usb/gspca/gspca_main.o
+  CC      drivers/media/usb/uvc/uvc_driver.o
+  CC      drivers/media/usb/uvc/uvc_queue.o
+  CC      drivers/media/usb/uvc/uvc_v4l2.o
+  CC      drivers/media/usb/uvc/uvc_video.o
+  CC      drivers/media/usb/uvc/uvc_ctrl.o
+  CC      drivers/media/usb/uvc/uvc_status.o
+  CC      drivers/media/usb/uvc/uvc_isight.o
+  CC      drivers/media/usb/uvc/uvc_debugfs.o
+  CC      drivers/media/usb/uvc/uvc_entity.o
+  LD      drivers/media/usb/uvc/uvcvideo.o
+  LD      drivers/media/usb/uvc/built-in.o
+  LD      drivers/media/usb/built-in.o
+  CC      drivers/media/v4l2-core/v4l2-dev.o
+  CC      drivers/media/v4l2-core/v4l2-ioctl.o
+  CC      drivers/media/v4l2-core/v4l2-device.o
+  CC      drivers/media/v4l2-core/v4l2-fh.o
+  CC      drivers/media/v4l2-core/v4l2-event.o
+  CC      drivers/media/v4l2-core/v4l2-ctrls.o
+  CC      drivers/media/v4l2-core/v4l2-subdev.o
+  CC      drivers/media/v4l2-core/v4l2-clk.o
+  CC      drivers/media/v4l2-core/v4l2-async.o
+  CC      drivers/media/v4l2-core/v4l2-mc.o
+  LD      drivers/media/v4l2-core/videodev.o
+  CC      drivers/media/v4l2-core/v4l2-common.o
+  CC      drivers/media/v4l2-core/videobuf-core.o
+  CC      drivers/media/v4l2-core/videobuf2-core.o
+  CC      drivers/media/v4l2-core/videobuf2-v4l2.o
+  LD      drivers/media/v4l2-core/built-in.o
+  CC      drivers/media/media-device.o
+  CC      drivers/media/media-devnode.o
+  CC      drivers/media/media-entity.o
+  LD      drivers/media/media.o
+  LD      drivers/media/built-in.o
+  CC [M]  drivers/usb/gadget/function/f_uvc.o
+  CC [M]  drivers/usb/gadget/function/uvc_queue.o
+  CC [M]  drivers/usb/gadget/function/uvc_v4l2.o
+  CC [M]  drivers/usb/gadget/function/uvc_video.o
+  LD [M]  drivers/usb/gadget/function/usb_f_uvc.o
+  CC      drivers/usb/host/ehci-hcd.o
+  CC      drivers/usb/host/ehci-platform.o
+  LD      drivers/usb/host/built-in.o
+  LD      drivers/usb/built-in.o
+  LD      drivers/built-in.o
+  LD      vmlinux.o
+  MODPOST vmlinux.o
+  GEN     .version
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  LD      init/built-in.o
+  KSYM    .tmp_kallsyms1.o
+  KSYM    .tmp_kallsyms2.o
+  LD      vmlinux
+  SORTEX  vmlinux
+  SYSMAP  System.map
+  OBJCOPY arch/arm/boot/Image
+  Kernel: arch/arm/boot/Image is ready
+  GZIP    arch/arm/boot/compressed/piggy_data
+  AS      arch/arm/boot/compressed/piggy.o
+  LD      arch/arm/boot/compressed/vmlinux
+  OBJCOPY arch/arm/boot/zImage
+  Kernel: arch/arm/boot/zImage is ready
+  DTC     arch/arm/boot/dts/hi3516dv300-demb.dtb
+  Kernel: arch/arm/boot/zImage-dtb is ready
+  UIMAGE  arch/arm/boot/uImage
+Image Name:   Linux-4.9.37
+Created:      Fri Apr 17 16:25:59 2020
+Image Type:   ARM Linux Kernel Image (uncompressed)
+Data Size:    3462690 Bytes = 3381.53 KiB = 3.30 MiB
+Load Address: 80008000
+Entry Point:  80008000
+  Kernel: arch/arm/boot/uImage is ready
+  Building modules, stage 2.
+  MODPOST 56 modules
+  LD [M]  drivers/media/usb/gspca/gspca_main.ko
+  LD [M]  drivers/usb/gadget/function/usb_f_uvc.ko
+

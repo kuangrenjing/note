@@ -1,0 +1,9 @@
+struct usb_interface
+
+usb_register(struct usb_driver*);
+
+
+
+usb设备驱动、usb接口驱动
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+指的是hub和device的区别？

@@ -1,7 +1,8 @@
 VS安装“Qt VS Tools”插件
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	“工具”->“扩展与更新”->“联机” 搜索QT，第一条就是“Qt Visual Studio Tools”，点
-击“下载”，下载完毕后关闭VS，安装向导自动启动，一步步安装就是了。
+击“下载”，下载完毕后关闭VS，安装向导自动启动，一步步安装就是了。如果在VS里边下
+不动，就去QT官网下。
 
 	安装完后启动VS，菜单栏多了一个“Qt VS Tools”菜单。
 
@@ -12,7 +13,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 安装QT
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	点击qt-opensource-windows-x86-5.12.0.exe安装，选择组件时，MSVC 2017 32-bit
-和MSVC 2017 64-bit即可。
+、MSVC 2017 64-bit、source三项。
 
 配置Qt VS Tools
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

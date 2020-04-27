@@ -160,3 +160,49 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	ramfs不会用swap，tmpfs会使用swap
 
 两者都是用来提升效率，但是tmpfs比ramfs的性能更好（结果是对的，原理有待进一步探究）
+
+101、添加一块硬盘并使用它
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	譬如我们vmware虚拟机创建时的硬盘不够用了，需要加一块硬盘来存放新的文件，应该
+怎么操作才够骚呢？
+
+	在vmware中新增了一块40G的新硬盘并重启虚拟机后，使用fdisk -l命令可以看到新增
+加的这块硬盘的信息如下：
+Disk /dev/sdb: 40 GiB, 42949672960 bytes, 83886080 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+这块硬盘还处于未分区，未挂载状态，所以只有扇区大小，总大小等信息。
+
+	现在我们要对这块硬盘进行分区，对硬盘进行分区还是使用fdisk命令，在这里我们的
+调用格式是这样的：
+	fdisk /dev/sdb
+然后根据提示进行操作即可，经过这次略骚的操作之后：
+Disk /dev/sdb: 40 GiB, 42949672960 bytes, 83886080 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x4aa441d2
+
+Device     Boot Start      End  Sectors Size Id Type
+/dev/sdb1        2048 83886079 83884032  40G 83 Linux
+可以看到，我们把整个硬盘都整成一个叫/dev/sdb1的主分区了
+
+	要格式化吗？需要格式化，不然挂载时会出错。
+mkfs -t ext4 /dev/sdb
+
+	挂载分区到目录树上。
+	mount -t ext4 /dev/sdb1 /home/mqs2
+
+
+
+
+101、硬盘分区
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+fdisk -l   可以用于查看硬盘及分区信息，包括硬盘的大小和各分区的大小
+查看硬盘的块情况
+
+101、硬盘挂载
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+fdisk -l   用于查看硬盘及分区信息
