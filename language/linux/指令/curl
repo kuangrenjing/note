@@ -1,0 +1,2 @@
+
+curl -i -H "Content-Type: application/json" -d "hello word" -x POST RTSP://192.168.15.22:554
