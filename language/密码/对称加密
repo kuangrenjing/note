@@ -1,0 +1,9 @@
+
+分组加密三要素
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	算法、模式、填充方式。
+	IV与“算法、模式”有关
+
+iv
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+iv(initialization vector)初始化矢量。

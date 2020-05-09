@@ -1,0 +1,21 @@
+cat /proc/version2
+uname命令
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+功能：
+	print certain system information
+
+常用选项：
+-s, --kernel-name
+	打印内核名字，譬如[linux]
+
+-r, --kernel-release
+	打印内核发布版 譬如[3.10.0-862.9.1.ns7_4.37.mips64el]
+
+-i, --hardware-platform
+	打印硬件平台信息，使用cat /proc/cpuinfo可以看到更丰富的信息
+
+疑惑：
+	打印系统信息的命令为什么叫“uname”呢？
+
+proc虚拟目录
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

@@ -1,0 +1,21 @@
+1、linux软件包管理简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	简单来说，Linux软件包管理工具是一组命令的集合，其作用是提供在操作系统中安装，
+升级，卸载需要的软件的方法，并提供对系统中所有软件状态信息的查询。在GNU/Linux
+操作系统中，RPM和DPT为最常见的两类软件包管理工具，他们分别应用于基于rpm软件包的
+Linux发行版本和基于deb软件包的Linux发行版本。
+
+版本                        前端             后端                   包格式
+Debian, Ubuntu等   dpkg-deb/apt-get        DPT管理器                 deb
+RedHat，SUSE等              yum            RPM管理器                 rpm
+
+1、查看某个软件包是否已经安装
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+dpkg -s firefox
+dpkg -l | grep gcc
+
+apt-get --purge remove  software_name
+
+apt-get安装软件包如何知道他的编译参数
+
+

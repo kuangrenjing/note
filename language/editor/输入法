@@ -1,0 +1,13 @@
+1、半角/全角
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	为什么打开全角后，输入的字符变宽
+
+首先要回答“半角、全角是什么”
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+其实全角和半角是针对中文输入法输入字符的不同状态
+
+	全角模式：输入一个字符占用2个字符，  半角模式：输入一个字符占用1个字符。
+	全角模式输出的字符和半角不同，但是汉字的话2个模式都是占用2个字符
+	某些特殊的函数，比如命令就不能用全角输入
+
+在记事本里如何把全角字符改成半角字符

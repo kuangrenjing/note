@@ -1,0 +1,54 @@
+/opt/encrypt-server/bin/blxserver
+
+
+1、机器未监听80端口，web怎么连上的
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+执行命令
+	iptables --list --numeric -t nat --line-numbers
+
+输出有一条：
+	1    REDIRECT   tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:80 redir ports 1688
+
+就是说80端口转发1688端口
+
+netstat -ntpl命令查看
+tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      1014/master         
+tcp        0      0 0.0.0.0:9903            0.0.0.0:*               LISTEN      670/blxserver       
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      904/sshd            
+tcp6       0      0 :::1688                 :::*                    LISTEN      905/java            
+tcp6       0      0 ::1:25                  :::*                    LISTEN      1014/master         
+tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      905/java            
+tcp6       0      0 :::8009                 :::*                    LISTEN      905/java            
+tcp6       0      0 :::22                   :::*                    LISTEN      904/sshd
+是java监听在1688端口
+
+再通过ps命令查看905号进程的运行命令为：
+/usr/lib/jvm/jre/bin/java -classpath /usr/share/tomcat/bin/bootstrap.jar:/usr/share/tomcat/bin/tomcat-juli.jar:/usr/lib/java/commons-daemon.jar -Dcatalina.base=/usr/share/tomcat -Dcatalina.home=/usr/share/tomcat -Djava.endorsed.dirs= -Djava.io.tmpdir=/var/cache/tomcat/temp -Djava.util.logging.config.file=/usr/share/tomcat/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager orgapache.catalina.startup.Bootstrap start
+
+tomcat是一个web服务器
+
+web服务登录用户名、密码
+	Admin Admin1234
+
+默认的USBKey的PIN口令都是12345678
+
+2、三未信安文档解读
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+用户：
+	管理员或操作员，不是客户端连接来的用户。从SWCSM_GetCurrentStatus函数可以看出
+三未信安密码机可以有5个管理员，1个操作员（存在或不存在）？
+
+
+3、三未信安API测试总结
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ECC加密有长度限制，最长136字节，密文与明文等长。
+
+	ECC_agreement_test
+
+
+
+1、三未信安密码机疑问汇总
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	blxserver是个什么进程？
+	机器未监听80端口，web怎么连上的，交换机上使用了跳转机制?
+	用户管理、会话管理是在密码卡端进行的还是在API层进行的？
