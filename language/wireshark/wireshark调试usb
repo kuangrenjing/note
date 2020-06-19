@@ -1,0 +1,27 @@
+
+
+
+1、usbpcap简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://desowin.org/usbpcap/capture_limitations.html
+
+	USBPcap是一个windows上的开源的USB嗅探器(sniffer)。
+
+	USBPcap可以使用命令行(CMD)来抓包，然后用wireshark来分析，也可以直接使用
+wireshark来抓包分析。
+
+	USBPcap的抓包格式与usb 文档上的格式不一致，因为USBPcap不是一个USB硬件嗅探器。
+
+	USBPcap获取的是FDO->PDO的数据，所以PDO的一些封装信息它无法获取，具体是：
+		Bus states (Suspended, Power ON, Power OFF, Reset, High Speed Detection Handshake)
+		Packet ID (PID)
+		Split transactions (CSPLIT, SSPLIT)
+		Duration of bus state and time used to transfer packet over the wire
+		Transfer speed (Low Speed, Full Speed, High Speed)
+		设备枚举过程
+	https://desowin.org/usbpcap/capture_limitations.html
+
+2、过滤
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+usb.idVendor
+usb.idProduct

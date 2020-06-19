@@ -1,11 +1,59 @@
-git reset 回退
-git revert 反做
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git reset命令主要用来根据你传递给动作的参数来执行撤销操作。它可以移动HEAD指
+针并且可选的改变index或者暂存区，如果你使用--hard参数的话你甚至可以改变工作区。
+如果错误地为这个命令附加后面的参数，你可能会丢失你的工作，所以在使用前你要确定你
+已经完全理解了它。
 
-git reset --hard
-git reset --soft
-git reset --mixed(default)
+2、常用格式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+git reset [-q] [<tree-ish>] [--] <pathspec>…​
+git reset [-q] [--pathspec-from-file=<file> [--pathspec-file-nul]] [<tree-ish>]
+git reset (--patch | -p) [<tree-ish>] [--] [<pathspec>…​]
+git reset [--soft | --mixed [-N] | --hard | --merge | --keep] [-q] [<commit>]
+
+	前三种格式从<tree-ish>拷贝文件到index，文件路径信息可以在命令行中指定
+(<pathspec>)，也可以通过文件中转([--pathspec-from-file=<file> [--pathspec-file-nul]])，
+一定要注意，此格式不移动分支指向。
+
+	第4种格式设置分支头(HEAD)到<commit>，根据参数不同把index区或工作区覆盖为
+<commit>。具体是：
+	--soft
+		不改变index区和工作区
+	--mixed
+		改变index区
+	--hard
+		改变index区和工作区
+	--merge
+		改变index区，部分改变工作区，但工作区中unstaged changes的文件会被保留。如果
+	<commit>与HEAD不同的文件有unstaged changes的部分，那reset会被终止。
+	--keep
+		Resets index entries and updates files in the working tree that are different 
+	between <commit> and HEAD. If a file that is different between <commit> and HEAD 
+	has local changes, reset is aborted.
+
+
+2、git-reset的行为
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	<1>.移动 HEAD 分支的指向             (若指定了 --soft，则到此停止，此动作也是“撤销”的内涵所在)
+	<2>.使索引看起来像 HEAD              (若未指定 --hard，则到此停止)
+	<3>.使工作目录看起来像索引           (只有指定了--hard，才会做这一步)
+	<4>.如果指定了路径，则跳过第<1>步。  (且索引或工作区的作用范围只限于指定的路径)
+
+
+	需注意git-reset命令与git-checkout命令的区别
+	需注意git-reset命令与git-revert命令的区别
 
 
 git reset与git checkout的区别
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	git checkout是检出某个提交，它不会改变分支的指向，但会改变HEAD的指向，造成
+“分离头指针(detached HEAD)”
+
+git reset功能
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+常见场景：
+	开发者把工作目录(work tree)里搞得一团乱麻，搞不下去了，想回到上一个正常状态
+再重新开始。如果还没有把乱糟糟的代码提交，此时可以通过下面的命令，让工作目录回到
+上一次提交时的状态(last committed state):
+	git reset --hard HEAD

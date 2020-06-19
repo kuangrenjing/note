@@ -1,0 +1,4 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	但我们在使用git工作时，git会在后台保存一个引用日志(reflog)，引用日志记录了最
+近几个月我们的(仅仅是我们自己)的HEAD的变动历史。

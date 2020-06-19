@@ -32,18 +32,147 @@ web服务登录用户名、密码
 
 默认的USBKey的PIN口令都是12345678
 
-2、三未信安文档解读
+2、三未信安密码卡资源
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	密码卡支持5个管理员，1个操作员，但神州生产的密码机只配置了三个管理员，1个操
+作员。
+
+	1个设备密钥？对称非对称？索引0？初始化时自动生成。
+	25组RSA密钥对（每组可以有签名、加密或签名加密共存三种情况），索引为1~25，
+长度1024bits或2048bits。
+	50组ECC密钥对（每组可以有签名、加密或签名加密共存三种情况），索引号1~50，
+长度256bits
+	100对对称密钥，索引号1~100，长度128bits、192bits或256bits
+
+
+3、三未信安文档解读
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 用户：
 	管理员或操作员，不是客户端连接来的用户。从SWCSM_GetCurrentStatus函数可以看出
 三未信安密码机可以有5个管理员，1个操作员（存在或不存在）？
 
+4、三未信安API汇总
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)、设备管理类函数
+	A.打开设备：SDF_OpenDevice
+	B.关闭设备：SDF_CloseDevice
+	C.创建会话：SDF_OpenSession
+	D.关闭会话：SDF_CloseSession
+	E.获取设备信息：SDF_GetDeviceInfo
+	F.产生随机数：SDF_GenerateRandom
+	G.获取私钥使用权限：SDF_GetPrivateKeyAccessRight
+	H.释放私钥使用权限：SDF_ReleaseRrivateKeyAccessRight
 
-3、三未信安API测试总结
+2)、密钥管理类函数
+	A.导出RSA签名公钥:SDF_ExportSignPublicKey_RSA
+	B.导出RSA加密公钥:SDF_ExportEncPublicKey_RSA
+		说明：
+			索引不能超过25
+			可以用来确定模长度，用以确定一次能加解密多少字节
+
+	C.产生RSA非对称密钥对并输出:SDF_GenerateKeyPair_RSA
+	D.生成会话密钥并用内部RSA公钥加密输出:SDF_GenerateKeyWithIPK_RSA
+		说明：
+			填充方式按照PKCS#1 v1.5的要求进行
+	E.生成会话密钥并用外部RSA公钥加密输出:SDF_GenerateKeyWithEPK_RSA
+	F.导入会话密钥并用内部RSA私钥解密:SDF_ImportKeyWithISK_RSA
+	G.基于RSA算法的数字信封转换:SDF_ExchangeDigitEnvelopeBaseOnRSA
+	H.导出ECC签名公钥:SDF_ExportSignPublicKey_ECC
+	I.导出ECC加密公钥:SDF_ExportEncPublicKey_ECC
+	J.产生ECC非对称密钥对并输出:SDF_GenerateKeyPair_ECC
+	K.生成会话密钥并用内部ECC公钥加密输出:SDF_GenerateKeyWithIPK_ECC
+	L.生成会话密钥并用外部ECC公钥加密输出:SDF_GenerateKeyWithEPK_ECC
+	M.导入会话密钥并用内部ECC私钥解密:SDF_ImportKeyWithISK_ECC
+	N.生成密钥协商参数并输出:SDF_GenerateAgreementDataWithECC
+	O.计算会话密钥:SDF_GenerateKeyWithECC
+	P.产生协商数据并计算会话密钥:SDF_GenerateAgreementDataAndKeyWithECC
+	Q.基于ECC算法的数字信封转换:SDF_ExchangeDigitEnvelopeBaseOnECC
+	R.生成会话密钥并用密钥加密密钥加密输出:SDF_GenerateKeyWithKEK
+	S.导入会话密钥并用密钥加密密钥解密:SDF_ImportKeyWithKEK
+	T.导入明文会话密钥:SDF_ImportKey
+	U.销毁会话密钥:SDF_DestroyKey
+
+3)、非对称算法运算类函数
+	A.外部公钥RSA运算:SDF_ExternalPublicKeyOperation_RSA
+	B.外部私钥RSA运算:SDF_ExternalPrivateKeyOperation_RSA
+	C.内部公钥RSA运算:SDF_InternalPublicKeyOperation_RSA
+		说明：
+			与国密文档相比，添加了一个参数，用于指明使用索引下的加密密钥还是签
+		名密钥。
+			padding方式应该是RSA_NO_PADDING，需要加密者把明文截断或padding到模
+		长度后传给函数。
+
+	D.内部私RSA运算:SDF_InternalPrivateKeyOperation_RSA
+		说明：
+			与SDF_InternalPublicKeyOperation_RSA对应
+
+	E.外部密钥ECC签名:SDF_ExternalSign_ECC
+	F.外部密钥ECC验证:SDF_ExternalVerify_ECC
+	G.内部密钥ECC签名:SDF_InternalSign_ECC
+		说明：
+			pucData输入字段长度只能是32字节（256bits），可能主流的hash函数输出
+		是256biyts的缘故吧
+
+	H.内部密钥ECC验证:SDF_InternalVerify_ECC
+		说明：
+			与SDF_InternalSign_ECC对应
+
+	I.外部密钥ECC加密:SDF_ExternalEncrypt_ECC
+	J.外部密钥ECC解密:SDF_ExternalDecrypt_ECC
+	K.内部密钥ECC加密:SDF_InternalEncrypt_ECC  (三未添加)
+		说明：
+			与RSA不同，ECC加密明文任意长度都可以，但三未规定一次调用最长加密136
+		字节
+			与RSA相同的是：明文与密文等长
+
+	L.内部密钥ECC解密:SDF_InternalDecrypt_ECC  (三未添加)
+		说明：
+			与SDF_InternalEncrypt_ECC对应
+
+4)、对称算法运算类函数
+	A.对称加密:SDF_Encrypt
+		说明：
+			对称加密密钥长度：
+				SM1：      128bits??
+				SSF33：    接口不能使用这个算法
+				DES：      64bits  但三未的接口可以使用32bits密钥，此时加密长度却至少为8字节
+				3DES：     192bits  32*3 = 96bits是不行的
+				AES：      分组长度是128bits，密钥长度是128bits、192bits、258bits
+				SMS4：     128bits
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+			此函数不对数据进行填充处理，输入的数据必须是指定算法分组长度的整数倍。
+
+	B.对称解密:SDF_Decrypt
+	C.计算MAC:SDF_CalculateMAC
+
+5)、杂凑运算类函数
+	A.杂凑运算初始化:SDF_HashInit
+	B.多包杂凑运算:SDF_HashUpdate
+	C.杂凑运算结束:SDF_HashFinal
+
+6)、用户文件操作类函数
+	A.创建文件:SDF_CreateFile
+		说明：
+			0XFFFF长度是可以的，0XFFFFFFFF就过长了
+	B.读取文件:SDF_ReadFile
+	C.写文件:SDF_WriteFile
+	D.删除文件:SDF_DeleteFile
+
+7)、管理类函数（三未添加）
+
+
+4、三未信安API测试总结
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	ECC加密有长度限制，最长136字节，密文与明文等长。
 
-	ECC_agreement_test
+	三未信安密码卡存储的是50个RSA密钥，可能签名密钥与加密密钥交错存储（奇数索引
+为签名密钥，偶数索引为加密密钥）
+
+具体到函数：
+	SWCSM_GenerateRSAKeyPair(SGD_HANDLE hSessionHandle, SGD_UINT32 uiKeyNumber, SGD_UINT32 uiKeyBits);
+SWCSM_GenerateRSAKeyPair取值从1到50，如果超过50，报SWR_CARD_PARAMENT_ERR(0x1021013)
+错误。
 
 
 

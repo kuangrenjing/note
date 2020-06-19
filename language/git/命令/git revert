@@ -1,0 +1,13 @@
+1、简介
+
+
+
+
+2、使用场景
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+修改最近一次提交(不产生新的提交)
+git commit --amend
+
+修改多个提交信息(没有直接的命令，但可以使用交互式变基来完成)
+git commit -i HEAD^N HEAD^M

@@ -1,0 +1,96 @@
+1、哪6大工具
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	对称密码、公钥密码、单向散列函数、消息认证码、数字签名和伪随机数生成器。
+
+2、对称密码
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+可以解决的问题
+
+不能解决的问题
+
+3、公钥密码
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+可以解决的问题
+
+不能解决的问题
+
+4、单向散列函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+可以解决的问题
+
+不能解决的问题
+
+5、消息认证码(MAC、HMAC)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+5.1、简介
+消息的完整性：
+	即消息没有被篡改
+
+消息的认证：
+	消息来自正确的发送者。但有瑕疵，因为不能解决“防止否认”的问题
+
+	消息认证码（Message Authentication Code 简写MAC）是一种可以确认消息完整性和
+可以对消息进行认证的技术。可以直观地这样认为：
+	“对称密钥” + “单向散列函数” = “消息认证码”
+
+	事实上，使用某些对称加密算法可以进行消息认证。HMAC特指使用散列函数进行消息
+认证的情况。
+
+5.2、可以解决的问题
+	1、可以确认消息完整性
+	2、可以进行双方的消息的认证
+
+5.3、不能解决的问题
+	1、不能进行第三方认证。因为基于“对称加密”，对称密钥不能向第三者公开。
+	2、不能“防止否认”。因为基于“对称加密”，双方握有密钥，容易形成“密钥在你处泄露，
+你收到的密文不是我加密的”的扯皮情况。
+
+6、数字签名（不是证书）
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+6.1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+数字签名技术中涉及两种行为：
+	1、生产消息签名的行为（使用私钥）
+	2、验证消息签名的行为（使用公钥）
+
+可以直观地这样认为：
+	“非对称密钥” + “单向散列函数” = “数字签名”
+但公/私钥在其中扮演的角色与加密时相反
+
+6.2、可以解决的问题
+	1、可以确认消息完整性
+	2、可以进行双方的消息的认证
+	3、防止否认（比消息认证码先进的地方）
+
+6.3、不能解决的问题
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	因为我们现在使用需求是认证而不是加密，所以公钥的认证非常重要，数字签名不能
+解决公钥的认证问题。从一个认证陷落到另一个认证的陷阱之中。
+
+6.4、证书
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	公钥的数字签名？
+
+	证书是怎么解决“认证之认证”的问题的？要认证千千万万的潜在的通信者是很难的，但
+认证若干个“可信任的第三方”是可行的。
+	简单的说，我们手中握有这些“可信任的第三方”的公钥，这些公钥我们是绝对信任的，
+这些“可信任的第三方”用它的私钥对我们潜在的通信对方的公钥进行数字签名，从而解决
+公钥的认证问题。
+
+	可以直观地这样认为：使用可信的第三方的私钥对“签名公钥”进行数字签名的行为就是
+证书。
+
+
+术语：
+	公钥证书（Public-Key Certificate, PKC）
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	公钥证书简称证书。公钥证书记录有姓名、组织、邮箱地址等个人信息，以及属于此
+人的公钥，并由认证机构施加数字签名。
+
+	认证机构（Certification Authority、Certifying Authority, CA）
+
+7、伪随机数发生器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+可以解决的问题
+
+不能解决的问题

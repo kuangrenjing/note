@@ -1,1 +1,15 @@
 -D
+
+
+-fmessage-length
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	默认情况下，gnu工具链编译过程中，控制台输出的一行信息是不换行的，这样，当输
+出信息过长时(如编译错误时的信息)，会导致你无法看到完整的输出信息，加入
+-fmessage-length=0后，输出信息会根据控制台的宽度自动换行，这样就能看全输出信息了。
+
+-g -g3
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+-M -MD -MM -MMD
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+.d文件的使用

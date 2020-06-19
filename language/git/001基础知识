@@ -1,0 +1,166 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+[索引]：
+	1、nano编辑器
+	2、一些符号
+	3、两点语法与三点语法
+	4、git中会破坏数据的一些操作
+	5、HEAD
+	6、.gitignore文件的使用
+
+
+
+
+
+1、nano编辑器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git commit出现nano界面，如果熟悉nano的用法可以继续使用，如果不熟悉，也没事件
+熟悉，可以ctrl+x然后输出y再然后回车，就可以退出了。
+
+	把git的编辑器由nano换成vi
+
+	git config --global core.editor "vi"
+
+2、一些符号
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、--
+	git命令中经常出现单独的“--”，这是什么意思呢，按照命令解释是“Do not interpret
+ any more arguments as options”，也就说，这个符号之后就没有选项了。所以不不引起
+歧义的情况下，可以不使用此选项。
+
+	譬如，我们git入门时都会学到的一个指令，用index区的文件覆盖工作区的文件：
+“git checkout -- sdf/sdf.cpp”，这个指令中的“--”是可以省略的，但最好不要。我们
+可以这样来理解：“--”是选项和路径的分割符。
+
+
+3、两点(提交区间)与三点(祖先)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	提交区间对管理分支非常有用，使用“提交区间”可以解决“这个分支还有哪些提交尚未
+合并到主分支？”的问题。
+
+3.1、提交区间
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	最常用的指明提交区间语法是双点。
+
+	双点的前后是提交，那含义很明显，我们不多说。
+
+	双点的前后是分支，表示那些不在前分支，而在后分支的那些提交。
+
+双点的扩展：
+	双点语法很好用，但有时候你可能需要两个以上的分支才能确定你所需要的修订，不如
+查看哪些提交是被包含在某些分支中的一个，但是不在你当前的分支上。Git中可以使用^或
+--not来指明你不希望提交被包含在其中的分支。
+
+	下面三个命令是等价的：
+		git log refA..refB
+		git log ^refA refB
+		git log refB --not refA
+
+	有了^、--not语法，我们可以在命令中指定超过两个的引用，这是双点所无法实现的。
+譬如我们要查看所有被refA或refB包含的但是不被refC包含的提交，可以使用下面的指令：
+	git log refA refB ^refC
+
+3.2、三点
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	“三点”语法可以选择出被两个引用之一包含但又不被两者同时包含的提交。
+
+例子：
+	A <--- B <--- E <--- F       master
+           |
+           └------C <--- D       experiment
+
+	git log master...experiment 输出  E F C D
+
+
+4、git中会破坏数据的一些操作
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	只有用户更改只存在于工作区的时候，git命令才有可能不可逆转地破坏它们。
+
+1) git reset --hard
+	这条命令会更新工作区。
+
+2) git restore
+
+5、HEAD
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考
+	https://www.jianshu.com/p/624bf81a3290
+
+	我们可以认为HEAD指向版本库中我们要默认要操作的提交。
+
+	在详细介绍HEAD之前，先了解下HEAD出现之前的困惑：git中的分支，本质上仅仅是指
+向commit对象的可变指针，那我们如何来跟踪我们当前正处在哪个分支上，或者更直白的
+说我们的“暂存区”、“工作区”是和哪一个提交直接相关的，这时，HEAD指针就应运而生了。
+HEAD与分支一样，本质上都是一个可变指针，但HEAD是全局唯一的，这就是它与分支的一
+个最大的区别。
+
+	一般情况下，HEAD总是指向一个分支。显然，不一般的情况下，HEAD指向一个提交，
+此时称为分离头状态(detached header)。
+
+	一般使用git-checkout命令时会造成分离头状态，git-reset会同时改变HEAD和分支指
+向，所以不会造成分离头状态。
+
+【注】
+	在git-log命令中，(HEAD->branch)表示HEAD指向提交，(HEAD, branch)表示HEAD和分支
+指向同一个提交。(HEAD, branch)状态下应用git-reset命令，branch不会跟着移动，使用
+git-branch会清晰的告诉你(HEAD, branch)时HEAD正处于分离头状态。
+
+	处于分离头状态时一些不正当的操作会导致一些副作用：在分离头状态下，新的提交
+不属于任何分支，所以当HEAD离开后，将无法访问它们(除非使用提交的HASH值，可惜我们
+记不住，reflog里说不定能找到)。
+
+
+6、.gitignore文件的使用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)参考
+	https://baijiahao.baidu.com/s?id=1629789913774545149&wfr=spider&for=pc
+
+
+
+2)
+
+
+优先级：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在.gitingore文件中，每一行指定一个忽略规则，Git检查忽略规则的时候有多个来源，
+它的优先级如下（由高到低）：
+	从命令行中读取可用的忽略规则
+	当前目录定义的规则
+	父级目录定义的规则，依次递推
+	$GIT_DIR/info/exclude 文件中定义的规则
+	core.excludesfile中定义的全局规则
+
+匹配符的解释：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#		用于注释，可用'\'转义
+*		匹配除'\'之外的多个所有字符（譬如*.txt匹配所有的txt文件）
+/开头	匹配目录和文件（譬如/test匹配test目录和test文件）
+/结尾	匹配目录，但不匹配文件（譬如/test/只匹配test目录，不匹配test文件）
+!		代表取反
+?		匹配除'\'之外的一个所有字符（譬如test?.txt 可以匹配到 testa.txt、testk.txt等文件）
+[]		匹配数组中指定指定的字符（譬如test[k,l].txt 可以匹配到 testk.txt、testl.txt）
+**		用于匹配多层目录（譬如root/**/test 可以匹配到 root/a/b/c/test 、root/fd/gg/test等目录）
+
+
+.gitignore规则不生效
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	.gitignore只能忽略那些原来没有被track的文件，如果某些文件已经被纳入了版本管
+理中，则修改.gitignore是无效的。
+
+解决方法就是先把本地缓存删除（改变成未track状态），然后再提交:
+	git rm -r --cached .
+	git add .
+	git commit -m 'update .gitignore'
+
+检查文件是否能够被规则覆盖
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git check-ignore -v 文件名
+
+譬如：
+输入：git check-ignore -v hi_sdk_50/lib/lib_iniparser.a
+输出：.gitignore:4:**/*.a	hi_sdk_50/lib/lib_iniparser.a
+
+说明文件第4行的规则能覆盖这个文件，如果无输出，说明规则书写错误。

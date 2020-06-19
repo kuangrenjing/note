@@ -5,14 +5,19 @@
 	git log [<options>] [<revision range>] [[\--] <path>…​]
 
 解释：
-	git log可以携带git rev-list命令的参数用于控制哪些提交显示及怎么显示；还可以携带git diff-*的选项用于控制提交与父提交的diff是不是显示及怎么显示。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git log可以携带git rev-list命令的参数用于控制哪些提交显示及怎么显示；还可以
+携带git diff-*的选项用于控制提交与父提交的diff是不是显示及怎么显示。
 
 The command takes options applicable to the git rev-list command to control what is shown and how, and options applicable to the git diff-* commands to control how the changes each commit introduces are shown.
 1、选项：
 
 --no-decorate
 --decorate[=short|full|auto|no]
---no-decorate等同于--decorate=no， --no-decorate是默认行为，short是默认值。--decorate用于控制指向提交的引用（包括tag）如何显示，short和full的区别在于full显示引用的全路径而short只显示引用名。譬如:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	--no-decorate等同于--decorate=no， --no-decorate是默认行为，short是默认值。
+--decorate用于控制指向提交的引用（包括tag）如何显示，short和full的区别在于full显
+示引用的全路径而short只显示引用名。譬如:
 
 复制代码
 
@@ -104,3 +109,22 @@ raw格式下，提交对象内的字段是怎么保存的，就怎么显示出�
 --pretty=format:<string>可以自定义日志显示格式，这里暂略。
 
  【注】If the commit is a merge, and if the pretty-format is not oneline, email or raw, an additional line is inserted before the Author: line. This line begins with "Merge: " and the sha1s of ancestral commits are printed, separated by spaces. Note that the listed commits may not necessarily be the list of the direct parent commits if you have limited your view of history: for example, if you are only interested in changes related to a certain directory or file.
+
+
+
+
+
+
+
+
+
+
+--graph
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+git log --oneline -n20 --graph
+
+
+
+
+
+ https://www.jianshu.com/p/624bf81a3290    可以好好把玩

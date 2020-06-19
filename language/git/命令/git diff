@@ -1,0 +1,47 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	显示提交之间、提交与index之间、index与工作区之间、提交与工作区之间的差异。
+
+2、语法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+git diff [<options>] [<commit>] [--] [<path>…​]
+git diff [<options>] --cached [<commit>] [--] [<path>…​]
+git diff [<options>] <commit> <commit> [--] [<path>…​]
+git diff [<options>] <blob> <blob>
+git diff [<options>] --no-index [--] <path> <path>
+
+
+git diff [<options>] [--] [<path>…​]                      比较工作区和index区
+git diff [<options>] --no-index [--] <path> <path>       比较文件系统中的两个路径
+git diff [<options>] --cached [<commit>] [--] [<path>…​]  比较提交和index区
+git diff [<options>] <commit> [--] [<path>…​]             比较提交和工作区
+git diff [<options>] <commit> <commit> [--] [<path>…​]    比较两个提交
+git diff [<options>] <commit>..<commit> [--] [<path>…​]   与上同
+git diff [<options>] <commit1>...<commit2> [--] [<path>…​] = 
+	git diff [<options>] commit1与commit2最后一个共同祖先 <commit2> [--] [<path>…​]
+
+
+3、git版本diff结果解读
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+两方比较：
+
+结果：
+diff --git a/alg/alg.cpp b/alg/alg.cpp
+index 9aeb7d7..b6d69b1 100644
+--- a/alg/alg.cpp
++++ b/alg/alg.cpp
+@@ -1479,3 +1479,1304 @@
+
+解读：
+第一行：git版本的diff指令
+第二行：index不是指“staging Area”，而是比较的两个文件的索引
+第三行：---代表在a中，不在b中
+第四行：+++代表不在a中，在b中
+第五行：注意，两方比较是两个‘@’。格式：@@ <from-file-range> <to-file-range> @@。
+        格式解读示例：@@ -1479,3 +1479,1304 @@当前比较的块在a中是从1479开始的2行
+        在b中是从1479开始的1304行。
+
+
+三方比较：
+
+@@@ <from-file-range> <from-file-range> <to-file-range> @@@

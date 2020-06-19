@@ -1,0 +1,31 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git checkout命令用来切换分支，或者检出内容到工作目录。checkout会保留工作区、
+index区的修改。也就说如果index区或者工作区的内容与HEAD不相同，git-checkout会退出
+执行。
+
+
+
+git checkout --detach [<branch>]
+git checkout [--detach] <commit>
+这两条命令会造成detached HEAD状态
+
+
+
+
+2、撤销工作区修改的方法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)、使用git-checkout命令
+	因为git-checkout命令会保留工作区的修改，所以我们可以先git add .把修改加入到
+index区，然后再git-checkout。但这样做会在git底层增加不需要的文件版本。
+
+2)、使用git-restore命令
+
+
+
+
+
+
+
+N、git checkout与git reset的关系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

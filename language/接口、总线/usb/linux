@@ -1,0 +1,63 @@
+
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://elinux.org/images/1/17/USB_Debugging_and_Profiling_Techniques.pdf              usb调试技术
+https://www.cnblogs.com/ECJTUACM-873284962/p/9473808.html                              python抓流量包
+
+
+struct usb_interface
+
+usb_register(struct usb_driver*);
+
+
+
+usb设备驱动、usb接口驱动
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+指的是hub和device的区别？
+
+
+
+
+
+5、linux上查看usb设备
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	/sys/bus/usb/devices中执行“ls -al”输出形如：
+		1-0:1.0 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-0:1.0
+		1-11 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-11
+		1-11:1.0 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-11/1-11:1.0
+		1-7 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-7
+		1-7:1.0 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0
+		1-7:1.1 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.1
+		1-8 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-8
+		1-8:1.0 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.0
+		1-9 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-9
+		1-9:1.0 -> ../../../devices/pci0000:00/0000:00:14.0/usb1/1-9/1-9:1.0
+		2-0:1.0 -> ../../../devices/pci0000:00/0000:00:14.0/usb2/2-0:1.0
+		usb1 -> ../../../devices/pci0000:00/0000:00:14.0/usb1
+		usb2 -> ../../../devices/pci0000:00/0000:00:14.0/usb2
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这些信息如何解读呢，我们参照python项目usbid2.0的解释进行解读
+(https://pypi.org/project/usbid/)。
+
+	usb1、usb2
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	以usb开头的名字指的是usb的主控制器，也可代表主控制器上携带的根集线器(root hub)。
+一台电脑可能有多个主控，每个主控带有一个根集线器，一个根集线器下可挂载127个设备(是
+物理设备吗，还是configure的数目？)，包括集线器在内。
+
+	bus-port.port.port:a.i
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	bus:             根集线器号
+	非最后一个port:  子集线器号
+	最后一个port:    设备号
+	a:               配置(configure的索引？ 因为从0开始)
+	i:               接口(interface，是数目，还是索引，应该是数目，但从0开始)
+
+【注】：
+	usb协议规定，一个hub只能有一个interface
+	但一个设备可以有多个configure、多个interface
+
+udevadm info -p /sys/bus/usb/devices/1-9 -q property
+
+sec's ukey 4612:04b4
