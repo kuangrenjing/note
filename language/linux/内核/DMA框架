@@ -45,6 +45,20 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 总体
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	DMA可以控制memory到memory、memory到device、device到memory以及device到device的数
+据传输，DMA控制器在其中扮演中介的角色。对于DMA控制器而言，传输的两头都是slave。
+
+	DMA的传输工作需要DMA控制器驱动、设备驱动(包括内存驱动？)共同参与。Linux独立于DMA控制
+器驱动和设备驱动提供了一套DMA框架，源码位于drivers/dma/dmaengine.c中，有了这套框架，
+DMA控制器驱动向它注册自己，而设备驱动调用框架函数驱动DMA控制器来控制DMA通道进行传输。
+
+	DMA的硬件构成：一般地芯片会提供一个或多个DMA控制器，每个DMA控制器有多条物理通道（
+海思是4条或者8条），各通道可能与很多设备相连，使用请求线概念来区分DMA相连的设备（有方向
+性），譬如0号请求线代表“I2C0 RX通道DMA请求”。
+
+	linux的DMA还提供了虚拟通道的概念，源码位于drivers/dma，
+
+
 hiedmacv310_phy_chan
 virt-dma.h
 
