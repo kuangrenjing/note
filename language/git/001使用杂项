@@ -1,8 +1,0 @@
-1、nano编辑器
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	git commit出现nano界面，如果熟悉nano的用法可以继续使用，如果不熟悉，也没事件
-熟悉，可以ctrl+x然后输出y再然后回车，就可以退出了。
-
-	把git的编辑器由nano换成vi
-
-	git config --global core.editor "vi"

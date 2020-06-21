@@ -96,3 +96,31 @@ OUT令牌
 
 	USB的标准请求都是使用控制传输方式发出的。
 
+
+USB请求
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+请求类型：
+	standard
+	class
+	vendor
+
+
+IRP(I/O Request Packets)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+USB 底层驱动程序：USB 底层驱动程序由操作系统提供，它位于 USB 功能驱动程序的下面，负责与实际的硬件打交道，实现繁琐的底层通信。
+    USB 功能驱动程序：USB 功能驱动程序由设备开发者编写，位于 USB 底层驱动程序的上面，不与实际的硬件打交道，而是通过向 USB 底层驱动程序发送包含 URB(USB Request Block， USB请求块)的 IRP(I/O Request Packet， I/O 请求包)，来实现对 USB 设备信息的发送和接收。
+
+     应用程序完成一次I/O操作的过程
+
+     若应用程序想对设备进行 I/O 操作，它需调用 Windows API 函数 ，I/O 管理器将此请求构造成一个合适的 I/O 请求包 IRP 并把它传递给 USB 功能驱动程序。USB 功能驱动程序接收到这个 IRP 以后，根据 IRP 中包含的具体操作代码，构造相应 USB 请求块并把此 URB 放到一个新的 IRP 中，然后把此 IRP 传递 USB 底层驱动程序，USB底层驱动程序根据 IRP 中所含的 URB 执行响应的操作(如从 USB 设备读取数据)，并把操作结果返还给 USB 功能驱动程序。USB 功能驱动程序接收到此 IRP 后，将操作结果通过 IRP 返还给 I/O 管理器，最后 I/O 管理器将此 IRP 操作结果返还给应用程序，至此应用程序对 USB 设备的一次 I/O 操作完成。
+
+usb传输类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://bbs.elecfans.com/jishu_1680756_1_1.html
+
+	传输方式USB,有四种的传输方式,控制(Control),同步(isochronous),中断(interrupt),大量(bulk)
+
+
+usb urb
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	usb request block

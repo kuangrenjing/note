@@ -1,0 +1,76 @@
+
+1、国密接口规范解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+分类解读
+	6.2 设备管理类函数
+	6.3 密钥管理类函数
+	6.4 非对称算法运算类函数
+	6.5 对称算法运算类函数
+	6.6 杂凑运算类函数
+	6.7 用户文件操作类函数
+
+我们看到，国密API规范共定义了6类接口函数。每类函数的具体构成我们来看：
+1)、设备管理类函数
+	A.打开设备：SDF_OpenDevice
+	B.关闭设备：SDF_CloseDevice
+	C.创建会话：SDF_OpenSession
+	D.关闭会话：SDF_CloseSession
+	E.获取设备信息：SDF_GetDeviceInfo
+	F.产生随机数：SDF_GenerateRandom
+	G.获取私钥使用权限：SDF_GetPrivateKeyAccessRight
+	H.释放私钥使用权限：SDF_ReleaseRrivateKeyAccessRight
+
+2)、密钥管理类函数
+	A.导出RSA签名公钥:SDF_ExportSignPublicKey_RSA
+	B.导出RSA加密公钥:SDF_ExportEncPublicKey_RSA
+	C.产生RSA非对称密钥对并输出:SDF_GenerateKeyPair_RSA
+	D.生成会话密钥并用内部RSA公钥加密输出:SDF_GenerateKeyWithIPK_RSA
+	E.生成会话密钥并用外部RSA公钥加密输出:SDF_GenerateKeyWithEPK_RSA
+	F.导入会话密钥并用内部RSA私钥解密:SDF_ImportKeyWithISK_RSA
+	G.基于RSA算法的数字信封转换:SDF_ExchangeDigitEnvelopeBaseOnRSA
+	H.导出ECC签名公钥:SDF_ExportSignPublicKey_ECC
+	I.导出ECC加密公钥:SDF_ExportEncPublicKey_ECC
+	J.产生ECC非对称密钥对并输出:SDF_GenerateKeyPair_ECC
+	K.生成会话密钥并用内部ECC公钥加密输出:SDF_GenerateKeyWithIPK_ECC
+	L.生成会话密钥并用外部ECC公钥加密输出:SDF_GenerateKeyWithEPK_ECC
+	M.导入会话密钥并用内部ECC私钥解密:SDF_ImportKeyWithISK_ECC
+	N.生成密钥协商参数并输出:SDF_GenerateAgreementDataWithECC
+	O.计算会话密钥:SDF_GenerateKeyWithECC
+	P.产生协商数据并计算会话密钥:SDF_GenerateAgreementDataAndKeyWithECC
+	Q.基于ECC算法的数字信封转换:SDF_ExchangeDigitEnvelopeBaseOnECC
+	R.生成会话密钥并用密钥加密密钥加密输出:SDF_GenerateKeyWithKEK
+	S.导入会话密钥并用密钥加密密钥解密:SDF_ImportKeyWithKEK
+	T.导入明文会话密钥:SDF_ImportKey
+	U.销毁会话密钥:SDF_DestroyKey
+
+3)、非对称算法运算类函数
+	A.外部公钥RSA运算:SDF_ExternalPublicKeyOperation_RSA
+	B.外部私钥RSA运算:SDF_ExternalPrivateKeyOperation_RSA
+	C.内部公钥RSA运算:SDF_InternalPublicKeyOperation_RSA
+	D.内部私RSA运算:SDF_InternalPrivateKeyOperation_RSA
+	E.外部密钥ECC签名:SDF_ExternalSign_ECC
+	F.外部密钥ECC验证:SDF_ExternalVerify_ECC
+	G.内部密钥ECC签名:SDF_InternalSign_ECC
+	H.内部密钥ECC验证:SDF_InternalVerify_ECC
+	I.外部密钥ECC加密:SDF_ExternalEncrypt_ECC
+	J.外部密钥ECC解密:SDF_ExternalDecrypt_ECC
+
+4)、对称算法运算类函数
+	A.对称加密:SDF_Encrypt
+	B.对称解密:SDF_Decrypt
+	C.计算MAC:SDF_CalculateMAC
+
+5)、杂凑运算类函数
+	A.杂凑运算初始化:SDF_HashInit
+	B.多包杂凑运算:SDF_HashUpdate
+	C.杂凑运算结束:SDF_HashFinal
+
+6)、用户文件操作类函数
+	A.创建文件:SDF_CreateFile
+	B.读取文件:SDF_ReadFile
+	C.写文件:SDF_WriteFile
+	D.删除文件:SDF_DeleteFile
+
+函数级解读
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3）、非对称算法运算类函数

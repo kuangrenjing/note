@@ -1,0 +1,9 @@
+
+insmod报Operation not permitted错误
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	1、权限不对
+
+	2、系统运行在Security boot mode下，insmod: Loading of unsigned module is 
+restricted(即在serurity boot下，未签名的内核模块是不能加入的)
+
+

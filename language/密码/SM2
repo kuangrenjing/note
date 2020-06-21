@@ -1,0 +1,28 @@
+1、ECC原理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)直观理解：
+	如果存在等式：
+		K = kG
+	K、G作为公钥，k作为私钥
+	加密方：明文为M，使用公钥生成两个变量C1 = M + rK, C2 = rG 其中r为随机数
+	解密方：C1-kC2 = M + rK - krG(因K = kG) = M
+	偷窥方：r是随机数，无法破解，k是密钥，算法选的好，破解比较难
+
+	在国密算法里，K是公钥，k是私钥，G是基点。
+
+2)算法选择
+	选择的是椭圆曲线，有限元域
+
+	一定要注意，这个域上的加法运算跟实数域不是一回事。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在椭圆曲线上定义的加法是这样的，过椭圆曲线上两点P Q与椭圆曲线交于R'点，过R'
+点作垂直x轴线交于曲线于P，定义加法运算：
+	P+Q = R
+这个加法运算不能通过实数域的加法来进行，而是通过计算曲线与直线的交点来进行。也就
+是说诸如
+	C1 = M + rK
+	C2 = rG
+等的计算都是要通过计算交点来达到的，从这个角度说，我们必须先把明文编码到椭圆曲线
+上（所以：严格来说M是明文在椭圆曲线上的编码，这种编码不是加密的内容，可以随意公开）
+
+	对于一个特定的ECC算法，椭圆曲线是选定的，基点和阶也是选定的。

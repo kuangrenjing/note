@@ -1,0 +1,121 @@
+1、公钥加密原理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	公钥密码体制根据其所依据的难题一般分为三类：大素数分解问题类、离散对数问题
+类、椭圆曲线类。有时也把椭圆曲线类归为离散对数类。
+
+
+2、RSA
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、RSA原理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考:
+	https://blog.csdn.net/gao131360144/article/details/79966094
+	https://www.jianshu.com/p/c26437542a4b
+
+互质关系：
+	如果两个正整数，除了1之外没有其他公因子，我们称这两个数是互质关系。
+
+	举例
+		2，9（这两个数都不是质数，但他们互质）
+
+	结论：
+		任意两个质数构成互质关系，比如13和61.
+		一个数是质数，另一个数只要不是前者的倍数，两者就构成互质关系，比如3和10.
+		如果两个数中，较大的那个数是质数，则两者构成互质关系，比如97和57.（上条已覆盖？）
+		1和任意一个自然数都是互质关系。
+		p是大于1的整数，则p和p-1构成互质关系，比如57和56.
+		p是大于1的奇数，则p和p-2构成互质关系，比如17和15.
+
+欧拉函数
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	任意给定正整数n，计算在小于等于n的正整数之中，有多少个与n构成互质关系。计算
+这个值的方法叫做欧拉函数。以φ(n)表示。
+
+	欧拉函数的计算
+		1、n = 1
+			φ(n) = 1
+
+		2、n是质数
+			φ(n) = n-1
+
+			解释：
+				因为质数与每个小于它的数都构成互质关系
+
+		3、n是质数p的k次方(n = p^k p为质数，k>=1)
+			φ(n) = p^k - p^(k-1)
+
+			解释：
+				1~p^k中p的倍数的数与p^k都不互质，这些数有p^(k-1)个
+
+		4、n可以分解为两个互质的整数之积(n = p1*p2 p1、p2为质数)
+			φ(n)=φ(p1p2)=φ(p1)φ(p2)
+
+		5、其它一般情况
+
+
+
+2.2、密钥及密钥长度
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	RSA公钥是{E,N} RSA私钥是{D,N}，E是加密encryption的缩写，D是解密decryption的
+缩写。
+
+	E、D、N的求解：找到两个质数p、q，N = p*q，E、D也是通过p、q求得的。但p q不能
+公开，只能公开E、N，利用N的质数分解数学难题来保证加密的安全性。
+
+	我们所说的“密钥长度”一般指的是模值(N)的位长度，目前主流可选值：1024、2048、
+3072、4096...低于1024bit的密钥已经不建议使用（安全问题）。没有上限，多大都可以使
+用。
+
+	公钥指数、私钥指数是什么鬼
+
+2.3、RSA涉及字段
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+E       公钥指数
+D       私钥指数
+N(M)    模
+p       一个质数   （模的一半bit长度）
+q       另一个质数  (模的一半bit长度）
+Dp      D mod (p-1) 什么作用     用于求模反吧？
+Dq      D mod (q-1) 什么作用     用于求模反吧？
+i       系数                     用于求模反吧？
+
+2.4、RSA填充(padding)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+3、ECC原理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、参考
+	https://blog.csdn.net/liangjisheng/article/details/79428639    这篇其实更好
+	https://www.cnblogs.com/Kalafinaian/p/7392505.html             就看这篇挺好
+
+
+3.2、原理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)直观理解：
+	如果存在等式：
+		K = kG
+	K、G作为公钥，k作为私钥
+	加密方：明文为M，使用公钥生成两个变量C1 = M + rK, C2 = rG 其中r为随机数
+	解密方：C1-kC2 = M + rK - krG(因K = kG) = M
+	偷窥方：r是随机数，无法破解，k是密钥，算法选的好，破解比较难
+
+	在国密算法里，K是公钥，k是私钥，G是基点。
+	ECC密钥长度指的应该是k的长度
+
+2)算法选择
+	选择的是椭圆曲线，有限元域
+
+	一定要注意，这个域上的加法运算跟实数域不是一回事。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在椭圆曲线上定义的加法是这样的，过椭圆曲线上两点P Q与椭圆曲线交于R'点，过R'
+点作垂直x轴线交于曲线于P，定义加法运算：
+	P+Q = R
+这个加法运算不能通过实数域的加法来进行，而是通过计算曲线与直线的交点来进行。也就
+是说诸如
+	C1 = M + rK
+	C2 = rG
+等的计算都是要通过计算交点来达到的，从这个角度说，我们必须先把明文编码到椭圆曲线
+上（所以：严格来说M是明文在椭圆曲线上的编码，这种编码不是加密的内容，可以随意公开）
+
+	对于一个特定的ECC算法，椭圆曲线是选定的，基点和阶也是选定的。

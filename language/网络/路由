@@ -52,3 +52,18 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 以太网协议握手 查询网卡正在使用的以太网协议
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+ubuntu路由表
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+形如
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         _gateway        0.0.0.0         UG    100    0        0 enp3s0
+link-local      0.0.0.0         255.255.0.0     U     1000   0        0 enp3s0
+192.168.88.0    0.0.0.0         255.255.255.0   U     100    0        0 enp3s0
+
+
+那其中的"_gateway"是什么意思呢？
+	systemd-resolved解析工具会把"_gateway"解析为网关IP，接下来的问题就是在
+systemd系统下网关IP设置在哪里呢？

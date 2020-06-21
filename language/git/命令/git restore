@@ -1,0 +1,17 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	此命令用于恢复工作区文件，这是git中少有的几个不可逆的操作之一，使用时一定要
+小心。
+
+
+2、语法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+git restore [<options>] [--source=<tree>] [--staged] [--worktree] [--] <pathspec>…​
+git restore [<options>] [--source=<tree>] [--staged] [--worktree] --pathspec-from-file=<file> [--pathspec-file-nul]
+git restore (-p|--patch) [<options>] [--source=<tree>] [--staged] [--worktree] [--] [<pathspec>…​]
+
+
+3、术语、语法、选项解释
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	git-restore默认会使用index区覆盖工作区。如果使用--staged选项，使用HEAD覆盖
+index。不要指望一次性同时覆盖两者。

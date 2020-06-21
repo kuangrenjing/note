@@ -1,0 +1,31 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	相机镜头一般都存在畸变，所以需要做镜头畸变校正。海思Hisilicon PQ Tools有相关
+的内容，但不给你讲原理，设置各参数的意义也非常晦涩，基本没有可操作性。
+
+	显然，图像处理算法不是海思的自创，既然海思不给我们讲清除，我们可以寻找相关领
+域的经典算法，再拿这些算法对比海思的参数结构体以确定海思使用的是什么算法，我们再
+使用其它工具求出这些参数再丢给海思使之生效，也不失为一种曲线救国的策略。
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	通过阅读海思的《HiMPP V4.0媒体处理软件开发参考》文档，我们知道海思可以使用
+三种算法来进行镜头畸变校正（LDC Lens Distortion Correction），分别使用LDC_ATTR_S、
+LDCV2_ATTR_S和LDCV3_ATTR_S三个结构体表示。
+
+	LDC_ATTR_S似乎只考虑了“barrel”和“fish-eys”效应
+
+	LDCV2_ATTR_S还考虑了切向畸变，即镜片平面与探测器平面不平行导致的畸变。
+
+	https://docs.opencv.org/4.1.2/d4/d94/tutorial_camera_calibration.html
+	https://blog.csdn.net/weixin_42578378/article/details/89300701
+	https://www.cnblogs.com/riddick/p/6711263.html
+	
+
+
+	单应性矩阵(homography)
+
+
+2、相机标定的原理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+参考1：相机标定（1）内\外参矩阵和畸变矩阵（非常重要）
+	https://blog.csdn.net/qq_30815237/article/details/87530011
+	https://blog.csdn.net/xholes/article/details/80599802

@@ -1,0 +1,57 @@
+1、密码设备简单介绍：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1.1、常见的密码设备有哪些
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	加密机、动态口令、密码键盘、密钥分发器
+
+1.2、密码设备分类
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	1)、基于IC卡技术的密码设备。主要包括IC卡、USB Key。IC卡通过串口与主机连接，
+用ISO7816协议通信；USB Key通过USB与主机连接，通过USB协议通信。
+	2)、密码卡。通过主机主板上的扩展槽与主机连接，采用PCI、PCI-E等协议通信。
+	3)、密码机。通过网络接口与主机连接，用TCP/IP协议通信。
+
+1.3、密码设备私钥存储方式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	https://www.fisec.cn/675.html
+
+1.4、私钥存储安全性
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	密码设备有很好的安全性，能有效安全存储私钥，具体措施包括：
+	1)、不让私钥以明文形式导出密码设备；
+	2)、密码设备能有效防止非法强制入侵或破坏。如密码机硬件被非法强制打开时，将自
+动销毁全部密钥。
+	3)、不允许远程配置管理密码设备，只允许通过密码机自带的管理屏幕操作。
+	4)、配置管理时用高强度的身份认证手段，如口令、指纹、密码卡。有些配置管理还需
+要多人一起操作。
+
+1.5、私钥访问方式
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	因私钥保存在密码设备中，为保证安全性，应用系统不让直接从密码设备中取出私钥后
+再解密或签名，而是向密码设备发送解密或签名请求，委托密码设备间接调用私钥实现解密
+或签名。
+	应用系统可通过以下几种方式访问私钥：
+	1)、报文方式。应用系统直接把待解密或签名的数据组成请求包，发送给密码设备，密
+码设备完成解密或签名后，将响应包返回给应用系统。报文协议可用APDU、XML、TLV等；
+APDU适用于IC类密码设备，XML、TLV等适用于密码机或密码卡。通信协议可用TPDU(T=0或
+T=1)、USB、串口、PCI或PCIE、TCP/IP、HTTP、FTP等。TPDU、USB、串口等适用于IC类密码
+设备；PCI或PCIE等适用于密码卡；TCP/IP、HTTP、FTP等适用于密码机。
+	2)、API方式。采用这种方式应该是为一屏蔽底层差异，给客户提供统一接口。应用系统
+直接把待解密或签名的数据提交给本地API接口模块，由API接口模块作为代理，将待解密或
+签名的数据组成请求包，采用报文方式发送给密码设备，密码设备完成解密或签名操作后，把
+响应包返回给API接口模块，由API接口模块解析响应包后，将结果数据返回给应用系统。常见
+的API规范由PKCS#11、CrptoAPI、CAPICom、JCE、PCSC、国密接口等。
+
+2、密码设备相关术语[国密标准]
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2.1、设备密钥 device key pair
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	存储在设备内部的用于设备管理的非对称密钥对，包含签名密钥对和加密密钥对。
+
+	设备管理具体是什么骚操作呢？
+
+2.2、密钥加密密钥
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	对密钥进行加密保护的密钥。
+
+
