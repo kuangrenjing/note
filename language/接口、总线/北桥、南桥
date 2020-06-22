@@ -1,0 +1,12 @@
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一般来说，主板上除了CPU外还有两个主要芯片，靠上方(离CPU近)的叫北桥，也称为
+主桥(Host Bridge)，靠下方(离CPU远)的叫南桥。
+
+	大体上说：北桥负责与CPU通信，并且连接高速设备(内存/显存/PCIe)，南桥负责与低速
+设备进行通信
+
+
+2、发展历程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Intel从第一代Core i7 (i7 9xx)开始，将原属于北桥功能的内存控制器整合到CPU当中，在主流机Core i中(i7 8xx)更将PCI-e控制器（主要负责连接显卡）整合到CPU当中，这时候传统意义上的北桥的所有功能都已经整合到CPU内部了，所以Intel 50系芯片“组”（X58除外，这是搭配i7 9xx用的，还有北桥）已经没有传统意义的北桥了，而南桥依然负责处理低速设备（SATA/USB/PCI等）、时钟等功能。由于只剩下一个芯片了，也没有“芯片组”的说法了，只剩下孤零零的PCH (Platform Controller Hub)。

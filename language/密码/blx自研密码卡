@@ -18,7 +18,12 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	def.h文件中定义了CmdHead RspHead，不过逻辑比较乱，跟文档不太相符。
 
 
-
+2、驱动源码解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+PCI配置头信息：
+	nf2kernel.h提供了：
+		PCI_VENDOR_ID_STANFORD
+		PCI_DEVICE_ID_STANFORD_NF2
 
 
 2、源码解析

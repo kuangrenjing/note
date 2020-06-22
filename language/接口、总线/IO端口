@@ -1,0 +1,25 @@
+https://blog.csdn.net/wosiwozaiwhy/article/details/41521373
+
+x86系统IO地址空间
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	在X86系统上，内存和IO不是统一编址的，它们的访问指令不相同，访问IO的指令是IN
+和OUT指令。
+
+	在X86系统上，IO地址又称为IO端口，范围：0~65535
+
+x86系统IO地址空间映射
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	PC的外设千差万别，如何把各设备的本地IO地址映射到系统的IO地址空间中去呢？答案
+是PCI配置空间（详见PCI接口篇）。
+
+	通过/proc/ioports可以查看各设备的IO端口范围
+
+
+x86系统IO内存
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	因为x86的IO地址空间只有64K(0~0xfffff)，这个空间实在是太小了，在有些应用场合
+下根本不够用，譬如一般图形采集卡都带有16M以上的缓存区，这个缓存区就不能作为IO端口
+使用。
+
+
+https://blog.csdn.net/wosiwozaiwhy/article/details/41521373
