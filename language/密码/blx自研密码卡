@@ -30,9 +30,10 @@ PCI配置头信息：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 def.h文件规定：
-	0x20000 ~ 0x21000存放随机数(4096字节长度)
+	0x20000 ~ 0x20fff存放随机数(4096字节长度)
+	0x10000 ~ 0x10fff(4K)用于ARM与上位机交互
 
-	#define REGS_ADDR_DATA (0x10000)
+#define REGS_ADDR_DATA (0x10000)
 #define REGS_ADDR_RANDOMS (0x20000)
 
 

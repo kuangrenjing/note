@@ -88,6 +88,10 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	在空仓库下执行"git clone git@github.com:kuangrenjing/note.git"
 
+【注】
+	如果远程仓库存在多个分支，我们需要克隆的不是主分支，可以这样执行git-clone命令：
+	git clone -b <分支名> <仓库路径>
+
 	以后就使用"git pull origin master:master"命令来拉取远程仓库了，origin是使用
 "git remote add"设置的远程仓库的本地别名。
 

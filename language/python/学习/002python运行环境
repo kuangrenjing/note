@@ -1,0 +1,28 @@
+windows系统
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	我的PC上安装了两个版本的python, python2.7安装在C:/Python27目录；python37安
+装在C:/Program Files/Python37目录。以目标脚本D:/share/note/language/python/test/0-100/001.py
+为例：
+	d:
+	cd share/note/language/python/test/0-100
+	c:/"program file"/python37/python 001.py
+
+
+Python解释器获取输入
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://docs.python.org/zh-cn/3/reference/toplevel_components.html
+
+	Python解释器可以从多种源获得输入：
+	作为标准输入或程序参数传入的脚本；
+	以交互方式键入的语句；导入的模块源文件。
+
+
+python运行环境
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+最小初始化环境：
+	all built-in and standard modules are available, but none have been 
+initialized, except for sys (various system services), builtins (built-in 
+functions, exceptions and None) and __main__。实际上，运行环境初始化时会创建sys
+模块对象，但并不会绑定它，可以使用dir()函数查看__main__模块的命名空间，看到其中并
+没有sys名字。builtins模块会被创建并绑定到__builtins__。
+

@@ -1,0 +1,130 @@
+1、sdf规定的错误码
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#define  SDR_OK                0x0                        /*成功*/
+#define  SDR_BASE              0x01000000
+#define SDR_UNKNOWERR          (SDR_BASE + 0x00000001)    /*未知错误*/
+#define SDR_NOTSUPPORT         (SDR_BASE + 0x00000002)    /*不支持*/
+#define SDR_COMMFAIL           (SDR_BASE + 0x00000003)    /*通信错误*/
+#define SDR_HARDFAIL           (SDR_BASE + 0x00000004)    /*硬件错误*/
+#define SDR_OPENDEVICE         (SDR_BASE + 0x00000005)    /*打开设备错误*/
+#define SDR_OPENSESSION        (SDR_BASE + 0x00000006)    /*打开会话句柄错误*/
+#define SDR_PARDENY            (SDR_BASE + 0x00000007)    /*权限不满足*/
+#define SDR_KEYNOTEXIST        (SDR_BASE + 0x00000008)    /*密钥不存在*/
+#define SDR_ALGNOTSUPPORT      (SDR_BASE + 0x00000009)    /*不支持的算法*/
+#define SDR_ALGMODNOTSUPPORT   (SDR_BASE + 0x0000000A)    /*不支持的算法模式*/
+#define SDR_PKOPERR            (SDR_BASE + 0x0000000B)    /*公钥运算错误*/
+#define SDR_SKOPERR            (SDR_BASE + 0x0000000C)    /*私钥运算错误*/
+#define SDR_SIGNERR            (SDR_BASE + 0x0000000D)    /*签名错误*/
+#define SDR_VERIFYERR          (SDR_BASE + 0x0000000E)    /*验证错误*/
+#define SDR_SYMOPERR           (SDR_BASE + 0x0000000F)    /*对称运算错误*/
+#define SDR_STEPERR            (SDR_BASE + 0x00000010)    /*步骤错误*/
+#define SDR_FILESIZEERR        (SDR_BASE + 0x00000011)    /*文件大小错误或输入数据长度非法*/
+#define SDR_FILENOEXIST        (SDR_BASE + 0x00000012)    /*文件不存在*/
+#define SDR_FILEOFSERR         (SDR_BASE + 0x00000013)    /*文件操作偏移量错误*/
+#define SDR_KEYTYPEERR         (SDR_BASE + 0x00000014)    /*密钥类型错误*/
+#define SDR_KEYERR             (SDR_BASE + 0x00000015)    /*密钥错误*/
+
+
+
+2、各功能可能会遇到的错误码？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+获取指定索引的KEK        SDR_KEYNOTEXIST
+
+
+
+
+3、卡端代码的错误码
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#ifndef __ERRORS_H__
+#define __ERRORS_H__
+
+//杂项错误
+#define ERR_SRAM_READ (0x01)
+#define ERR_CARD_INIT (0x02)
+
+#define ERR_KEY_KEYNUM  (0x1001)
+#define ERR_KEY_ARG     (0x1002)
+#define ERR_KEY_KEYLEN  (0x1003)
+#define ERR_KEY_NOEXIST (0x1004)
+#define ERR_INFO_NUM    (0x1005)
+#define ERR_INFO_LEN    (0x1006)
+
+#define ERR_CMD_DATALEN    (0x2001)
+#define ERR_CMD_MALLOC     (0x2002)
+#define ERR_CMD_FILECREAT  (0x2003)
+#define ERR_CMD_FILEDELETE (0x2004)
+#define ERR_CMD_FILEWRITE  (0x2005)
+#define ERR_CMD_FILEREAD   (0x2006)
+#define ERR_CMD_GETFILELIST (0x2007)
+#define ERR_CMD_CLEANFILESPACE (0x2008)
+
+#define ERR_RNG_GENERATE (0x3001)
+
+#define ERR_ALG_ARGUMENT   (0x4001)
+#define ERR_ALG_NORESPONSE (0x4002)
+#define ERR_ALG_RSPLEN     (0x4003)
+#define ERR_ALG_SM2VERIFY  (0x4004)
+#define ERR_ALG_SM2DECRYPT (0x4005)
+
+#endif
+
+
+
+修正后：
+
+#ifndef __ERRORS_H__
+#define __ERRORS_H__
+
+//杂项错误
+//#define ERR_SRAM_READ (0x01)
+//#define ERR_CARD_INIT (0x02)
+/*
+ * @密码卡内部模块工作不正常：譬如内存、FLASH、随机数发生
+ *	器、FPGA等的访问错误，无响应等。
+ */
+#define ERR_INTERNAL  (0x01)    //密码卡内部模块工作不正常
+
+//密钥类错误
+#define ERR_KEY_INDEX   (0x1001)  //指定的密钥索引不合法
+#define ERR_KEY_LEN     (0x1002)  //指定的密钥长度不合法
+#define ERR_KEY_NOEXIST (0x1003)  //指定索引的密钥不存在
+//#define ERR_KEY_KEYNUM  (0x1004)
+//#define ERR_KEY_ARG     (0x1005)
+//#define ERR_INFO_NUM    (0x1006)
+//#define ERR_INFO_LEN    (0x1007)
+
+//算法运算类错误
+#define ERR_ALG_NOTSUPPORT     (0x2001)  //不支持指定算法
+#define ERR_ALG_MODENOTSUPPORT (0x2002)  //算法模式不支持
+
+//文件类错误
+#define ERR_FILE_NAMELEN       (0x3001)  //指定的文件名长度不合法
+#define ERR_FILE_NAME          (0x3002)  //指定的文件名不合法
+#define ERR_FILE_ROOMNOTENOUGH (0x3003)  //文件空间不足，不足以放下指定长度的新建文件
+#define ERR_FILE_NOTEXIST      (0x3004)  //指定文件不存在
+#define ERR_FILE_EXIST         (0x3005)  //指定文件已存在
+#define ERR_FILE_OFFSET        (0x3006)  //指定偏移量不合法
+#define ERR_FILE_NAMEOFFSET    (0x3007)  //文件名列表偏移量不合法
+//#define ERR_CMD_DATALEN        (0x2001)
+//#define ERR_CMD_MALLOC         (0x2002)
+//#define ERR_CMD_FILECREAT      (0x2003)
+//#define ERR_CMD_FILEDELETE     (0x2004)
+//#define ERR_CMD_FILEWRITE      (0x2005)
+//#define ERR_CMD_FILEREAD       (0x2006)
+//#define ERR_CMD_GETFILELIST    (0x2007)
+//#define ERR_CMD_CLEANFILESPACE (0x2008)
+
+
+
+//管理类错误
+//信息类错误？
+
+//#define ERR_RNG_GENERATE (0x3001)
+//#define ERR_ALG_ARGUMENT   (0x4001)
+//#define ERR_ALG_NORESPONSE (0x4002)
+//#define ERR_ALG_RSPLEN     (0x4003)
+//#define ERR_ALG_SM2VERIFY  (0x4004)
+//#define ERR_ALG_SM2DECRYPT (0x4005)
+
+#endif
+

@@ -1,0 +1,19 @@
+
+
+
+
+2、属性命名规则
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	xx:公有变量
+
+	_x: 单前置下划线,私有化属性或方法，from somemodule import *禁止导入,类对象
+和子类可以访问
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	__xx：双前置下划线,避免与子类中的属性命名冲突，无法在外部直接访问(使用名字
+重整(name mangling)技术所以访问不到)。名字重整，那整成了啥呢，其实就是_类名__xx
+，这样，父类、子类就可以拥有名字看上去一样的变量了。
+
+	__xx__:双前后下划线,用户名字空间的魔法对象或属性。例如:__init__，不要自己发
+明这样的名字
+
+	xx_:单后置下划线,用于避免与Python关键词的冲突

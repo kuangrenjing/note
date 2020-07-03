@@ -65,6 +65,9 @@ Linux现在支持多个PCI domain，每个PCI domain管理256个bus（2^8），�
 
 PCI驱动
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/zhongzhe/articles/3897166.html   配置空间中base address registor的操作
+
+
 PCI有三个空间：Configuration Space、Memory Space、IO Space。
 
 对Legacy PCI来讲，Configuration Space有256 Bytes
@@ -77,3 +80,14 @@ lspci -s 00:03.0 -vxx 可以查看“00:03.0”设备的配置空间
 
 
 配置空间应该存在于板卡内部。
+
+
+
+PCI总线操作
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	对驱动开发者而言，可简单了解。
+	command  
+
+
+kmalloc与vmalloc
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

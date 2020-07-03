@@ -1,5 +1,58 @@
-1、独立的程序
-	一个以"py"为后缀的文件就是一个独立的python程序。
+1、模块简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://docs.python.org/zh-cn/3/tutorial/modules.html
+
+	一个以"py"为后缀的文件就是一个独立的python程序。python程序可以直接交给解释器
+运行，也可以通过导入机制导入到其它python程序中使用，此时它被称为模块。
+
+	每一个python程序都是一个独立的命名空间，有它自己的符号表。
+
+	python程序内包含定义(变量、函数、类等)和可执行的语句。当直接运行时，可执行代码
+被执行，但作为模块时，可执行代码只在被导入时被执行一次。在程序内部，可通过__name__
+特殊变量来判断自身是被作为模块还是被直接运行的，从来调用不同的代码。
+
+Python 中只有模块（module），类（class）以及函数（def、lambda）才会引入新的作用域
+
+
+
+作用域与命名空间
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://docs.python.org/zh-cn/3/tutorial/classes.html#python-scopes-and-namespaces
+
+	命名空间是一个名字到对象的映射的集合，这个集合内的名字具有相同的生存期。命名
+空间是彼此独立的。
+
+	作用域规定了名字的可见性。
+
+python有三种命名空间：
+	内置命名空间，通常放置在模块的__builtins__变量中
+	全局命名空间
+	局部命名空间
+
+作用域是从程序的文本区域角度考虑的，基于此，一个典型的嵌套作用域是这样的：
+	最先搜索最内部作用域（文本区域）所属的命名空间
+	搜索外层作用域所属的命名空间（闭包、递归调用等），对当前作用域而言，这些变量
+称为“非局部变量nolocal”
+	搜索当前模块的全局命名空间
+	搜索内置命名空间
+
+	名称可以使用命名空间限定访问，这没有问题，如果采用非限定访问方式，那就涉及
+到作用域搜索问题。
+
+
+导入体系
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://docs.python.org/zh-cn/3.8/reference/import.html
+
+__import__函数
+
+	当我们使用import语句时，内置命名空间的__import__函数将被调用，当然我们也可以
+直接调用__import__函数。
+
+	相对导入 绝对导入
+https://my.oschina.net/u/4477231/blog/4328359
+
+python2默认是相对导入 python3默认是绝对导入。
 
 
 
@@ -48,5 +101,99 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 参考：
 https://docs.python.org/zh-cn/3/library/
 
-
 C:\Program Files\Python38\Lib
+
+6.1、keyword(python保留字)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	此库的kwlist变量保存了python当前版本所使用的所有保留字
+
+
+7、模块初始化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+8、模块属性
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+__all__
+
+
+
+
+__name__(导入体系相关)
+
+    __name__ 属性必须被设为模块的完整限定名称。 此名称被用来在导入系统中唯一地标识模块。
+
+__loader__(导入体系相关)
+
+    __loader__ 属性必须被设为导入系统在加载模块时使用的加载器对象。 这主要是用于内省，但也可用于额外的加载器专用功能，例如获取关联到加载器的数据。
+
+__package__(导入体系相关)
+
+    模块的 __package__ 属性必须设定。 其取值必须为一个字符串，但可以与 __name__ 取相同的值。 当模块是包时，其 __package__ 值应该设为其 __name__ 值。 当模块不是包时，对于最高层级模块 __package__ 应该设为空字符串，对于子模块则应该设为其父包名。 更多详情可参阅 PEP 366。
+
+    该属性取代 __name__ 被用来为主模块计算显式相对导入，相关定义见 PEP 366。 预期它与 __spec__.parent 具有相同的值。
+
+    在 3.6 版更改: __package__ 预期与 __spec__.parent 具有相同的值。
+
+__spec__(导入体系相关)
+
+    __spec__ 属性必须设为在导入模块时要使用的模块规格说明。 对 __spec__ 的正确设定将同时作用于 解释器启动期间初始化的模块。 唯一的例外是 __main__，其中的 __spec__ 会 在某些情况下设为 None.
+
+    当 __package__ 未定义时， __spec__.parent 会被用作回退项。
+
+    3.4 新版功能.
+
+    在 3.6 版更改: 当 __package__ 未定义时，__spec__.parent 会被用作回退项。
+
+__path__(导入体系相关，加载器设置？)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	如果模块为包（不论是正规包还是命名空间包），则必须设置模块对象的__path__属
+性。属性值必须为可迭代对象，但如果__path__没有进一步的用处则可以为空。如果__path__
+不为空，则在迭代时它应该产生字符串。
+
+	不是包的模块不应该具有__path__属性。
+
+__file__(导入体系相关)
+__cached__(导入体系相关)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	
+
+    __file__ 是可选项。 如果设置，此属性的值必须为字符串。 导入系统可以选择在其没有语法意义时不设置 __file__ (例如从数据库加载的模块)。
+
+    如果设置了 __file__，则也可以再设置 __cached__ 属性，后者取值为编译版本代码（例如字节码文件）所在的路径。 设置此属性不要求文件已存在；该路径可以简单地指向应该存放编译文件的位置 (参见 PEP 3147)。
+
+    当未设置 __file__ 时也可以设置 __cached__。 但是，那样的场景很不典型。 最终，加载器会使用 __file__ 和/或 __cached__。 因此如果一个加载器可以从缓存加载模块但是不能从文件加载，那种非典型场景就是适当的。
+
+
+
+__dict__???
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8、常见模块
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+_frozen_importlib
+
+
+os
+
+__future__
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Python提供了__future__模块，把下一个新版本的特性导入到当前版本，于是我们就
+可以在当前版本中测试一些新版本的特性。

@@ -1,0 +1,21 @@
+
+
+
+1、标识符一般规则
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	第一个字符必须是字母表中字母或下划线_。
+	标识符的其他的部分由字母、数字和下划线组成。
+	标识符对大小写敏感。
+	在Python3中，可以用中文作为变量名，非ASCII标识符也是允许的了。
+
+
+2、特殊标识符-下划线
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/navysummer/p/10438779.html
+https://blog.csdn.net/nba199044/article/details/99985447    一些常见的特殊变量
+
+Python用下划线作为变量前缀和后缀指定特殊变量
+	_xxx 不能用’from module import *’导入
+	__xxx__ 系统定义名字
+	__xxx 类中的私有变量名
+核心风格：避免用下划线作为变量名的开始。
