@@ -1,7 +1,55 @@
-函数
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://docs.python.org/zh-cn/3/reference/compound_stmts.html#function     符合语句-函数
+https://docs.python.org/zh-cn/3/reference/expressions.html#calls           表达式-调用
+
+1、函数的一般概念
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	()是函数调用运算符
-	def 函数名(): 定义函数
+	函数定义语句采用def格式，函数定义语句被执行后生成一个函数对象(函数可执行语
+句的包装器)
+	函数调用语句采用()格式
+
+2、函数的定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2、python3 函数定义完整语法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+funcdef                   ::=  [decorators] "def" funcname "(" [parameter_list] ")"
+                               ["->" expression] ":" suite
+decorators                ::=  decorator+
+decorator                 ::=  "@" dotted_name ["(" [argument_list [","]] ")"] NEWLINE
+dotted_name               ::=  identifier ("." identifier)*
+parameter_list            ::=  defparameter ("," defparameter)* "," "/" ["," [parameter_list_no_posonly]]
+                                 | parameter_list_no_posonly
+parameter_list_no_posonly ::=  defparameter ("," defparameter)* ["," [parameter_list_starargs]]
+                               | parameter_list_starargs
+parameter_list_starargs   ::=  "*" [parameter] ("," defparameter)* ["," ["**" parameter [","]]]
+                               | "**" parameter [","]
+parameter                 ::=  identifier [":" expression]
+defparameter              ::=  parameter ["=" expression]
+funcname                  ::=  identifier
+
+
+函数定义语法中涉及的“术语”有：
+	修饰器(decorator)
+	标注
+	位置参数、关键字参数、默认值参数、额外参数(位置型、关键字型)
+	单星号参数、双星号参数
+
+
+
+3
+
+3、函数调用
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	首先明确，python中调用语法是统一的(针对可调用对象：用户定义的函数，内置函数，
+内置对象的方法，类对象，类实例的方法以及任何具有 __call__() 方法的对象都是可调用
+对象)。
+
+
+
+
+
+
 	位置参数 跟c/c++语言类似
 	关键字参数 调用时指定参数名(即传入的参数可以与函数定义的参数顺序不相同)
 	使用*收集位置参数
@@ -14,3 +62,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 改变和存储函数外创建的变量的值
 
 	函数返回函数会形成一个闭包
+
+
+函数标注
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	使用函数参数标注，能提示程序员应该怎样正确使用这个函数，相当于c语言中的原型
+作用，但他对函数无任何功能限制（不按提示类型输入它不检查报错），只起提示作用。

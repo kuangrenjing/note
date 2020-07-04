@@ -1,0 +1,14 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://docs.python.org/zh-cn/3/reference/compound_stmts.html#function
+
+
+
+
+6、函数定义
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	函数定义执行和函数调用执行是两个不同的概念。函数定义执行的是函数定义语句，
+函数定义的执行类似于c语言中的编译过程，生成一个函数对象(函数的可执行语句的包装器)。
+
+	函数对象有独立的命名空间，这个函数对象包含对当前全局命名空间的引用，作为函数
+被调用时所使用的全局命名空间。
