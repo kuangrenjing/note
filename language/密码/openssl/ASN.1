@@ -1,0 +1,59 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/liao20081228/article/details/77411474
+https://blog.csdn.net/gdfhhj/article/details/83722771
+
+
+
+1、数据序列化
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	数据序列化:将高级语言代码转变成二进制流的过程称为数据的序列化，数据序列化的
+目的是物理存储或网络传输。在计算机高级程序编程语言里有许多结构化的结构，比如：
+数、图和结构体等，如何在网络中传输这些结构化的结构数据呢？我们知道高级语言里面的
+任何代码最终在网络中都是以二进制流的形式进行传输的，但是对于结构化的数据除了编成
+二进制码外，他们之间还存有一定的关系，为了在对方仍然知道这些关系以用来还原之前的
+结构，因此除了对结构化的数据进行编码外还得需要保存好他们的结构关系。
+
+	以二叉树为例，在tcp协议传输数据的时候，把网络看作一个“流”（类似管道），数据
+从一边流进去从另一边流出来，但是二叉树要塞到这个“流”里面怎么塞呢，只能把它变成数
+组类似的东西，到了另一边再恢复成二叉树，就像运输床的时候要先拆开，到了目的地再把
+床头啊床板啊什么的装回去。
+
+	为了解决高级语言中结构化数据在网络传输中的结构关系能送达目的地进行还原，历史
+上出现了以下几种数据序列化的方法：ASN.1(二进制方法)，XML(文本、二进制结合方法)，
+Json(文本方法)等。
+
+2、ASN.1简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ASN.1全称为Abstract Syntax Notation One(抽象语法标记)，是一种描述数字对象的
+方法和标准，目前，很多软件和协议使用此标准。ASN.1作为一个数字对象描述标准，包括
+了两部分，分别为数据描述语言(ISO8824)和数据编码规则(ISO8825)。ASN.1的数据描述语
+言标准允许用户自定义基本数据类型，并可以通过简单的数据类型组成更复杂的数据类型。
+比如一个复杂的数据对象，如X509证书，就是在其它一些数据类型上定义的，而其它数据类
+型又是在更基本的数据类型上建立的，直到回溯到定义的最基本的数据类型。
+
+3、ASN.1详解
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	略过。只需知道它是用来做“数据序列化”的即可。
+
+4、Openssl的ASN.1的实现
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、DECLARE_ASN1_FUNCTIONS IMPLEMENT_ASN1_FUNCTIONS
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)、参考
+https://blog.csdn.net/sszgg2006/article/details/42395895
+
+2)、实例讲解
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+DECLARE_ASN1_FUNCTIONS(X509)实际上声明了下列4个函数：
+	X509_new();
+	X509_free();
+	i2d_X509();
+	d2i_X509();
+
+有声明就得有定义，IMPLEMENT_ASN1_FUNCTIONS(X509)又分别定义了这四个函数。
+
+
+4.2、ITEM TEMPLATE
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	include/openssl/asn1t.h

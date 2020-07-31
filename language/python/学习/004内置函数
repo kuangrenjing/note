@@ -158,6 +158,10 @@ sorted()
 
 
 4、函数说明
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	这些函数有些类型是type，有些类型是builtin_function_or_method。他们都有__call__
+属性，属于可调用对象。
+
 4.1、print()函数
 	为什么print在Python3中变成了函数？
 		https://www.jianshu.com/p/74444d688efc
@@ -169,6 +173,13 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	列表、字符串、元组、字典、集合、zip()对象、range()对象是python的可迭代对象。
 在特定条件下文件、自定义对象也可迭代。
+
+	当你用for in 去操作list的时候，list也是马上先调用__iter__方法，返回一个迭代
+器对象，然后一直循环执行__next__方法，除非__next__方法抛出这个经典的StopIteration()
+异常，不然它就会一直遍历下去，一个一个元素的访问。
+
+	iter(a)会调用a对象的__iter__函数
+	next(a)会调用a对象的__next__函数
 
 
 4.3、range()函数
@@ -186,6 +197,15 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 排序相关
 4.5、sorted()
+
+
+4.6、type()
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	读取对象的__class__属性，此属性保存对象的类型名(当然，它也是个对象)
+
+4.7、dir()
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	调用对象的__dir__属性，这个属性是个函数，一般就是内建函数
 
 
 解包相关？？？

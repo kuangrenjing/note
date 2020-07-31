@@ -1,0 +1,12 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/aixiaoxiaoyu/articles/8352120.html
+http://gmssl.org/docs/sdf.html                                   sdf引擎
+https://blog.csdn.net/bytxl/article/details/39498769              一个实例
+
+
+Engine机制 Engine机制的出现是在OpenSSL的0.9.6版的事情，开始的时候是将普通版本跟支持Engine的版本分开的，到了OpenSSL的0.9.7版，Engine机制集成到了OpenSSL的内核中，成为了OpenSSL不可缺少的一部分。
+
+Engine机制目的是为了使OpenSSL能够透明地使用第三方提供的软件加密库或者硬件加密设备进行加密。OpenSSL的Engine机制成功地达到了这个目的，这使得OpenSSL已经不仅仅使一个加密库，而是提供了一个通用地加密接口，能够与绝大部分加密库或者加密设备协调工作。当然，要使特定加密库或加密设备更OpenSSL协调工作，需要写少量的接口代码，但是这样的工作量并不大，虽然还是需要一点密码学的知识。Engine机制的功能跟Windows提供的CSP功能目标是基本相同的。
+
+目前，OpenSSL的0.9.7版本支持的内嵌第三方加密设备有8种，包括：CryptoSwift、nCipher、Atalla、Nuron、UBSEC、Aep、SureWare以及IBM 4758 CCA的硬件加密设备。现在还出现了支持PKCS#11接口的Engine接口，支持微软CryptoAPI的接口也有人进行开发。当然，所有上述Engine接口支持不一定很全面，比如，可能支持其中一两种公开密钥算法。表1是OpenSSL-0.9.7版本支持的硬件及其对应的简要描述名称，这个简要描述名称在很多时候是要使用的，如编程或执行命令的时候，简要密钥名称是大小写敏感的，目前一般都是采用小写字符。 

@@ -1,0 +1,13 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/liao20081228/article/details/77193729
+
+
+1、简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	BIO是封装了许多类型I/O接口细节的一种应用接口。这样，应用程序可以和SSL连接、
+非加密的网络连接以及文件IO进行透明的连接。
+
+	事实上，BIO不单单封装了IO(文件、FD、内存、socket、connect、accept、BIO对、空)
+还封装了对从IO接受到的数据流的处理流程(buffer、加解密、md、base64、ssl、空)。基于
+此，BIO分为两大类：source/sink型(又分8种，见上)；filter型(又分6种，见上)。

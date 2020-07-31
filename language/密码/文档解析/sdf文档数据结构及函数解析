@@ -1,0 +1,19 @@
+
+
+ECC密文结构
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+typedef struct ECCCipher_st
+{
+	unsigned int  clength;  //C的有效长度
+	unsigned char x[ECCref_MAX_LEN];
+	unsigned char y[ECCref_MAX_LEN];
+	unsigned char C[ECCref_MAX_CIPHER_LEN];
+	unsigned char M[ECCref_MAX_LEN];
+} ECCCipher;
+
+	按照GM/T 0003.4-2012文档规定，SM2加密输出的密文是 C=C1||C3||C2，根据对比，
+C1就是ECCCipher中的x，y；C3就是ECCCipher中的M；C2就是ECCCipher中的C。所以ECCCipher
+中的x，y与ECCrefPublicKey中的不是一回事，它是在SM2加密过程中生成的随机数计算出的
+椭圆曲线点。
+
+

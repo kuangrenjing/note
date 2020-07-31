@@ -11,7 +11,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 2、函数的定义
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-2、python3 函数定义完整语法
+2.1、python3 函数定义完整语法
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 funcdef                   ::=  [decorators] "def" funcname "(" [parameter_list] ")"
                                ["->" expression] ":" suite
@@ -28,19 +28,56 @@ parameter                 ::=  identifier [":" expression]
 defparameter              ::=  parameter ["=" expression]
 funcname                  ::=  identifier
 
-
 函数定义语法中涉及的“术语”有：
 	修饰器(decorator)
 	标注
 	位置参数、关键字参数、默认值参数、额外参数(位置型、关键字型)
 	单星号参数、双星号参数
 
+2.2、修饰器(decorator)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	一个函数定义可以被一个或多个decorator表达式所包装。当函数被定义时将在包含该
+函数定义的作用域中对装饰器表达式求值。求值结果必须是一个可调用对象，它会以该函
+数对象作为唯一参数被发起调用。其返回值将被绑定到函数名称而非函数对象。多个装饰
+器会以嵌套方式被应用。(意思是函数名已经跟原始函数对象解绑，然后绑定到修饰器的返
+回对象上？？？)
 
+2.3、标注
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	标注相当于C语言函数原型的参数类型，返回值类型限定。但python函数调用时并不检
+查参数类型，也不转换返回值类型。标注只起提醒使用者如何使用函数的作用。
 
-3
+标注的格式示例:
+	def add(a:int, b:int)->int:
+		return (a+b)
+提醒使用者此函数接受两个int类型的参数，返回一个int类型的返回值。
+
+2.4、函数参数类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	python函数参数的概念比较多，具体来看：
+	函数调用时可以按照函数定义时的参数位置来给参数赋值（位置参数），也可以通过
+指定参数名来给参数赋值（关键字参数），还可以使用定义时的默认值来给参数赋值，调用
+时参数个数可以比定义时的多。
+
 
 3、函数调用
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+3.1、python3函数调用的完整语法
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+call                 ::=  primary "(" [argument_list [","] | comprehension] ")"
+argument_list        ::=  positional_arguments ["," starred_and_keywords]
+                            ["," keywords_arguments]
+                          | starred_and_keywords ["," keywords_arguments]
+                          | keywords_arguments
+positional_arguments ::=  positional_item ("," positional_item)*
+positional_item      ::=  assignment_expression | "*" expression
+starred_and_keywords ::=  ("*" expression | keyword_item)
+                          ("," "*" expression | "," keyword_item)*
+keywords_arguments   ::=  (keyword_item | "**" expression)
+                          ("," keyword_item | "," "**" expression)*
+keyword_item         ::=  identifier "=" expression
+
+
 	首先明确，python中调用语法是统一的(针对可调用对象：用户定义的函数，内置函数，
 内置对象的方法，类对象，类实例的方法以及任何具有 __call__() 方法的对象都是可调用
 对象)。

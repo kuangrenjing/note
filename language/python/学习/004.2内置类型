@@ -1,0 +1,23 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://docs.python.org/zh-cn/3/library/stdtypes.html#typeiter
+
+一切皆对象之根源
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+python是原型语言吗？
+
+
+1、容器
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/nicolas923/p/8625216.html
+https://blog.csdn.net/qq_34246164/article/details/81154904
+	python官方似乎并没有明确规定容器对象的具体定义。
+
+	一个网路上可见的定义：在某些对象中会包含对其它对象的引用，这样的对象被称作容
+器(containers)。但这个定义并不特别准备，按照这个定义来套，除了不可变对象，其它python
+对象都是容器了。
+
+
+
+抽象基类class type???

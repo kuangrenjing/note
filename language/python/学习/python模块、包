@@ -44,6 +44,11 @@ python有三种命名空间：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://docs.python.org/zh-cn/3.8/reference/import.html
 
+一个模块的加载过程分为三个子步骤：
+	搜寻
+	加载
+	名称绑定
+
 __import__函数
 
 	当我们使用import语句时，内置命名空间的__import__函数将被调用，当然我们也可以
@@ -53,6 +58,19 @@ __import__函数
 https://my.oschina.net/u/4477231/blog/4328359
 
 python2默认是相对导入 python3默认是绝对导入。
+
+
+importlib
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/TMesh/p/11735933.html
+
+	importlib.__import__
+	实现内置__import__的功能，但强烈不建议拿importlib.__import__替换
+__builtins__.__import__
+
+
+相对导入与绝对导入
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
 
@@ -116,6 +134,8 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 8、模块属性
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 __all__
+	这是包的属性，一般在__init__.py中定义，可以是__init__.py中定义的函数，也可以
+是包的子包或模块。"from <name> import *"语法会使用到这个变量。
 
 
 

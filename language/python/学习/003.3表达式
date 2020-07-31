@@ -1,0 +1,39 @@
+
+
+1、python运算符优先级
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+运算符                                                  描述
+:=                                                      赋值表达式
+lambda                                                  lambda 表达式
+if -- else                                              条件表达式
+or                                                      布尔逻辑或 OR
+and                                                     布尔逻辑与 AND
+not x                                                   布尔逻辑非 NOT
+in, not in, is, is not, <, <=, >, >=, !=, ==            比较运算，包括成员检测和标识号检测
+|                                                       按位或 OR
+^                                                       按位异或 XOR
+&                                                       按位与 AND
+<<, >>                                                  移位
++, -                                                    加和减
+*, @, /, //, %                                          乘，矩阵乘，除，整除，取余 5
++x, -x, ~x                                              正，负，按位非 NOT
+**                                                      乘方 6
+await x                                                 await 表达式
+x[index], x[index:index], x(arguments...), x.attribute  抽取，切片，调用，属性引用
+(expressions...),
+[expressions...], {key: value...}, {expressions...}     绑定或加圆括号的表达式，列表显示，字典显示，集合显示
+
+
+
+2、列表、集合与字典的显示
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+推导式
+	https://www.jianshu.com/p/0a269715a742
+	为了构建列表、集合或字典，Python提供了名为“显示”(displays)的特殊句法，每个
+类型各有两种形式:
+	第一种是显式地列出容器内容
+	第二种是通过一组循环和筛选指令计算出来，称为推导式。
+
+迭代器
+
+

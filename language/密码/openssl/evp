@@ -1,0 +1,17 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/liao20081228/article/details/76285896
+
+
+4、非对称加解密
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+4.1、相关文件(crypto/evp)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+主要是以 p_开头的文件。其中:
+	p_enc.c 封装了公钥加密；
+	p_dec.c 封装了私钥解密；
+	p_lib.c 实现一些辅助函数；
+	p_sign.c 封装了签名函数；
+	p_verify.c 封装了验签函数；
+	p_seal.c 封装了数字信封；
+	p_open.c 封装了解数字信封。

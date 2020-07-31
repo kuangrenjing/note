@@ -1,0 +1,14 @@
+1. OPENSSL简介
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	OpenSSL项目是一个协作开发一个健壮的，商业级的，全功能的，并且开放源代码工具
+包，它实现了安全套接字层(SSL v2/v3)和传输层安全(TLS v1)协议以及全强大的通用加密库。
+
+OPENSSL由3部分组成:
+	1. The SSL library(SSL、TLS开发代码库)
+	2. the Crypto library(密码学相关开发代码库)
+	3. command line tool(命令行工具，提供CA、证书等功能)
+
+
+EVP ENGINE
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
