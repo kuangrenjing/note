@@ -9,7 +9,7 @@ import os
 print("sys.path is ", sys.path)
 
 #import import_test.hello_who
-from .import_test import hello_who
+from import_test import hello_who
 
 print("hello_who.__file__ is ", hello_who.__file__)
 
