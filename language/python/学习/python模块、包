@@ -59,6 +59,8 @@ https://my.oschina.net/u/4477231/blog/4328359
 
 python2默认是相对导入 python3默认是绝对导入。
 
+ValueError: attempted relative import beyond top-level package
+
 
 importlib
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
