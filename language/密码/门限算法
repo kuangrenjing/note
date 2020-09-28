@@ -1,0 +1,14 @@
+https://www.docin.com/p-1411286615.html
+https://zhuanlan.zhihu.com/p/150535159                不错的
+https://blog.csdn.net/kety_gz/article/details/89366868    shamir秘密共享一个非常浅显的例子
+https://blog.csdn.net/QZC295919009/article/details/52387201?utm_source=blogxgwz3    2^8在线工具
+
+https://github.com/dsprenkels/sss   shamir源码
+
+
+1、秘密分享
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	秘密分享是所有门限密码算法的基础，解决了算法设计中密钥控制权安全分发的问题，
+用技术手段保障了隐私数据多方协作中，权利均衡、平等互信的效果。
+
+	常用的，容易理解的秘密分享技术是拉格朗日插值算法。

@@ -1,0 +1,7 @@
+
+
+
+1、设备管理类函数
+1)、ULONG SKF_EnumDev(IN BOOL bPresent, OUT LPSTR szNameList, 
+		IN OUT ULONG *pulSize);
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

@@ -43,6 +43,25 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	对于一个特定的ECC算法，椭圆曲线是选定的，基点和阶也是选定的。
 
 
+3) SM2 加密算法计算过程
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+加密者A用用户B的公钥进行加密
+
+用户B：
+	私钥：dB
+	公钥：PB = [dB]G
+
+A的计算过程：
+	使用随机数发生器产生随机数k [1, n-1]
+	计算曲线上一点C1，C1 =(x1, y1)= [k]G          (KG_compute_in_card)
+	检测S=[h]PB，若S是无穷点，则报错退出。此步骤可以与上一步合并
+	计算(x2, y2) = [k]PB                          (KP_compute_in_card)
+	计算C2 = M 与或 KDF(x2||y2, klen)
+	计算C3 = Hash(x2||M||y2)
+	加密结果：C=C1||C3||C2
+
+
+
 
 
 3、SM3

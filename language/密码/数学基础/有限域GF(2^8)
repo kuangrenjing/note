@@ -1,0 +1,88 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/luotuo44/article/details/41645597
+
+
+1、密码学中的逆运算
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	可以粗暴地逆运算是密文能恢复为明文的理论基础。一套加解密算法能成为加解密算法
+就在于此算法在其框架内存在逆运算。
+
+	但逆运算本身并不重要，譬如可以说3是8的逆元，也可以说5是8的逆元，只要一套数学
+理论作用于某一集合，此集合内各个元素都有逆元且逆元唯一，那此数学理论就定义了此集
+合上的一套加解密算法。
+
+2、域的概念
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	可以认为域是一个特殊的集合，在这个集合上，加法和乘法具有封闭性。也就是说对
+域中的元素进行加法或乘法（这种加法和乘法通常是自定义的，譬如定义与运算为加法运算，
+异或运算为乘法运算，这是没问题的）运算后的结果仍然是域中的元素。
+
+	域有单位元和逆元两个概念。
+
+	加法和乘法运算都有对应的单位元(这两个单位元一般不同，但都用符号e表示)。单位
+元就像线性代数的单位矩阵。一个矩阵乘以单位矩阵等于本身。对应地，在域中的单位元有：
+对于加法单位元，所有元素加上单位元e，等于其本身。对应乘法单位元，所有元素乘上单
+位e，等于其本身。
+
+	逆元就像数学上的倒数，两个元素互为对方的逆元。如果元素a和b互为加法逆元，那么
+就有 a + b = e。若互为乘法逆元，那么就有a * b = e。如果元素a在域中找不到另外一个
+元素b，使得a+b=e(a*b=e)，那么a就没有加法(乘法)逆元。
+
+	逆元有什么用呢？其实逆元是用于减法、除法运算的。
+
+	一个集合有加法单位元和乘法单位元，以及每一个元素都对应有加法逆元和乘法逆元，
+是成为域的必要条件。需要注意：即使集合里面有元素0，并且0没有对应的乘法逆元，那么
+该集合也可能是一个域。因为并不要求0有乘法逆元。
+
+	一个域的例子就是我们平时熟悉的有理数集合，相应的加法和乘法就是我们平时用的加
+法和乘法。其中，加法的单位元为0，有理数a的加法逆元就是其相反数。因为a + (-a) = 0
+(单位元)。乘法的单位元为1，a的乘法逆元是其倒数。因为a * (1/a) = 1。注意这里的元素
+0并没有乘法逆元。
+
+3、有限域
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	有限域，又称为伽罗瓦域(galois field)是指域中的元素个数是有限的。刚刚说到的
+有理数域显然就不是有限域。
+
+	根据以上的定义，有限域是一个非常宽泛的定义，因为它只规定了集合元素个数是有限
+的，并未规定具体集合，也未规定集合上的运算。
+
+4、有限域GF(p)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	GF(p)的定义：
+p为素数
+作用集合[0, p-1]
+a + b = (a + b)mod p                (注意这两个加号意义不同)
+a*b   = (a + a + ... + a) mod p
+
+可以证明，GF(p)的加法单位元是0，乘法单位元是1。
+
+5、有限域GF(2^n)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	GF(2^n)不是GF(p)，因为GF(p)要求p为素数，而2^n显然是个合数。所以GF(p)的那
+套定义不适用于GF(2^n)。
+
+	人们发现：对[0, p^n)，当p为素数时，可以构造一种运算，使之满足域的定义，这种
+运算是基于多项式的。在计算机领域，我们显然会选择p=2，通常我们还会选择n=8
+
+5.1、多项式的构造
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	重点是如何把集合与多项式对照起来。
+
+	以GF(2^3)为例，构造：
+f(x) = a1x^2 + a2x + a3 (a1, a2, a3 属于[0,1]，因为p=2)
+这样，通过多项式和它的系数就把多项式和集合对照起来的：
+多项式    0    1    x    x + 1    x^2    x^2 + 1    x^2 + x    x^2 + x + 1
+a1a2a3   000  001  010    011     100     101       110           111
+
+素多项式：
+	与素数类似，素多项式不能分解为两个多项式的乘积。
+
+
+5.2、多项式运算
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	加法、乘法就是正常的多项式乘法
+	合并同类项是异或操作
+	因为合并同类项是异或操作，所以没有减法，减法就是加法
+	使用素多项式进行mod运算，根据素多项式的不同，加法逆元和乘法逆元也不相同

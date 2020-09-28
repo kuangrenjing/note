@@ -1,0 +1,260 @@
+0、尚要解决的问题
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+0.1)、SDF库进程不安全
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+情况描述：
+	密码卡与驱动通过卡内缓冲区交换数据，但交换协议没有事务的概念，每次读写都是从
+读写缓冲区的起始位置进行，这就要求一次“写-读”过程必须是一个原子动作。
+
+解决方法：
+a)密码卡驱动加锁
+	密码卡驱动通过加锁让FPAG“写-读”，ARM“写-读”成为原子动作。
+
+b)sdf动态库加锁、且密码卡字符设备不能共享打开
+	仅仅sdf动态库加锁不能保证FPAG“写-读”，ARM“写-读”成为原子动作。因为锁智能影响
+进程内的线程同步。
+
+	控制密码卡字符设备不能共享打开：在nf2_open函数中使用设备打开计数静态变量。(20200904已解决)
+	sdf动态库加锁，目前来看应该在alg.cpp各函数中加锁。
+
+0.2)、SDF库线程不安全
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+情况描述:
+	与进程不安全情况类似
+
+解决方法
+	sdf动态库加锁
+
+
+
+1、驱动
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)、驱动整体
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	PCI设备一般都具有双重身份，一方面作为PCI设备注册到Linux内核，另一方面，作为
+字符设备或者块设备，或者网络设备注册到Linux内核，所以，在看PCI设备时一定要注意到
+这点。
+
+	一般情况下，都是在PCI设备驱动的Probe函数中，完成PCI设备驱动的初始化，以及作
+为字符设备，块设备，或者网络设备的注册与初始化功能。
+
+	在神州龙芯密码卡驱动中，PCI设备结构是nf2_pci_driver，它的probe函数是nf2_probe，
+nf2_probe函数中调用了nf2c_probe，nf2c_probe就是初始化字符设备的函数。
+2)、PCI接口
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	pci与FPGA通信
+	pci与ARM通信
+
+2.1)、pci与FPGA通信
+通信方式：
+	read write系统调用
+
+源码中相关类型：
+	nf2util.h中struct z_packet_header
+
+2.2)、pci与ARM通信
+通信方式：
+	读写共享内存
+
+源码中相关类型：
+	def.h文件中定义了CmdHead RspHead，不过逻辑比较乱，跟文档不太相符。
+
+
+3)、驱动源码解析
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+PCI配置头信息：
+	nf2kernel.h提供了：
+		PCI_VENDOR_ID_STANFORD
+		PCI_DEVICE_ID_STANFORD_NF2
+
+
+3.2)、ioremap ioread32
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+
+2、SDF动态库
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+def.h文件规定：
+	0x20000 ~ 0x20fff存放随机数(4096字节长度)
+	0x10000 ~ 0x10fff(4K)用于ARM与上位机交互
+
+#define REGS_ADDR_DATA (0x10000)
+#define REGS_ADDR_RANDOMS (0x20000)
+
+
+
+alg.cpp文件规定：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	#define SENDFLAG (0x5a5a5a5a)
+	#define RECVFLAG (0x5b5b5b5b)
+
+
+
+
+
+
+
+
+
+1、功能索引
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+《龙芯密码卡与上位机通讯协议》目前规定的功能：
+获取KEK
+写入或更新KEK
+内部生成或更新KEK
+销毁KEK
+获取SM2密钥对
+写入或更新SM2密钥对
+内部生成或更新SM2密钥对
+销毁SM2密钥对
+获取卡信息
+写入或更新卡信息
+销毁卡信息
+获取工作状态信息
+写入或更新工作状态信息
+密码卡初始化
+内部sm2密钥对私钥签名
+内部sm2密钥对公钥验签
+内部sm2密钥对公钥加密
+内部sm2密钥对私钥解密
+内部对称密钥加密
+内部对称密钥解密
+设备密钥对私钥签名
+设备密钥对公钥验签
+新建文件
+删除文件
+写文件
+读文件
+获取文件列表
+清空文件空间
+
+
+2、功能错误
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+《龙芯密码卡与上位机通讯协议》目前规定的功能：
+获取KEK                    密钥不存在  密钥索引不合法 未知错误
+写入或更新KEK              密钥索引不合法 密钥长度不合法  未知错误
+内部生成或更新KEK          密钥索引不合法 密钥长度不合法  未知错误
+销毁KEK                    密钥索引不合法  未知错误
+获取SM2密钥对              密钥不存在  密钥索引不合法 未知错误
+写入或更新SM2密钥对        密钥索引不合法 密钥长度不合法  未知错误
+内部生成或更新SM2密钥对    密钥索引不合法 密钥长度不合法  未知错误
+销毁SM2密钥对              密钥索引不合法  未知错误
+获取卡信息
+写入或更新卡信息
+销毁卡信息
+获取工作状态信息
+写入或更新工作状态信息
+密码卡初始化                
+内部sm2密钥对私钥签名
+内部sm2密钥对公钥验签
+内部sm2密钥对公钥加密
+内部sm2密钥对私钥解密
+内部对称密钥加密
+内部对称密钥解密
+设备密钥对私钥签名
+设备密钥对公钥验签
+新建文件
+删除文件
+写文件
+读文件
+获取文件列表
+清空文件空间
+
+
+获取卡信息
+SDF_GetDeviceInfo   SDF_GetKeyStatus(三未添加)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	1 生产厂商
+	2 设备型号
+	3 设备序列号
+	4 设备版本
+	5 支持标准版本
+	6 支持公钥算法
+	7 支持对称算法
+	8 支持杂凑算法
+	9 用户存储空间
+SWCSM_GetCurrentStatus
+
+
+卡管理
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+alg.h定义：
+
+	卡管理通过在ARM端开辟卡信息数组，然后用户设置、查询卡信息。卡信息数组每个元
+素长128字节，且掉电不保护。
+
+#define CARD_MANAGER_NUMBER_MAX        (0x3)                 最多3个管理员
+#define CARD_OPERATOR_NUMBER_MAX       (0x1)                 最多1个操作员
+
+#define CARD_CARDINFO_LEN              (128)
+#define CARD_CARDINFO_INDEX_WORKSTATUS (0x2)                 卡信息索引[2]存放工作状态
+#define CARD_CARDINFO_INDEX_MANAGER    (0x3)                 卡信息索引[3][4][5]存放管理员信息
+#define CARD_CARDINFO_INDEX_OPERATOR   (0x8)                 卡信息索引[8]存放操作员信息
+
+	在调用CMD_KEYCARDINIT(0x0101000d)，卡信息数组会被初始化。
+
+	卡信息索引[2]存放工作状态，长度为32字节。具体构造如下：
+struct workstatus_st{
+    unsigned char device_status;    CARD_WORKSTATUS_INIT、CARD_WORKSTATUS_UNKNOWN、CARD_WORKSTATUS_WORK
+    unsigned char manager_num;
+    unsigned char manager_exist[5];
+    unsigned char manager_log[5];
+    unsigned char operator_exist;
+    unsigned char reserve1;
+    unsigned char operator_log;
+    unsigned char reserves[17];
+};
+
+	从设计逻辑上看，似乎把SDF_OpenDevice作为“workstatus”更新的时机
+(card_workstatus_update)，SDF_OpenDevice之前登录的管理员、操作员都会在此时更新到
+“workstatus”中去。
+
+device_status状态切换
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	密码卡上电后ARM设置device_status为CARD_WORKSTATUS_UNKNOWN，
+SWCSM_InitDevice->card_workstatus_init设置device_status为CARD_WORKSTATUS_INIT，
+SDF_OpenDevice->card_workstatus_update可能会设置device_status为CARD_WORKSTATUS_WORK
+
+管理员添加和登录
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	SWCSM_AddOneManager->card_add_manager->设置workstatus.manager_exist相应索引
+为CARD_WORKSTATUS_EXIST，并设置卡信息响应索引的字节[0]为CARD_WORKSTATUS_EXIST，
+后面的字节为ukey_id，ukey的设备公钥。
+
+	SWCSM_Login->card_login：待整理
+
+权限与workstatus
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	权限宏定义在def.h，所以也是在内部使用：
+#define PERMISSIONS_NONE                 (0x00)
+#define PERMISSIONS_OPERATOR             (0x01)
+#define PERMISSIONS_ADMINISTRATOR        (0x02)
+#define PERMISSIONS_SUPER_ADMINISTRATOR  (0x04)
+#define PERMISSIONS_INIT                 (0x08)
+
+	我们注意到：SWCSM_InitDevice后、SWCSM_AddOneManager前后、SWCSM_DelOneManager前后、
+SWCSM_AddOneOperator前后、SWCSM_DelOneOperator前后、SWCSM_Login后、SWCSM_Logout后，
+都要调用card_permissions_get来获取权限，并保存到pSess->permissions。
+
+	思考：一般会话不调用这些函数，pSess->permissions怎么设置(PERMISSIONS_NONE还是
+PERMISSIONS_INIT)，它们是不是需要使用权限。
+
+	获取权限时：
+先把权限初始化为PERMISSIONS_NONE，
+如果workstatus为CARD_WORKSTATUS_INIT，或管理员数目为0把权限设置为PERMISSIONS_INIT，
+如果登录管理员数目超过0，权限设置为PERMISSIONS_ADMINISTRATOR
+如果登录管理员数目超过半数，权限加上(注意是加上)PERMISSIONS_SUPER_ADMINISTRATOR、PERMISSIONS_OPERATOR
+如果管理员登录了，权限加上PERMISSIONS_OPERATOR
+这样，前面定义的五种权限都覆盖到了。
+
+
+
+
+
+
+
+

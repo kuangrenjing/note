@@ -22,3 +22,17 @@ error: Pulling is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
 hint: as appropriate to mark resolution and make a commit.
 fatal: Exiting because of an unresolved conflict.
+
+
+
+3、git apply错误
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+git apply --ignore-whitespace ../cmp/sdf.cpp.patch
+error: corrupt patch at line 224
+
+我们要理解，.patch文件是由很多段组成的，段开口类似于下面的格式：
+
+@@ -1192,9 +1121,46 @@ SGD_RV SDF_GenerateAgreementDataAndKeyWithECC
+
+我们在手动删除.patch文件的段的时候一定要把段删干净，不然容易给其它段加上空行，造成
+合成失败。

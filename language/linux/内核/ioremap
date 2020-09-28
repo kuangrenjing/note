@@ -1,0 +1,20 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.linuxidc.com/Linux/2011-04/34295.htm   Linux内核中ioremap映射的透彻理解
+
+
+3、ioremap后不应直接操作IO虚拟地址
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	IO资源映射到内存地址空间后，不应直接操作映射后的虚拟地址，这是因为“I/O寄存
+器和常规内存”是不同的。
+
+	常规内存的唯一作用就是存储数据，而I/O寄存器的读写会引发其它的边际效应，譬如
+驱动一个动作单元工作。
+
+	而我们的编译器会对我们程序进行许多优化，譬如变量的缓存和指令的重排，这些优化
+可能会改变读写内存的次数和时机，这对内存没有问题，因为CPU和编译器清楚地了解它的
+功能就是存储，而I/O寄存器，CPU和编译器显然不能完全了解读写它们的边际效能。
+
+	所以，我们要使用操作系统提供的专门的I/O地址空间的读写函数进行I/O虚拟地址空间
+的读写工作，实际上这些函数主要做的工作就是避免读写工作被编译器优化。
+

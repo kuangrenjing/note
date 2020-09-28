@@ -33,7 +33,7 @@ python有三种命名空间：
 	最先搜索最内部作用域（文本区域）所属的命名空间
 	搜索外层作用域所属的命名空间（闭包、递归调用等），对当前作用域而言，这些变量
 称为“非局部变量nolocal”
-	搜索当前模块的全局命名空间
+	搜索当前模块的全局命名空间(函数有__module__属性)
 	搜索内置命名空间
 
 	名称可以使用命名空间限定访问，这没有问题，如果采用非限定访问方式，那就涉及
@@ -54,15 +54,29 @@ __import__函数
 	当我们使用import语句时，内置命名空间的__import__函数将被调用，当然我们也可以
 直接调用__import__函数。
 
-主模块、入口模块
+主模块、__main__模块
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	__name__属性值为__main__的模块
 
-	相对导入 绝对导入
-https://my.oschina.net/u/4477231/blog/4328359
+相对导入 绝对导入
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+1)参考
+	https://my.oschina.net/u/4477231/blog/4328359
 
-python2默认是相对导入 python3默认是绝对导入。
+2)总结
+	相对导入采用与linux相对路径类似的语法格式，譬如当前目录是一个点，父目录是两个
+点。(from .packet_name import module_name表示从当前目录下的packet_name子包中导入
+module_name模块；from . import module_name表示从当前目录导入module_name模块)
 
-ValueError: attempted relative import beyond top-level package
+	python2默认是相对导入 python3默认是绝对导入。
+
+	相对导入是基于模块的__name__属性的。（所以在__main__模块中不能相对导入。）
+
+3)错误说明
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	ValueError: attempted relative import beyond top-level package(这是因为：前
+面说到，相对导入是基于__name__属性的，如果模块的完全限定名只有一级层次关系，相对
+导入时却用了两个点，这是就会报这个错，是不是可以这样说，相对导入只能在包内进行？)
 
 
 importlib
@@ -72,11 +86,6 @@ https://www.cnblogs.com/TMesh/p/11735933.html
 	importlib.__import__
 	实现内置__import__的功能，但强烈不建议拿importlib.__import__替换
 __builtins__.__import__
-
-
-相对导入与绝对导入
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
 
 
 2、模块与包

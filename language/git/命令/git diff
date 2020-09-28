@@ -15,7 +15,7 @@ git diff [<options>] [--] [<path>…​]                      比较工作区和
 git diff [<options>] --no-index [--] <path> <path>       比较文件系统中的两个路径
 git diff [<options>] --cached [<commit>] [--] [<path>…​]  比较提交和index区
 git diff [<options>] <commit> [--] [<path>…​]             比较提交和工作区
-git diff [<options>] <commit> <commit> [--] [<path>…​]    比较两个提交
+git diff [<options>] <commit> <commit> [--] [<path>…​]    比较两个提交                要合并进来的放在后面
 git diff [<options>] <commit>..<commit> [--] [<path>…​]   与上同
 git diff [<options>] <commit1>...<commit2> [--] [<path>…​] = 
 	git diff [<options>] commit1与commit2最后一个共同祖先 <commit2> [--] [<path>…​]
@@ -45,3 +45,10 @@ index 9aeb7d7..b6d69b1 100644
 三方比较：
 
 @@@ <from-file-range> <from-file-range> <to-file-range> @@@
+
+
+
+4、git diff生成patch
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	譬如比较两个文件格式实例：
+git diff --no-index -- alg/alg.cpp ../alg.cpp > ../alg.cpp.patch

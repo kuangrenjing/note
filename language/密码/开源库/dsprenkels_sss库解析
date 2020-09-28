@@ -1,0 +1,18 @@
+
+
+1、概况：
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	sss_create_shares      秘密可以为任意长度（<=64字节），如果要更长，需要自己
+想办法。
+	sss_create_keyshares   秘密只能是32字节，一般用来保存加密秘密的key
+
+	sss_Share是个字节数组，n个共享者，每人都握有一个sss_Share。前sss_KEYSHARE_LEN
+存放的是密钥碎片，只要有超过k（阈值）个共享者参与，拿出自己的密钥碎片，就可以恢复
+出（通过拉格朗日插值）密钥，后SSS_CLEN存放的是经密钥加密的秘密，对每个共享者这部分
+都是一样的。
+
+2、void sss_create_keyshares(sss_Keyshare *out,
+                          const uint8_t key[32],
+                          uint8_t n,
+                          uint8_t k);
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

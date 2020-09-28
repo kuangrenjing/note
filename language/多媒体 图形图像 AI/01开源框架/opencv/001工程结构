@@ -1,6 +1,70 @@
-1.x版本API使用C语言编写
-2.x版本API使用C++语言编写
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.cnblogs.com/shine-lee/p/9884551.html
+https://cloud.tencent.com/developer/article/1375617
 
-1.x的API接口都废弃了，所以现在提起OpenCV API指的是OpenCV 2.x以后的版本
 
-1、核心功能
+1、版本迭代
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+OpenCV 1.x
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	OpenCV最初基于C语言开发，API也都是基于C的，面临内存管理、指针等C语言固有的
+麻烦。
+
+	2006年10月1.0发布时，部分使用了C++，同时支持Python，其中已经有了random trees、
+boosted trees、neural nets等机器学习方法，完善对图形界面的支持。
+
+	2008年10月1.1pre1发布，使用 VS2005构建，Python bindings支持Python 2.6，Linux
+下支持Octave bindings，在这一版本中加入了SURF、RANSAC、Fast approximate nearest 
+neighbor search等，Face Detection (cvHaarDetectObjects)也变得更快。
+
+OpenCV 2.x
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	当C++流行起来，OpenCV 2.x发布，其尽量使用C++而不是C，但是为了向前兼容，仍保
+留了对C API的支持。从2010年开始，2.x决定不再频繁支持和更新C API，而是focus在C++
+ API，C API仅作备份。
+
+	2009年9月2.0 beta发布，主要使用CMake构建，加入了很多新特征、描述子等，如FAST、
+LBP等。
+
+	2010年4月2.1版本，加入了Grabcut等，可以使用SSE/SSE2…指令集。
+
+	2010年10月2.2版本发布，OpenCV的模块变成了大家熟悉的模样，像opencv_imgproc、
+opencv_features2d等，同时有了opencv_contrib用于放置尚未成熟的代码，opencv_gpu放
+置使用CUDA加速的OpenCV函数。
+
+	2011年6月起的2.3.x版本、2012年4月起的2.4.x版本，一面增加新方法，一面修复bug，
+同时加强对GPU、Java for Android、 OpenCL、并行化的支持等等，OpenCV愈加稳定完善，
+值得注意的是 SIFT和SURF从2.4开始被放到了nonfree 模块（因为专利）。
+
+	考虑到过渡，OpenCV 2.4.x仍在维护，不过以后可能仅做bug修复和效率提升，不再增
+加新功能——鼓励向3.x迁移。
+
+OpenCV 3.x
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	随着3.x的发布，1.x的C API将被淘汰不再被支持，以后C API可能通过C++源代码自动
+生成。3.x与2.x不完全兼容，与2.x相比，主要的不同之处在于OpenCV 3.x 的大部分方法
+都使用了OpenCL加速。
+
+	2014年8月3.0 alpha发布，除大部分方法都使用OpenCL加速外，3.x默认包含以及使用
+IPP，同时，matlab bindings、Face Recognition、SIFT、SURF、 text detector、motion 
+templates & simple flow 等都移到了opencv_contrib下（opencv_contrib不仅存放了尚未
+稳定的代码，同时也存放了涉及专利保护的技术实现），大量涌现的新方法也包含在其中。
+
+	2017年8月3.3版本，2017年12月开始的3.4.x版本，opencv_dnn从opencv_contrib移至
+opencv，同时OpenCV开始支持C++ 11构建，之后明显感到对神经网络的支持在加强，
+opencv_dnn被持续改进和扩充。
+
+OpenCV 4.0
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	2018年10月4.0.0发布，OpenCV开始需要支持C++11的编译器才能编译，同时对几百个
+基础函数使用 "wide universal intrinsics"重写，这些内联函数可以根据目标平台和编译
+选项映射为SSE2、 SSE4、 AVX2、NEON 或者 VSX 内联函数，获得性能提升。此外，还加入
+了QR code的检测和识别，以及Kinect Fusion algorithm，DNN也在持续改善和扩充。
+
+【注1】wide universal intrinsics
+	统一向量指令，其实就是把各硬件平台的向量指令进行一次封装。
+
+【注2】opencv_dnn
+	opencv3.1时加入，dnn(Deep Neural Networks)是深度神经网络的意思。opencv_dnn
+主要用于人脸识别。
