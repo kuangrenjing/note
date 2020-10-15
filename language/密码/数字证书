@@ -1,0 +1,76 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://www.cfca.com.cn/20150807/101228814.html         中国金融认证中心
+https://www.sslshopper.com/certificate-decoder.html    在线证书读取
+https://www.pianyissl.com/tools/cer_decoder            在线证书读取
+https://www.qqxiuzi.cn/bianma/base64.htm               在线base64编解码
+http://lapo.it/asn1js/                                 在线ASN.1解析
+https://blog.csdn.net/liaoxiangui/article/details/80604125  
+
+https://www.zhihu.com/question/370312009/answer/1394907838
+
+
+
+
+1、数字证书、CA、CA证书
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	如果定义数字身份证是实物身份证的数字化，那么数字证书是数字身份证上的一个“签名”。
+
+	数字证书是由CA签发的。CA(Certificate Authority)，常称为“认证中心”、“证书授权中心”，
+它是负责管理和签发证书的第三方机构，作用是检查证书持有者身份的合法性，并签发证书。
+
+
+	CA证书就是CA颁发的证书，是数字证书的典型代表，其中包含：证书持有者的身份信息，CA机构
+的签名，公钥和私钥。身份信息用于表明证书持有者的身份；CA签名用于保证身份的真实性；公钥和
+私钥用于通信过程中加解密，从而保证通信信息的安全性。
+
+
+
+2、PKI
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+3、x.509(证书规范)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/liuxiaoxiaocsdn/article/details/78982976
+https://blog.csdn.net/lk2684753/article/details/100160856           重要
+
+	证书是由认证机构颁发的，使用者需要对证书进行验证，因此如果证书的格式千奇百怪那就不
+方便了。于是，人们制定了证书的标准规范，其中使用最广泛的是由ITU（International 
+TelecommumcationUnion，国际电信联盟）和ISO（IntemationalOrganizationforStandardization, 
+国际标准化组织）制定的X.509规范。
+
+
+
+4、cer(证书格式)
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+5、CA证书请求
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+6、OCSP
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+实现中,OCSP已经成为证书撤销列表(CRL)的替代或补充机制,克服了基于CRL机制的
+
+
+7、证书链
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/liaoxiangui/article/details/80604125
+
+7.1、如何获取签发者证书
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+我们先来看看HTTPS是怎么处理的
+https://blog.csdn.net/wheatcookie/article/details/85057987
+
+
+x.509 v3有Authority Info Access（Authority Information Access）字段
+
+
+
+8、CTL(certificate trust list)证书信任列表
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://forsenergy.com/zh-cn/certmgr/html/355962c2-4f6b-4cbd-ab00-6e7ee4dddc16.htm
