@@ -1,0 +1,6 @@
+/usr/include                                                                     一般用户级头文件
+/usr/local/include
+/usr/src/kernels/3.10.0-862.9.1.ns7_4.37.mips64el/include                        系统级文件？
+/usr/src/kernels/3.10.0-862.9.1.ns7_4.37.mips64el/tools/include
+/usr/src/kernels/3.10.0-862.9.1.ns7_4.37.mips64el/arch/mips/include              体系级文件？
+/usr/src/kernels/3.10.0-862.9.1.ns7_4.37.mips64el/arch/cris/include
