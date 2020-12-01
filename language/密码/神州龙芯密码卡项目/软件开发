@@ -80,7 +80,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
 
-2、SDF动态库
+4、SDF动态库
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 def.h文件规定：
@@ -96,6 +96,13 @@ alg.cpp文件规定：
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	#define SENDFLAG (0x5a5a5a5a)
 	#define RECVFLAG (0x5b5b5b5b)
+
+
+5、ARM程序
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+曾出现的问题：
+	先创建一个sessionkey，再然后“创建、删除”sessionkey若干次，最后删除最开始的那
+个sessionkey，ARM卡死。
 
 
 

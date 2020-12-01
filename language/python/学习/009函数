@@ -2,6 +2,7 @@
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 https://docs.python.org/zh-cn/3/reference/compound_stmts.html#function     符合语句-函数
 https://docs.python.org/zh-cn/3/reference/expressions.html#calls           表达式-调用
+https://www.runoob.com/w3cnote/python-func-decorators.html                 修饰器
 
 1、函数的一般概念
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -41,6 +42,8 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 数对象作为唯一参数被发起调用。其返回值将被绑定到函数名称而非函数对象。多个装饰
 器会以嵌套方式被应用。(意思是函数名已经跟原始函数对象解绑，然后绑定到修饰器的返
 回对象上？？？)
+
+https://www.runoob.com/w3cnote/python-func-decorators.html
 
 2.3、标注
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

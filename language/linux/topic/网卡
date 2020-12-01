@@ -1,0 +1,12 @@
+
+
+1、/proc/net/dev 各条目的名字是怎么来的
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bond0                  网卡binding技术，多个网卡共享一个IP和mac？
+virbr0                 KVM创建的网卡
+em0
+enp2s0
+
+/sys/class/net
+
+
