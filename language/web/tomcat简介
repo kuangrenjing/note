@@ -1,0 +1,23 @@
+0、参考
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://blog.csdn.net/posonrick/article/details/72566875
+
+
+1、tomcat是啥？
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	Tomcat最主要的功能是提供Servlet/JSP容器，尽管它也可以作为独立的Java Web服务
+器，它在对静态资源（如HTML文件或图像文件）的处理速度，以及提供的Web服务器管理功
+能方面都不如其他专业的HTTP服务器，如IIS和Apache服务器。
+　　
+　　因此在实际应用中，常常把Tomcat与其他HTTP服务器集成。对于不支持Servlet/JSP的
+HTTP服务器，可以通过Tomcat服务器来运行Servlet/JSP组件。
+　　
+　　当Tomcat与其他HTTP服务器集成时，Tomcat服务器的工作模式通常为进程外的Servlet容
+器，Tomcat服务器与其他HTTP服务器之间通过专门的插件来通信。
+
+
+2、tomcat监听多个端口
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	tomcat监听一个HTTP端口(8080)，此时它作为一个web服务器使用
+	tomcat监听一个AJP端口(8009)，此时它作为一个servlet使用
+	tomcat监听一个关闭端口(8005)，通过此端口可以关闭tomcat

@@ -1,0 +1,32 @@
+1、江南科友
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://wenku.baidu.com/view/e6e2c36269dc5022aaea00ef.html
+https://wenku.baidu.com/view/628b0cc7d5bbfd0a79567357.html
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	江南科友的机器只能通过串口进行密码机的配置。配置三种角色（6个ukey）：超级管
+理员（三个ukey代表）、管理员（两个，各由一个ukey代表）、维护员（一个ukey代表）。
+4种状态：超级管理员状态、管理员状态、维护员状态、未授权状态
+
+1）超级管理员状态
+	当超级管理员登录或密码机内无主密钥时，处于超级管理员状态。可执行管理状态下的
+所有操作，此外还能做主密码钥相关操作。
+
+2）管理员状态
+	可执行维护状态下的所有操作，此外还能执行一些经常性的密钥操作，如工作密码的生成
+及分发。
+
+3）维护员状态
+	可执行与密钥无关的一般性操作，如密码机的参数设置
+
+4）未授权状态
+	可查看密码机软件版本，机器状态等等
+
+
+2、兴唐通信科技
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://www.docin.com/p-2379864646.html
+
+	管理工具可选择通过串口还是网口连接密码机，能生成设备证书
+
+

@@ -20,3 +20,29 @@
 		设计文档    吴扬飞 李鑫
 		开发文档    吴扬飞 李鑫
 		代码实现    吴扬飞 李鑫
+
+
+2021工作安排
+1、sdf库代码消化白盒测试（8~10周）
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	结合国密文档和SDF库实现代码注释仔细研读消化SDF库代码，理解国密SM1~4基本原理
+和SDF接口的调用规则。在此基础上对各模块单元进行单元测试，对重点代码进行全覆盖测
+试。
+
+2、密码卡管理终端/客户端（10~12周）
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	开发shell版和UI版的密码卡管理终端，实现对密码卡的用户管理和密钥管理等，在此
+基础上添加对密码机的支持，包括日志管理，网络等配置管理。
+
+	可参照三未的密码卡、密码机管理终端程序。
+
+3、密码卡的多平台适配（单平台4~6周）
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	密码卡PCI驱动、SDF库的平台移植，使密码卡能在相关平台正常运行。在此基础上对
+相关平台影响密码卡运行效率的瓶颈问题进行优化。
+
+	目前先做飞腾平台的适配
+
+4、配合用户使用SDF接口
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	目前我们内部用户是郭安南。

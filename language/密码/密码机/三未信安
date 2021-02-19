@@ -181,3 +181,12 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	blxserver是个什么进程？
 	机器未监听80端口，web怎么连上的，交换机上使用了跳转机制?
 	用户管理、会话管理是在密码卡端进行的还是在API层进行的？
+
+
+
+
+2、开机自启动
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+/etc/systemd/system/enccarddrvload.service:ExecStart=/home/sec/encrypt_card_driver_load/encrypt_card_driver_load.sh
+
+Systemd 默认从目录/etc/systemd/system/读取配置文件

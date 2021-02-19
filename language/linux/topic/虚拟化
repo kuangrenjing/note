@@ -1,0 +1,36 @@
+0、参考
+
+
+
+1、概念
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+hypervisor
+
+
+
+2、查看Linux操作系统云服务器器虚拟化类型
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+http://dockone.io/article/9017
+
+
+Hypervisior vendor
+lscpu
+
+3、虚拟化技术
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+KVM QEMU
+kvm.ko是一个内核模块，它可以把虚拟机操作直接透传到宿主机CPU而不需要经过虚拟机操
+作系统。
+qemu与centos
+qemu与vmware比较
+
+linux裁剪实战
+https://www.cnblogs.com/grglym/p/10744738.html
+
+
+
+4、PCI透传
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+https://my.oschina.net/lastritter/blog/3004692
+pci_stub
+vfio
